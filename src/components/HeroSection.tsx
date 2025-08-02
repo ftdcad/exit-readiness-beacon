@@ -43,6 +43,13 @@ const HeroSection = () => {
               >
                 Start Assessment
               </Button>
+              <Button 
+                variant="outline" 
+                size="lg" 
+                className="border-border/50 hover:bg-background-hover font-semibold px-8 py-4 transition-luxury"
+              >
+                View Sample Report
+              </Button>
             </div>
 
             {/* Social Proof */}
