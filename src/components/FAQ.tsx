@@ -227,13 +227,6 @@ const FAQ = () => {
       urgent: true
     },
     {
-      icon: MessageCircle,
-      title: "Email Questions",
-      description: "Get answers within 4 hours",
-      action: "Send Email",
-      urgent: false
-    },
-    {
       icon: Shield,
       title: "Request NDA",
       description: "Confidential discussion about your business",
