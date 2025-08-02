@@ -175,18 +175,18 @@ Confidential. Strategic. Unbiased.`;
 
   return (
     <Dialog open={true} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-4xl max-h-[90vh] bg-background-card border-border/50 backdrop-luxury">
-        <DialogHeader>
+      <DialogContent className="sm:max-w-4xl max-h-[95vh] bg-background-card border-border/50 backdrop-luxury overflow-hidden flex flex-col">
+        <DialogHeader className="flex-shrink-0">
           <DialogTitle className="flex items-center gap-3 text-xl">
             <Shield className="h-6 w-6 text-accent" />
             Mutual Non-Disclosure Agreement
           </DialogTitle>
         </DialogHeader>
 
-        <div className="space-y-6">
+        <div className="flex-1 overflow-y-auto space-y-6 pr-2">
           {/* Full NDA Content */}
           <div className="border border-border/30 rounded-lg">
-            <ScrollArea className="h-64 p-4">
+            <ScrollArea className="h-48 p-4">
               <div className="space-y-4 text-sm text-foreground-secondary leading-relaxed whitespace-pre-line">
                 {fullNDAText}
               </div>
@@ -194,7 +194,7 @@ Confidential. Strategic. Unbiased.`;
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4 pb-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="firstName">First Name</Label>
