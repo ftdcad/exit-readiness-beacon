@@ -72,9 +72,23 @@ const PreAssessmentForm = () => {
   };
 
   const industries = [
-    "Software/SaaS", "E-commerce", "Healthcare/Medical", "Financial Services",
-    "Manufacturing", "Professional Services", "Real Estate", "Technology Hardware",
-    "Consumer Products", "Education", "Other"
+    "HVAC/Mechanical Services",
+    "Electrical Services", 
+    "Plumbing Services",
+    "Construction/General Contracting",
+    "Professional Services (Accounting, Legal, Consulting)",
+    "Healthcare Services (Dental, Veterinary, Urgent Care)",
+    "Home Services (Pest Control, Landscaping, Cleaning)",
+    "Software/SaaS",
+    "Manufacturing",
+    "Financial Services",
+    "Behavioral Health/Mental Health",
+    "Staffing & Recruiting",
+    "E-commerce",
+    "Real Estate Services",
+    "Food & Beverage",
+    "Transportation/Logistics",
+    "Other"
   ];
 
   const revenueRanges = [
