@@ -5,7 +5,7 @@ import { Phone, Mail, MapPin, Linkedin, Shield, Clock, Award } from "lucide-reac
 
 const Footer = () => {
   const companyInfo = {
-    name: "Meridian Advisory Group",
+    name: "Exitus Advisory Group",
     tagline: "Strategic Exit Intelligence",
     phone: "(561) 555-0190",
     email: "inquiries@meridianadvisory.com",
@@ -125,7 +125,7 @@ const Footer = () => {
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             {/* Copyright */}
             <div className="text-foreground-muted text-sm">
-              © 2025 Meridian Advisory Group. All rights reserved.
+              © 2025 Exitus Advisory Group. All rights reserved.
             </div>
 
             {/* Legal Links */}
@@ -157,7 +157,7 @@ const Footer = () => {
         <div className="pb-4">
           <div className="bg-background-hover/50 border border-border/30 rounded-lg p-4">
             <p className="text-foreground-muted text-xs leading-relaxed">
-              <strong>Important Disclosure:</strong> Meridian Advisory Group provides strategic advisory services. 
+              <strong>Important Disclosure:</strong> Exitus Advisory Group provides strategic advisory services. 
               We are not a registered investment advisor or broker-dealer. All assessments are for informational 
               purposes and do not constitute investment advice. Past performance does not guarantee future results. 
               Exit outcomes depend on market conditions and company-specific factors beyond our control.
