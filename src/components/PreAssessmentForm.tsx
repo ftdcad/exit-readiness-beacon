@@ -7,7 +7,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { CheckCircle, Clock, Users, DollarSign, Scale, Plus, X, FileText } from "lucide-react";
+import { CheckCircle, Clock, Users, DollarSign, Scale, Plus, X, FileText, Upload, File } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 const PreAssessmentForm = () => {
@@ -37,6 +37,11 @@ const PreAssessmentForm = () => {
     pnlAvailability: "",
     taxReturnsAvailability: "",
     balanceSheetsAvailability: "",
+    
+    // Document Uploads
+    pnlFiles: [] as File[],
+    taxReturnFiles: [] as File[],
+    balanceSheetFiles: [] as File[],
     
     // Exit Goals
     exitTimeline: "",
@@ -114,6 +119,36 @@ const PreAssessmentForm = () => {
       const percentage = parseFloat(owner.percentage) || 0;
       return total + percentage;
     }, 0);
+  };
+
+  // File upload handlers
+  const handleFileUpload = (files: FileList | null, documentType: 'pnl' | 'taxReturn' | 'balanceSheet') => {
+    if (!files) return;
+    
+    const fileArray = Array.from(files);
+    const fieldMap = {
+      pnl: 'pnlFiles',
+      taxReturn: 'taxReturnFiles', 
+      balanceSheet: 'balanceSheetFiles'
+    } as const;
+    
+    setFormData(prev => ({
+      ...prev,
+      [fieldMap[documentType]]: [...prev[fieldMap[documentType]], ...fileArray]
+    }));
+  };
+
+  const removeFile = (index: number, documentType: 'pnl' | 'taxReturn' | 'balanceSheet') => {
+    const fieldMap = {
+      pnl: 'pnlFiles',
+      taxReturn: 'taxReturnFiles',
+      balanceSheet: 'balanceSheetFiles'
+    } as const;
+    
+    setFormData(prev => ({
+      ...prev,
+      [fieldMap[documentType]]: prev[fieldMap[documentType]].filter((_, i) => i !== index)
+    }));
   };
 
   const industries = [
@@ -553,6 +588,50 @@ const PreAssessmentForm = () => {
                             <Label htmlFor="pnl-unsure">Not sure</Label>
                           </div>
                         </RadioGroup>
+                        
+                        {formData.pnlAvailability === 'readily-available' && (
+                          <div className="mt-4 p-4 border-2 border-dashed border-border/50 rounded-lg bg-background-hover/30">
+                            <div className="text-center">
+                              <Upload className="h-8 w-8 text-foreground-secondary mx-auto mb-2" />
+                              <Label className="text-sm font-medium">Upload P&L Statements</Label>
+                              <p className="text-xs text-foreground-secondary mb-3">Drag and drop or click to select files (PDF, Excel)</p>
+                              <input
+                                type="file"
+                                multiple
+                                accept=".pdf,.xlsx,.xls"
+                                onChange={(e) => handleFileUpload(e.target.files, 'pnl')}
+                                className="hidden"
+                                id="pnl-upload"
+                              />
+                              <Label htmlFor="pnl-upload" className="cursor-pointer">
+                                <Button type="button" variant="outline" size="sm" asChild>
+                                  <span>Choose Files</span>
+                                </Button>
+                              </Label>
+                              {formData.pnlFiles.length > 0 && (
+                                <div className="mt-3 space-y-2">
+                                  {formData.pnlFiles.map((file, index) => (
+                                    <div key={index} className="flex items-center justify-between text-xs bg-background-hover p-2 rounded">
+                                      <div className="flex items-center gap-2">
+                                        <File className="h-3 w-3" />
+                                        <span>{file.name}</span>
+                                      </div>
+                                      <Button
+                                        type="button"
+                                        variant="ghost"
+                                        size="sm"
+                                        onClick={() => removeFile(index, 'pnl')}
+                                        className="h-auto p-1"
+                                      >
+                                        <X className="h-3 w-3" />
+                                      </Button>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        )}
                       </div>
 
                       <div className="space-y-4">
@@ -579,6 +658,50 @@ const PreAssessmentForm = () => {
                             <Label htmlFor="tax-unsure">Not sure</Label>
                           </div>
                         </RadioGroup>
+                        
+                        {formData.taxReturnsAvailability === 'readily-available' && (
+                          <div className="mt-4 p-4 border-2 border-dashed border-border/50 rounded-lg bg-background-hover/30">
+                            <div className="text-center">
+                              <Upload className="h-8 w-8 text-foreground-secondary mx-auto mb-2" />
+                              <Label className="text-sm font-medium">Upload Tax Returns</Label>
+                              <p className="text-xs text-foreground-secondary mb-3">Drag and drop or click to select files (PDF, Excel)</p>
+                              <input
+                                type="file"
+                                multiple
+                                accept=".pdf,.xlsx,.xls"
+                                onChange={(e) => handleFileUpload(e.target.files, 'taxReturn')}
+                                className="hidden"
+                                id="tax-upload"
+                              />
+                              <Label htmlFor="tax-upload" className="cursor-pointer">
+                                <Button type="button" variant="outline" size="sm" asChild>
+                                  <span>Choose Files</span>
+                                </Button>
+                              </Label>
+                              {formData.taxReturnFiles.length > 0 && (
+                                <div className="mt-3 space-y-2">
+                                  {formData.taxReturnFiles.map((file, index) => (
+                                    <div key={index} className="flex items-center justify-between text-xs bg-background-hover p-2 rounded">
+                                      <div className="flex items-center gap-2">
+                                        <File className="h-3 w-3" />
+                                        <span>{file.name}</span>
+                                      </div>
+                                      <Button
+                                        type="button"
+                                        variant="ghost"
+                                        size="sm"
+                                        onClick={() => removeFile(index, 'taxReturn')}
+                                        className="h-auto p-1"
+                                      >
+                                        <X className="h-3 w-3" />
+                                      </Button>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        )}
                       </div>
 
                       <div className="space-y-4">
@@ -605,6 +728,50 @@ const PreAssessmentForm = () => {
                             <Label htmlFor="balance-unsure">Not sure</Label>
                           </div>
                         </RadioGroup>
+                        
+                        {formData.balanceSheetsAvailability === 'readily-available' && (
+                          <div className="mt-4 p-4 border-2 border-dashed border-border/50 rounded-lg bg-background-hover/30">
+                            <div className="text-center">
+                              <Upload className="h-8 w-8 text-foreground-secondary mx-auto mb-2" />
+                              <Label className="text-sm font-medium">Upload Balance Sheets</Label>
+                              <p className="text-xs text-foreground-secondary mb-3">Drag and drop or click to select files (PDF, Excel)</p>
+                              <input
+                                type="file"
+                                multiple
+                                accept=".pdf,.xlsx,.xls"
+                                onChange={(e) => handleFileUpload(e.target.files, 'balanceSheet')}
+                                className="hidden"
+                                id="balance-upload"
+                              />
+                              <Label htmlFor="balance-upload" className="cursor-pointer">
+                                <Button type="button" variant="outline" size="sm" asChild>
+                                  <span>Choose Files</span>
+                                </Button>
+                              </Label>
+                              {formData.balanceSheetFiles.length > 0 && (
+                                <div className="mt-3 space-y-2">
+                                  {formData.balanceSheetFiles.map((file, index) => (
+                                    <div key={index} className="flex items-center justify-between text-xs bg-background-hover p-2 rounded">
+                                      <div className="flex items-center gap-2">
+                                        <File className="h-3 w-3" />
+                                        <span>{file.name}</span>
+                                      </div>
+                                      <Button
+                                        type="button"
+                                        variant="ghost"
+                                        size="sm"
+                                        onClick={() => removeFile(index, 'balanceSheet')}
+                                        className="h-auto p-1"
+                                      >
+                                        <X className="h-3 w-3" />
+                                      </Button>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
