@@ -50,7 +50,7 @@ const OfferDetails = () => {
             4-Week Assessment Program
           </Badge>
           <h2 className="text-3xl md:text-4xl font-bold">
-            What You Get in Your <span className="text-accent">PE Readiness Assessment</span>
+            What You Get in Your <span className="text-accent">Exit Readiness Assessment</span>
           </h2>
           <p className="text-foreground-secondary text-lg max-w-2xl mx-auto">
             Get a free initial assessment teaser, then proceed with our comprehensive 4-week evaluation designed to identify gaps, maximize valuation, and position your company for a successful exit.
