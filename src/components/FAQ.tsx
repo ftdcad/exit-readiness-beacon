@@ -27,7 +27,7 @@ const FAQ = () => {
     },
     {
       question: "Do you guarantee results?",
-      answer: "We guarantee the quality of our work - if you're not satisfied with the assessment, we'll refund your fee. While we can't guarantee exit outcomes (too many market variables), our track record shows 94% of assessed companies successfully complete their exit process."
+      answer: "While we can't guarantee exit outcomes due to market variables, our track record shows 94% of assessed companies successfully complete their exit process. We focus on delivering thorough, actionable insights based on our extensive PE experience."
     },
     {
       question: "What documents do I need to provide?",

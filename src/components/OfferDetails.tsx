@@ -40,7 +40,6 @@ const OfferDetails = () => {
     "No retainer or hourly billing",
     "Fixed $5,000 investment", 
     "Payment upon completion",
-    "Money-back guarantee if not satisfied",
     "Includes 2-hour strategy session"
   ];
 
