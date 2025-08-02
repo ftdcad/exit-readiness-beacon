@@ -145,13 +145,6 @@ const FAQ = () => {
                     </div>
                   ))}
 
-                  {/* Urgency Note */}
-                  <div className="p-3 bg-warning/10 border border-warning/20 rounded-lg">
-                    <p className="text-xs text-warning-foreground">
-                      <strong>Limited Availability:</strong> Only 3 assessment spots remaining this month. 
-                      Book your call today to secure your place.
-                    </p>
-                  </div>
                 </CardContent>
               </Card>
 
