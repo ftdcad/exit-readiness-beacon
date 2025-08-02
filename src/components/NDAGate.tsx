@@ -4,8 +4,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Shield, Lock, X } from "lucide-react";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Shield, Lock, Download } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import jsPDF from 'jspdf';
 
 interface NDAGateProps {
   onClose: () => void;
@@ -20,7 +22,64 @@ export const NDAGate = ({ onClose }: NDAGateProps) => {
     agreesToNDA: false,
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showDownload, setShowDownload] = useState(false);
   const { toast } = useToast();
+
+  const fullNDAText = `📄 MUTUAL NON-DISCLOSURE AGREEMENT
+
+Effective Date: Upon acceptance via NDA Gate
+
+Parties:
+
+"Visitor": Any individual accessing this website or engaging with Exitus Advisory Group through the PE Readiness Assessment platform
+
+"Exitus Advisory Group": The confidential advisory services entity operating this website
+
+1. Purpose
+This Agreement governs the exchange of confidential business information between the Visitor and Exitus Advisory Group. The purpose is to allow for an honest evaluation of exit readiness, strategy alignment, and deal-related information while maintaining strict confidentiality on both sides.
+
+2. Definition of Confidential Information
+"Confidential Information" includes, but is not limited to:
+
+• All submitted data (financials, P&L, org charts, strategic goals, etc.)
+• Business conditions, customer lists, staffing structure
+• Uploaded or AI-generated assessments, scorecards, or exit roadmaps
+• LOIs, term sheets, valuations, and notes related to potential or ongoing transactions
+• All correspondence, call notes, and insights shared directly or indirectly through this platform
+
+3. Obligations
+Both parties agree to:
+
+• Keep all Confidential Information strictly private
+• Use it only for the purpose of the assessment or strategic planning
+• Not disclose, replicate, or share any materials with third parties without written consent
+• Take commercially reasonable steps to secure all data provided or received
+
+4. Exclusions
+This Agreement does not apply to information that:
+
+• Was publicly known at the time of disclosure
+• Becomes publicly available through no fault of either party
+• Was independently developed without access to the Confidential Information
+• Must be disclosed by law or legal process (notice will be provided if allowed)
+
+5. Enforcement & Legal Remedy
+This Agreement remains in effect for five (5) years from acceptance. A breach of confidentiality will result in immediate grounds for legal action, including but not limited to:
+
+• Injunctive relief
+• Recovery of compensatory damages
+• Forensic analysis of misuse
+
+Exitus Advisory Group may log IP addresses, store acceptance timestamps, and retain metadata to prove engagement and agreement.
+
+6. No License or Rights Transferred
+This Agreement does not transfer ownership or licensing rights of any intellectual property or proprietary content.
+
+7. Acceptance
+By clicking "I Agree" and accessing the site, both parties affirm they have read, understood, and agreed to be legally bound by this Mutual NDA.
+
+Exitus Advisory Group
+Confidential. Strategic. Unbiased.`;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,7 +105,7 @@ export const NDAGate = ({ onClose }: NDAGateProps) => {
       ipAddress: "Client IP", // Would be captured server-side
     };
     
-    localStorage.setItem('meridian_nda_accepted', JSON.stringify(ndaData));
+    localStorage.setItem('exitus_nda_accepted', JSON.stringify(ndaData));
     
     toast({
       title: "NDA Accepted",
@@ -57,28 +116,81 @@ export const NDAGate = ({ onClose }: NDAGateProps) => {
     onClose();
   };
 
+  const handleCheckboxChange = (checked: boolean) => {
+    setFormData(prev => ({ ...prev, agreesToNDA: checked }));
+    setShowDownload(checked);
+  };
+
+  const generatePDF = () => {
+    const doc = new jsPDF();
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const margin = 20;
+    const textWidth = pageWidth - 2 * margin;
+    
+    // Add title
+    doc.setFontSize(16);
+    doc.setFont(undefined, 'bold');
+    doc.text('MUTUAL NON-DISCLOSURE AGREEMENT', pageWidth / 2, 30, { align: 'center' });
+    
+    // Add effective date
+    doc.setFontSize(12);
+    doc.setFont(undefined, 'normal');
+    doc.text(`Effective Date: ${new Date().toLocaleDateString()}`, pageWidth / 2, 45, { align: 'center' });
+    
+    // Add user information
+    let yPosition = 60;
+    doc.setFont(undefined, 'bold');
+    doc.text('Agreement Details:', margin, yPosition);
+    yPosition += 10;
+    doc.setFont(undefined, 'normal');
+    doc.text(`Name: ${formData.firstName} ${formData.lastName}`, margin, yPosition);
+    yPosition += 8;
+    doc.text(`Email: ${formData.email}`, margin, yPosition);
+    yPosition += 8;
+    doc.text(`Company: ${formData.company}`, margin, yPosition);
+    yPosition += 8;
+    doc.text(`Accepted: ${new Date().toLocaleString()}`, margin, yPosition);
+    yPosition += 20;
+    
+    // Add NDA content
+    const lines = doc.splitTextToSize(fullNDAText, textWidth);
+    
+    lines.forEach((line: string) => {
+      if (yPosition > 270) {
+        doc.addPage();
+        yPosition = 20;
+      }
+      doc.text(line, margin, yPosition);
+      yPosition += 6;
+    });
+    
+    // Save the PDF
+    doc.save(`NDA-ExitusAdvisory-${formData.firstName}${formData.lastName}-${new Date().toISOString().split('T')[0]}.pdf`);
+    
+    toast({
+      title: "NDA Downloaded",
+      description: "Your signed NDA has been saved successfully.",
+    });
+  };
+
   return (
     <Dialog open={true} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md bg-background-card border-border/50 backdrop-luxury">
+      <DialogContent className="sm:max-w-4xl max-h-[90vh] bg-background-card border-border/50 backdrop-luxury">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-3 text-xl">
             <Shield className="h-6 w-6 text-accent" />
-            Confidentiality Agreement
+            Mutual Non-Disclosure Agreement
           </DialogTitle>
         </DialogHeader>
 
         <div className="space-y-6">
-          {/* NDA Notice */}
-          <div className="p-4 bg-accent/10 border border-accent/20 rounded-lg">
-            <div className="flex items-start gap-3">
-              <Lock className="h-5 w-5 text-accent mt-0.5 flex-shrink-0" />
-              <div className="text-sm text-foreground-secondary">
-                <p className="font-medium text-foreground mb-2">Mutual Non-Disclosure Agreement</p>
-                <p>
-                  This assessment involves sharing sensitive business information. By proceeding, you agree to maintain strict confidentiality of all shared data and methodologies.
-                </p>
+          {/* Full NDA Content */}
+          <div className="border border-border/30 rounded-lg">
+            <ScrollArea className="h-64 p-4">
+              <div className="space-y-4 text-sm text-foreground-secondary leading-relaxed whitespace-pre-line">
+                {fullNDAText}
               </div>
-            </div>
+            </ScrollArea>
           </div>
 
           {/* Form */}
@@ -137,7 +249,7 @@ export const NDAGate = ({ onClose }: NDAGateProps) => {
               <Checkbox 
                 id="nda"
                 checked={formData.agreesToNDA}
-                onCheckedChange={(checked) => setFormData(prev => ({ ...prev, agreesToNDA: checked as boolean }))}
+                onCheckedChange={handleCheckboxChange}
                 className="mt-1 h-5 w-5 border-2 border-accent data-[state=checked]:bg-accent data-[state=checked]:border-accent"
               />
               <div className="space-y-1">
@@ -145,16 +257,29 @@ export const NDAGate = ({ onClose }: NDAGateProps) => {
                   I agree to the mutual non-disclosure agreement and understand that all information shared during this assessment will remain strictly confidential.
                 </Label>
                 <p className="text-xs text-foreground-muted">
-                  Full NDA terms available upon request
+                  A downloadable copy will be available once you agree
                 </p>
               </div>
             </div>
+
+            {/* Download Button */}
+            {showDownload && (
+              <Button 
+                type="button"
+                variant="outline"
+                onClick={generatePDF}
+                className="w-full border-accent/30 hover:bg-accent/10 flex items-center gap-2"
+              >
+                <Download className="h-4 w-4" />
+                Download NDA (PDF)
+              </Button>
+            )}
 
             {/* Submit Button */}
             <Button 
               type="submit" 
               className="w-full bg-accent hover:bg-accent/90 font-semibold button-shadow transition-luxury"
-              disabled={isSubmitting}
+              disabled={isSubmitting || !formData.agreesToNDA}
             >
               {isSubmitting ? "Processing..." : "Accept & Continue"}
             </Button>
