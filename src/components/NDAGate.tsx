@@ -138,7 +138,7 @@ export const NDAGate = ({ onClose }: NDAGateProps) => {
                 id="nda"
                 checked={formData.agreesToNDA}
                 onCheckedChange={(checked) => setFormData(prev => ({ ...prev, agreesToNDA: checked as boolean }))}
-                className="mt-1"
+                className="mt-1 h-5 w-5 border-2 border-accent data-[state=checked]:bg-accent data-[state=checked]:border-accent"
               />
               <div className="space-y-1">
                 <Label htmlFor="nda" className="text-sm leading-relaxed cursor-pointer">
