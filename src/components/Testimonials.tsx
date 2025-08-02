@@ -141,9 +141,6 @@ const Testimonials = () => {
               <button className="px-6 py-3 bg-accent hover:bg-accent/90 text-accent-foreground font-semibold rounded-lg button-shadow transition-luxury">
                 Start Your Assessment
               </button>
-              <button className="px-6 py-3 border border-border/50 hover:bg-background-hover text-foreground font-semibold rounded-lg transition-luxury">
-                Download Case Studies
-              </button>
             </div>
           </div>
         </div>

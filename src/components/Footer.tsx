@@ -20,7 +20,6 @@ const Footer = () => {
 
   const quickLinks = [
     { label: "Assessment Process", href: "#process" },
-    { label: "Case Studies", href: "#testimonials" },
     { label: "About Our Team", href: "#team" },
     { label: "FAQ", href: "#faq" },
     { label: "Contact", href: "#contact" }
