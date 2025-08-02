@@ -14,13 +14,6 @@ const Footer = () => {
 
   const credentials = [];
 
-  const quickLinks = [
-    { label: "Assessment Process", href: "#process" },
-    { label: "About Our Team", href: "#team" },
-    { label: "FAQ", href: "#faq" },
-    { label: "Contact", href: "#contact" }
-  ];
-
   const legalLinks = [
     { label: "Privacy Policy", href: "/privacy" },
     { label: "Terms of Service", href: "/terms" },
@@ -33,7 +26,7 @@ const Footer = () => {
       <div className="container px-4 md:px-6">
         {/* Main Footer Content */}
         <div className="py-12">
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {/* Company Info */}
             <div className="lg:col-span-2 space-y-6">
               <div>
@@ -42,8 +35,9 @@ const Footer = () => {
                 </h3>
                 <p className="text-accent font-medium mb-4">{companyInfo.tagline}</p>
                 <p className="text-foreground-secondary text-sm leading-relaxed">
-                  Helping founders maximize exit value through comprehensive operational assessments 
-                  and strategic advisory. Confidential, no-BS approach with proven results.
+                  Anonymous strategic advisory from founders who've been on both sides of the table. 
+                  We've raised capital and now invest in companies. Completely discreet process to help 
+                  maximize your exit value without the typical advisor theatrics.
                 </p>
               </div>
 
@@ -72,23 +66,6 @@ const Footer = () => {
                   </div>
                 ))}
               </div>
-            </div>
-
-            {/* Quick Links */}
-            <div>
-              <h4 className="font-semibold text-foreground mb-4">Quick Links</h4>
-              <ul className="space-y-2">
-                {quickLinks.map((link, index) => (
-                  <li key={index}>
-                    <a 
-                      href={link.href}
-                      className="text-foreground-secondary text-sm hover:text-accent transition-colors"
-                    >
-                      {link.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
             </div>
 
             {/* Call to Action */}
