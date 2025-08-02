@@ -186,19 +186,19 @@ const PreAssessmentForm = () => {
                   </div>
                 )}
 
-                {/* Step 2: Financial Information */}
+                {/* Step 2: Business Performance */}
                 {step === 2 && (
                   <div className="space-y-6">
                     <CardHeader className="px-0 pt-0">
                       <CardTitle className="flex items-center gap-2 text-xl">
                         <DollarSign className="h-5 w-5 text-accent" />
-                        Financial Overview
+                        Business Performance
                       </CardTitle>
                     </CardHeader>
 
                     <div className="grid gap-4">
                       <div className="space-y-2">
-                        <Label htmlFor="annualRevenue">Annual Revenue (Latest 12 Months)</Label>
+                        <Label htmlFor="annualRevenue">Approximate Annual Revenue</Label>
                         <Select
                           value={formData.annualRevenue}
                           onValueChange={(value) => setFormData(prev => ({ ...prev, annualRevenue: value }))}
@@ -214,30 +214,42 @@ const PreAssessmentForm = () => {
                         </Select>
                       </div>
 
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="revenueGrowth">YoY Revenue Growth %</Label>
-                          <Input
-                            id="revenueGrowth"
-                            type="number"
-                            placeholder="e.g., 25"
-                            value={formData.revenueGrowth}
-                            onChange={(e) => setFormData(prev => ({ ...prev, revenueGrowth: e.target.value }))}
-                            className="bg-background-hover border-border/50"
-                          />
-                        </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="revenueGrowth">How would you describe your revenue trend?</Label>
+                        <Select
+                          value={formData.revenueGrowth}
+                          onValueChange={(value) => setFormData(prev => ({ ...prev, revenueGrowth: value }))}
+                        >
+                          <SelectTrigger className="bg-background-hover border-border/50">
+                            <SelectValue placeholder="Select growth trend" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="rapid-growth">Growing rapidly (30%+ annually)</SelectItem>
+                            <SelectItem value="steady-growth">Growing steadily (10-30% annually)</SelectItem>
+                            <SelectItem value="slow-growth">Growing slowly (0-10% annually)</SelectItem>
+                            <SelectItem value="flat">Relatively flat</SelectItem>
+                            <SelectItem value="declining">Declining</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
 
-                        <div className="space-y-2">
-                          <Label htmlFor="profitMargin">EBITDA Margin %</Label>
-                          <Input
-                            id="profitMargin"
-                            type="number"
-                            placeholder="e.g., 15"
-                            value={formData.profitMargin}
-                            onChange={(e) => setFormData(prev => ({ ...prev, profitMargin: e.target.value }))}
-                            className="bg-background-hover border-border/50"
-                          />
-                        </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="profitMargin">How profitable is your business?</Label>
+                        <Select
+                          value={formData.profitMargin}
+                          onValueChange={(value) => setFormData(prev => ({ ...prev, profitMargin: value }))}
+                        >
+                          <SelectTrigger className="bg-background-hover border-border/50">
+                            <SelectValue placeholder="Select profitability" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="highly-profitable">Highly profitable (20%+ margins)</SelectItem>
+                            <SelectItem value="profitable">Profitable (10-20% margins)</SelectItem>
+                            <SelectItem value="break-even">Around break-even</SelectItem>
+                            <SelectItem value="losing-money">Currently losing money</SelectItem>
+                            <SelectItem value="unsure">Not sure</SelectItem>
+                          </SelectContent>
+                        </Select>
                       </div>
                     </div>
                   </div>
