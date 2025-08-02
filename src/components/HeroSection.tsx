@@ -38,8 +38,7 @@ const HeroSection = () => {
                 </span>
               </h1>
               <p className="text-xl md:text-2xl text-foreground-secondary leading-relaxed">
-                6-week operational assessment for founders considering private equity or strategic exit.{" "}
-                <span className="text-foreground font-semibold">Confidential. No BS. $5K flat.</span>
+                6-week operational assessment for founders considering private equity or strategic exit.
               </p>
             </div>
 
