@@ -126,7 +126,56 @@ const FAQ = () => {
     },
     {
       question: "What if I'm not ready to exit for 2-3 years?",
-      answer: "Perfect timing. The assessment creates a roadmap for becoming PE-ready. Most improvements take 12-24 months to implement properly. Starting early gives you the best chance to maximize valuation when you do decide to go to market."
+      answer: (
+        <div className="space-y-4">
+          <p className="font-semibold text-foreground">
+            Perfect timing. This is exactly when you should be thinking about this - not when you're ready to exit.
+          </p>
+          
+          <div className="space-y-3">
+            <div className="flex gap-3">
+              <span className="text-accent font-bold">•</span>
+              <div>
+                <span className="font-bold">Transaction Timeline Reality:</span> After you sign a letter of intent, it's going to take anywhere from 5 to 11 months or longer to close the deal. Nobody's ever ready when they think they're ready.
+              </div>
+            </div>
+            
+            <div className="flex gap-3">
+              <span className="text-accent font-bold">•</span>
+              <div>
+                <span className="font-bold">The Planning Paradox:</span> This is about planning ahead and knowing that you could be ready for sale when you are actually ready to sell - not scrambling at the last minute.
+              </div>
+            </div>
+            
+            <div className="flex gap-3">
+              <span className="text-accent font-bold">•</span>
+              <div>
+                <span className="font-bold">Post-Sale Employment Reality:</span> When you sell your business, they're commonly going to want you to stick around for 3 to 5 years. So if you're planning to be "ready" in five years, you're already a year late.
+              </div>
+            </div>
+            
+            <div className="flex gap-3">
+              <span className="text-accent font-bold">•</span>
+              <div>
+                <span className="font-bold">Cost of Being Unprepared:</span> Not being prepared and not being ready costs hundreds of thousands of dollars on an average transaction. This assessment acts as insurance against these costly mistakes.
+              </div>
+            </div>
+            
+            <div className="flex gap-3">
+              <span className="text-accent font-bold">•</span>
+              <div>
+                <span className="font-bold">The Assessment Advantage:</span> Most improvements take 12-24 months to implement properly. Starting early gives you the strategic advantage to maximize valuation and avoid the expensive scramble that unprepared sellers face.
+              </div>
+            </div>
+          </div>
+          
+          <div className="pt-3 border-t border-border/30 bg-accent/10 p-3 rounded-md">
+            <p className="text-sm text-foreground-secondary font-semibold">
+              <span className="text-accent">Bottom Line:</span> This is common sense business planning, not premature exit planning. The best time to prepare for a transaction is years before you need it.
+            </p>
+          </div>
+        </div>
+      )
     },
     {
       question: "Do you guarantee results?",
