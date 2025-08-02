@@ -107,12 +107,6 @@ const Footer = () => {
                   Schedule Assessment
                 </Button>
                 
-                <div className="mt-4 pt-4 border-t border-border/50">
-                  <div className="flex items-center gap-2 text-xs text-warning">
-                    <Clock className="h-3 w-3" />
-                    <span>3 spots left this month</span>
-                  </div>
-                </div>
               </Card>
             </div>
           </div>
