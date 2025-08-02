@@ -7,7 +7,53 @@ const FAQ = () => {
   const faqs = [
     {
       question: "What exactly should I expect from this $5,000 assessment?",
-      answer: "• **Plain English Translation**: We translate complex legal and financial jargon into terms you actually understand\n• **Preparation Timeline**: We help you understand what needs to happen when, so you're not scrambling at the last minute\n• **Hidden Cost Awareness**: We explain the real costs coming your way - not just the obvious fees\n• **Post-Closing Reality**: We prepare you for what life actually looks like after the deal closes\n• **Process Guidance**: We explain what it means when lawyers, bankers, and buyers say certain things\n• **Cost-Benefit Mathematics**: We help you understand the real math behind decisions that could cost or save you millions\n\n*This is educational preparation, not financial or legal advice - just founder-to-founder translation of what these deals actually mean.*"
+      answer: (
+        <div className="space-y-4">
+          <div className="space-y-3">
+            <div className="flex gap-3">
+              <span className="text-accent font-bold">•</span>
+              <div>
+                <span className="font-bold">Plain English Translation</span>: We translate complex legal and financial jargon into terms you actually understand
+              </div>
+            </div>
+            <div className="flex gap-3">
+              <span className="text-accent font-bold">•</span>
+              <div>
+                <span className="font-bold">Preparation Timeline</span>: We help you understand what needs to happen when, so you're not scrambling at the last minute
+              </div>
+            </div>
+            <div className="flex gap-3">
+              <span className="text-accent font-bold">•</span>
+              <div>
+                <span className="font-bold">Hidden Cost Awareness</span>: We explain the real costs coming your way - not just the obvious fees
+              </div>
+            </div>
+            <div className="flex gap-3">
+              <span className="text-accent font-bold">•</span>
+              <div>
+                <span className="font-bold">Post-Closing Reality</span>: We prepare you for what life actually looks like after the deal closes
+              </div>
+            </div>
+            <div className="flex gap-3">
+              <span className="text-accent font-bold">•</span>
+              <div>
+                <span className="font-bold">Process Guidance</span>: We explain what it means when lawyers, bankers, and buyers say certain things
+              </div>
+            </div>
+            <div className="flex gap-3">
+              <span className="text-accent font-bold">•</span>
+              <div>
+                <span className="font-bold">Cost-Benefit Mathematics</span>: We help you understand the real math behind decisions that could cost or save you millions
+              </div>
+            </div>
+          </div>
+          <div className="pt-2 border-t border-border/30">
+            <p className="text-sm italic text-foreground-muted">
+              This is educational preparation, not financial or legal advice - just founder-to-founder translation of what these deals actually mean.
+            </p>
+          </div>
+        </div>
+      )
     },
     {
       question: "How confidential is this process?",
