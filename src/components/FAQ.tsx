@@ -215,10 +215,6 @@ const FAQ = () => {
           <p>We'll provide a detailed checklist after our initial call.</p>
         </div>
       )
-    },
-    {
-      question: "How many spots are available each month?",
-      answer: "We limit ourselves to 5 assessments per month to ensure quality and attention. Once we're booked, there's typically a 4-6 week waiting list. High-growth companies get priority scheduling."
     }
   ];
 
