@@ -1,58 +1,82 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Meridian Advisory Group - PE Readiness Assessment Design System */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Core Brand Colors - Dark Luxury Theme */
+    --background: 225 86% 5%;          /* #050714 - Deep dark blue */
+    --background-card: 225 78% 9%;     /* #0F1629 - Card background */
+    --background-hover: 225 67% 13%;   /* #1A2240 - Hover states */
+    
+    --foreground: 225 25% 95%;         /* #F3F4F6 - Primary text */
+    --foreground-secondary: 225 9% 66%; /* #9CA3AF - Secondary text */
+    --foreground-muted: 225 13% 45%;   /* #6B7280 - Muted text */
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    /* Brand Primary Colors */
+    --primary: 225 92% 8%;             /* #0A0E27 - Primary brand */
+    --primary-secondary: 225 76% 16%;   /* #1A1F3A - Secondary brand */
+    --primary-foreground: 225 25% 95%; /* #F3F4F6 - Text on primary */
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    /* Accent & Action Colors */
+    --accent: 217 91% 60%;             /* #3B82F6 - Blue accent */
+    --accent-foreground: 225 25% 95%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --success: 158 64% 52%;            /* #10B981 - Success green */
+    --success-foreground: 225 25% 95%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --warning: 38 92% 50%;             /* #F59E0B - Warning amber */
+    --warning-foreground: 225 25% 95%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    /* UI Elements */
+    --card: 225 78% 9%;                /* #0F1629 */
+    --card-foreground: 225 25% 95%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --border: 225 67% 13%;             /* #1A2240 */
+    --input: 225 67% 13%;
+    --ring: 217 91% 60%;               /* Blue focus ring */
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    /* Semantic Colors */
+    --secondary: 225 67% 13%;
+    --secondary-foreground: 225 25% 95%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --muted: 225 67% 13%;
+    --muted-foreground: 225 9% 66%;
 
-    --radius: 0.5rem;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 225 25% 95%;
 
-    --sidebar-background: 0 0% 98%;
+    --popover: 225 78% 9%;
+    --popover-foreground: 225 25% 95%;
 
-    --sidebar-foreground: 240 5.3% 26.1%;
+    --radius: 0.75rem;
 
-    --sidebar-primary: 240 5.9% 10%;
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-secondary)));
+    --gradient-accent: linear-gradient(135deg, hsl(var(--accent)), hsl(217 91% 70%));
+    --gradient-success: linear-gradient(135deg, hsl(var(--success)), hsl(158 64% 62%));
+    
+    /* Shadows */
+    --shadow-luxury: 0 20px 60px -12px hsl(225 86% 2% / 0.8);
+    --shadow-card: 0 10px 30px -5px hsl(225 86% 2% / 0.6);
+    --shadow-button: 0 4px 20px hsl(217 91% 60% / 0.3);
+    
+    /* Animations */
+    --transition-smooth: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 300ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Sidebar (keeping existing for compatibility) */
+    --sidebar-background: 225 78% 9%;
+    --sidebar-foreground: 225 25% 95%;
+    --sidebar-primary: 225 92% 8%;
+    --sidebar-primary-foreground: 225 25% 95%;
+    --sidebar-accent: 225 67% 13%;
+    --sidebar-accent-foreground: 225 25% 95%;
+    --sidebar-border: 225 67% 13%;
+    --sidebar-ring: 217 91% 60%;
   }
 
   .dark {
@@ -100,6 +124,72 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-inter antialiased;
+    font-feature-settings: 'cv11', 'ss01';
+    min-height: 100vh;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-balance;
+  }
+
+  /* Custom scrollbar for dark theme */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--background));
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--border));
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--accent));
+  }
+}
+
+@layer components {
+  /* Custom utility classes for the design system */
+  .text-luxury {
+    background: var(--gradient-accent);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .glass-card {
+    background: hsl(var(--card) / 0.8);
+    backdrop-filter: blur(12px);
+    border: 1px solid hsl(var(--border) / 0.5);
+  }
+
+  .luxury-shadow {
+    box-shadow: var(--shadow-luxury);
+  }
+
+  .card-shadow {
+    box-shadow: var(--shadow-card);
+  }
+
+  .button-shadow {
+    box-shadow: var(--shadow-button);
+  }
+
+  .transition-luxury {
+    transition: var(--transition-smooth);
+  }
+
+  .transition-bounce {
+    transition: var(--transition-bounce);
+  }
+
+  /* Glassmorphism effects */
+  .backdrop-luxury {
+    backdrop-filter: blur(20px) saturate(180%);
+    background: hsl(var(--background) / 0.9);
   }
 }

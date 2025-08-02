@@ -1,0 +1,184 @@
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { CheckCircle, Clock, Users, FileText, TrendingUp, Shield, Calendar, DollarSign } from "lucide-react";
+
+const OfferDetails = () => {
+  const deliverables = [
+    {
+      icon: FileText,
+      title: "Comprehensive Assessment Report",
+      description: "40+ page detailed analysis with PE-grade financial modeling and operational benchmarking"
+    },
+    {
+      icon: TrendingUp,
+      title: "Exit Readiness Score",
+      description: "Quantified rating (1-10) across 6 key dimensions with specific improvement roadmap"
+    },
+    {
+      icon: Users,
+      title: "Management Team Evaluation",
+      description: "Leadership depth analysis and organizational structure recommendations"
+    },
+    {
+      icon: Shield,
+      title: "Risk Mitigation Plan",
+      description: "Identified vulnerabilities with prioritized action items and timeline"
+    }
+  ];
+
+  const timeline = [
+    { week: "Week 1", activity: "Financial Deep Dive", description: "P&L analysis, KPI benchmarking, unit economics review" },
+    { week: "Week 2", activity: "Operational Assessment", description: "Process mapping, efficiency analysis, scalability evaluation" },
+    { week: "Week 3", activity: "Management & Culture", description: "Leadership interviews, team structure analysis" },
+    { week: "Week 4", activity: "Market & Competitive", description: "Positioning analysis, growth opportunity assessment" },
+    { week: "Week 5", activity: "Risk & Compliance", description: "Legal, regulatory, and operational risk evaluation" },
+    { week: "Week 6", activity: "Report & Presentation", description: "Final report delivery and strategic discussion" }
+  ];
+
+  const pricingFeatures = [
+    "No retainer or hourly billing",
+    "Fixed $5,000 investment", 
+    "Payment upon completion",
+    "Money-back guarantee if not satisfied",
+    "Includes 2-hour strategy session"
+  ];
+
+  return (
+    <section className="py-16 bg-background">
+      <div className="container px-4 md:px-6">
+        {/* Header */}
+        <div className="text-center space-y-4 mb-12">
+          <Badge className="bg-accent/20 text-accent border-accent/30">
+            6-Week Assessment Program
+          </Badge>
+          <h2 className="text-3xl md:text-4xl font-bold">
+            What You Get in Your <span className="text-accent">PE Readiness Assessment</span>
+          </h2>
+          <p className="text-foreground-secondary text-lg max-w-2xl mx-auto">
+            A comprehensive evaluation designed to identify gaps, maximize valuation, 
+            and position your company for a successful exit.
+          </p>
+        </div>
+
+        <div className="grid lg:grid-cols-2 gap-12 items-start">
+          {/* Left: Deliverables */}
+          <div className="space-y-8">
+            <div>
+              <h3 className="text-2xl font-bold mb-6 flex items-center gap-2">
+                <FileText className="h-6 w-6 text-accent" />
+                Core Deliverables
+              </h3>
+              <div className="space-y-4">
+                {deliverables.map((item, index) => (
+                  <Card key={index} className="glass-card border-border/50 hover:border-accent/30 transition-luxury">
+                    <CardContent className="p-6">
+                      <div className="flex items-start gap-4">
+                        <div className="p-2 bg-accent/20 rounded-lg">
+                          <item.icon className="h-5 w-5 text-accent" />
+                        </div>
+                        <div>
+                          <h4 className="font-semibold text-foreground mb-2">{item.title}</h4>
+                          <p className="text-foreground-secondary text-sm">{item.description}</p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
+
+            {/* Pricing Card */}
+            <Card className="glass-card border-accent/30 luxury-shadow">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-xl">
+                  <DollarSign className="h-6 w-6 text-success" />
+                  Investment & Terms
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="text-center p-6 bg-gradient-to-br from-accent/10 to-success/10 rounded-lg border border-accent/20">
+                  <div className="text-4xl font-bold text-accent mb-2">$5,000</div>
+                  <div className="text-foreground-secondary">Fixed Fee • No Surprises</div>
+                </div>
+                
+                <div className="space-y-3">
+                  {pricingFeatures.map((feature, index) => (
+                    <div key={index} className="flex items-center gap-3">
+                      <CheckCircle className="h-4 w-4 text-success flex-shrink-0" />
+                      <span className="text-foreground-secondary text-sm">{feature}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <Button className="w-full bg-success hover:bg-success/90 font-semibold button-shadow">
+                  Schedule Assessment Call
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Right: Timeline */}
+          <div>
+            <h3 className="text-2xl font-bold mb-6 flex items-center gap-2">
+              <Calendar className="h-6 w-6 text-accent" />
+              6-Week Timeline
+            </h3>
+            
+            <div className="space-y-6">
+              {timeline.map((phase, index) => (
+                <div key={index} className="relative">
+                  {/* Timeline Line */}
+                  {index < timeline.length - 1 && (
+                    <div className="absolute left-6 top-12 w-0.5 h-16 bg-border" />
+                  )}
+                  
+                  <div className="flex items-start gap-4">
+                    <div className="flex items-center justify-center w-12 h-12 bg-accent/20 rounded-full border-2 border-accent/30">
+                      <Clock className="h-5 w-5 text-accent" />
+                    </div>
+                    
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-3 mb-2">
+                        <h4 className="font-semibold text-foreground">{phase.week}</h4>
+                        <Badge variant="outline" className="border-accent/30 text-accent">
+                          {phase.activity}
+                        </Badge>
+                      </div>
+                      <p className="text-foreground-secondary text-sm leading-relaxed">
+                        {phase.description}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Additional Info */}
+            <Card className="mt-8 glass-card border-border/50">
+              <CardContent className="p-6">
+                <h4 className="font-semibold text-foreground mb-3">What Makes This Different?</h4>
+                <div className="space-y-2 text-sm text-foreground-secondary">
+                  <div className="flex items-start gap-2">
+                    <CheckCircle className="h-4 w-4 text-success mt-0.5 flex-shrink-0" />
+                    <span>PE fund perspective - we know what buyers actually look for</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <CheckCircle className="h-4 w-4 text-success mt-0.5 flex-shrink-0" />
+                    <span>Hands-on operational experience, not just financial modeling</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <CheckCircle className="h-4 w-4 text-success mt-0.5 flex-shrink-0" />
+                    <span>Actionable recommendations with clear implementation steps</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default OfferDetails;
