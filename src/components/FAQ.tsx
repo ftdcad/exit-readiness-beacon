@@ -197,7 +197,7 @@ const FAQ = () => {
     },
     {
       question: "What documents do I need to provide?",
-      answer: "Financial statements (3 years), management reports, org charts, customer data, and operational metrics. We'll provide a detailed checklist after our initial call. Most founders already have 80% of what we need."
+      answer: "You don't actually need to provide anything, but this list below is the minimum criteria we would need to get started. Dependent on your industry, there could be additional documentation we request to help direct you or guide you, but listed below is the bare minimum we would need to give you a fair assessment: Financial statements (3 years), management reports, org charts, customer data, and operational metrics. We'll provide a detailed checklist after our initial call. Most founders already have 80% of what we need."
     },
     {
       question: "How many spots are available each month?",
