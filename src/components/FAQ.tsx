@@ -61,7 +61,29 @@ const FAQ = () => {
     },
     {
       question: "What size companies do you typically work with?",
-      answer: "Our sweet spot is companies with $5M-$100M annual revenue, though we've successfully assessed businesses from $2M to $500M. The key factors are growth trajectory, profitability potential, and genuine exit intent within 2-3 years."
+      answer: (
+        <div className="space-y-4">
+          <div className="space-y-3">
+            <div className="flex gap-3">
+              <span className="text-accent font-bold">•</span>
+              <div>
+                <span className="font-bold">Tuck-in/Rollup Transactions</span>: Companies valued between $400,000 - $1.5 million for strategic add-on acquisitions
+              </div>
+            </div>
+            <div className="flex gap-3">
+              <span className="text-accent font-bold">•</span>
+              <div>
+                <span className="font-bold">Equity Purchase Deals</span>: Companies valued between $5 million - $20 million for direct private equity acquisition
+              </div>
+            </div>
+          </div>
+          <div className="pt-2 border-t border-border/30">
+            <p className="text-sm text-foreground-secondary">
+              <span className="font-semibold">Timeline Expectations:</span> We work with sellers who have a 1-2 year coaching timeline or immediate sale readiness, with most maintaining a 1-3 year exit strategy. Private equity hold periods typically run 5-7 years until the second transaction.
+            </p>
+          </div>
+        </div>
+      )
     },
     {
       question: "How is this different from hiring an investment banker?",
