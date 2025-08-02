@@ -197,7 +197,24 @@ const FAQ = () => {
     },
     {
       question: "What documents do I need to provide?",
-      answer: "You don't actually need to provide anything, but this list below is the minimum criteria we would need to get started. Dependent on your industry, there could be additional documentation we request to help direct you or guide you, but listed below is the bare minimum we would need to give you a fair assessment: Financial statements (3 years), management reports, org charts, customer data, and operational metrics. We'll provide a detailed checklist after our initial call. Most founders already have 80% of what we need."
+      answer: (
+        <div>
+          <p className="mb-3">You don't actually need to provide anything upfront, but here's what we'd need to get started:</p>
+          <ul className="list-disc list-inside mb-3 space-y-1">
+            <li>Financial statements (3 years)</li>
+            <li>P&L statements (3 years)</li>
+            <li>Tax returns (3 years)</li>
+          </ul>
+          <p className="mb-2">We may also need:</p>
+          <ul className="list-disc list-inside mb-3 space-y-1">
+            <li>Org charts</li>
+            <li>Customer data</li>
+            <li>Operational metrics</li>
+            <li>Management reports</li>
+          </ul>
+          <p>We'll provide a detailed checklist after our initial call.</p>
+        </div>
+      )
     },
     {
       question: "How many spots are available each month?",
