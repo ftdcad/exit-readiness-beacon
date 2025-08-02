@@ -24,6 +24,9 @@ const PreAssessmentForm = () => {
     revenue2023: "",
     revenue2022: "",
     
+    // Investment Type
+    investmentType: "",
+    
     // Exit Goals
     exitTimeline: "",
     exitType: "",
@@ -37,7 +40,7 @@ const PreAssessmentForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 
-  const totalSteps = 3;
+  const totalSteps = 4;
   const progress = (step / totalSteps) * 100;
 
   const handleNext = () => {
@@ -298,8 +301,53 @@ const PreAssessmentForm = () => {
                   </div>
                 )}
 
-                {/* Step 3: Exit Goals & Contact */}
+                {/* Step 3: Investment Type & Interest */}
                 {step === 3 && (
+                  <div className="space-y-6">
+                    <CardHeader className="px-0 pt-0">
+                      <CardTitle className="flex items-center gap-2 text-xl">
+                        <CheckCircle className="h-5 w-5 text-accent" />
+                        Investment Type & Interest
+                      </CardTitle>
+                      <p className="text-sm text-foreground-secondary">
+                        Understanding what type of investment you're considering helps us provide more targeted guidance.
+                      </p>
+                    </CardHeader>
+
+                    <div className="grid gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="investmentType">What type of investment are you most interested in?</Label>
+                        <Select
+                          value={formData.investmentType}
+                          onValueChange={(value) => setFormData(prev => ({ ...prev, investmentType: value }))}
+                        >
+                          <SelectTrigger className="bg-background-hover border-border/50">
+                            <SelectValue placeholder="Select investment type" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="angel">Angel Investment - Early stage funding, typically $25K-$500K for startups</SelectItem>
+                            <SelectItem value="venture-capital">Venture Capital - Growth funding $1M+ for high-potential businesses</SelectItem>
+                            <SelectItem value="private-equity-minority">Private Equity (Minority) - PE firm takes &lt;50% ownership ⚠️ Very rare</SelectItem>
+                            <SelectItem value="private-equity-majority">Private Equity (Majority) - PE firm takes &gt;50% ownership (Most common)</SelectItem>
+                            <SelectItem value="strategic-acquisition">Strategic Acquisition - Sale to industry competitor or larger company</SelectItem>
+                            <SelectItem value="not-sure">Not Sure Yet - Still exploring options</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      {formData.investmentType === "private-equity-minority" && (
+                        <div className="p-4 bg-orange-50 dark:bg-orange-950/20 border border-orange-200 dark:border-orange-800 rounded-lg">
+                          <p className="text-sm text-orange-800 dark:text-orange-200">
+                            <strong>Important Note:</strong> Private equity minority investments are extremely rare. Most PE firms prefer majority control to implement operational changes and drive growth. Consider whether majority PE or strategic acquisition might better align with your goals.
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Step 4: Exit Strategy & Contact */}
+                {step === 4 && (
                   <div className="space-y-6">
                     <CardHeader className="px-0 pt-0">
                       <CardTitle className="flex items-center gap-2 text-xl">
