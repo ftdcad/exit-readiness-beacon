@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle, Clock, Users, FileText, TrendingUp, Shield, Calendar, DollarSign } from "lucide-react";
+import { CheckCircle, Clock, Users, FileText, TrendingUp, Shield, Calendar, DollarSign, Key } from "lucide-react";
 
 const OfferDetails = () => {
   const deliverables = [
@@ -134,7 +134,7 @@ const OfferDetails = () => {
                   
                   <div className="flex items-start gap-4">
                     <div className="flex items-center justify-center w-12 h-12 bg-accent/20 rounded-full border-2 border-accent/30">
-                      <Clock className="h-5 w-5 text-accent" />
+                      <Key className="h-5 w-5 text-accent" />
                     </div>
                     
                     <div className="flex-1 min-w-0">
