@@ -19,9 +19,10 @@ const PreAssessmentForm = () => {
     employees: "",
     
     // Financial
-    annualRevenue: "",
-    revenueGrowth: "",
-    profitMargin: "",
+    revenue2025: "",
+    revenue2024: "",
+    revenue2023: "",
+    revenue2022: "",
     
     // Exit Goals
     exitTimeline: "",
@@ -77,7 +78,7 @@ const PreAssessmentForm = () => {
   ];
 
   const revenueRanges = [
-    "$1M - $5M", "$5M - $10M", "$10M - $25M", "$25M - $50M", 
+    "Under $1M", "$1M - $5M", "$5M - $10M", "$10M - $25M", "$25M - $50M", 
     "$50M - $100M", "$100M+"
   ];
 
@@ -194,14 +195,20 @@ const PreAssessmentForm = () => {
                         <DollarSign className="h-5 w-5 text-accent" />
                         Business Performance
                       </CardTitle>
+                      <p className="text-sm text-foreground-secondary">
+                        Rough estimates are fine. This helps us understand your business trajectory.
+                      </p>
                     </CardHeader>
 
                     <div className="grid gap-4">
                       <div className="space-y-2">
-                        <Label htmlFor="annualRevenue">Approximate Annual Revenue</Label>
+                        <Label htmlFor="revenue2025" className="flex items-center gap-2">
+                          2025 Gross Revenue (what are you on track for this year?)
+                          <span className="text-xs text-foreground-muted cursor-help" title="Total income before any deductions or expenses">ⓘ</span>
+                        </Label>
                         <Select
-                          value={formData.annualRevenue}
-                          onValueChange={(value) => setFormData(prev => ({ ...prev, annualRevenue: value }))}
+                          value={formData.revenue2025}
+                          onValueChange={(value) => setFormData(prev => ({ ...prev, revenue2025: value }))}
                         >
                           <SelectTrigger className="bg-background-hover border-border/50">
                             <SelectValue placeholder="Select revenue range" />
@@ -215,39 +222,61 @@ const PreAssessmentForm = () => {
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="revenueGrowth">How would you describe your revenue trend?</Label>
+                        <Label htmlFor="revenue2024" className="flex items-center gap-2">
+                          2024 Gross Revenue
+                          <span className="text-xs text-foreground-muted cursor-help" title="Total income before any deductions or expenses">ⓘ</span>
+                        </Label>
                         <Select
-                          value={formData.revenueGrowth}
-                          onValueChange={(value) => setFormData(prev => ({ ...prev, revenueGrowth: value }))}
+                          value={formData.revenue2024}
+                          onValueChange={(value) => setFormData(prev => ({ ...prev, revenue2024: value }))}
                         >
                           <SelectTrigger className="bg-background-hover border-border/50">
-                            <SelectValue placeholder="Select growth trend" />
+                            <SelectValue placeholder="Select revenue range" />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="rapid-growth">Growing rapidly (30%+ annually)</SelectItem>
-                            <SelectItem value="steady-growth">Growing steadily (10-30% annually)</SelectItem>
-                            <SelectItem value="slow-growth">Growing slowly (0-10% annually)</SelectItem>
-                            <SelectItem value="flat">Relatively flat</SelectItem>
-                            <SelectItem value="declining">Declining</SelectItem>
+                            {revenueRanges.map((range) => (
+                              <SelectItem key={range} value={range}>{range}</SelectItem>
+                            ))}
                           </SelectContent>
                         </Select>
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="profitMargin">How profitable is your business?</Label>
+                        <Label htmlFor="revenue2023" className="flex items-center gap-2">
+                          2023 Gross Revenue
+                          <span className="text-xs text-foreground-muted cursor-help" title="Total income before any deductions or expenses">ⓘ</span>
+                        </Label>
                         <Select
-                          value={formData.profitMargin}
-                          onValueChange={(value) => setFormData(prev => ({ ...prev, profitMargin: value }))}
+                          value={formData.revenue2023}
+                          onValueChange={(value) => setFormData(prev => ({ ...prev, revenue2023: value }))}
                         >
                           <SelectTrigger className="bg-background-hover border-border/50">
-                            <SelectValue placeholder="Select profitability" />
+                            <SelectValue placeholder="Select revenue range" />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="highly-profitable">Highly profitable (20%+ margins)</SelectItem>
-                            <SelectItem value="profitable">Profitable (10-20% margins)</SelectItem>
-                            <SelectItem value="break-even">Around break-even</SelectItem>
-                            <SelectItem value="losing-money">Currently losing money</SelectItem>
-                            <SelectItem value="unsure">Not sure</SelectItem>
+                            {revenueRanges.map((range) => (
+                              <SelectItem key={range} value={range}>{range}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="revenue2022" className="flex items-center gap-2 text-foreground-secondary">
+                          2022 Gross Revenue (leave blank if not applicable)
+                          <span className="text-xs text-foreground-muted cursor-help" title="Total income before any deductions or expenses">ⓘ</span>
+                        </Label>
+                        <Select
+                          value={formData.revenue2022}
+                          onValueChange={(value) => setFormData(prev => ({ ...prev, revenue2022: value }))}
+                        >
+                          <SelectTrigger className="bg-background-hover border-border/50">
+                            <SelectValue placeholder="Leave blank if company was not operating" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {revenueRanges.map((range) => (
+                              <SelectItem key={range} value={range}>{range}</SelectItem>
+                            ))}
                           </SelectContent>
                         </Select>
                       </div>
