@@ -6,8 +6,8 @@ import { HelpCircle, MessageCircle, Calendar, Shield } from "lucide-react";
 const FAQ = () => {
   const faqs = [
     {
-      question: "What exactly is included in the $5,000 assessment?",
-      answer: "The flat fee includes: comprehensive 6-week evaluation, 40+ page detailed report, exit readiness scoring, management team analysis, risk assessment, operational benchmarking, 2-hour strategy session, and actionable improvement roadmap. No additional fees or surprises."
+      question: "What exactly should I expect from this $5,000 assessment?",
+      answer: "• **Plain English Translation**: We translate complex legal and financial jargon into terms you actually understand\n• **Preparation Timeline**: We help you understand what needs to happen when, so you're not scrambling at the last minute\n• **Hidden Cost Awareness**: We explain the real costs coming your way - not just the obvious fees\n• **Post-Closing Reality**: We prepare you for what life actually looks like after the deal closes\n• **Process Guidance**: We explain what it means when lawyers, bankers, and buyers say certain things\n• **Cost-Benefit Mathematics**: We help you understand the real math behind decisions that could cost or save you millions\n\n*This is educational preparation, not financial or legal advice - just founder-to-founder translation of what these deals actually mean.*"
     },
     {
       question: "How confidential is this process?",
