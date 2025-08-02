@@ -87,7 +87,42 @@ const FAQ = () => {
     },
     {
       question: "How is this different from hiring an investment banker?",
-      answer: "This happens before you hire a banker. We identify and fix operational gaps that could derail your process or reduce valuation. Think of it as 'pre-due diligence' - we find the issues buyers will find, but give you time to address them first."
+      answer: (
+        <div className="space-y-4">
+          <p className="font-semibold text-foreground">
+            The difference between us and an investment banker is like comparing an apple to a screwdriver - they're not even remotely the same thing.
+          </p>
+          
+          <div className="space-y-3">
+            <div className="flex gap-3">
+              <span className="text-accent font-bold">•</span>
+              <div>
+                <span className="font-bold">Investment bankers are the true professionals</span> - if you've retained one, you need to listen to them. They live in a world of Excel sheets and data, using vernacular and phrases that most sellers don't completely understand.
+              </div>
+            </div>
+            
+            <div className="flex gap-3">
+              <span className="text-accent font-bold">•</span>
+              <div>
+                <span className="font-bold">We're here to help you find</span> what you've hidden in the corners or what others may be hiding from you. We focus on the nuts and bolts of a transaction and little things that can make a massive improvement on your sale strategy.
+              </div>
+            </div>
+            
+            <div className="flex gap-3">
+              <span className="text-accent font-bold">•</span>
+              <div>
+                <span className="font-bold">We're not the right fit for everybody</span>, but we've never seen a deal that we weren't able to assist in better positioning and posturing.
+              </div>
+            </div>
+          </div>
+          
+          <div className="pt-3 border-t border-border/30 bg-muted/30 p-3 rounded-md">
+            <p className="text-sm text-foreground-secondary font-semibold">
+              <span className="text-destructive">Important:</span> Under no circumstances are we attorneys or investment bankers. We provide business optimization and preparation services only.
+            </p>
+          </div>
+        </div>
+      )
     },
     {
       question: "What if I'm not ready to exit for 2-3 years?",
