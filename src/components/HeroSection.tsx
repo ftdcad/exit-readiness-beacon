@@ -6,12 +6,6 @@ import { NDAGate } from "./NDAGate";
 const HeroSection = () => {
   const [showNDA, setShowNDA] = useState(false);
 
-  const trustSignals = [
-    { icon: TrendingUp, text: "8-figure exit expertise" },
-    { icon: Users, text: "100+ successful assessments" },
-    { icon: DollarSign, text: "$2.3B+ in transaction value" },
-  ];
-
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-background">
       {/* Background Elements */}
@@ -41,18 +35,6 @@ const HeroSection = () => {
                 6-week operational assessment for founders considering private equity or strategic exit.
               </p>
             </div>
-
-            {/* Trust Signals */}
-            <div className="grid sm:grid-cols-3 gap-4">
-              {trustSignals.map((signal, index) => (
-                <div key={index} className="flex items-center gap-3 p-3 rounded-lg bg-card/50 border border-border/50">
-                  <signal.icon className="h-5 w-5 text-accent flex-shrink-0" />
-                  <span className="text-sm font-medium text-foreground-secondary">{signal.text}</span>
-                </div>
-              ))}
-            </div>
-
-            {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4">
               <Button 
                 size="lg" 
