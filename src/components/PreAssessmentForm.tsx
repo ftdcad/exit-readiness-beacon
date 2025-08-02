@@ -92,8 +92,8 @@ const PreAssessmentForm = () => {
   ];
 
   const revenueRanges = [
-    "Under $1M", "$1M - $5M", "$5M - $10M", "$10M - $25M", "$25M - $50M", 
-    "$50M - $100M", "$100M+"
+    "Under $1M", "$1M+", "$2M+", "$3M+", "$4M+", "$5M-$7M", 
+    "$7M-$10M", "$10M-$15M", "$15M-$25M", "$25M+"
   ];
 
   const employeeRanges = [
