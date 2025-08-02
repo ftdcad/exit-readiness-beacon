@@ -13,7 +13,7 @@ const OfferDetails = () => {
     {
       icon: TrendingUp,
       title: "Exit Readiness Score",
-      description: "Quantified rating (1-10) across 6 key dimensions with specific improvement roadmap"
+      description: "Quantified rating (1-10) across 6 critical dimensions with specific improvement roadmap"
     },
     {
       icon: Users,
@@ -121,7 +121,7 @@ const OfferDetails = () => {
           <div>
             <h3 className="text-2xl font-bold mb-6 flex items-center gap-2">
               <Calendar className="h-6 w-6 text-accent" />
-              6-Week Timeline
+              6-Week Timeline: The 6 Keys to Get You There
             </h3>
             
             <div className="space-y-6">
