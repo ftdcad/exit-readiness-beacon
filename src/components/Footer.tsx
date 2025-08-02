@@ -12,11 +12,7 @@ const Footer = () => {
     address: "Boca Raton, FL"
   };
 
-  const credentials = [
-    { icon: Award, text: "Certified Exit Planning Advisor" },
-    { icon: Shield, text: "FINRA Licensed" },
-    { icon: Clock, text: "15+ Years PE Experience" }
-  ];
+  const credentials = [];
 
   const quickLinks = [
     { label: "Assessment Process", href: "#process" },
