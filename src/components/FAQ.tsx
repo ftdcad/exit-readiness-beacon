@@ -161,12 +161,6 @@ const FAQ = () => {
               </div>
             </div>
             
-            <div className="flex gap-3">
-              <span className="text-accent font-bold">•</span>
-              <div>
-                <span className="font-bold">The Assessment Advantage:</span> Most improvements take 12-24 months to implement properly. Starting early gives you the strategic advantage to maximize valuation and avoid the expensive scramble that unprepared sellers face.
-              </div>
-            </div>
           </div>
           
           <div className="pt-3 border-t border-border/30 bg-accent/10 p-3 rounded-md">
@@ -179,7 +173,27 @@ const FAQ = () => {
     },
     {
       question: "Do you guarantee results?",
-      answer: "While we can't guarantee exit outcomes due to market variables, our track record shows 94% of assessed companies successfully complete their exit process. We focus on delivering thorough, actionable insights based on our extensive PE experience."
+      answer: (
+        <div className="space-y-4">
+          <p className="text-foreground font-semibold">
+            Death and taxes - that's the only thing in life that's guaranteed.
+          </p>
+          
+          <p className="text-foreground">
+            We will work hard for you. We believe we will add value. We believe we will show you things that you don't already know - as long as you're open and vulnerable and willing to go through the process of understanding what these deals take.
+          </p>
+          
+          <p className="text-foreground">
+            Outside of that, there is no guarantee.
+          </p>
+          
+          <div className="pt-3 border-t border-border/30 bg-accent/10 p-3 rounded-md">
+            <p className="text-sm text-foreground-secondary font-semibold">
+              What we <span className="text-accent">do</span> guarantee: Our commitment to working hard, providing honest assessment, and giving maximum effort to help you understand and navigate the complexities of these transactions.
+            </p>
+          </div>
+        </div>
+      )
     },
     {
       question: "What documents do I need to provide?",
