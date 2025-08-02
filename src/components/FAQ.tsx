@@ -118,7 +118,7 @@ const FAQ = () => {
           
           <div className="pt-3 border-t border-border/30 bg-muted/30 p-3 rounded-md">
             <p className="text-sm text-foreground-secondary font-semibold">
-              <span className="text-destructive">Important:</span> Under no circumstances are we attorneys or investment bankers. We provide business optimization and preparation services only.
+              <span className="text-destructive">Important:</span> Under no circumstances are we giving legal advice or acting as investment bankers. We provide business optimization and preparation services only.
             </p>
           </div>
         </div>
