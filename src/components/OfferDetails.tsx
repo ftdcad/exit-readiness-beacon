@@ -8,7 +8,7 @@ const OfferDetails = () => {
     {
       icon: FileText,
       title: "Comprehensive Assessment Report",
-      description: "40+ page detailed analysis with PE-grade financial modeling and operational benchmarking"
+      description: "Detailed analysis with financial modeling and operational benchmarking"
     },
     {
       icon: TrendingUp,
