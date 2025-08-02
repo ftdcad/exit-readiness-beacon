@@ -84,32 +84,51 @@ const OfferDetails = () => {
               </div>
             </div>
 
-            {/* Pricing Card */}
-            <Card className="glass-card border-accent/30 luxury-shadow">
+            {/* Free Assessment Card */}
+            <Card className="glass-card border-accent/30 luxury-shadow bg-gradient-to-br from-primary/5 to-accent/5">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-xl">
-                  <DollarSign className="h-6 w-6 text-success" />
-                  Investment & Terms
+                  <div className="inline-flex items-center gap-2 bg-success/10 text-success px-3 py-1 rounded-full text-sm font-medium">
+                    <CheckCircle className="h-4 w-4" />
+                    100% FREE
+                  </div>
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="text-center p-6 bg-gradient-to-br from-accent/10 to-success/10 rounded-lg border border-accent/20">
-                  <div className="text-4xl font-bold text-accent mb-2">$5,000</div>
-                  <div className="text-foreground-secondary">$1,000 Down • $4,000 at Completion</div>
+                <div className="text-center space-y-2">
+                  <h3 className="text-xl font-bold text-foreground">Initial Exit Readiness Assessment</h3>
+                  <p className="text-sm text-foreground-secondary">No cost, no obligation — discover your readiness score</p>
                 </div>
                 
                 <div className="space-y-3">
-                  {pricingFeatures.map((feature, index) => (
-                    <div key={index} className="flex items-center gap-3">
-                      <CheckCircle className="h-4 w-4 text-success flex-shrink-0" />
-                      <span className="text-foreground-secondary text-sm">{feature}</span>
+                  <h4 className="font-semibold text-foreground">Free Assessment Includes:</h4>
+                  <div className="space-y-2">
+                    <div className="flex items-start gap-2">
+                      <CheckCircle className="h-4 w-4 text-success mt-0.5 flex-shrink-0" />
+                      <span className="text-sm text-foreground-secondary">30-minute consultation call</span>
                     </div>
-                  ))}
+                    <div className="flex items-start gap-2">
+                      <CheckCircle className="h-4 w-4 text-success mt-0.5 flex-shrink-0" />
+                      <span className="text-sm text-foreground-secondary">Preliminary readiness score (1-10)</span>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <CheckCircle className="h-4 w-4 text-success mt-0.5 flex-shrink-0" />
+                      <span className="text-sm text-foreground-secondary">Initial gap analysis</span>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <CheckCircle className="h-4 w-4 text-success mt-0.5 flex-shrink-0" />
+                      <span className="text-sm text-foreground-secondary">Custom roadmap overview</span>
+                    </div>
+                  </div>
                 </div>
 
                 <Button className="w-full bg-success hover:bg-success/90 font-semibold button-shadow">
-                  Schedule Assessment Call
+                  Get Your Free Assessment
                 </Button>
+                
+                <p className="text-xs text-center text-foreground-secondary">
+                  If you choose to proceed with the full 4-week assessment after our call, investment terms will be discussed.
+                </p>
               </CardContent>
             </Card>
           </div>
