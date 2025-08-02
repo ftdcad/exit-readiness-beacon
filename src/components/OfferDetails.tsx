@@ -28,18 +28,16 @@ const OfferDetails = () => {
   ];
 
   const timeline = [
-    { week: "Week 1", activity: "Financial Deep Dive", description: "P&L analysis, KPI benchmarking, unit economics review" },
-    { week: "Week 2", activity: "Operational Assessment", description: "Process mapping, efficiency analysis, scalability evaluation" },
-    { week: "Week 3", activity: "Management & Culture", description: "Leadership interviews, team structure analysis" },
-    { week: "Week 4", activity: "Market & Competitive", description: "Positioning analysis, growth opportunity assessment" },
-    { week: "Week 5", activity: "Risk & Compliance", description: "Legal, regulatory, and operational risk evaluation" },
-    { week: "Week 6", activity: "Report & Presentation", description: "Final report delivery and strategic discussion" }
+    { week: "Week 1", activity: "Financial & Operational Foundation", description: "P&L analysis, KPI benchmarking, unit economics review, process mapping, efficiency analysis, scalability evaluation" },
+    { week: "Week 2", activity: "Management & Market Analysis", description: "Leadership interviews, team structure analysis, positioning analysis, growth opportunity assessment" },
+    { week: "Week 3", activity: "Risk & Compliance Deep Dive", description: "Legal, regulatory, and operational risk evaluation, vulnerability assessment, compliance gap analysis" },
+    { week: "Week 4", activity: "Report & Strategic Presentation", description: "Final report delivery, strategic discussion, and actionable roadmap presentation" }
   ];
 
   const pricingFeatures = [
     "No retainer or hourly billing",
-    "Fixed $5,000 investment", 
-    "Payment upon completion",
+    "$1,000 down to start assessment", 
+    "$4,000 due at completion",
     "Includes 2-hour strategy session"
   ];
 
@@ -49,14 +47,13 @@ const OfferDetails = () => {
         {/* Header */}
         <div className="text-center space-y-4 mb-12">
           <Badge className="bg-accent/20 text-accent border-accent/30">
-            6-Week Assessment Program
+            4-Week Assessment Program
           </Badge>
           <h2 className="text-3xl md:text-4xl font-bold">
             What You Get in Your <span className="text-accent">PE Readiness Assessment</span>
           </h2>
           <p className="text-foreground-secondary text-lg max-w-2xl mx-auto">
-            A comprehensive evaluation designed to identify gaps, maximize valuation, 
-            and position your company for a successful exit.
+            Get a free initial assessment teaser, then proceed with our comprehensive 4-week evaluation designed to identify gaps, maximize valuation, and position your company for a successful exit.
           </p>
         </div>
 
@@ -98,7 +95,7 @@ const OfferDetails = () => {
               <CardContent className="space-y-4">
                 <div className="text-center p-6 bg-gradient-to-br from-accent/10 to-success/10 rounded-lg border border-accent/20">
                   <div className="text-4xl font-bold text-accent mb-2">$5,000</div>
-                  <div className="text-foreground-secondary">Fixed Fee • No Surprises</div>
+                  <div className="text-foreground-secondary">$1,000 Down • $4,000 at Completion</div>
                 </div>
                 
                 <div className="space-y-3">
@@ -119,10 +116,10 @@ const OfferDetails = () => {
 
           {/* Right: Timeline */}
           <div>
-            <h3 className="text-2xl font-bold mb-6 flex items-center gap-2">
-              <Calendar className="h-6 w-6 text-accent" />
-              6-Week Timeline: The 6 Keys to Get You There
-            </h3>
+              <h3 className="text-2xl font-bold mb-6 flex items-center gap-2">
+                <Calendar className="h-6 w-6 text-accent" />
+                4-Week Timeline: The 6 Keys to Get You There
+              </h3>
             
             <div className="space-y-6">
               {timeline.map((phase, index) => (
