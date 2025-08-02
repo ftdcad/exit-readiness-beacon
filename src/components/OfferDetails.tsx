@@ -157,7 +157,7 @@ const OfferDetails = () => {
                 <div className="space-y-2 text-sm text-foreground-secondary">
                   <div className="flex items-start gap-2">
                     <CheckCircle className="h-4 w-4 text-success mt-0.5 flex-shrink-0" />
-                    <span>We've sat in the buyer's chair — Private equity perspective — we know exactly what buyers look for, and how they exploit what you don't prepare.</span>
+                    <span>We've sat in the buyer's chair — Private equity perspective gives us insight into exactly what buyers look for and common preparation gaps that impact valuation.</span>
                   </div>
                   <div className="flex items-start gap-2">
                     <CheckCircle className="h-4 w-4 text-success mt-0.5 flex-shrink-0" />
