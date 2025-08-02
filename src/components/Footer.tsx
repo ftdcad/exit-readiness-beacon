@@ -43,21 +43,6 @@ const Footer = () => {
                 </p>
               </div>
 
-              {/* Contact Info */}
-              <div className="space-y-3">
-                <div className="flex items-center gap-3">
-                  <Phone className="h-4 w-4 text-accent" />
-                  <span className="text-foreground text-sm">{companyInfo.phone}</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <Mail className="h-4 w-4 text-accent" />
-                  <span className="text-foreground text-sm">{companyInfo.email}</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <MapPin className="h-4 w-4 text-accent" />
-                  <span className="text-foreground text-sm">{companyInfo.address}</span>
-                </div>
-              </div>
 
               {/* Credentials */}
               <div className="space-y-2">
