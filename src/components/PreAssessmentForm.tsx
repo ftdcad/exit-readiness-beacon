@@ -7,7 +7,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { CheckCircle, Clock, Users, DollarSign, Scale, Plus, X } from "lucide-react";
+import { CheckCircle, Clock, Users, DollarSign, Scale, Plus, X, FileText } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 const PreAssessmentForm = () => {
@@ -33,6 +33,11 @@ const PreAssessmentForm = () => {
     ownershipType: "",
     owners: [] as Array<{ name: string; percentage: string }>,
     
+    // Document Availability
+    pnlAvailability: "",
+    taxReturnsAvailability: "",
+    balanceSheetsAvailability: "",
+    
     // Exit Goals
     exitTimeline: "",
     exitType: "",
@@ -46,7 +51,7 @@ const PreAssessmentForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 
-  const totalSteps = 5;
+  const totalSteps = 6;
   const progress = (step / totalSteps) * 100;
 
   const handleNext = () => {
@@ -510,8 +515,103 @@ const PreAssessmentForm = () => {
                   </div>
                 )}
 
-                {/* Step 5: Exit Strategy & Contact */}
+                {/* Step 5: Document Availability */}
                 {step === 5 && (
+                  <div className="space-y-6">
+                    <CardHeader className="px-0 pt-0">
+                      <CardTitle className="flex items-center gap-2 text-xl">
+                        <FileText className="h-5 w-5 text-accent" />
+                        Financial Documentation
+                      </CardTitle>
+                      <p className="text-sm text-foreground-secondary">
+                        Understanding what financial documents you have available helps us prepare for the due diligence process.
+                      </p>
+                    </CardHeader>
+
+                    <div className="grid gap-6">
+                      <div className="space-y-4">
+                        <Label className="text-base font-medium">Are you able to provide 3 years of P&L statements?</Label>
+                        <RadioGroup
+                          value={formData.pnlAvailability}
+                          onValueChange={(value) => setFormData(prev => ({ ...prev, pnlAvailability: value }))}
+                          className="grid gap-3"
+                        >
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="readily-available" id="pnl-ready" />
+                            <Label htmlFor="pnl-ready">Yes, I have them readily available</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="need-time" id="pnl-time" />
+                            <Label htmlFor="pnl-time">Yes, but I'd need time to gather them</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="not-available" id="pnl-no" />
+                            <Label htmlFor="pnl-no">No, I don't have them available</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="not-sure" id="pnl-unsure" />
+                            <Label htmlFor="pnl-unsure">Not sure</Label>
+                          </div>
+                        </RadioGroup>
+                      </div>
+
+                      <div className="space-y-4">
+                        <Label className="text-base font-medium">Are you able to provide 3 years of tax returns?</Label>
+                        <RadioGroup
+                          value={formData.taxReturnsAvailability}
+                          onValueChange={(value) => setFormData(prev => ({ ...prev, taxReturnsAvailability: value }))}
+                          className="grid gap-3"
+                        >
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="readily-available" id="tax-ready" />
+                            <Label htmlFor="tax-ready">Yes, I have them readily available</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="need-time" id="tax-time" />
+                            <Label htmlFor="tax-time">Yes, but I'd need time to gather them</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="not-available" id="tax-no" />
+                            <Label htmlFor="tax-no">No, I don't have them available</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="not-sure" id="tax-unsure" />
+                            <Label htmlFor="tax-unsure">Not sure</Label>
+                          </div>
+                        </RadioGroup>
+                      </div>
+
+                      <div className="space-y-4">
+                        <Label className="text-base font-medium">Are you able to provide 3 years of balance sheets?</Label>
+                        <RadioGroup
+                          value={formData.balanceSheetsAvailability}
+                          onValueChange={(value) => setFormData(prev => ({ ...prev, balanceSheetsAvailability: value }))}
+                          className="grid gap-3"
+                        >
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="readily-available" id="balance-ready" />
+                            <Label htmlFor="balance-ready">Yes, I have them readily available</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="need-time" id="balance-time" />
+                            <Label htmlFor="balance-time">Yes, but I'd need time to gather them</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="not-available" id="balance-no" />
+                            <Label htmlFor="balance-no">No, I don't have them available</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="not-sure" id="balance-unsure" />
+                            <Label htmlFor="balance-unsure">Not sure</Label>
+                          </div>
+                        </RadioGroup>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Step 6: Exit Strategy & Contact */}
+                {step === 6 && (
                   <div className="space-y-6">
                     <CardHeader className="px-0 pt-0">
                       <CardTitle className="flex items-center gap-2 text-xl">
