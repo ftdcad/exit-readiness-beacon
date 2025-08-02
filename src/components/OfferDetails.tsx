@@ -157,19 +157,31 @@ const OfferDetails = () => {
             {/* Additional Info */}
             <Card className="mt-8 glass-card border-border/50">
               <CardContent className="p-6">
-                <h4 className="font-semibold text-foreground mb-3">What Makes This Different?</h4>
+                <h4 className="font-semibold text-foreground mb-3">What Makes Us Different</h4>
                 <div className="space-y-2 text-sm text-foreground-secondary">
                   <div className="flex items-start gap-2">
                     <CheckCircle className="h-4 w-4 text-success mt-0.5 flex-shrink-0" />
-                    <span>PE fund perspective - we know what buyers actually look for</span>
+                    <span>We've sat in the buyer's chair — Private equity perspective — we know exactly what buyers look for, and how they exploit what you don't prepare.</span>
                   </div>
                   <div className="flex items-start gap-2">
                     <CheckCircle className="h-4 w-4 text-success mt-0.5 flex-shrink-0" />
-                    <span>Hands-on operational experience, not just financial modeling</span>
+                    <span>Hands-on operators, not spreadsheet tourists — We've run businesses, led exits, and felt what it's like to hand over the keys — this isn't theoretical.</span>
                   </div>
                   <div className="flex items-start gap-2">
                     <CheckCircle className="h-4 w-4 text-success mt-0.5 flex-shrink-0" />
-                    <span>Actionable recommendations with clear implementation steps</span>
+                    <span>Recommendations you can actually execute — No vague consulting fluff. You'll get punch-list steps you can act on immediately.</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <CheckCircle className="h-4 w-4 text-success mt-0.5 flex-shrink-0" />
+                    <span>We've done this from both sides — Veteran sellers and embedded buyer-side advisors — we know what happens in those closed-door calls you'll never hear.</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <CheckCircle className="h-4 w-4 text-success mt-0.5 flex-shrink-0" />
+                    <span>Insider knowledge you won't find online — This isn't scraped blog advice or recycled checklists — it's the stuff you only learn after someone's been burned.</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <CheckCircle className="h-4 w-4 text-success mt-0.5 flex-shrink-0" />
+                    <span>Zero theory, 100% deal reality — Our frameworks are built in the field, not a classroom. If it doesn't matter in diligence, we don't waste your time on it.</span>
                   </div>
                 </div>
               </CardContent>
