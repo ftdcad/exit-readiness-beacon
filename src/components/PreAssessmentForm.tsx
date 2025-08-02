@@ -8,7 +8,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { CheckCircle, Clock, Users, DollarSign, Scale, Plus, X, FileText, Upload, File } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+import { AssessmentGuard } from "@/components/AssessmentGuard";
+import { useContactSubmission } from "@/hooks/useContactSubmission";
+import { useNDASubmission } from "@/hooks/useNDASubmission";
 
 const PreAssessmentForm = () => {
   const [step, setStep] = useState(1);
@@ -51,10 +53,15 @@ const PreAssessmentForm = () => {
     // Contact
     phone: "",
     preferredContact: "",
+    
+    // Enhanced fields
+    jobTitle: "",
+    companySize: "",
+    howDidYouHear: "",
   });
   
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const { toast } = useToast();
+  const { submitContact, isSubmitting } = useContactSubmission();
+  const { checkNDAStatus } = useNDASubmission();
 
   const totalSteps = 6;
   const progress = (step / totalSteps) * 100;
@@ -69,25 +76,17 @@ const PreAssessmentForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
 
-    // Simulate API submission to Airtable/Notion
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    // Get NDA record ID if available
+    const ndaStatus = checkNDAStatus();
+    const ndaRecordId = ndaStatus?.id;
 
-    // Store data locally for demo
-    localStorage.setItem('meridian_preassessment', JSON.stringify({
-      ...formData,
-      submittedAt: new Date().toISOString(),
-      status: 'pending_review'
-    }));
-
-    toast({
-      title: "Assessment Submitted",
-      description: "Thank you! We'll review your information and contact you within 24 hours.",
-    });
-
-    setIsSubmitting(false);
-    // Would redirect to thank you page or show success state
+    const result = await submitContact(formData, ndaRecordId);
+    
+    if (result.success) {
+      // Could redirect to thank you page or show success state
+      // For now, form will show success message via toast
+    }
   };
 
   // Owner management functions
@@ -184,6 +183,7 @@ const PreAssessmentForm = () => {
     <section className="py-16 bg-background-card">
       <div className="container px-4 md:px-6">
         <div className="max-w-2xl mx-auto">
+          <AssessmentGuard>
           {/* Header */}
           <div className="text-center space-y-4 mb-8">
             <h2 className="text-3xl md:text-4xl font-bold">
@@ -838,16 +838,69 @@ const PreAssessmentForm = () => {
                         />
                       </div>
 
-                      <div className="space-y-2">
-                        <Label htmlFor="phone">Phone Number</Label>
-                        <Input
-                          id="phone"
-                          type="tel"
-                          value={formData.phone}
-                          onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
-                          className="bg-background-hover border-border/50"
-                          required
-                        />
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="phone">Phone Number</Label>
+                          <Input
+                            id="phone"
+                            type="tel"
+                            value={formData.phone}
+                            onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
+                            className="bg-background-hover border-border/50"
+                            required
+                          />
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label htmlFor="jobTitle">Your Job Title</Label>
+                          <Input
+                            id="jobTitle"
+                            value={formData.jobTitle}
+                            onChange={(e) => setFormData(prev => ({ ...prev, jobTitle: e.target.value }))}
+                            className="bg-background-hover border-border/50"
+                            placeholder="e.g., CEO, Founder, Owner"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="preferredContact">Preferred Contact Method</Label>
+                          <Select
+                            value={formData.preferredContact}
+                            onValueChange={(value) => setFormData(prev => ({ ...prev, preferredContact: value }))}
+                          >
+                            <SelectTrigger className="bg-background-hover border-border/50">
+                              <SelectValue placeholder="Select method" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="phone">Phone Call</SelectItem>
+                              <SelectItem value="email">Email</SelectItem>
+                              <SelectItem value="video">Video Call</SelectItem>
+                              <SelectItem value="in-person">In-Person Meeting</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label htmlFor="howDidYouHear">How did you hear about us?</Label>
+                          <Select
+                            value={formData.howDidYouHear}
+                            onValueChange={(value) => setFormData(prev => ({ ...prev, howDidYouHear: value }))}
+                          >
+                            <SelectTrigger className="bg-background-hover border-border/50">
+                              <SelectValue placeholder="Select source" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="google">Google Search</SelectItem>
+                              <SelectItem value="linkedin">LinkedIn</SelectItem>
+                              <SelectItem value="referral">Referral</SelectItem>
+                              <SelectItem value="social-media">Social Media</SelectItem>
+                              <SelectItem value="industry-event">Industry Event</SelectItem>
+                              <SelectItem value="other">Other</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -897,6 +950,7 @@ const PreAssessmentForm = () => {
               <span>Confidential & secure • No spam • 24hr response guarantee</span>
             </div>
           </div>
+          </AssessmentGuard>
         </div>
       </div>
     </section>

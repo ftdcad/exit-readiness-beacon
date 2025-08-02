@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNDASubmission } from "@/hooks/useNDASubmission";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -19,11 +20,10 @@ export const NDAGate = ({ onClose }: NDAGateProps) => {
     lastName: "",
     email: "",
     company: "",
-    agreesToNDA: false,
   });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showDownload, setShowDownload] = useState(false);
-  const { toast } = useToast();
+  const [isAgreed, setIsAgreed] = useState(false);
+  const [showDownloadButton, setShowDownloadButton] = useState(false);
+  const { submitNDA, isSubmitting } = useNDASubmission();
 
   const fullNDAText = `📄 MUTUAL NON-DISCLOSURE AGREEMENT
 
@@ -84,41 +84,21 @@ Confidential. Strategic. Unbiased.`;
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!formData.agreesToNDA) {
-      toast({
-        title: "NDA Agreement Required",
-        description: "Please agree to the NDA terms to proceed.",
-        variant: "destructive",
-      });
+    if (!isAgreed) {
+      alert("Please agree to the NDA terms before submitting.");
       return;
     }
 
-    setIsSubmitting(true);
+    const result = await submitNDA(formData);
     
-    // Simulate API call - in real implementation, store in Supabase
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    // Store NDA acceptance timestamp + IP (would be done server-side)
-    const ndaData = {
-      ...formData,
-      timestamp: new Date().toISOString(),
-      ipAddress: "Client IP", // Would be captured server-side
-    };
-    
-    localStorage.setItem('exitus_nda_accepted', JSON.stringify(ndaData));
-    
-    toast({
-      title: "NDA Accepted",
-      description: "Thank you. You can now proceed with the assessment.",
-    });
-    
-    setIsSubmitting(false);
-    onClose();
+    if (result.success) {
+      onClose();
+    }
   };
 
   const handleCheckboxChange = (checked: boolean) => {
-    setFormData(prev => ({ ...prev, agreesToNDA: checked }));
-    setShowDownload(checked);
+    setIsAgreed(checked);
+    setShowDownloadButton(checked);
   };
 
   const generatePDF = () => {
@@ -166,11 +146,6 @@ Confidential. Strategic. Unbiased.`;
     
     // Save the PDF
     doc.save(`NDA-ExitusAdvisory-${formData.firstName}${formData.lastName}-${new Date().toISOString().split('T')[0]}.pdf`);
-    
-    toast({
-      title: "NDA Downloaded",
-      description: "Your signed NDA has been saved successfully.",
-    });
   };
 
   return (
@@ -248,7 +223,7 @@ Confidential. Strategic. Unbiased.`;
             <div className="flex items-start space-x-3 pt-4">
               <Checkbox 
                 id="nda"
-                checked={formData.agreesToNDA}
+                checked={isAgreed}
                 onCheckedChange={handleCheckboxChange}
                 className="mt-1 h-5 w-5 border-2 border-accent data-[state=checked]:bg-accent data-[state=checked]:border-accent"
               />
@@ -263,7 +238,7 @@ Confidential. Strategic. Unbiased.`;
             </div>
 
             {/* Download Button */}
-            {showDownload && (
+            {showDownloadButton && (
               <Button 
                 type="button"
                 variant="outline"
@@ -279,7 +254,7 @@ Confidential. Strategic. Unbiased.`;
             <Button 
               type="submit" 
               className="w-full bg-accent hover:bg-accent/90 font-semibold button-shadow transition-luxury"
-              disabled={isSubmitting || !formData.agreesToNDA}
+              disabled={isSubmitting || !isAgreed}
             >
               {isSubmitting ? "Processing..." : "Accept & Continue"}
             </Button>
