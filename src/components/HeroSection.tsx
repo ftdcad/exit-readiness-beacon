@@ -47,8 +47,9 @@ const HeroSection = () => {
                 variant="outline" 
                 size="lg" 
                 className="border-border/50 hover:bg-background-hover font-semibold px-8 py-4 transition-luxury"
+                onClick={() => setShowNDA(true)}
               >
-                View Sample Report
+                Sign NDA
               </Button>
             </div>
 
