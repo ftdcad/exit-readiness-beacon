@@ -3,10 +3,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { CheckCircle, Clock, Users, DollarSign } from "lucide-react";
+import { CheckCircle, Clock, Users, DollarSign, Scale, Plus, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 const PreAssessmentForm = () => {
@@ -27,6 +28,11 @@ const PreAssessmentForm = () => {
     // Investment Type
     investmentType: "",
     
+    // Business Structure & Ownership
+    entityType: "",
+    ownershipType: "",
+    owners: [] as Array<{ name: string; percentage: string }>,
+    
     // Exit Goals
     exitTimeline: "",
     exitType: "",
@@ -40,7 +46,7 @@ const PreAssessmentForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 
-  const totalSteps = 4;
+  const totalSteps = 5;
   const progress = (step / totalSteps) * 100;
 
   const handleNext = () => {
@@ -72,6 +78,37 @@ const PreAssessmentForm = () => {
 
     setIsSubmitting(false);
     // Would redirect to thank you page or show success state
+  };
+
+  // Owner management functions
+  const addOwner = () => {
+    setFormData(prev => ({
+      ...prev,
+      owners: [...prev.owners, { name: "", percentage: "" }]
+    }));
+  };
+
+  const removeOwner = (index: number) => {
+    setFormData(prev => ({
+      ...prev,
+      owners: prev.owners.filter((_, i) => i !== index)
+    }));
+  };
+
+  const updateOwner = (index: number, field: 'name' | 'percentage', value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      owners: prev.owners.map((owner, i) => 
+        i === index ? { ...owner, [field]: value } : owner
+      )
+    }));
+  };
+
+  const getTotalPercentage = () => {
+    return formData.owners.reduce((total, owner) => {
+      const percentage = parseFloat(owner.percentage) || 0;
+      return total + percentage;
+    }, 0);
   };
 
   const industries = [
@@ -346,8 +383,135 @@ const PreAssessmentForm = () => {
                   </div>
                 )}
 
-                {/* Step 4: Exit Strategy & Contact */}
+                {/* Step 4: Business Structure & Ownership */}
                 {step === 4 && (
+                  <div className="space-y-6">
+                    <CardHeader className="px-0 pt-0">
+                      <CardTitle className="flex items-center gap-2 text-xl">
+                        <Scale className="h-5 w-5 text-accent" />
+                        Business Structure & Ownership
+                      </CardTitle>
+                      <p className="text-sm text-foreground-secondary">
+                        Understanding your corporate structure and ownership helps us tailor our assessment.
+                      </p>
+                    </CardHeader>
+
+                    <div className="grid gap-6">
+                      <div className="space-y-2">
+                        <Label htmlFor="entityType">What type of business entity are you?</Label>
+                        <Select
+                          value={formData.entityType}
+                          onValueChange={(value) => setFormData(prev => ({ ...prev, entityType: value }))}
+                        >
+                          <SelectTrigger className="bg-background-hover border-border/50">
+                            <SelectValue placeholder="Select entity type" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="llc">LLC (Limited Liability Company)</SelectItem>
+                            <SelectItem value="c-corp">C Corporation</SelectItem>
+                            <SelectItem value="s-corp">S Corporation</SelectItem>
+                            <SelectItem value="partnership">Partnership</SelectItem>
+                            <SelectItem value="sole-proprietorship">Sole Proprietorship</SelectItem>
+                            <SelectItem value="other">Other</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      <div className="space-y-4">
+                        <Label>Are you the sole owner or do you have partners/co-owners?</Label>
+                        <RadioGroup
+                          value={formData.ownershipType}
+                          onValueChange={(value) => setFormData(prev => ({ ...prev, ownershipType: value, owners: value === 'sole' ? [] : prev.owners }))}
+                          className="flex gap-6"
+                        >
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="sole" id="sole" />
+                            <Label htmlFor="sole">Sole owner</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="multiple" id="multiple" />
+                            <Label htmlFor="multiple">Multiple owners/partners</Label>
+                          </div>
+                        </RadioGroup>
+                      </div>
+
+                      {formData.ownershipType === 'multiple' && (
+                        <div className="space-y-4">
+                          <div className="flex items-center justify-between">
+                            <Label className="text-base font-medium">Ownership Structure</Label>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              onClick={addOwner}
+                              className="flex items-center gap-2"
+                            >
+                              <Plus className="h-4 w-4" />
+                              Add Owner
+                            </Button>
+                          </div>
+
+                          {formData.owners.map((owner, index) => (
+                            <div key={index} className="flex gap-3 items-end">
+                              <div className="flex-1 space-y-2">
+                                <Label htmlFor={`owner-name-${index}`}>Owner Name</Label>
+                                <Input
+                                  id={`owner-name-${index}`}
+                                  value={owner.name}
+                                  onChange={(e) => updateOwner(index, 'name', e.target.value)}
+                                  placeholder="Full name"
+                                  className="bg-background-hover border-border/50"
+                                />
+                              </div>
+                              <div className="w-32 space-y-2">
+                                <Label htmlFor={`owner-percentage-${index}`}>Ownership %</Label>
+                                <Input
+                                  id={`owner-percentage-${index}`}
+                                  type="number"
+                                  min="0"
+                                  max="100"
+                                  step="0.1"
+                                  value={owner.percentage}
+                                  onChange={(e) => updateOwner(index, 'percentage', e.target.value)}
+                                  placeholder="0"
+                                  className="bg-background-hover border-border/50"
+                                />
+                              </div>
+                              <Button
+                                type="button"
+                                variant="outline"
+                                size="sm"
+                                onClick={() => removeOwner(index)}
+                                className="p-2"
+                              >
+                                <X className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          ))}
+
+                          {formData.owners.length > 0 && (
+                            <div className="mt-4 p-3 bg-background-hover/50 rounded-lg">
+                              <div className="flex justify-between items-center">
+                                <span className="text-sm font-medium">Total Ownership:</span>
+                                <span className={`text-sm font-medium ${getTotalPercentage() === 100 ? 'text-success' : 'text-warning'}`}>
+                                  {getTotalPercentage().toFixed(1)}%
+                                </span>
+                              </div>
+                              {getTotalPercentage() !== 100 && (
+                                <p className="text-xs text-warning mt-1">
+                                  Ownership percentages should total 100%
+                                </p>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Step 5: Exit Strategy & Contact */}
+                {step === 5 && (
                   <div className="space-y-6">
                     <CardHeader className="px-0 pt-0">
                       <CardTitle className="flex items-center gap-2 text-xl">
