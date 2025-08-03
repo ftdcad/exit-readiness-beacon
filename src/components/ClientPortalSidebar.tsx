@@ -30,8 +30,8 @@ const weeks = [
     title: 'Foundation & Education',
     icon: BookOpen,
     modules: [
-      { name: 'Know Your Buyer', path: '/portal/week-1/know-your-buyer' },
       { name: 'Interactive Glossary', path: '/portal/week-1/glossary' },
+      { name: 'Know Your Buyer', path: '/portal/week-1/know-your-buyer' },
       { name: 'EBITDA Mastery', path: '/portal/week-1/ebitda-course' },
       { name: 'Asset Workshop', path: '/portal/week-1/asset-workshop' },
       { name: 'Quick Wins', path: '/portal/week-1/quick-wins' }
