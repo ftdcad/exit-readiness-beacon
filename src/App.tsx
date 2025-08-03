@@ -19,6 +19,7 @@ import ClientPortalDashboard from "./pages/ClientPortalDashboard";
 import GlossaryPage from "./pages/GlossaryPage";
 import EBITDACoursePage from "./pages/EBITDACoursePage";
 import AssetWorkshopPage from "./pages/AssetWorkshopPage";
+import QuickWinsPage from "./pages/QuickWinsPage";
 
 const queryClient = new QueryClient();
 
@@ -100,6 +101,16 @@ const App = () => (
               <ClientRoute>
                 <ClientPortalLayout>
                   <AssetWorkshopPage />
+                </ClientPortalLayout>
+              </ClientRoute>
+            } 
+          />
+          <Route 
+            path="/portal/week-1/quick-wins" 
+            element={
+              <ClientRoute>
+                <ClientPortalLayout>
+                  <QuickWinsPage />
                 </ClientPortalLayout>
               </ClientRoute>
             } 

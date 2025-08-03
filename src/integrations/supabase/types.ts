@@ -414,6 +414,39 @@ export type Database = {
           },
         ]
       }
+      quick_wins_progress: {
+        Row: {
+          completed_items: Json | null
+          created_at: string
+          id: string
+          multiple: number | null
+          notes: Json | null
+          updated_at: string
+          user_id: string
+          values: Json | null
+        }
+        Insert: {
+          completed_items?: Json | null
+          created_at?: string
+          id?: string
+          multiple?: number | null
+          notes?: Json | null
+          updated_at?: string
+          user_id: string
+          values?: Json | null
+        }
+        Update: {
+          completed_items?: Json | null
+          created_at?: string
+          id?: string
+          multiple?: number | null
+          notes?: Json | null
+          updated_at?: string
+          user_id?: string
+          values?: Json | null
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string | null
