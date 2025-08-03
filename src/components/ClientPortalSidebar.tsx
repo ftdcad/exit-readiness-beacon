@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
+import { useProgress } from '@/hooks/useProgress';
 import {
   Sidebar,
   SidebarContent,
@@ -76,11 +77,10 @@ export function ClientPortalSidebar() {
   const { state } = useSidebar();
   const location = useLocation();
   const { profile } = useAuth();
+  const { getUnlockedWeeks, getWeekProgress, isModuleCompleted } = useProgress();
   const collapsed = state === 'collapsed';
 
-  // For now, assume week 1 is unlocked (this would come from user progress in real implementation)
-  const unlockedWeeks = [1]; // This would be dynamic based on user progress
-
+  const unlockedWeeks = getUnlockedWeeks();
   const isWeekUnlocked = (weekNumber: number) => unlockedWeeks.includes(weekNumber);
   const isActive = (path: string) => location.pathname === path;
 
@@ -115,6 +115,7 @@ export function ClientPortalSidebar() {
         {/* Weekly Modules */}
         {weeks.map((week) => {
           const weekUnlocked = isWeekUnlocked(week.number);
+          const weekProgress = getWeekProgress(week.number);
           const WeekIcon = week.icon;
           
           return (
@@ -129,10 +130,19 @@ export function ClientPortalSidebar() {
                     </>
                   )}
                 </div>
-                {!collapsed && weekUnlocked && (
-                  <Badge variant="secondary" className="text-xs">
-                    Active
-                  </Badge>
+                {!collapsed && (
+                  <div className="flex items-center gap-1">
+                    {weekProgress && (
+                      <Badge variant="outline" className="text-xs">
+                        {weekProgress.completedModules}/{weekProgress.totalModules}
+                      </Badge>
+                    )}
+                    {weekUnlocked && (
+                      <Badge variant="secondary" className="text-xs">
+                        Active
+                      </Badge>
+                    )}
+                  </div>
                 )}
               </SidebarGroupLabel>
               
@@ -142,29 +152,52 @@ export function ClientPortalSidebar() {
                     {week.title}
                   </div>
                   <SidebarMenu>
-                    {week.modules.map((module) => (
-                      <SidebarMenuItem key={module.name}>
-                        <SidebarMenuButton asChild>
-                          {weekUnlocked ? (
-                            <NavLink 
-                              to={module.path} 
-                              className={getNavClasses(module.path)}
-                            >
-                              <span className="text-sm">{module.name}</span>
-                              {isActive(module.path) && (
-                                <CheckCircle className="h-4 w-4 ml-auto text-primary" />
-                              )}
-                            </NavLink>
-                          ) : (
-                            <div className={getNavClasses(module.path, true)}>
-                              <span className="text-sm">{module.name}</span>
-                              <Lock className="h-3 w-3 ml-auto" />
-                            </div>
-                          )}
-                        </SidebarMenuButton>
-                      </SidebarMenuItem>
-                    ))}
+                    {week.modules.map((module) => {
+                      const moduleCompleted = isModuleCompleted(module.name, week.number);
+                      
+                      return (
+                        <SidebarMenuItem key={module.name}>
+                          <SidebarMenuButton asChild>
+                            {weekUnlocked ? (
+                              <NavLink 
+                                to={module.path} 
+                                className={getNavClasses(module.path)}
+                              >
+                                <span className="text-sm">{module.name}</span>
+                                {moduleCompleted ? (
+                                  <CheckCircle className="h-4 w-4 ml-auto text-primary" />
+                                ) : isActive(module.path) ? (
+                                  <div className="h-2 w-2 rounded-full bg-primary ml-auto" />
+                                ) : null}
+                              </NavLink>
+                            ) : (
+                              <div className={getNavClasses(module.path, true)}>
+                                <span className="text-sm">{module.name}</span>
+                                <Lock className="h-3 w-3 ml-auto" />
+                              </div>
+                            )}
+                          </SidebarMenuButton>
+                        </SidebarMenuItem>
+                      );
+                    })}
                   </SidebarMenu>
+                  
+                  {/* Week unlock progress indicator */}
+                  {!collapsed && !weekUnlocked && week.number > 1 && (
+                    <div className="px-3 py-2 text-xs text-muted-foreground">
+                      <div className="flex items-center justify-between mb-1">
+                        <span>Complete Week {week.number - 1} to unlock</span>
+                      </div>
+                      {weekProgress && (
+                        <div className="w-full bg-muted rounded-full h-1">
+                          <div 
+                            className="bg-primary h-1 rounded-full transition-all" 
+                            style={{ width: `${Math.min(weekProgress.progress, 80)}%` }}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </SidebarGroupContent>
               )}
             </SidebarGroup>
