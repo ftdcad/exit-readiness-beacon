@@ -15,6 +15,7 @@ import { ClientRoute } from "./components/ClientRoute";
 import { ClientPortalLayout } from "./components/ClientPortalLayout";
 import ClientPortalDashboard from "./pages/ClientPortalDashboard";
 import GlossaryPage from "./pages/GlossaryPage";
+import EBITDACoursePage from "./pages/EBITDACoursePage";
 
 const queryClient = new QueryClient();
 
@@ -75,6 +76,16 @@ const App = () => (
               <ClientRoute>
                 <ClientPortalLayout>
                   <GlossaryPage />
+                </ClientPortalLayout>
+              </ClientRoute>
+            } 
+          />
+          <Route 
+            path="/portal/week-1/ebitda-course" 
+            element={
+              <ClientRoute>
+                <ClientPortalLayout>
+                  <EBITDACoursePage />
                 </ClientPortalLayout>
               </ClientRoute>
             } 
