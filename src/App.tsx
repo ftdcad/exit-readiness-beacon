@@ -21,6 +21,8 @@ import EBITDACoursePage from "./pages/EBITDACoursePage";
 import AssetWorkshopPage from "./pages/AssetWorkshopPage";
 import QuickWinsPage from "./pages/QuickWinsPage";
 import KnowYourBuyerPage from "./pages/KnowYourBuyerPage";
+import ExitReadinessAssessmentPage from "./pages/ExitReadinessAssessmentPage";
+import PEReadyMetricsPage from "./pages/PEReadyMetricsPage";
 
 const queryClient = new QueryClient();
 
@@ -122,6 +124,28 @@ const App = () => (
               <ClientRoute>
                 <ClientPortalLayout>
                   <QuickWinsPage />
+                </ClientPortalLayout>
+              </ClientRoute>
+            } 
+          />
+          
+          {/* Week 2 Routes */}
+          <Route 
+            path="/portal/week-2/assessment" 
+            element={
+              <ClientRoute>
+                <ClientPortalLayout>
+                  <ExitReadinessAssessmentPage />
+                </ClientPortalLayout>
+              </ClientRoute>
+            } 
+          />
+          <Route 
+            path="/portal/week-2/metrics" 
+            element={
+              <ClientRoute>
+                <ClientPortalLayout>
+                  <PEReadyMetricsPage />
                 </ClientPortalLayout>
               </ClientRoute>
             } 

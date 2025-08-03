@@ -39,13 +39,15 @@ const weeks = [
   },
   {
     number: 2,
-    title: 'Valuation Mechanics',
+    title: 'Deal Readiness',
     icon: Calculator,
     modules: [
-      { name: 'Strategy Builder', path: '/portal/week-2/strategy-builder' },
-      { name: 'EBITDA Calculator', path: '/portal/week-2/calculator' },
-      { name: 'Industry Multiples', path: '/portal/week-2/multiples' },
-      { name: 'Scenario Planning', path: '/portal/week-2/scenarios' }
+      { name: 'Exit Readiness Assessment', path: '/portal/week-2/assessment' },
+      { name: '90-Day Value Builder', path: '/portal/week-2/value-builder' },
+      { name: 'PE-Ready Metrics', path: '/portal/week-2/metrics' },
+      { name: 'EBITDA Impact Calculator', path: '/portal/week-2/calculator' },
+      { name: 'Industry Multiple Finder', path: '/portal/week-2/multiples' },
+      { name: 'Exit Scenario Planner', path: '/portal/week-2/scenarios' }
     ]
   },
   {
