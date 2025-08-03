@@ -90,9 +90,9 @@ export default function EBITDACoursePage() {
                   the single most important metric private equity firms use to value your business.
                 </p>
                 
-                <div className="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-400">
-                  <h4 className="text-blue-800 font-semibold mb-2">Why PE Firms Love EBITDA</h4>
-                  <ul className="text-blue-700 space-y-1">
+                <div className="bg-primary/10 backdrop-blur-sm p-4 rounded-lg border-l-4 border-accent/30">
+                  <h4 className="text-accent font-semibold mb-2">Why PE Firms Love EBITDA</h4>
+                  <ul className="text-accent space-y-1">
                     <li>• Shows your company's true operating performance</li>
                     <li>• Removes accounting "noise" like depreciation schedules</li>
                     <li>• Enables apples-to-apples comparison between companies</li>
@@ -101,16 +101,16 @@ export default function EBITDACoursePage() {
                 </div>
 
                 <h4 className="text-lg font-semibold">The Simple Formula</h4>
-                <div className="bg-gray-50 p-4 rounded-lg font-mono text-center">
+                <div className="bg-muted/20 backdrop-blur-sm p-4 rounded-lg font-mono text-center">
                   <div className="text-xl font-bold">EBITDA = Revenue - Operating Expenses</div>
-                  <div className="text-sm text-gray-600 mt-2">
+                  <div className="text-sm text-muted-foreground mt-2">
                     (Before interest, taxes, depreciation, and amortization)
                   </div>
                 </div>
 
-                <div className="bg-green-50 p-4 rounded-lg border-l-4 border-green-400">
-                  <h4 className="text-green-800 font-semibold mb-2">Real Example</h4>
-                  <p className="text-green-700">
+                <div className="bg-success/10 backdrop-blur-sm p-4 rounded-lg border-l-4 border-success/30">
+                  <h4 className="text-success font-semibold mb-2">Real Example</h4>
+                  <p className="text-success">
                     <strong>Company A:</strong> $5M revenue, $3.5M operating expenses = $1.5M EBITDA<br/>
                     <strong>At 6x multiple:</strong> Company value = $9M<br/>
                     <strong>Increase EBITDA to $1.7M:</strong> Company value = $10.2M<br/>
@@ -157,9 +157,9 @@ export default function EBITDACoursePage() {
                 </p>
 
                 <div className="grid md:grid-cols-2 gap-4">
-                  <div className="bg-red-50 p-4 rounded-lg border border-red-200">
-                    <h4 className="text-red-800 font-semibold mb-3">❌ Accountant's EBITDA</h4>
-                    <ul className="text-red-700 text-sm space-y-1">
+                  <div className="bg-destructive/10 backdrop-blur-sm p-4 rounded-lg border border-destructive/30">
+                    <h4 className="text-destructive font-semibold mb-3">❌ Accountant's EBITDA</h4>
+                    <ul className="text-destructive text-sm space-y-1">
                       <li>• Takes numbers straight from P&L</li>
                       <li>• Includes owner perks and unusual expenses</li>
                       <li>• No adjustments for "one-time" items</li>
@@ -167,9 +167,9 @@ export default function EBITDACoursePage() {
                     </ul>
                   </div>
                   
-                  <div className="bg-green-50 p-4 rounded-lg border border-green-200">
-                    <h4 className="text-green-800 font-semibold mb-3">✅ PE Firm's EBITDA</h4>
-                    <ul className="text-green-700 text-sm space-y-1">
+                  <div className="bg-success/10 backdrop-blur-sm p-4 rounded-lg border border-success/30">
+                    <h4 className="text-success font-semibold mb-3">✅ PE Firm's EBITDA</h4>
+                    <ul className="text-success text-sm space-y-1">
                       <li>• Adds back owner compensation above market</li>
                       <li>• Removes one-time expenses</li>
                       <li>• Adds back non-essential spending</li>
@@ -178,9 +178,9 @@ export default function EBITDACoursePage() {
                   </div>
                 </div>
 
-                <div className="bg-yellow-50 p-4 rounded-lg border-l-4 border-yellow-400">
-                  <h4 className="text-yellow-800 font-semibold mb-2">⚠️ The $180K Mistake</h4>
-                  <p className="text-yellow-700">
+                <div className="bg-warning/10 backdrop-blur-sm p-4 rounded-lg border-l-4 border-warning/30">
+                  <h4 className="text-warning font-semibold mb-2">⚠️ The $180K Mistake</h4>
+                  <p className="text-warning">
                     One client had $1.2M in accountant EBITDA. After proper add-backs, we found $1.38M 
                     in normalized EBITDA. At 6x multiple, that's $1.08M more in exit value. 
                     The difference? Understanding what PE firms actually count.
@@ -268,8 +268,8 @@ export default function EBITDACoursePage() {
                       </ul>
                     </div>
 
-                    <div className="border border-red-200 rounded-lg p-4 bg-red-50">
-                      <h5 className="font-medium text-red-700 mb-2">❌ Questionable Add-Backs</h5>
+                    <div className="border border-destructive/30 rounded-lg p-4 bg-destructive/10 backdrop-blur-sm">
+                      <h5 className="font-medium text-destructive mb-2">❌ Questionable Add-Backs</h5>
                       <ul className="text-sm space-y-1">
                         <li>• Regular business expenses labeled as "one-time"</li>
                         <li>• Adding back salaries of actual working employees</li>
@@ -280,9 +280,9 @@ export default function EBITDACoursePage() {
                   </div>
                 </div>
 
-                <div className="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-400">
-                  <h4 className="text-blue-800 font-semibold mb-2">💡 Pro Tip</h4>
-                  <p className="text-blue-700">
+                <div className="bg-primary/10 backdrop-blur-sm p-4 rounded-lg border-l-4 border-accent/30">
+                  <h4 className="text-accent font-semibold mb-2">💡 Pro Tip</h4>
+                  <p className="text-accent">
                     Document every add-back with clear justification. PE firms will scrutinize these 
                     during due diligence. The better your documentation, the more likely they'll accept 
                     your adjusted EBITDA number.
@@ -327,14 +327,14 @@ export default function EBITDACoursePage() {
                   create massive increases in company value.
                 </p>
 
-                <div className="bg-gradient-to-r from-green-50 to-blue-50 p-6 rounded-lg border">
+                <div className="bg-gradient-to-r from-primary/10 to-accent/10 backdrop-blur-sm p-6 rounded-lg border border-accent/30">
                   <h4 className="font-semibold text-center mb-4">The Multiplier Effect</h4>
                   <div className="text-center space-y-2">
                     <div className="text-3xl font-bold text-primary">+$100K EBITDA</div>
                     <div className="text-lg">×</div>
                     <div className="text-2xl font-semibold">6x Multiple</div>
                     <div className="text-lg">=</div>
-                    <div className="text-3xl font-bold text-green-600">+$600K Value</div>
+                    <div className="text-3xl font-bold text-success">+$600K Value</div>
                   </div>
                 </div>
 
@@ -362,9 +362,9 @@ export default function EBITDACoursePage() {
                   </div>
                 </div>
 
-                <div className="bg-amber-50 p-4 rounded-lg border-l-4 border-amber-400">
-                  <h4 className="text-amber-800 font-semibold mb-2">🚀 Your Mission</h4>
-                  <p className="text-amber-700">
+                <div className="bg-warning/10 backdrop-blur-sm p-4 rounded-lg border-l-4 border-warning/30">
+                  <h4 className="text-warning font-semibold mb-2">🚀 Your Mission</h4>
+                  <p className="text-warning">
                     Your goal is to increase EBITDA by at least $200K before going to market. 
                     At a 6x multiple, that's $1.2M more in your pocket. This course gives you 
                     the roadmap to get there.
