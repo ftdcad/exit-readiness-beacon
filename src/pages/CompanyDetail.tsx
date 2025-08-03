@@ -5,9 +5,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useInquiry } from '@/hooks/useInquiries';
-import { useFinancialAssessment } from '@/hooks/useFinancialAssessment';
+import { useFinancialAssessment, useAddBackCategories, useUpdateAddBackCategory } from '@/hooks/useFinancialAssessment';
 import { FinancialInputForm } from '@/components/FinancialInputForm';
 import { PEReadinessGauge } from '@/components/PEReadinessGauge';
+import { AddBackSliders } from '@/components/AddBackSliders';
 
 const CompanyDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -15,6 +16,8 @@ const CompanyDetail = () => {
   
   const { data: company, isLoading: companyLoading, error: companyError } = useInquiry(id!);
   const { data: assessment, isLoading: assessmentLoading } = useFinancialAssessment(id!);
+  const { data: addBackCategories = [], isLoading: addBacksLoading } = useAddBackCategories(assessment?.id || '');
+  const updateAddBackCategory = useUpdateAddBackCategory();
 
   const formatRevenue = (revenue: number | null) => {
     if (!revenue) return 'Not specified';
@@ -48,7 +51,22 @@ const CompanyDetail = () => {
     return <Badge variant={config.variant}>{config.label}</Badge>;
   };
 
-  if (companyLoading) {
+  const handleUpdateAddBack = async (categoryId: string, amount: number, isApplied: boolean) => {
+    if (!assessment?.id) return;
+    
+    try {
+      await updateAddBackCategory.mutateAsync({
+        categoryId,
+        amount,
+        isApplied,
+        assessmentId: assessment.id
+      });
+    } catch (error) {
+      console.error('Failed to update add-back category:', error);
+    }
+  };
+
+  if (companyLoading || assessmentLoading || addBacksLoading) {
     return (
       <div className="p-6 space-y-6">
         <div className="flex items-center gap-4">
@@ -161,6 +179,15 @@ const CompanyDetail = () => {
               />
             </CardContent>
           </Card>
+
+          {/* Add-Back Sliders */}
+          {assessment && (
+            <AddBackSliders
+              categories={addBackCategories}
+              onUpdateCategory={handleUpdateAddBack}
+              currentEbitda={assessment.current_ebitda || 0}
+            />
+          )}
         </div>
 
         {/* Right Column - PE Readiness Score & Metrics */}
@@ -178,6 +205,7 @@ const CompanyDetail = () => {
                 score={assessment?.pe_readiness_score || 0}
                 assessment={assessment}
                 company={company}
+                addBacks={addBackCategories}
               />
             </CardContent>
           </Card>

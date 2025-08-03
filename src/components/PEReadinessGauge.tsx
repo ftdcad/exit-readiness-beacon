@@ -2,16 +2,17 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Card, CardContent } from '@/components/ui/card';
 import { TrendingUp, FileText, DollarSign, BarChart3 } from 'lucide-react';
-import { FinancialAssessment } from '@/hooks/useFinancialAssessment';
+import { FinancialAssessment, AddBackCategory, calculatePEScore, calculateValuationMultiple } from '@/hooks/useFinancialAssessment';
 import { ContactInquiry } from '@/hooks/useInquiries';
 
 interface PEReadinessGaugeProps {
   score: number;
   assessment: FinancialAssessment | null | undefined;
   company: ContactInquiry;
+  addBacks?: AddBackCategory[];
 }
 
-export const PEReadinessGauge = ({ score, assessment, company }: PEReadinessGaugeProps) => {
+export const PEReadinessGauge = ({ score, assessment, company, addBacks = [] }: PEReadinessGaugeProps) => {
   const getScoreColor = (score: number) => {
     if (score >= 80) return 'text-green-600';
     if (score >= 60) return 'text-yellow-600';
@@ -31,45 +32,6 @@ export const PEReadinessGauge = ({ score, assessment, company }: PEReadinessGaug
     return 'bg-red-500';
   };
 
-  // Calculate individual component scores
-  const ebitdaScore = assessment?.ebitda_margin ? Math.min(40, (assessment.ebitda_margin / 0.20) * 40) : 0;
-  const docScore = 0; // Will be calculated based on document uploads in future
-  const addBackScore = 0; // Will be calculated based on add-backs in future
-  const healthScore = 0; // Will be calculated based on business health metrics
-
-  const components = [
-    {
-      label: 'EBITDA Margin',
-      score: ebitdaScore,
-      maxScore: 40,
-      icon: DollarSign,
-      description: assessment?.ebitda_margin 
-        ? `${(assessment.ebitda_margin * 100).toFixed(1)}% margin`
-        : 'Not calculated',
-    },
-    {
-      label: 'Documentation',
-      score: docScore,
-      maxScore: 20,
-      icon: FileText,
-      description: 'Tax returns, P&Ls, contracts',
-    },
-    {
-      label: 'Add-Back Potential',
-      score: addBackScore,
-      maxScore: 20,
-      icon: TrendingUp,
-      description: 'Personal expenses to normalize',
-    },
-    {
-      label: 'Business Health',
-      score: healthScore,
-      maxScore: 20,
-      icon: BarChart3,
-      description: 'Customer concentration, scalability',
-    },
-  ];
-
   const formatCurrency = (value: number | null) => {
     if (!value) return '$0';
     return new Intl.NumberFormat('en-US', {
@@ -80,10 +42,74 @@ export const PEReadinessGauge = ({ score, assessment, company }: PEReadinessGaug
     }).format(value);
   };
 
-  // Calculate estimated valuation if we have assessment data
-  const estimatedValuation = assessment && assessment.current_ebitda 
-    ? assessment.current_ebitda * 4.5 // Default 4.5x multiple
-    : null;
+  // Calculate add-backs total and adjusted EBITDA
+  const totalAddBacks = addBacks
+    .filter(addBack => addBack.is_applied)
+    .reduce((sum, addBack) => sum + addBack.amount, 0);
+  
+  const adjustedEbitda = (assessment?.current_ebitda || 0) + totalAddBacks;
+  const adjustedEbitdaMargin = assessment?.revenue ? adjustedEbitda / assessment.revenue : 0;
+  
+  // Calculate component scores using adjusted metrics
+  const currentMargin = assessment?.ebitda_margin || 0;
+  const marginToUse = adjustedEbitdaMargin || currentMargin;
+  const ebitdaMarginScore = Math.min(marginToUse * 400, 100); // 25% margin = 100 points
+  const documentationScore = assessment?.assessment_status === 'complete' ? 100 : 50;
+  
+  // Add-back quality score (better score for fewer add-backs relative to EBITDA)
+  const addBackPercentage = assessment?.current_ebitda ? (totalAddBacks / assessment.current_ebitda) : 0;
+  const addBackScore = addBackPercentage <= 0.05 ? 100 : 
+                      addBackPercentage <= 0.15 ? 80 : 
+                      addBackPercentage <= 0.25 ? 60 : 40;
+  
+  const businessHealthScore = 85; // This would come from a separate assessment
+  
+  // Calculate overall score using the imported function
+  const overallScore = calculatePEScore(
+    currentMargin,
+    adjustedEbitdaMargin,
+    assessment?.assessment_status === 'complete',
+    totalAddBacks,
+    assessment?.current_ebitda || 0,
+    businessHealthScore
+  );
+
+  const components = [
+    {
+      name: "EBITDA Margin",
+      score: ebitdaMarginScore,
+      description: adjustedEbitdaMargin > currentMargin ? 
+        `${(currentMargin * 100).toFixed(1)}% → ${(adjustedEbitdaMargin * 100).toFixed(1)}% (adjusted)` :
+        `${(currentMargin * 100).toFixed(1)}% margin`,
+      target: "Target: 20%+"
+    },
+    {
+      name: "Documentation", 
+      score: documentationScore,
+      description: assessment?.assessment_status === 'complete' ? "Complete documentation" : "Basic records only",
+      target: "Complete financials needed"
+    },
+    {
+      name: "Add-Back Quality", 
+      score: addBackScore,
+      description: totalAddBacks > 0 ? 
+        `${formatCurrency(totalAddBacks)} in add-backs (${(addBackPercentage * 100).toFixed(1)}%)` : 
+        "Clean operations",
+      target: "Lower % is better"
+    },
+    {
+      name: "Business Health",
+      score: businessHealthScore, 
+      description: "Customer base, scalability, systems",
+      target: "Diversified & scalable"
+    }
+  ];
+
+
+  // Calculate estimated valuation using adjusted EBITDA
+  const multiple = calculateValuationMultiple(currentMargin, adjustedEbitdaMargin, company.industry);
+  const currentValuation = (assessment?.current_ebitda || 0) * multiple;
+  const adjustedValuation = adjustedEbitda * multiple;
 
   return (
     <div className="space-y-6">
@@ -110,16 +136,16 @@ export const PEReadinessGauge = ({ score, assessment, company }: PEReadinessGaug
                 stroke="currentColor"
                 strokeWidth="8"
                 fill="transparent"
-                strokeDasharray={`${2.51 * score} 251.2`}
-                className={score >= 80 ? 'text-green-500' : score >= 60 ? 'text-yellow-500' : 'text-red-500'}
+                strokeDasharray={`${2.51 * overallScore} 251.2`}
+                className={overallScore >= 80 ? 'text-green-500' : overallScore >= 60 ? 'text-yellow-500' : 'text-red-500'}
                 strokeLinecap="round"
               />
             </svg>
             {/* Score text */}
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="text-center">
-                <div className={`text-2xl font-bold ${getScoreColor(score)}`}>
-                  {score}
+                <div className={`text-2xl font-bold ${getScoreColor(overallScore)}`}>
+                  {overallScore}
                 </div>
                 <div className="text-xs text-muted-foreground">/ 100</div>
               </div>
@@ -128,8 +154,8 @@ export const PEReadinessGauge = ({ score, assessment, company }: PEReadinessGaug
         </div>
         
         <div>
-          <Badge variant={score >= 60 ? 'default' : 'destructive'} className="mb-2">
-            {getScoreLabel(score)}
+          <Badge variant={overallScore >= 60 ? 'default' : 'destructive'} className="mb-2">
+            {getScoreLabel(overallScore)}
           </Badge>
           <p className="text-sm text-muted-foreground">
             PE Readiness Score
@@ -140,39 +166,54 @@ export const PEReadinessGauge = ({ score, assessment, company }: PEReadinessGaug
       {/* Component Breakdown */}
       <div className="space-y-4">
         <h4 className="font-medium">Score Breakdown</h4>
-        {components.map((component) => {
-          const Icon = component.icon;
-          const percentage = (component.score / component.maxScore) * 100;
+        {components.map((component, index) => {
+          const icons = [DollarSign, FileText, TrendingUp, BarChart3];
+          const Icon = icons[index];
           
           return (
-            <Card key={component.label}>
+            <Card key={component.name}>
               <CardContent className="p-4">
                 <div className="flex items-center gap-3 mb-2">
                   <Icon className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-sm font-medium">{component.label}</span>
+                  <span className="text-sm font-medium">{component.name}</span>
                   <span className="text-sm text-muted-foreground ml-auto">
-                    {Math.round(component.score)}/{component.maxScore}
+                    {Math.round(component.score)}/100
                   </span>
                 </div>
-                <Progress value={percentage} className="h-2 mb-2" />
-                <p className="text-xs text-muted-foreground">{component.description}</p>
+                <Progress value={component.score} className="h-2 mb-2" />
+                <div className="space-y-1">
+                  <p className="text-xs text-muted-foreground">{component.description}</p>
+                  <p className="text-xs text-muted-foreground font-medium">{component.target}</p>
+                </div>
               </CardContent>
             </Card>
           );
         })}
       </div>
 
-      {/* Valuation Estimate */}
-      {estimatedValuation && (
+      {/* Estimated Valuation */}
+      {currentValuation > 0 && (
         <Card>
           <CardContent className="p-4">
             <h4 className="font-medium mb-2">Estimated Valuation</h4>
-            <p className="text-2xl font-bold text-primary">
-              {formatCurrency(estimatedValuation)}
-            </p>
-            <p className="text-xs text-muted-foreground">
-              Based on {assessment?.current_ebitda ? formatCurrency(assessment.current_ebitda) : '$0'} EBITDA × 4.5x multiple
-            </p>
+            <div className="text-2xl font-bold text-primary">
+              {adjustedValuation > currentValuation ? (
+                <div>
+                  <div className="text-lg text-gray-500 line-through">{formatCurrency(currentValuation)}</div>
+                  <div>{formatCurrency(adjustedValuation)}</div>
+                </div>
+              ) : (
+                formatCurrency(currentValuation)
+              )}
+            </div>
+            <div className="text-xs text-muted-foreground mt-1">
+              {formatCurrency(adjustedEbitda)} EBITDA × {multiple}x multiple
+              {adjustedValuation > currentValuation && (
+                <div className="text-green-700 font-medium">
+                  +{formatCurrency(adjustedValuation - currentValuation)} potential increase
+                </div>
+              )}
+            </div>
           </CardContent>
         </Card>
       )}
@@ -182,13 +223,13 @@ export const PEReadinessGauge = ({ score, assessment, company }: PEReadinessGaug
         <CardContent className="p-4">
           <h4 className="font-medium mb-3">Recommended Actions</h4>
           <div className="space-y-2 text-sm">
-            {score < 40 && (
+            {overallScore < 40 && (
               <div className="flex items-start gap-2">
                 <div className="w-2 h-2 bg-red-500 rounded-full mt-1.5 flex-shrink-0" />
                 <span>Complete financial assessment to identify improvement areas</span>
               </div>
             )}
-            {assessment?.ebitda_margin && assessment.ebitda_margin < 0.15 && (
+            {marginToUse < 0.15 && (
               <div className="flex items-start gap-2">
                 <div className="w-2 h-2 bg-yellow-500 rounded-full mt-1.5 flex-shrink-0" />
                 <span>Improve EBITDA margin through cost optimization or add-backs</span>

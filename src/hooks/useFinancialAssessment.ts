@@ -158,16 +158,57 @@ export const useUpdateAddBackCategory = () => {
   const { toast } = useToast();
 
   return useMutation({
-    mutationFn: async ({ id, amount, isApplied }: { id: string; amount: number; isApplied: boolean }) => {
-      const { data, error } = await supabase
+    mutationFn: async ({ categoryId, amount, isApplied, assessmentId }: { 
+      categoryId: string; 
+      amount: number; 
+      isApplied: boolean; 
+      assessmentId: string;
+    }) => {
+      // First try to update existing category
+      const { data: existingData } = await supabase
         .from('add_back_categories')
-        .update({ amount, is_applied: isApplied })
-        .eq('id', id)
-        .select()
-        .single();
+        .select('*')
+        .eq('id', categoryId)
+        .maybeSingle();
 
-      if (error) throw error;
-      return data;
+      if (existingData) {
+        // Update existing category
+        const { data, error } = await supabase
+          .from('add_back_categories')
+          .update({ amount, is_applied: isApplied })
+          .eq('id', categoryId)
+          .select()
+          .single();
+
+        if (error) throw error;
+        return data;
+      } else {
+        // Create new category - this handles the default categories
+        const categoryNames: Record<string, { category: string; description: string }> = {
+          'owner-salary': { category: 'Owner Salary Add-Back', description: 'Excess owner compensation above market rate' },
+          'personal-vehicles': { category: 'Personal Vehicle Expenses', description: 'Vehicle expenses not related to business operations' },
+          'travel-meals': { category: 'Travel & Meals', description: 'Personal travel and meal expenses' },
+          'legal-professional': { category: 'Legal & Professional Fees', description: 'One-time or non-recurring professional fees' },
+          'other-expenses': { category: 'Other Non-Recurring Expenses', description: 'Other one-time or personal expenses' },
+        };
+
+        const categoryInfo = categoryNames[categoryId] || { category: 'Custom Category', description: 'Custom add-back category' };
+
+        const { data, error } = await supabase
+          .from('add_back_categories')
+          .insert({
+            assessment_id: assessmentId,
+            category: categoryInfo.category,
+            description: categoryInfo.description,
+            amount,
+            is_applied: isApplied
+          })
+          .select()
+          .single();
+
+        if (error) throw error;
+        return data;
+      }
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['add-back-categories', data.assessment_id] });
@@ -182,47 +223,71 @@ export const useUpdateAddBackCategory = () => {
   });
 };
 
-// Calculate PE Readiness Score
+// Calculate PE readiness score based on multiple factors
 export const calculatePEScore = (
   ebitdaMargin: number,
-  hasDocuments: { taxReturns: boolean; pAndLs: boolean; balanceSheets: boolean; contracts: boolean },
-  addBacks: AddBackCategory[],
-  healthMetrics: { concentrationUnder30: boolean; recurringRevenue: boolean; cleanBooks: boolean; ownerNotPrimary: boolean }
+  adjustedEbitdaMargin: number,
+  hasDocumentation: boolean,
+  addBacksTotal: number,
+  currentEbitda: number,
+  businessHealthScore: number = 75
 ): number => {
   let score = 0;
-
-  // EBITDA Margin (40 points max)
-  if (ebitdaMargin >= 0.20) score += 40;
-  else if (ebitdaMargin >= 0.15) score += 30;
-  else if (ebitdaMargin >= 0.10) score += 20;
-  else if (ebitdaMargin >= 0.05) score += 10;
-
-  // Documentation (20 points max)
-  const docs = Object.values(hasDocuments);
-  score += docs.filter(Boolean).length * 5;
-
-  // Add-back potential (20 points max)
-  const appliedAddBacks = addBacks.filter(ab => ab.is_applied);
-  const addBackScore = Math.min(appliedAddBacks.length * 5, 20);
-  score += addBackScore;
-
-  // Business health (20 points max)
-  const health = Object.values(healthMetrics);
-  score += health.filter(Boolean).length * 5;
-
-  return Math.min(score, 100);
+  
+  // Use adjusted EBITDA margin for scoring (40% of total score)
+  const marginToUse = adjustedEbitdaMargin || ebitdaMargin;
+  if (marginToUse >= 0.25) score += 40; // 25%+ margin = excellent
+  else if (marginToUse >= 0.20) score += 32; // 20-25% = very good
+  else if (marginToUse >= 0.15) score += 24; // 15-20% = good
+  else if (marginToUse >= 0.10) score += 16; // 10-15% = fair
+  else score += 8; // <10% = needs improvement
+  
+  // Documentation (20% of total score)
+  if (hasDocumentation) score += 20;
+  else score += 5; // Partial credit for basic records
+  
+  // Add-back quality scoring (20% of total score)
+  const addBackPercentage = currentEbitda > 0 ? (addBacksTotal / currentEbitda) : 0;
+  if (addBackPercentage <= 0.05) score += 20; // Clean books (≤5% add-backs)
+  else if (addBackPercentage <= 0.15) score += 16; // Moderate add-backs (5-15%)
+  else if (addBackPercentage <= 0.25) score += 12; // Significant add-backs (15-25%)
+  else score += 8; // Heavy add-backs (>25%)
+  
+  // Business health (20% of total score)
+  score += (businessHealthScore / 100) * 20;
+  
+  return Math.min(Math.round(score), 100);
 };
 
-// Calculate industry multiple based on margin and industry
+// Calculate valuation multiple based on EBITDA margin and industry
 export const calculateValuationMultiple = (
   ebitdaMargin: number,
-  industry: string,
-  benchmarks: IndustryBenchmark[]
+  adjustedEbitdaMargin: number,
+  industry: string = "default"
 ): number => {
-  const benchmark = benchmarks.find(b => b.industry === industry);
-  if (!benchmark) return 4.0; // Default multiple
-
-  if (ebitdaMargin >= benchmark.margin_excellent) return benchmark.multiple_high;
-  if (ebitdaMargin >= benchmark.margin_good) return benchmark.multiple_mid;
-  return benchmark.multiple_low;
+  // Use adjusted EBITDA margin for valuation if available
+  const marginToUse = adjustedEbitdaMargin || ebitdaMargin;
+  
+  // Base multiple ranges by margin quality
+  let baseMultiple = 3.0; // Default minimum
+  
+  if (marginToUse >= 0.25) baseMultiple = 6.0; // 25%+ = premium multiple
+  else if (marginToUse >= 0.20) baseMultiple = 5.0; // 20-25% = high multiple  
+  else if (marginToUse >= 0.15) baseMultiple = 4.5; // 15-20% = good multiple
+  else if (marginToUse >= 0.10) baseMultiple = 4.0; // 10-15% = average multiple
+  else if (marginToUse >= 0.05) baseMultiple = 3.5; // 5-10% = below average
+  
+  // Industry adjustments (simplified for now)
+  const industryAdjustments: Record<string, number> = {
+    "Technology": 1.2,
+    "Healthcare": 1.1,
+    "Manufacturing": 1.0,
+    "Professional Services": 1.1,
+    "Construction": 0.9,
+    "Retail": 0.8,
+    "default": 1.0
+  };
+  
+  const adjustment = industryAdjustments[industry] || industryAdjustments.default;
+  return Math.round((baseMultiple * adjustment) * 10) / 10;
 };
