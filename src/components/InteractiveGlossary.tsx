@@ -20,66 +20,66 @@ const glossaryTerms: GlossaryTerm[] = [
   {
     id: '1',
     term: 'EBITDA',
-    definition: 'Earnings Before Interest, Taxes, Depreciation, and Amortization. A measure of a company\'s operating performance and cash flow generation.',
+    definition: 'Earnings Before Interest, Taxes, Depreciation, Amortization. Your operating profit before financing and non-cash expenses. The #1 metric buyers use.',
     category: 'financial',
-    example: 'If your company has $2M in revenue, $1.5M in operating expenses, $100K in depreciation, your EBITDA would be $500K + $100K = $600K.',
-    relatedTerms: ['Multiple', 'Adjusted EBITDA', 'Operating Cash Flow']
+    example: 'A company with $2M revenue, $1.5M operating expenses has $500K EBITDA.',
+    relatedTerms: ['Add-Backs', 'Multiple', 'Quality of Earnings']
   },
   {
     id: '2',
-    term: 'Multiple',
-    definition: 'The ratio of enterprise value to EBITDA, used to value companies. Higher multiples indicate higher valuations.',
+    term: 'Multiple (Valuation Multiple)',
+    definition: 'What buyers pay relative to EBITDA. "5x multiple" = paying 5 times annual EBITDA. Higher margins = higher multiples.',
     category: 'financial',
-    example: 'A 5x multiple on $1M EBITDA means your company is valued at $5M.',
-    relatedTerms: ['EBITDA', 'Enterprise Value', 'Valuation']
+    example: 'A 5x multiple on $1M EBITDA values the business at $5M.',
+    relatedTerms: ['EBITDA', 'Platform Company', 'Enterprise Value']
   },
   {
     id: '3',
     term: 'Due Diligence',
-    definition: 'The comprehensive review process where buyers examine all aspects of your business before finalizing a deal.',
+    definition: 'The buyer\'s deep investigation of your business. Expect requests for every document imaginable. Full disclosure prevents problems later.',
     category: 'legal',
-    example: 'PE firms will review your financial records, contracts, HR policies, and operations during a 60-90 day due diligence period.',
-    relatedTerms: ['LOI', 'Management Presentation', 'Data Room']
+    example: 'Reviewing 3 years of financial statements, customer contracts, and operational procedures.',
+    relatedTerms: ['Quality of Earnings', 'Reps & Warranties', 'Management Presentation']
   },
   {
     id: '4',
-    term: 'Letter of Intent (LOI)',
-    definition: 'A non-binding document outlining the key terms of a proposed acquisition, including valuation and deal structure.',
+    term: 'LOI (Letter of Intent)',
+    definition: 'Non-binding offer outlining price and terms. Once signed, you enter exclusive negotiations. Not final but sets the framework.',
     category: 'legal',
-    example: 'An LOI might offer $10M at 6x EBITDA with 70% cash and 30% rollover equity.',
-    relatedTerms: ['Due Diligence', 'Purchase Agreement', 'Term Sheet']
+    example: 'An LOI proposing $10M purchase price with 30-day exclusivity period.',
+    relatedTerms: ['Purchase Agreement', 'Due Diligence', 'Closing']
   },
   {
     id: '5',
-    term: 'Rollover Equity',
-    definition: 'When the seller retains an ownership stake in the company post-acquisition, typically 10-30% of the transaction value.',
-    category: 'deal-structure',
-    example: 'In a $10M deal with 20% rollover, you\'d receive $8M cash and keep $2M worth of equity in the new entity.',
-    relatedTerms: ['Management Rollover', 'Second Bite', 'Equity Participation']
+    term: 'Working Capital',
+    definition: 'The difference between current assets and current liabilities, representing the short-term financial health and liquidity of a business.',
+    category: 'financial',
+    example: 'Current assets of $500K minus current liabilities of $300K equals $200K working capital.',
+    relatedTerms: ['Working Capital Adjustment', 'Cash Flow', 'Operating Capital']
   },
   {
     id: '6',
-    term: 'Working Capital',
-    definition: 'Current assets minus current liabilities. Represents the cash needed to run daily operations.',
-    category: 'financial',
-    example: 'If you have $500K in receivables and inventory, but owe $200K in payables, your working capital is $300K.',
-    relatedTerms: ['Cash Flow', 'Current Assets', 'Operating Capital']
+    term: 'Rollover Equity',
+    definition: 'Keeping ownership stake in new company structure. Selling 80% for cash, rolling 20% into HoldCo for future upside.',
+    category: 'deal-structure',
+    example: 'Selling 80% for $8M cash while rolling over 20% equity in the new structure.',
+    relatedTerms: ['Holding Company', 'Earnout', 'Pro Rata']
   },
   {
     id: '7',
     term: 'Management Presentation',
-    definition: 'A detailed presentation to potential buyers showcasing your business model, growth strategy, and investment opportunity.',
+    definition: 'A comprehensive presentation by the management team to potential buyers, covering business overview, financials, growth opportunities, and strategic vision.',
     category: 'operational',
-    example: 'A 20-slide deck covering market position, financials, growth drivers, and management team capabilities.',
-    relatedTerms: ['Due Diligence', 'Investment Memorandum', 'Pitch Deck']
+    example: 'A 30-slide deck covering company history, market position, financial performance, and growth strategy.',
+    relatedTerms: ['Due Diligence', 'Management Meeting', 'Business Overview']
   },
   {
     id: '8',
     term: 'Add-Backs',
-    definition: 'Non-recurring or owner-specific expenses added back to EBITDA to show normalized earning power.',
+    definition: 'Expenses added back to profit to show "normalized" EBITDA. Common examples: owner\'s excessive salary, personal vehicle, one-time legal fees. If you paid yourself $300K but market rate is $150K, that $150K difference is an add-back.',
     category: 'financial',
     example: 'Adding back $50K in owner\'s personal expenses and $25K in one-time legal fees to increase EBITDA by $75K.',
-    relatedTerms: ['Adjusted EBITDA', 'Normalization', 'Quality of Earnings']
+    relatedTerms: ['EBITDA', 'Quality of Earnings', 'Normalization']
   },
   {
     id: '9',
@@ -87,7 +87,159 @@ const glossaryTerms: GlossaryTerm[] = [
     definition: 'Atypical private equity structure using Small Business Administration loans instead of direct investor capital. Unlike typical PE (which uses direct investor money with no strings attached), SBA-backed deals require the seller to stay 1-2 years, have lower down payments, and must follow specific SBA rules.',
     category: 'deal-structure',
     example: 'Typical PE: Buyer puts down $3M cash from investors. SBA-backed PE: Buyer puts down $1M cash + $2M SBA loan, but you must stay 18 months to help transition.',
-    relatedTerms: ['Private Equity', 'LBO', 'Platform Company']
+    relatedTerms: ['Search Fund/ETA', 'LBO', 'Platform Company']
+  },
+  {
+    id: '10',
+    term: 'Bolt-On Acquisition',
+    definition: 'A smaller company ($500K-$2M EBITDA) added to a platform company. Keeps some identity but operates under platform control. Gets lower multiples (3.5-5x) than platforms.',
+    category: 'deal-structure',
+    example: 'Platform company buys a $1M EBITDA bolt-on at 4x multiple for $4M to expand into new geography.',
+    relatedTerms: ['Platform Company', 'Tuck-In Acquisition', 'Roll-Up']
+  },
+  {
+    id: '11',
+    term: 'Closing',
+    definition: 'The day ownership transfers and money changes hands. You sign docs, get paid (minus escrow), and hand over the keys.',
+    category: 'legal',
+    example: 'Closing day: Sign purchase agreement, receive $8.5M wire (with $1.5M held in escrow), transfer ownership.',
+    relatedTerms: ['Escrow/Holdback', 'Working Capital Adjustment', 'Reps & Warranties']
+  },
+  {
+    id: '12',
+    term: 'Covenants',
+    definition: 'Promises to do or not do something. Example: You promise not to compete for 3 years post-sale. These are legally binding.',
+    category: 'legal',
+    example: 'Non-compete covenant preventing you from starting a similar business for 3 years in same market.',
+    relatedTerms: ['Reps & Warranties', 'Indemnification', 'Purchase Agreement']
+  },
+  {
+    id: '13',
+    term: 'Earnout',
+    definition: 'Part of purchase price paid later IF business hits targets. Example: $8M now + $2M if you hit $X revenue next year. Risky for sellers.',
+    category: 'deal-structure',
+    example: '$8M at closing + $2M earnout if company achieves $15M revenue in Year 1.',
+    relatedTerms: ['Rollover Equity', 'Escrow/Holdback', 'KPI']
+  },
+  {
+    id: '14',
+    term: 'Escrow/Holdback',
+    definition: 'Money held back from purchase price (usually 10-15%) for 12-18 months to cover potential claims. You get it back if no issues arise.',
+    category: 'deal-structure',
+    example: '$10M sale with $1.5M held in escrow for 18 months to cover potential warranty breaches.',
+    relatedTerms: ['Indemnification', 'Reps & Warranties', 'RWI']
+  },
+  {
+    id: '15',
+    term: 'Holding Company (HoldCo)',
+    definition: 'Parent company created to own your business. If you roll equity, you own shares in HoldCo, which owns the operating company.',
+    category: 'deal-structure',
+    example: 'PE creates HoldCo to own your operating company; you roll 20% equity into HoldCo shares.',
+    relatedTerms: ['Rollover Equity', 'LBO', 'Corporate Structure']
+  },
+  {
+    id: '16',
+    term: 'Indemnification',
+    definition: 'Your promise to pay buyer back if certain problems arise post-sale. Usually capped at a % of purchase price.',
+    category: 'legal',
+    example: 'You indemnify buyer for tax issues up to $1M (10% of purchase price) for 3 years.',
+    relatedTerms: ['Reps & Warranties', 'Escrow/Holdback', 'RWI']
+  },
+  {
+    id: '17',
+    term: 'KPI (Key Performance Indicator)',
+    definition: 'Important metrics that track business health. Examples: monthly recurring revenue, customer churn rate, gross margin.',
+    category: 'operational',
+    example: 'Monthly recurring revenue growing 15% year-over-year, customer churn rate below 5%.',
+    relatedTerms: ['EBITDA', 'Quality of Earnings', 'Earnout']
+  },
+  {
+    id: '18',
+    term: 'Leveraged Buyout (LBO)',
+    definition: 'Acquisition using mostly debt. The company takes on loans to finance its own purchase. Expect big interest payments post-close.',
+    category: 'deal-structure',
+    example: '$10M acquisition using $3M equity + $7M debt secured by company assets.',
+    relatedTerms: ['SBA-backed PE', 'Holding Company', 'Platform Company']
+  },
+  {
+    id: '19',
+    term: 'Platform Company',
+    definition: 'The main company PE builds around in an industry. Gets highest multiples (5-7x+). Expected to help integrate future acquisitions.',
+    category: 'deal-structure',
+    example: 'PE buys HVAC company at 6x multiple as platform, then adds bolt-ons at 4x multiples.',
+    relatedTerms: ['Bolt-On Acquisition', 'Multiple', 'Roll-Up']
+  },
+  {
+    id: '20',
+    term: 'Pro Rata',
+    definition: '"In proportion to ownership." If you own 20% and company needs $100K, your pro rata share is $20K.',
+    category: 'deal-structure',
+    example: 'Company raises $500K; your 15% ownership means $75K pro rata investment opportunity.',
+    relatedTerms: ['Rollover Equity', 'Holding Company', 'Equity Participation']
+  },
+  {
+    id: '21',
+    term: 'QoE (Quality of Earnings)',
+    definition: 'Deep financial analysis to verify your EBITDA is real and sustainable. Like an audit focused on cash flow quality.',
+    category: 'financial',
+    example: 'QoE finds $200K in non-recurring revenue, reducing adjusted EBITDA from $1.2M to $1M.',
+    relatedTerms: ['EBITDA', 'Add-Backs', 'Due Diligence']
+  },
+  {
+    id: '22',
+    term: 'Redlining',
+    definition: 'Marking up contracts with proposed changes. Normal part of negotiations. Each side redlines until agreement reached.',
+    category: 'legal',
+    example: 'Buyer redlines purchase agreement to extend due diligence period from 30 to 45 days.',
+    relatedTerms: ['Purchase Agreement', 'LOI', 'Legal Review']
+  },
+  {
+    id: '23',
+    term: 'Reps & Warranties',
+    definition: 'Your promises about the business being true. "No lawsuits," "taxes are paid," etc. If wrong, triggers indemnification.',
+    category: 'legal',
+    example: 'Warranty that financial statements are accurate; representation that all taxes are current.',
+    relatedTerms: ['Indemnification', 'Escrow/Holdback', 'Due Diligence']
+  },
+  {
+    id: '24',
+    term: 'Roll-Up',
+    definition: 'Strategy of buying multiple companies in same industry to create one larger entity. Your company becomes part of bigger platform.',
+    category: 'deal-structure',
+    example: 'PE buys 5 regional HVAC companies and combines them into one $50M revenue platform.',
+    relatedTerms: ['Platform Company', 'Bolt-On Acquisition', 'Consolidation Strategy']
+  },
+  {
+    id: '25',
+    term: 'RWI (Reps & Warranties Insurance)',
+    definition: 'Insurance that covers breaches instead of you paying from escrow. Good for sellers - reduces personal risk.',
+    category: 'legal',
+    example: '$1M RWI policy covers warranty breaches, allowing lower escrow and faster release.',
+    relatedTerms: ['Reps & Warranties', 'Escrow/Holdback', 'Indemnification']
+  },
+  {
+    id: '26',
+    term: 'Search Fund/ETA',
+    definition: 'Individual entrepreneur raising money to buy and run one business. Common for $1-5M EBITDA deals. Often SBA-backed.',
+    category: 'deal-structure',
+    example: 'MBA graduate raises $3M search fund to buy and operate a manufacturing company.',
+    relatedTerms: ['SBA-backed PE', 'Platform Company', 'Entrepreneurship Through Acquisition']
+  },
+  {
+    id: '27',
+    term: 'Tuck-In Acquisition',
+    definition: 'Tiny company (<$500K EBITDA) completely absorbed into platform. Lowest multiples (2-3.5x). You\'re bought for customers, not systems.',
+    category: 'deal-structure',
+    example: 'Platform buys $300K EBITDA company at 3x multiple purely for customer list integration.',
+    relatedTerms: ['Platform Company', 'Bolt-On Acquisition', 'Customer Acquisition']
+  },
+  {
+    id: '28',
+    term: 'Working Capital Adjustment',
+    definition: 'Post-closing true-up ensuring business has normal operating cash. Like agreeing on gas in tank when selling a car.',
+    category: 'financial',
+    example: 'Normal working capital is $200K; at closing it\'s $150K, so purchase price reduced by $50K.',
+    relatedTerms: ['Working Capital', 'Closing', 'Purchase Price Adjustment']
   }
 ];
 
