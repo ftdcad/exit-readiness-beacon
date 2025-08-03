@@ -3,9 +3,10 @@ import {
   Building2, 
   Users, 
   Activity, 
-  LogOut 
+  LogOut,
+  Globe
 } from 'lucide-react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import {
   Sidebar,
@@ -61,6 +62,19 @@ export function AdminSidebar() {
           <SidebarGroupLabel>Admin Panel</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
+              {/* View Site Link */}
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link 
+                    to="/" 
+                    className="flex items-center px-3 py-2 rounded-md transition-colors text-sidebar-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground border-b border-border/20 mb-1"
+                  >
+                    <Globe className="h-4 w-4" />
+                    {!collapsed && <span className="ml-2">View Site</span>}
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              
               {menuItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
