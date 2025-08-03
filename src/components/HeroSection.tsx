@@ -41,14 +41,14 @@ const HeroSection = () => {
                 className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold px-8 py-4 button-shadow transition-luxury"
                 onClick={() => setShowNDA(true)}
               >
-                Start Assessment
+                Sign NDA
               </Button>
               <Button 
                 size="lg" 
                 className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold px-8 py-4 button-shadow transition-luxury"
                 onClick={() => setShowNDA(true)}
               >
-                Sign NDA
+                Start Assessment
               </Button>
             </div>
 
