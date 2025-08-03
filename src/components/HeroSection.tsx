@@ -44,9 +44,8 @@ const HeroSection = () => {
                 Start Assessment
               </Button>
               <Button 
-                variant="outline" 
                 size="lg" 
-                className="border-border/50 hover:bg-background-hover font-semibold px-8 py-4 transition-luxury"
+                className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold px-8 py-4 button-shadow transition-luxury"
                 onClick={() => setShowNDA(true)}
               >
                 Sign NDA
