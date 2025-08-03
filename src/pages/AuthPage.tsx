@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, LogOut } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const AuthPage = () => {
@@ -14,8 +14,10 @@ const AuthPage = () => {
   const [password, setPassword] = useState('');
   const [isLogin, setIsLogin] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [currentUser, setCurrentUser] = useState<any>(null);
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [searchParams] = useSearchParams();
 
   useEffect(() => {
     // Check if user is already authenticated
@@ -29,18 +31,27 @@ const AuthPage = () => {
           .eq('id', session.user.id)
           .single();
         
-        if (profile?.role?.name === 'client') {
-          navigate('/portal');
-        } else if (profile?.role?.name === 'admin') {
-          navigate('/admin/dashboard');
-        } else {
-          navigate('/');
+        // Store current user info for logout option
+        setCurrentUser({
+          email: session.user.email,
+          role: profile?.role?.name
+        });
+        
+        // Only auto-redirect if not explicitly requesting logout
+        if (!searchParams.has('logout')) {
+          if (profile?.role?.name === 'client') {
+            navigate('/portal');
+          } else if (profile?.role?.name === 'admin') {
+            navigate('/admin/dashboard');
+          } else {
+            navigate('/');
+          }
         }
       }
     };
     
     checkAuth();
-  }, [navigate]);
+  }, [navigate, searchParams]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -103,6 +114,28 @@ const AuthPage = () => {
     }
   };
 
+  const handleLogout = async () => {
+    setLoading(true);
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
+      
+      setCurrentUser(null);
+      toast({
+        title: "Signed out",
+        description: "You have been successfully logged out.",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted/20 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
@@ -115,18 +148,39 @@ const AuthPage = () => {
         
         <Card>
           <CardHeader className="space-y-1">
+            {currentUser && (
+              <div className="mb-4 p-3 bg-muted rounded-lg">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium">Currently signed in as:</p>
+                    <p className="text-xs text-muted-foreground">{currentUser.email} ({currentUser.role})</p>
+                  </div>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={handleLogout}
+                    disabled={loading}
+                  >
+                    <LogOut className="w-4 h-4 mr-2" />
+                    Sign Out
+                  </Button>
+                </div>
+              </div>
+            )}
             <CardTitle className="text-2xl text-center">
               {isLogin ? 'Sign In' : 'Create Account'}
             </CardTitle>
             <CardDescription className="text-center">
-              {isLogin 
-                ? 'Enter your credentials to access your account' 
-                : 'Create a new account to get started'
+              {currentUser 
+                ? 'You are already signed in. Sign out to use different credentials.'
+                : isLogin 
+                  ? 'Enter your credentials to access your account' 
+                  : 'Create a new account to get started'
               }
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4" style={{ opacity: currentUser ? 0.5 : 1 }}>
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
                 <Input
@@ -149,7 +203,7 @@ const AuthPage = () => {
                   required
                 />
               </div>
-              <Button type="submit" className="w-full" disabled={loading}>
+              <Button type="submit" className="w-full" disabled={loading || !!currentUser}>
                 {loading ? 'Please wait...' : (isLogin ? 'Sign In' : 'Create Account')}
               </Button>
             </form>
