@@ -266,10 +266,16 @@ export function InteractiveGlossary() {
     return glossaryTerms.filter(term => {
       const matchesSearch = term.term.toLowerCase().includes(searchTerm.toLowerCase()) ||
                           term.definition.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesCategory = selectedCategory === 'all' || term.category === selectedCategory;
-      const matchesFavorites = selectedCategory === 'favorites' ? favorites.includes(term.id) : true;
       
-      return matchesSearch && (matchesCategory || matchesFavorites);
+      if (selectedCategory === 'favorites') {
+        return matchesSearch && favorites.includes(term.id);
+      }
+      
+      if (selectedCategory === 'all') {
+        return matchesSearch;
+      }
+      
+      return matchesSearch && term.category === selectedCategory;
     });
   }, [searchTerm, selectedCategory, favorites]);
 
