@@ -80,6 +80,14 @@ const glossaryTerms: GlossaryTerm[] = [
     category: 'financial',
     example: 'Adding back $50K in owner\'s personal expenses and $25K in one-time legal fees to increase EBITDA by $75K.',
     relatedTerms: ['Adjusted EBITDA', 'Normalization', 'Quality of Earnings']
+  },
+  {
+    id: '9',
+    term: 'SBA-backed PE',
+    definition: 'Atypical private equity structure using Small Business Administration loans instead of direct investor capital. Unlike typical PE (which uses direct investor money with no strings attached), SBA-backed deals require the seller to stay 1-2 years, have lower down payments, and must follow specific SBA rules.',
+    category: 'deal-structure',
+    example: 'Typical PE: Buyer puts down $3M cash from investors. SBA-backed PE: Buyer puts down $1M cash + $2M SBA loan, but you must stay 18 months to help transition.',
+    relatedTerms: ['Private Equity', 'LBO', 'Platform Company']
   }
 ];
 
