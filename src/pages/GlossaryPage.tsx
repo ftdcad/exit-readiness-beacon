@@ -26,9 +26,9 @@ export default function GlossaryPage() {
       <InteractiveGlossary />
 
       {/* Completion Actions */}
-      <Card className="border-green-200 bg-green-50/50">
+      <Card className="border-green-400/20 bg-green-900/10 backdrop-blur-sm">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-green-800">
+          <CardTitle className="flex items-center gap-2 text-green-400">
             <CheckCircle className="h-5 w-5" />
             Mark Module Complete
           </CardTitle>
