@@ -1,11 +1,7 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { CheckCircle, Lock, TrendingUp, Users, DollarSign } from "lucide-react";
-import { NDAGate } from "./NDAGate";
-import { Link } from "react-router-dom";
+import { CheckCircle, Lock } from "lucide-react";
+import { AuthAwareActions } from "./AuthAwareActions";
 
 const HeroSection = () => {
-  const [showNDA, setShowNDA] = useState(false);
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-background">
@@ -36,29 +32,7 @@ const HeroSection = () => {
                 4-week operational assessment for founders considering private equity or strategic exit.
               </p>
             </div>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Button 
-                size="lg" 
-                className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold px-8 py-4 button-shadow transition-luxury"
-                onClick={() => setShowNDA(true)}
-              >
-                Sign NDA
-              </Button>
-              <Button 
-                size="lg" 
-                className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold px-8 py-4 button-shadow transition-luxury"
-                onClick={() => setShowNDA(true)}
-              >
-                Start Assessment
-              </Button>
-              <Button 
-                size="lg" 
-                className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold px-8 py-4 button-shadow transition-luxury"
-                asChild
-              >
-                <Link to="/auth?logout">User Login</Link>
-              </Button>
-            </div>
+            <AuthAwareActions />
 
             {/* Social Proof */}
             <div className="flex items-center gap-4 pt-4">
@@ -103,8 +77,6 @@ const HeroSection = () => {
         </div>
       </div>
 
-      {/* NDA Gate Modal */}
-      {showNDA && <NDAGate onClose={() => setShowNDA(false)} />}
     </section>
   );
 };
