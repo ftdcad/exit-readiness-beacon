@@ -180,224 +180,237 @@ const AssetWorkshopPage = () => {
   ];
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
-      {/* Header */}
-      <div className="space-y-2">
-        <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-          Asset Categorization Workshop
-        </h1>
-        <p className="text-muted-foreground text-lg">
-          Identify Core vs Non-Core Assets
-        </p>
-      </div>
-
-      {/* Story/Context */}
-      <Card className="border-primary/20 bg-primary/5 backdrop-blur-sm">
-        <CardHeader>
-          <CardTitle className="text-primary">Founder's Story</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-muted-foreground leading-relaxed">
-            "When I sold my company, I didn't realize the building I owned in the company's name was tanking our valuation. 
-            Private equity wanted no part of it. That moment taught me a hard lesson: buyers want streamlined, operationally 
-            essential businesses. Everything else? Dead weight."
-          </p>
-          <div className="mt-4 p-4 rounded-lg bg-background/50">
-            <p className="font-medium text-foreground">
-              This module helps you identify which assets to divest or separate *before* buyers discount your deal.
-            </p>
-          </div>
-        </CardContent>
-      </Card>
-
-      <ResizablePanelGroup direction="horizontal" className="min-h-[800px]">
-        {/* Left Panel - Categorizer */}
-        <ResizablePanel defaultSize={65}>
-          <div className="space-y-6 pr-6">
-            {/* Add New Asset */}
-            <Card className="border-primary/20 bg-card/50 backdrop-blur-sm">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Plus className="h-5 w-5" />
-                  Add Business Asset
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <Input
-                    placeholder="Asset name"
-                    value={newAsset.name}
-                    onChange={(e) => setNewAsset(prev => ({ ...prev, name: e.target.value }))}
-                  />
-                  <Input
-                    type="number"
-                    placeholder="Value ($)"
-                    value={newAsset.value}
-                    onChange={(e) => setNewAsset(prev => ({ ...prev, value: e.target.value }))}
-                  />
-                </div>
-                <Input
-                  placeholder="Description"
-                  value={newAsset.description}
-                  onChange={(e) => setNewAsset(prev => ({ ...prev, description: e.target.value }))}
-                />
-                <Button onClick={addAsset} disabled={!newAsset.name || !newAsset.value}>
-                  Add Asset
-                </Button>
-              </CardContent>
-            </Card>
-
-            {/* Categories */}
-            <div className="grid grid-cols-1 gap-6">
-              {categories.map((category) => {
-                const Icon = category.icon;
-                const categoryAssets = assets.filter(asset => asset.currentCategory === category.key);
-                
-                return (
-                  <Card 
-                    key={category.key}
-                    className={`${category.borderColor} ${category.bgColor} backdrop-blur-sm transition-all duration-200`}
-                    onDragOver={handleDragOver}
-                    onDrop={(e) => handleDrop(e, category.key)}
-                  >
-                    <CardHeader>
-                      <CardTitle className={`flex items-center gap-2 ${category.textColor}`}>
-                        <Icon className="h-5 w-5" />
-                        {category.title}
-                        <Badge variant="outline" className={`${category.textColor} border-current`}>
-                          {categoryAssets.length}
-                        </Badge>
-                      </CardTitle>
-                      <CardDescription>{category.description}</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="space-y-3">
-                        {categoryAssets.map((asset) => (
-                          <div
-                            key={asset.id}
-                            draggable
-                            onDragStart={(e) => handleDragStart(e, asset.id)}
-                            className="p-3 rounded-lg bg-background/70 border border-border/50 cursor-move hover:bg-background/90 transition-colors"
-                          >
-                            <div className="flex items-start justify-between">
-                              <div className="flex-1">
-                                <h4 className="font-medium">{asset.name}</h4>
-                                <p className="text-sm text-muted-foreground">{asset.description}</p>
-                                <p className="text-sm font-medium text-primary">
-                                  ${asset.value.toLocaleString()}
-                                </p>
-                              </div>
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => removeAsset(asset.id)}
-                                className="text-muted-foreground hover:text-destructive"
-                              >
-                                <Minus className="h-4 w-4" />
-                              </Button>
-                            </div>
-                            <Textarea
-                              placeholder="Add notes..."
-                              value={asset.notes}
-                              onChange={(e) => updateAssetNotes(asset.id, e.target.value)}
-                              className="mt-2 text-sm"
-                              rows={2}
-                            />
-                          </div>
-                        ))}
-                        {categoryAssets.length === 0 && (
-                          <div className="p-8 text-center text-muted-foreground border-2 border-dashed border-border/30 rounded-lg">
-                            Drag assets here
-                          </div>
-                        )}
-                      </div>
-                    </CardContent>
-                  </Card>
-                );
-              })}
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiM5QzkyQUMiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PGNpcmNsZSBjeD0iMzAiIGN5PSIzMCIgcj0iMSIvPjwvZz48L2c+PC9zdmc+')] opacity-20"></div>
+      
+      <div className="relative z-10 container mx-auto p-6 space-y-8">
+        {/* Module Header */}
+        <Card className="border-primary/20 bg-gradient-to-r from-primary/5 to-primary/10 backdrop-blur-lg">
+          <CardHeader>
+            <div className="flex items-center gap-2 text-primary mb-2">
+              <CheckCircle2 className="h-6 w-6" />
+              <span className="text-sm font-medium">Week 1 • Module 1</span>
             </div>
-          </div>
-        </ResizablePanel>
+            <CardTitle className="text-3xl bg-gradient-to-r from-blue-400 via-purple-400 to-blue-400 bg-clip-text text-transparent">
+              Asset Categorization Workshop
+            </CardTitle>
+            <CardDescription className="text-lg text-muted-foreground">
+              Identify Core vs Non-Core Assets - Strategic Asset Allocation for Maximum Exit Value
+            </CardDescription>
+          </CardHeader>
+        </Card>
 
-        <ResizableHandle withHandle />
+        {/* Story/Context */}
+        <Card className="border-primary/20 bg-gradient-to-br from-primary/10 via-accent/5 to-primary/5 backdrop-blur-lg">
+          <CardHeader>
+            <CardTitle className="text-accent">Founder's Story</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-accent/90 leading-relaxed text-lg">
+              "When I sold my company, I didn't realize the building I owned in the company's name was tanking our valuation. 
+              Private equity wanted no part of it. That moment taught me a hard lesson: buyers want streamlined, operationally 
+              essential businesses. Everything else? Dead weight."
+            </p>
+            <div className="mt-6 p-4 rounded-lg bg-gradient-to-r from-accent/10 to-primary/10 backdrop-blur-sm border border-accent/20">
+              <p className="font-medium text-accent">
+                💡 This module helps you identify which assets to divest or separate *before* buyers discount your deal.
+              </p>
+            </div>
+          </CardContent>
+        </Card>
 
-        {/* Right Panel - Valuation Impact */}
-        <ResizablePanel defaultSize={35}>
-          <div className="pl-6 space-y-6">
-            <Card className="border-primary/20 bg-card/50 backdrop-blur-sm">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <DollarSign className="h-5 w-5" />
-                  Valuation Impact
-                </CardTitle>
-                <CardDescription>Live preview of buyer discount</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-3">
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Total Assets:</span>
-                    <span className="font-medium">${impact.totalAssets.toLocaleString()}</span>
+        <ResizablePanelGroup direction="horizontal" className="min-h-[800px]">
+          {/* Left Panel - Categorizer */}
+          <ResizablePanel defaultSize={65}>
+            <div className="space-y-6 pr-6">
+              {/* Add New Asset */}
+              <Card className="border-primary/20 bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-lg">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-accent">
+                    <Plus className="h-5 w-5" />
+                    Add Business Asset
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <Input
+                      placeholder="Asset name"
+                      value={newAsset.name}
+                      onChange={(e) => setNewAsset(prev => ({ ...prev, name: e.target.value }))}
+                      className="bg-background/50 backdrop-blur-sm"
+                    />
+                    <Input
+                      type="number"
+                      placeholder="Value ($)"
+                      value={newAsset.value}
+                      onChange={(e) => setNewAsset(prev => ({ ...prev, value: e.target.value }))}
+                      className="bg-background/50 backdrop-blur-sm"
+                    />
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Value Destroyers:</span>
-                    <span className="font-medium text-red-400">${impact.destroyerValue.toLocaleString()}</span>
-                  </div>
-                  <Separator />
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Buyer Discount (20%):</span>
-                    <span className="font-medium text-red-400">-${impact.discountAmount.toLocaleString()}</span>
-                  </div>
-                  <div className="flex justify-between text-lg font-semibold">
-                    <span>Adjusted Valuation:</span>
-                    <span className={impact.deltaFromBaseline < 0 ? 'text-red-400' : 'text-green-400'}>
-                      ${impact.adjustedValuation.toLocaleString()}
-                    </span>
-                  </div>
-                </div>
+                  <Input
+                    placeholder="Description"
+                    value={newAsset.description}
+                    onChange={(e) => setNewAsset(prev => ({ ...prev, description: e.target.value }))}
+                    className="bg-background/50 backdrop-blur-sm"
+                  />
+                  <Button onClick={addAsset} disabled={!newAsset.name || !newAsset.value} className="w-full">
+                    Add Asset
+                  </Button>
+                </CardContent>
+              </Card>
 
-                {impact.deltaFromBaseline < 0 && (
-                  <div className="p-4 rounded-lg bg-red-900/10 border border-red-400/20">
-                    <p className="text-red-400 text-sm font-medium">
-                      ⚠️ Value destroyers are reducing your valuation by ${Math.abs(impact.deltaFromBaseline).toLocaleString()}
-                    </p>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-
-            <Card className="border-primary/20 bg-card/50 backdrop-blur-sm">
-              <CardHeader>
-                <CardTitle>Asset Summary</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  {categories.map((category) => {
-                    const count = assets.filter(asset => asset.currentCategory === category.key).length;
-                    const value = assets
-                      .filter(asset => asset.currentCategory === category.key)
-                      .reduce((sum, asset) => sum + asset.value, 0);
-                    
-                    return (
-                      <div key={category.key} className="flex justify-between items-center">
-                        <span className={`text-sm ${category.textColor}`}>{category.title}:</span>
-                        <div className="text-right">
-                          <div className="text-sm font-medium">{count} assets</div>
-                          <div className="text-xs text-muted-foreground">${value.toLocaleString()}</div>
+              {/* Categories */}
+              <div className="grid grid-cols-1 gap-6">
+                {categories.map((category) => {
+                  const Icon = category.icon;
+                  const categoryAssets = assets.filter(asset => asset.currentCategory === category.key);
+                  
+                  return (
+                    <Card 
+                      key={category.key}
+                      className={`border-primary/20 bg-gradient-to-br from-${category.key === 'Core' ? 'emerald' : category.key === 'Destroyer' ? 'red' : 'amber'}-900/20 to-${category.key === 'Core' ? 'emerald' : category.key === 'Destroyer' ? 'red' : 'amber'}-900/5 backdrop-blur-lg transition-all duration-200 hover:shadow-lg`}
+                      onDragOver={handleDragOver}
+                      onDrop={(e) => handleDrop(e, category.key)}
+                    >
+                      <CardHeader>
+                        <CardTitle className={`flex items-center gap-2 ${category.textColor}`}>
+                          <Icon className="h-5 w-5" />
+                          {category.title}
+                          <Badge variant="outline" className={`${category.textColor} border-current bg-background/20`}>
+                            {categoryAssets.length}
+                          </Badge>
+                        </CardTitle>
+                        <CardDescription className="text-muted-foreground/80">{category.description}</CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-3">
+                          {categoryAssets.map((asset) => (
+                            <div
+                              key={asset.id}
+                              draggable
+                              onDragStart={(e) => handleDragStart(e, asset.id)}
+                              className="p-4 rounded-lg bg-gradient-to-r from-background/80 to-background/60 border border-border/50 cursor-move hover:from-background/90 hover:to-background/70 transition-all duration-200 backdrop-blur-sm shadow-sm hover:shadow-md"
+                            >
+                              <div className="flex items-start justify-between">
+                                <div className="flex-1">
+                                  <h4 className="font-semibold text-foreground">{asset.name}</h4>
+                                  <p className="text-sm text-muted-foreground/80">{asset.description}</p>
+                                  <p className="text-sm font-semibold text-accent mt-1">
+                                    ${asset.value.toLocaleString()}
+                                  </p>
+                                </div>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => removeAsset(asset.id)}
+                                  className="text-muted-foreground hover:text-destructive opacity-60 hover:opacity-100"
+                                >
+                                  <Minus className="h-4 w-4" />
+                                </Button>
+                              </div>
+                              <Textarea
+                                placeholder="Add notes..."
+                                value={asset.notes}
+                                onChange={(e) => updateAssetNotes(asset.id, e.target.value)}
+                                className="mt-3 text-sm bg-background/30 backdrop-blur-sm"
+                                rows={2}
+                              />
+                            </div>
+                          ))}
+                          {categoryAssets.length === 0 && (
+                            <div className="p-8 text-center text-muted-foreground/60 border-2 border-dashed border-border/30 rounded-lg bg-background/10 backdrop-blur-sm">
+                              Drag assets here to categorize
+                            </div>
+                          )}
                         </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </CardContent>
-            </Card>
+                      </CardContent>
+                    </Card>
+                  );
+                })}
+              </div>
+            </div>
+          </ResizablePanel>
 
-            <Button className="w-full" variant="outline">
-              <Download className="h-4 w-4 mr-2" />
-              Export Analysis
-            </Button>
-          </div>
-        </ResizablePanel>
-      </ResizablePanelGroup>
+          <ResizableHandle withHandle />
+
+          {/* Right Panel - Valuation Impact */}
+          <ResizablePanel defaultSize={35}>
+            <div className="pl-6 space-y-6">
+              <Card className="border-primary/20 bg-gradient-to-br from-accent/10 to-primary/5 backdrop-blur-lg">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-accent">
+                    <DollarSign className="h-5 w-5" />
+                    Valuation Impact
+                  </CardTitle>
+                  <CardDescription className="text-muted-foreground/80">Live preview of buyer discount</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="space-y-3">
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Total Assets:</span>
+                      <span className="font-semibold text-accent">${impact.totalAssets.toLocaleString()}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Value Destroyers:</span>
+                      <span className="font-semibold text-red-400">${impact.destroyerValue.toLocaleString()}</span>
+                    </div>
+                    <Separator className="bg-border/50" />
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Buyer Discount (20%):</span>
+                      <span className="font-semibold text-red-400">-${impact.discountAmount.toLocaleString()}</span>
+                    </div>
+                    <div className="flex justify-between text-lg font-bold">
+                      <span className="text-foreground">Adjusted Valuation:</span>
+                      <span className={impact.deltaFromBaseline < 0 ? 'text-red-400' : 'text-emerald-400'}>
+                        ${impact.adjustedValuation.toLocaleString()}
+                      </span>
+                    </div>
+                  </div>
+
+                  {impact.deltaFromBaseline < 0 && (
+                    <div className="p-4 rounded-lg bg-gradient-to-r from-red-900/20 to-red-900/10 border border-red-400/30 backdrop-blur-sm">
+                      <p className="text-red-400 text-sm font-medium">
+                        ⚠️ Value destroyers are reducing your valuation by ${Math.abs(impact.deltaFromBaseline).toLocaleString()}
+                      </p>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
+              <Card className="border-primary/20 bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-lg">
+                <CardHeader>
+                  <CardTitle className="text-accent">Asset Summary</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    {categories.map((category) => {
+                      const count = assets.filter(asset => asset.currentCategory === category.key).length;
+                      const value = assets
+                        .filter(asset => asset.currentCategory === category.key)
+                        .reduce((sum, asset) => sum + asset.value, 0);
+                      
+                      return (
+                        <div key={category.key} className="flex justify-between items-center">
+                          <span className={`text-sm font-medium ${category.textColor}`}>{category.title}:</span>
+                          <div className="text-right">
+                            <div className="text-sm font-semibold text-foreground">{count} assets</div>
+                            <div className="text-xs text-muted-foreground">${value.toLocaleString()}</div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Button className="w-full bg-gradient-to-r from-accent to-primary hover:from-accent/90 hover:to-primary/90 text-white shadow-lg" variant="default">
+                <Download className="h-4 w-4 mr-2" />
+                Export Analysis
+              </Button>
+            </div>
+          </ResizablePanel>
+        </ResizablePanelGroup>
+      </div>
     </div>
   );
 };
