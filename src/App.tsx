@@ -11,6 +11,10 @@ import AdminRoute from "./components/AdminRoute";
 import AdminLayout from "./components/AdminLayout";
 import AdminInquiries from "./pages/AdminInquiries";
 import CompanyDetail from "./pages/CompanyDetail";
+import { ClientRoute } from "./components/ClientRoute";
+import { ClientPortalLayout } from "./components/ClientPortalLayout";
+import ClientPortalDashboard from "./pages/ClientPortalDashboard";
+import GlossaryPage from "./pages/GlossaryPage";
 
 const queryClient = new QueryClient();
 
@@ -53,6 +57,29 @@ const App = () => (
               </AdminRoute>
             } 
           />
+          
+          {/* Client Portal Routes */}
+          <Route 
+            path="/portal" 
+            element={
+              <ClientRoute>
+                <ClientPortalLayout>
+                  <ClientPortalDashboard />
+                </ClientPortalLayout>
+              </ClientRoute>
+            } 
+          />
+          <Route 
+            path="/portal/week-1/glossary" 
+            element={
+              <ClientRoute>
+                <ClientPortalLayout>
+                  <GlossaryPage />
+                </ClientPortalLayout>
+              </ClientRoute>
+            } 
+          />
+          
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

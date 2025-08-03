@@ -132,6 +132,69 @@ export type Database = {
           },
         ]
       }
+      client_progress: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          id: string
+          module_name: string
+          user_id: string
+          week_number: number
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          module_name: string
+          user_id: string
+          week_number: number
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          module_name?: string
+          user_id?: string
+          week_number?: number
+        }
+        Relationships: []
+      }
+      client_scenarios: {
+        Row: {
+          add_backs: Json | null
+          adjusted_ebitda: number | null
+          created_at: string
+          current_ebitda: number | null
+          id: string
+          revenue: number | null
+          scenario_name: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          add_backs?: Json | null
+          adjusted_ebitda?: number | null
+          created_at?: string
+          current_ebitda?: number | null
+          id?: string
+          revenue?: number | null
+          scenario_name: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          add_backs?: Json | null
+          adjusted_ebitda?: number | null
+          created_at?: string
+          current_ebitda?: number | null
+          id?: string
+          revenue?: number | null
+          scenario_name?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       company_comments: {
         Row: {
           comment: string
