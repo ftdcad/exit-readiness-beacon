@@ -68,7 +68,7 @@ export default function EBITDACoursePage() {
             >
               {section.title}
               {completedSections.includes(section.id) && (
-                <CheckCircle className="h-3 w-3 text-green-600 absolute -top-1 -right-1" />
+                <CheckCircle className="h-3 w-3 text-success absolute -top-1 -right-1" />
               )}
             </TabsTrigger>
           ))}
@@ -248,7 +248,7 @@ export default function EBITDACoursePage() {
                 </p>
 
                 <div className="space-y-4">
-                  <div className="bg-muted p-4 rounded-lg">
+                  <div className="bg-muted/20 backdrop-blur-sm p-4 rounded-lg">
                     <h4 className="font-semibold mb-2">🎯 Add-Back Strategy</h4>
                     <p className="text-sm">
                       The goal isn't to inflate numbers artificially. It's to show what the business 
@@ -257,8 +257,8 @@ export default function EBITDACoursePage() {
                   </div>
 
                   <div className="grid gap-4">
-                    <div className="border rounded-lg p-4">
-                      <h5 className="font-medium text-green-700 mb-2">✅ Legitimate Add-Backs</h5>
+                    <div className="bg-success/10 backdrop-blur-sm border border-success/30 rounded-lg p-4">
+                      <h5 className="font-medium text-success mb-2">✅ Legitimate Add-Backs</h5>
                       <ul className="text-sm space-y-1">
                         <li>• Owner salary above $150K for a $5M business</li>
                         <li>• Owner's spouse on payroll doing minimal work</li>
@@ -396,9 +396,9 @@ export default function EBITDACoursePage() {
 
       {/* Course Completion */}
       {isCompleted && (
-        <Card className="border-green-200 bg-green-50/50">
+        <Card className="border-success/30 bg-success/10 backdrop-blur-sm">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-green-800">
+            <CardTitle className="flex items-center gap-2 text-success">
               <CheckCircle className="h-5 w-5" />
               EBITDA Mastery Complete!
             </CardTitle>
