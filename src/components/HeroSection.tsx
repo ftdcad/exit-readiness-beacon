@@ -28,7 +28,7 @@ const HeroSection = () => {
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight">
                 Are You{" "}
                 <span className="text-luxury bg-gradient-to-r from-accent to-accent/70 bg-clip-text text-transparent">
-                  PE-Ready?
+                  Exit Ready?
                 </span>
               </h1>
               <p className="text-xl md:text-2xl text-foreground-secondary leading-relaxed">

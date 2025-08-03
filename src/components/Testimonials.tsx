@@ -21,7 +21,7 @@ const Testimonials = () => {
       company: "LogiChain Pro",
       industry: "Supply Chain",
       exitValue: "$23M",
-      testimonial: "Meridian's report became our roadmap for the next 18 months. Every recommendation was spot-on. Our buyers were impressed with how 'PE-ready' we were.",
+      testimonial: "Meridian's report became our roadmap for the next 18 months. Every recommendation was spot-on. Our buyers were impressed with how 'exit ready' we were.",
       rating: 5,
       outcome: "Strategic Acquisition"
     },
