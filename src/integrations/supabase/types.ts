@@ -320,6 +320,39 @@ export type Database = {
           },
         ]
       }
+      exit_readiness_assessments: {
+        Row: {
+          answers: Json
+          assessment_version: string | null
+          completed_at: string | null
+          created_at: string | null
+          id: string
+          score: number
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          answers?: Json
+          assessment_version?: string | null
+          completed_at?: string | null
+          created_at?: string | null
+          id?: string
+          score?: number
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          answers?: Json
+          assessment_version?: string | null
+          completed_at?: string | null
+          created_at?: string | null
+          id?: string
+          score?: number
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       financial_assessments: {
         Row: {
           adjusted_ebitda: number | null
