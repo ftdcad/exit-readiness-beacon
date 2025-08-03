@@ -41,12 +41,6 @@ export default function EBITDACoursePage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="flex items-center gap-4 text-sm text-muted-foreground mb-4">
-            <span>📊 4 Key Sections</span>
-            <span>⏱️ 25 minutes</span>
-            <span>🎯 Valuation Optimization</span>
-          </div>
-          
           <div className="space-y-2">
             <div className="flex justify-between text-sm">
               <span>Course Progress</span>
