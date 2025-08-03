@@ -60,7 +60,7 @@ const HeroSection = () => {
                 ))}
               </div>
               <div className="text-sm text-foreground-secondary">
-                <span className="font-semibold text-foreground">47 founders</span> completed assessments this quarter
+                Assessment for founders by founders
               </div>
             </div>
           </div>
