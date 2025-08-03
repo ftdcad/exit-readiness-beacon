@@ -132,6 +132,36 @@ export type Database = {
           },
         ]
       }
+      buyer_analysis: {
+        Row: {
+          buyer_scores: Json | null
+          created_at: string
+          id: string
+          quiz_answers: Json | null
+          selected_buyer: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          buyer_scores?: Json | null
+          created_at?: string
+          id?: string
+          quiz_answers?: Json | null
+          selected_buyer?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          buyer_scores?: Json | null
+          created_at?: string
+          id?: string
+          quiz_answers?: Json | null
+          selected_buyer?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       client_progress: {
         Row: {
           completed_at: string | null

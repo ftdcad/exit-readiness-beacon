@@ -20,6 +20,7 @@ import GlossaryPage from "./pages/GlossaryPage";
 import EBITDACoursePage from "./pages/EBITDACoursePage";
 import AssetWorkshopPage from "./pages/AssetWorkshopPage";
 import QuickWinsPage from "./pages/QuickWinsPage";
+import KnowYourBuyerPage from "./pages/KnowYourBuyerPage";
 
 const queryClient = new QueryClient();
 
@@ -71,6 +72,16 @@ const App = () => (
               <ClientRoute>
                 <ClientPortalLayout>
                   <ClientPortalDashboard />
+                </ClientPortalLayout>
+              </ClientRoute>
+            } 
+          />
+          <Route 
+            path="/portal/week-1/know-your-buyer" 
+            element={
+              <ClientRoute>
+                <ClientPortalLayout>
+                  <KnowYourBuyerPage />
                 </ClientPortalLayout>
               </ClientRoute>
             } 
