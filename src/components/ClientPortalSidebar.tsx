@@ -86,7 +86,7 @@ export function ClientPortalSidebar() {
       return "text-muted-foreground/50 cursor-not-allowed opacity-50";
     }
     return isActive(path) 
-      ? "bg-primary/10 text-primary font-medium border-r-2 border-primary" 
+      ? "bg-accent/10 text-accent font-medium border-r-2 border-accent" 
       : "hover:bg-muted/50 text-foreground";
   };
 
