@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, Lock, TrendingUp, Users, DollarSign } from "lucide-react";
 import { NDAGate } from "./NDAGate";
+import { Link } from "react-router-dom";
 
 const HeroSection = () => {
   const [showNDA, setShowNDA] = useState(false);
@@ -49,6 +50,13 @@ const HeroSection = () => {
                 onClick={() => setShowNDA(true)}
               >
                 Start Assessment
+              </Button>
+              <Button 
+                size="lg" 
+                className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold px-8 py-4 button-shadow transition-luxury"
+                asChild
+              >
+                <Link to="/auth">User Login</Link>
               </Button>
             </div>
 
