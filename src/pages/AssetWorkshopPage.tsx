@@ -7,6 +7,9 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Download, Plus, DollarSign, AlertTriangle, CheckCircle2, Minus } from 'lucide-react';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
+import { useProgress } from '@/hooks/useProgress';
+import { useAuth } from '@/hooks/useAuth';
+import { useToast } from '@/hooks/use-toast';
 
 interface Asset {
   id: string;
@@ -18,6 +21,10 @@ interface Asset {
 }
 
 const AssetWorkshopPage = () => {
+  const { markModuleComplete, isModuleCompleted } = useProgress();
+  const { user } = useAuth();
+  const { toast } = useToast();
+  
   const [assets, setAssets] = useState<Asset[]>([
     {
       id: '1',
@@ -398,10 +405,36 @@ const AssetWorkshopPage = () => {
                 </CardContent>
               </Card>
 
-              <Button className="w-full bg-gradient-to-r from-accent to-primary hover:from-accent/90 hover:to-primary/90 text-white shadow-lg" variant="default">
-                <Download className="h-4 w-4 mr-2" />
-                Export Analysis
-              </Button>
+              <div className="space-y-3">
+                <Button className="w-full bg-gradient-to-r from-accent to-primary hover:from-accent/90 hover:to-primary/90 text-white shadow-lg" variant="default">
+                  <Download className="h-4 w-4 mr-2" />
+                  Export Analysis
+                </Button>
+                
+                <Button 
+                  className="w-full"
+                  variant="outline"
+                  onClick={async () => {
+                    try {
+                      await markModuleComplete('Asset Workshop', 1);
+                      toast({
+                        title: "Module Completed!",
+                        description: "You've completed the Asset Workshop module.",
+                      });
+                    } catch (error) {
+                      toast({
+                        title: "Error",
+                        description: "Failed to mark module as complete.",
+                        variant: "destructive",
+                      });
+                    }
+                  }}
+                  disabled={isModuleCompleted('Asset Workshop', 1)}
+                >
+                  <CheckCircle2 className="h-4 w-4 mr-2" />
+                  {isModuleCompleted('Asset Workshop', 1) ? 'Module Completed' : 'Complete Module'}
+                </Button>
+              </div>
             </div>
           </ResizablePanel>
         </ResizablePanelGroup>

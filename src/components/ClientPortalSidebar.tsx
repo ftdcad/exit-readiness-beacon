@@ -182,17 +182,17 @@ export function ClientPortalSidebar() {
                     })}
                   </SidebarMenu>
                   
-                  {/* Week unlock progress indicator */}
+                  {/* Progress guidance for non-paying users */}
                   {!collapsed && !weekUnlocked && week.number > 1 && (
                     <div className="px-3 py-2 text-xs text-muted-foreground">
                       <div className="flex items-center justify-between mb-1">
-                        <span>Complete Week {week.number - 1} to unlock</span>
+                        <span>Recommended Path: Week {week.number - 1} first</span>
                       </div>
                       {weekProgress && (
                         <div className="w-full bg-muted rounded-full h-1">
                           <div 
                             className="bg-primary h-1 rounded-full transition-all" 
-                            style={{ width: `${Math.min(weekProgress.progress, 80)}%` }}
+                            style={{ width: `${weekProgress.progress}%` }}
                           />
                         </div>
                       )}

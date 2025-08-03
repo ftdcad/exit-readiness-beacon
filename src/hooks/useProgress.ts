@@ -21,7 +21,7 @@ export const useProgress = () => {
   const [progress, setProgress] = useState<ModuleProgress[]>([]);
   const [weekProgress, setWeekProgress] = useState<WeekProgress[]>([]);
   const [loading, setLoading] = useState(true);
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
 
   // Module counts per week (matches sidebar data)
   const weekModuleCounts = {
@@ -60,12 +60,18 @@ export const useProgress = () => {
         const progressPercent = Math.round((completedCount / totalCount) * 100);
         
         // Unlock logic:
-        // Week 1 is always unlocked
-        // Week N is unlocked if Week N-1 has at least 80% completion (4/5 for week 1)
+        // For paying clients (role_id matches client role), unlock everything
+        // Week 1 is always unlocked for everyone else
         let isUnlocked = week === 1;
-        if (week > 1) {
-          const prevWeek = weekProgressData[week - 2];
-          isUnlocked = prevWeek ? prevWeek.progress >= 80 : false;
+        if (user) {
+          // Check if user has client role - if so, unlock all weeks
+          const isClient = profile?.role_id === '25fafd5b-23ba-49a8-b632-01cd0179c3dc';
+          if (isClient) {
+            isUnlocked = true;
+          } else if (week > 1) {
+            const prevWeek = weekProgressData[week - 2];
+            isUnlocked = prevWeek ? prevWeek.progress >= 80 : false;
+          }
         }
         
         weekProgressData.push({

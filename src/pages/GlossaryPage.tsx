@@ -4,8 +4,35 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { CheckCircle, ArrowRight, BookOpen } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useProgress } from '@/hooks/useProgress';
+import { useAuth } from '@/hooks/useAuth';
+import { useToast } from '@/hooks/use-toast';
 
 export default function GlossaryPage() {
+  const { markModuleComplete, isModuleCompleted } = useProgress();
+  const { user } = useAuth();
+  const { toast } = useToast();
+
+  const handleMarkComplete = async () => {
+    if (!user) return;
+    
+    try {
+      await markModuleComplete('Interactive Glossary', 1);
+      toast({
+        title: "Module Completed!",
+        description: "You've completed the Interactive Glossary module.",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to mark module as complete.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const isCompleted = isModuleCompleted('Interactive Glossary', 1);
+
   return (
     <div className="space-y-8">
       {/* Module Header */}
@@ -48,9 +75,13 @@ export default function GlossaryPage() {
           </div>
           
           <div className="flex gap-3">
-            <Button className="flex-1">
+            <Button 
+              className="flex-1"
+              onClick={handleMarkComplete}
+              disabled={isCompleted}
+            >
               <CheckCircle className="h-4 w-4 mr-2" />
-              Complete Module
+              {isCompleted ? 'Module Completed' : 'Complete Module'}
             </Button>
             <Button variant="outline" asChild>
               <Link to="/portal/week-1/ebitda-course">

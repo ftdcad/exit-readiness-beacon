@@ -6,9 +6,15 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { CheckCircle, ArrowRight, Calculator, TrendingUp, DollarSign, AlertCircle, PlayCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useProgress } from '@/hooks/useProgress';
+import { useAuth } from '@/hooks/useAuth';
+import { useToast } from '@/hooks/use-toast';
 
 export default function EBITDACoursePage() {
   const [completedSections, setCompletedSections] = useState<string[]>([]);
+  const { markModuleComplete, isModuleCompleted } = useProgress();
+  const { user } = useAuth();
+  const { toast } = useToast();
   
   const sections = [
     { id: 'basics', title: 'EBITDA Basics', duration: '5 min' },
@@ -412,9 +418,27 @@ export default function EBITDACoursePage() {
             </div>
             
             <div className="flex gap-3">
-              <Button className="flex-1">
+              <Button 
+                className="flex-1"
+                onClick={async () => {
+                  try {
+                    await markModuleComplete('EBITDA Mastery', 1);
+                    toast({
+                      title: "Module Completed!",
+                      description: "You've completed the EBITDA Mastery Course.",
+                    });
+                  } catch (error) {
+                    toast({
+                      title: "Error",
+                      description: "Failed to mark module as complete.",
+                      variant: "destructive",
+                    });
+                  }
+                }}
+                disabled={isModuleCompleted('EBITDA Mastery', 1)}
+              >
                 <CheckCircle className="h-4 w-4 mr-2" />
-                Complete Module
+                {isModuleCompleted('EBITDA Mastery', 1) ? 'Module Completed' : 'Complete Module'}
               </Button>
               <Button variant="outline" asChild>
                 <Link to="/portal/week-1/asset-workshop">
