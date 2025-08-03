@@ -135,7 +135,7 @@ export function ClientPortalSidebar() {
               
               {!collapsed && (
                 <SidebarGroupContent>
-                  <div className="text-xs text-muted-foreground px-3 mb-2">
+                  <div className="text-xs text-foreground font-medium px-3 mb-2">
                     {week.title}
                   </div>
                   <SidebarMenu>
