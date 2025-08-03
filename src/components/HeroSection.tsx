@@ -71,7 +71,7 @@ const HeroSection = () => {
               <div className="space-y-6">
                 <div className="text-center">
                   <h3 className="text-2xl font-bold text-foreground mb-2">Assessment Preview</h3>
-                  <p className="text-foreground-secondary">What we evaluate in 6 weeks</p>
+                  <p className="text-foreground-secondary">What we evaluate in 4 weeks</p>
                 </div>
                 
                 <div className="space-y-4">
