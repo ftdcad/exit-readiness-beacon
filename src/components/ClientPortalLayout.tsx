@@ -1,3 +1,4 @@
+import React from 'react';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { ClientPortalSidebar } from '@/components/ClientPortalSidebar';
 import { Button } from '@/components/ui/button';
