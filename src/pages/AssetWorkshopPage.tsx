@@ -180,10 +180,7 @@ const AssetWorkshopPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
-      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiM5QzkyQUMiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PGNpcmNsZSBjeD0iMzAiIGN5PSIzMCIgcj0iMSIvPjwvZz48L2c+PC9zdmc+')] opacity-20"></div>
-      
-      <div className="relative z-10 container mx-auto p-6 space-y-8">
+    <div className="space-y-8">
         {/* Module Header */}
         <Card className="border-primary/20 bg-gradient-to-r from-primary/5 to-primary/10 backdrop-blur-lg">
           <CardHeader>
@@ -191,9 +188,7 @@ const AssetWorkshopPage = () => {
               <CheckCircle2 className="h-6 w-6" />
               <span className="text-sm font-medium">Week 1 • Module 1</span>
             </div>
-            <CardTitle className="text-3xl bg-gradient-to-r from-blue-400 via-purple-400 to-blue-400 bg-clip-text text-transparent">
-              Asset Categorization Workshop
-            </CardTitle>
+            <CardTitle className="text-2xl">Asset Categorization Workshop</CardTitle>
             <CardDescription className="text-lg text-muted-foreground">
               Identify Core vs Non-Core Assets - Strategic Asset Allocation for Maximum Exit Value
             </CardDescription>
@@ -410,7 +405,6 @@ const AssetWorkshopPage = () => {
             </div>
           </ResizablePanel>
         </ResizablePanelGroup>
-      </div>
     </div>
   );
 };
