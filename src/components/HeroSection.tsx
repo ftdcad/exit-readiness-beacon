@@ -89,13 +89,6 @@ const HeroSection = () => {
                     </div>
                   ))}
                 </div>
-
-                <div className="pt-4 border-t border-border/50">
-                  <div className="text-center">
-                    <div className="text-3xl font-bold text-accent">97%</div>
-                    <div className="text-sm text-foreground-secondary">Client satisfaction rate</div>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
