@@ -324,7 +324,7 @@ export default function EBITDACoursePage() {
                 <div className="bg-gradient-to-r from-primary/10 to-accent/10 backdrop-blur-sm p-6 rounded-lg border border-accent/30">
                   <h4 className="font-semibold text-center mb-4">The Multiplier Effect</h4>
                   <div className="text-center space-y-2">
-                    <div className="text-3xl font-bold text-primary">+$100K EBITDA</div>
+                    <div className="text-3xl font-bold text-blue-400">+$100K EBITDA</div>
                     <div className="text-lg">×</div>
                     <div className="text-2xl font-semibold">6x Multiple</div>
                     <div className="text-lg">=</div>
