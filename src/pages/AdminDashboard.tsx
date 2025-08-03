@@ -1,10 +1,15 @@
 import { useAuth } from '@/hooks/useAuth';
+import { useInquiryStats } from '@/hooks/useInquiries';
+import { useProfileStats } from '@/hooks/useProfiles';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { LogOut, Users, Building2, FileText } from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
+import { LogOut, Users, Building2, FileText, TrendingUp } from 'lucide-react';
 
 const AdminDashboard = () => {
   const { profile, signOut } = useAuth();
+  const { data: inquiryStats, isLoading: inquiryLoading } = useInquiryStats();
+  const { data: profileStats, isLoading: profileLoading } = useProfileStats();
 
   const handleSignOut = async () => {
     await signOut();
@@ -44,7 +49,11 @@ const AdminDashboard = () => {
               <Building2 className="h-4 w-4 text-accent" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-foreground">0</div>
+              {inquiryLoading ? (
+                <Skeleton className="h-8 w-16" />
+              ) : (
+                <div className="text-2xl font-bold text-foreground">{inquiryStats?.total || 0}</div>
+              )}
               <p className="text-xs text-foreground-muted">
                 Submitted assessments
               </p>
@@ -59,7 +68,11 @@ const AdminDashboard = () => {
               <FileText className="h-4 w-4 text-warning" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-foreground">0</div>
+              {inquiryLoading ? (
+                <Skeleton className="h-8 w-16" />
+              ) : (
+                <div className="text-2xl font-bold text-foreground">{inquiryStats?.pending || 0}</div>
+              )}
               <p className="text-xs text-foreground-muted">
                 Awaiting admin review
               </p>
@@ -74,7 +87,11 @@ const AdminDashboard = () => {
               <Users className="h-4 w-4 text-success" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-foreground">1</div>
+              {profileLoading ? (
+                <Skeleton className="h-8 w-16" />
+              ) : (
+                <div className="text-2xl font-bold text-foreground">{profileStats?.admins || 0}</div>
+              )}
               <p className="text-xs text-foreground-muted">
                 Active administrators
               </p>
