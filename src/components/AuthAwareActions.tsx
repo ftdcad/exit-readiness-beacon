@@ -15,8 +15,8 @@ export const AuthAwareActions = ({ className }: AuthAwareActionsProps) => {
 
   // If user is logged in, show appropriate portal access
   if (user && profile) {
-    const isAdmin = profile.role?.name === 'admin';
-    const isClient = profile.role?.name === 'client';
+    const isAdmin = profile?.role_id === '5d867d9b-0bf7-4822-87ad-2637136b45f7';
+    const isClient = profile?.role_id === '25fafd5b-23ba-49a8-b632-01cd0179c3dc';
 
     return (
       <div className={`flex flex-col sm:flex-row gap-4 ${className}`}>
