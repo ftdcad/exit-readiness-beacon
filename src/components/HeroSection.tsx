@@ -32,7 +32,7 @@ const HeroSection = () => {
                 </span>
               </h1>
               <p className="text-xl md:text-2xl text-foreground-secondary leading-relaxed">
-                6-week operational assessment for founders considering private equity or strategic exit.
+                4-week operational assessment for founders considering private equity or strategic exit.
               </p>
             </div>
             <div className="flex flex-col sm:flex-row gap-4">
