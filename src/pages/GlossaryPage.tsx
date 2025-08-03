@@ -20,13 +20,6 @@ export default function GlossaryPage() {
             Master the essential terminology of private equity transactions and valuations
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="flex items-center gap-4 text-sm text-muted-foreground">
-            <span>📚 20+ Essential Terms</span>
-            <span>⏱️ 15-20 minutes</span>
-            <span>🎯 Foundation Knowledge</span>
-          </div>
-        </CardContent>
       </Card>
 
       {/* Glossary Component */}
