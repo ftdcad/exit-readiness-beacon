@@ -425,6 +425,7 @@ export type Database = {
           updated_at: string
           user_id: string
           values: Json | null
+          vehicle_assets: Json | null
         }
         Insert: {
           completed_items?: Json | null
@@ -436,6 +437,7 @@ export type Database = {
           updated_at?: string
           user_id: string
           values?: Json | null
+          vehicle_assets?: Json | null
         }
         Update: {
           completed_items?: Json | null
@@ -447,6 +449,7 @@ export type Database = {
           updated_at?: string
           user_id?: string
           values?: Json | null
+          vehicle_assets?: Json | null
         }
         Relationships: []
       }

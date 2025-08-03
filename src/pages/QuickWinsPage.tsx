@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import VehicleAssetTracker, { VehicleAsset } from "@/components/VehicleAssetTracker";
 
 // Custom debounce hook to avoid lodash dependency
 const useDebounce = (callback: () => void, delay: number, deps: any[]) => {
@@ -87,6 +88,7 @@ export default function QuickWinsPage() {
   const [notes, setNotes] = useState<Record<string, string>>({});
   const [multiple, setMultiple] = useState(5);
   const [customItems, setCustomItems] = useState<CustomItem[]>([]);
+  const [vehicleAssets, setVehicleAssets] = useState<VehicleAsset[]>([]);
 
   const getMidpoint = (range: number[]) => Math.round((range[0] + range[1]) / 2);
   
@@ -132,6 +134,7 @@ export default function QuickWinsPage() {
         notes: notes as any,
         multiple,
         custom_items: customItems as any,
+        vehicle_assets: vehicleAssets as any,
         updated_at: new Date().toISOString()
       });
       if (error) throw error;
@@ -144,7 +147,7 @@ export default function QuickWinsPage() {
   };
 
   // Auto-save with debounce
-  useDebounce(saveProgress, 1000, [completedItems, values, notes, multiple, customItems]);
+  useDebounce(saveProgress, 1000, [completedItems, values, notes, multiple, customItems, vehicleAssets]);
 
   useEffect(() => {
     if (!user) return;
@@ -168,6 +171,7 @@ export default function QuickWinsPage() {
         setValues(initialValues);
         setMultiple(data?.multiple || 5);
         setCustomItems((data?.custom_items as any as CustomItem[]) || []);
+        setVehicleAssets((data?.vehicle_assets as any as VehicleAsset[]) || []);
       } catch (err) {
         console.error("Load error:", err);
       } finally {
@@ -188,9 +192,10 @@ export default function QuickWinsPage() {
     );
 
   // Calculate totals
+  const vehicleAssetsTotal = vehicleAssets.reduce((sum, asset) => sum + (asset.personalCost || 0), 0);
   const coreAddBacks = Object.values(values).reduce((sum, v) => sum + v, 0);
   const customAddBacks = customItems.reduce((sum, item) => sum + (item.amount || 0), 0);
-  const totalAddBacks = coreAddBacks + customAddBacks;
+  const totalAddBacks = coreAddBacks + customAddBacks + vehicleAssetsTotal;
   const valuationIncrease = totalAddBacks * multiple;
   const totalItems = QuickWinsModule.checklistItems.length + customItems.filter(item => item.title && item.amount > 0).length;
   const completedCoreItems = completedItems.length;
@@ -286,9 +291,19 @@ export default function QuickWinsPage() {
                           <strong>Action Required:</strong> {item.action}
                         </p>
                       </div>
-                    </div>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                     </div>
+
+                     {/* Vehicle Asset Tracker for Personal Vehicle & Travel */}
+                     {item.id === "personal-vehicle" && (
+                       <div className="mt-6 pt-4 border-t border-border/50">
+                         <VehicleAssetTracker 
+                           vehicleAssets={vehicleAssets}
+                           onUpdateAssets={setVehicleAssets}
+                         />
+                       </div>
+                     )}
+                     
+                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-sm font-medium mb-2">
                           Estimated Add-Back Amount
@@ -473,6 +488,10 @@ export default function QuickWinsPage() {
                 <div className="flex justify-between">
                   <span className="text-sm text-muted-foreground">Core Add-Backs:</span>
                   <span className="font-medium">{formatCurrency(coreAddBacks)}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-sm text-muted-foreground">Vehicle Assets:</span>
+                  <span className="font-medium">{formatCurrency(vehicleAssetsTotal)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-sm text-muted-foreground">Custom Add-Backs:</span>
