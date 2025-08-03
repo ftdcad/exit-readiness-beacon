@@ -212,7 +212,7 @@ export default function QuickWinsPage() {
                   </div>
                   <button
                     onClick={() => toggleExpanded(item.id)}
-                    className="flex items-center gap-1 text-sm text-primary hover:text-primary/80 transition-colors"
+                    className="flex items-center gap-1 text-sm text-accent hover:text-accent/80 transition-colors"
                   >
                     {isExpanded ? (
                       <>
