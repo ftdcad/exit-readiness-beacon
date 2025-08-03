@@ -10,6 +10,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import AdminRoute from "./components/AdminRoute";
 import AdminLayout from "./components/AdminLayout";
 import AdminInquiries from "./pages/AdminInquiries";
+import CompanyDetail from "./pages/CompanyDetail";
 
 const queryClient = new QueryClient();
 
@@ -38,6 +39,16 @@ const App = () => (
               <AdminRoute>
                 <AdminLayout>
                   <AdminInquiries />
+                </AdminLayout>
+              </AdminRoute>
+            } 
+          />
+          <Route 
+            path="/admin/companies/:id" 
+            element={
+              <AdminRoute>
+                <AdminLayout>
+                  <CompanyDetail />
                 </AdminLayout>
               </AdminRoute>
             } 

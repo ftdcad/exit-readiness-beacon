@@ -155,7 +155,11 @@ const AdminInquiries = () => {
                       {formatDate(inquiry.created_at)}
                     </TableCell>
                     <TableCell>
-                      <Button variant="ghost" size="sm">
+                      <Button 
+                        variant="ghost" 
+                        size="sm"
+                        onClick={() => window.location.href = `/admin/companies/${inquiry.id}`}
+                      >
                         <Eye className="h-4 w-4" />
                       </Button>
                     </TableCell>

@@ -59,6 +59,79 @@ export type Database = {
           },
         ]
       }
+      add_back_categories: {
+        Row: {
+          amount: number | null
+          assessment_id: string
+          category: string
+          created_at: string
+          description: string | null
+          id: string
+          is_applied: boolean | null
+        }
+        Insert: {
+          amount?: number | null
+          assessment_id: string
+          category: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_applied?: boolean | null
+        }
+        Update: {
+          amount?: number | null
+          assessment_id?: string
+          category?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_applied?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "add_back_categories_assessment_id_fkey"
+            columns: ["assessment_id"]
+            isOneToOne: false
+            referencedRelation: "financial_assessments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      assessment_sessions: {
+        Row: {
+          assessment_id: string
+          created_at: string
+          id: string
+          scenario_data: Json | null
+          session_name: string
+          updated_at: string
+        }
+        Insert: {
+          assessment_id: string
+          created_at?: string
+          id?: string
+          scenario_data?: Json | null
+          session_name?: string
+          updated_at?: string
+        }
+        Update: {
+          assessment_id?: string
+          created_at?: string
+          id?: string
+          scenario_data?: Json | null
+          session_name?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assessment_sessions_assessment_id_fkey"
+            columns: ["assessment_id"]
+            isOneToOne: false
+            referencedRelation: "financial_assessments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       company_comments: {
         Row: {
           comment: string
@@ -153,6 +226,95 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      financial_assessments: {
+        Row: {
+          adjusted_ebitda: number | null
+          assessment_status: string | null
+          company_id: string
+          created_at: string
+          created_by: string | null
+          current_ebitda: number | null
+          ebitda_margin: number | null
+          id: string
+          net_income: number | null
+          pe_readiness_score: number | null
+          revenue: number | null
+          updated_at: string
+        }
+        Insert: {
+          adjusted_ebitda?: number | null
+          assessment_status?: string | null
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          current_ebitda?: number | null
+          ebitda_margin?: number | null
+          id?: string
+          net_income?: number | null
+          pe_readiness_score?: number | null
+          revenue?: number | null
+          updated_at?: string
+        }
+        Update: {
+          adjusted_ebitda?: number | null
+          assessment_status?: string | null
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          current_ebitda?: number | null
+          ebitda_margin?: number | null
+          id?: string
+          net_income?: number | null
+          pe_readiness_score?: number | null
+          revenue?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "financial_assessments_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "contact_inquiries"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      industry_benchmarks: {
+        Row: {
+          created_at: string
+          id: string
+          industry: string
+          margin_excellent: number
+          margin_fair: number
+          margin_good: number
+          multiple_high: number
+          multiple_low: number
+          multiple_mid: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          industry: string
+          margin_excellent: number
+          margin_fair: number
+          margin_good: number
+          multiple_high: number
+          multiple_low: number
+          multiple_mid: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          industry?: string
+          margin_excellent?: number
+          margin_fair?: number
+          margin_good?: number
+          multiple_high?: number
+          multiple_low?: number
+          multiple_mid?: number
+        }
+        Relationships: []
       }
       profiles: {
         Row: {
