@@ -37,11 +37,11 @@ export const useProfileStats = () => {
   return useQuery({
     queryKey: ['profile-stats'],
     queryFn: async () => {
-      const { data: totalUsers, error: totalError } = await supabase
+      const { count: totalCount, error: totalError } = await supabase
         .from('profiles')
         .select('*', { count: 'exact', head: true });
 
-      const { data: adminUsers, error: adminError } = await supabase
+      const { count: adminCount, error: adminError } = await supabase
         .from('profiles')
         .select(`
           *,
@@ -52,9 +52,11 @@ export const useProfileStats = () => {
       if (totalError) throw totalError;
       if (adminError) throw adminError;
 
+      console.log('Profile stats:', { totalCount, adminCount });
+
       return {
-        total: totalUsers?.length || 0,
-        admins: adminUsers?.length || 0,
+        total: totalCount || 0,
+        admins: adminCount || 0,
       };
     },
   });

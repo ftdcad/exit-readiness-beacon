@@ -96,11 +96,11 @@ export const useInquiryStats = () => {
   return useQuery({
     queryKey: ['inquiry-stats'],
     queryFn: async () => {
-      const { data: totalCount, error: totalError } = await supabase
+      const { count: totalCount, error: totalError } = await supabase
         .from('contact_inquiries')
         .select('*', { count: 'exact', head: true });
 
-      const { data: pendingCount, error: pendingError } = await supabase
+      const { count: pendingCount, error: pendingError } = await supabase
         .from('contact_inquiries')
         .select('*', { count: 'exact', head: true })
         .eq('status', 'new');
@@ -118,9 +118,11 @@ export const useInquiryStats = () => {
         ? revenueData.reduce((sum, item) => sum + (item.annual_revenue || 0), 0) / revenueData.length 
         : 0;
 
+      console.log('Inquiry stats:', { totalCount, pendingCount, avgRevenue });
+
       return {
-        total: totalCount?.length || 0,
-        pending: pendingCount?.length || 0,
+        total: totalCount || 0,
+        pending: pendingCount || 0,
         avgRevenue: Math.round(avgRevenue),
       };
     },

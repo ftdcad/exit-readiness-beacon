@@ -5,11 +5,13 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { LogOut, Users, Building2, FileText, TrendingUp } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const AdminDashboard = () => {
+  const navigate = useNavigate();
   const { profile } = useAuth();
-  const { data: inquiryStats, isLoading: inquiryLoading } = useInquiryStats();
-  const { data: profileStats, isLoading: profileLoading } = useProfileStats();
+  const { data: inquiryStats, isLoading: inquiryLoading, error: inquiryError } = useInquiryStats();
+  const { data: profileStats, isLoading: profileLoading, error: profileError } = useProfileStats();
 
   return (
     <div className="p-6 space-y-6">
@@ -90,9 +92,9 @@ const AdminDashboard = () => {
           </p>
           
           <div className="flex flex-wrap gap-4">
-            <Button disabled>
+            <Button onClick={() => navigate('/admin/inquiries')}>
               <Building2 className="w-4 h-4 mr-2" />
-              View Companies (Coming Soon)
+              View Companies
             </Button>
             
             <Button variant="outline" disabled>
@@ -100,6 +102,13 @@ const AdminDashboard = () => {
               Manage Users (Coming Soon)
             </Button>
           </div>
+          
+          {(inquiryError || profileError) && (
+            <div className="text-sm text-destructive">
+              {inquiryError && <p>Error loading inquiry stats: {inquiryError.message}</p>}
+              {profileError && <p>Error loading profile stats: {profileError.message}</p>}
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>
