@@ -265,7 +265,7 @@ const FAQ = () => {
 
             {/* Contact Options */}
             <div className="space-y-6">
-              <Card className="glass-card border-border/50 sticky top-8">
+              <Card className="glass-card border-border/50 sticky top-8 z-50 backdrop-blur-sm bg-background/95 shadow-2xl">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <HelpCircle className="h-5 w-5 text-accent" />
