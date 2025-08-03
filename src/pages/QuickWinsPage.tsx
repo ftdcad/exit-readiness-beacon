@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
-import { ChevronDown, ChevronUp, CheckCircle2, Circle, Target } from "lucide-react";
+import { ChevronDown, ChevronUp, CheckCircle2, Circle, Target, Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 // Custom debounce hook to avoid lodash dependency
 const useDebounce = (callback: () => void, delay: number, deps: any[]) => {
@@ -14,6 +16,15 @@ const useDebounce = (callback: () => void, delay: number, deps: any[]) => {
     return () => clearTimeout(handler);
   }, [...deps, delay]);
 };
+
+// Custom add-back item interface
+interface CustomItem {
+  id: string;
+  title: string;
+  amount: number;
+  notes: string;
+  category: string;
+}
 
 const QuickWinsModule = {
   title: "Quick Wins Checklist",
@@ -75,6 +86,7 @@ export default function QuickWinsPage() {
   const [values, setValues] = useState<Record<string, number>>({});
   const [notes, setNotes] = useState<Record<string, string>>({});
   const [multiple, setMultiple] = useState(5);
+  const [customItems, setCustomItems] = useState<CustomItem[]>([]);
 
   const getMidpoint = (range: number[]) => Math.round((range[0] + range[1]) / 2);
   
@@ -85,16 +97,41 @@ export default function QuickWinsPage() {
     maximumFractionDigits: 0
   }).format(amount);
 
+  // Add custom item functions
+  const addCustomItem = () => {
+    const newItem: CustomItem = {
+      id: `custom-${Date.now()}`,
+      title: '',
+      amount: 0,
+      notes: '',
+      category: 'Discretionary Personal'
+    };
+    setCustomItems(prev => [...prev, newItem]);
+  };
+
+  const updateCustomItem = (id: string, field: keyof CustomItem, value: string | number) => {
+    setCustomItems(prev => 
+      prev.map(item => 
+        item.id === id ? { ...item, [field]: value } : item
+      )
+    );
+  };
+
+  const deleteCustomItem = (id: string) => {
+    setCustomItems(prev => prev.filter(item => item.id !== id));
+  };
+
   const saveProgress = async () => {
     if (!user || saving) return;
     setSaving(true);
     try {
       const { error } = await supabase.from("quick_wins_progress").upsert({
         user_id: user.id,
-        completed_items: completedItems,
-        values,
-        notes,
+        completed_items: completedItems as any,
+        values: values as any,
+        notes: notes as any,
         multiple,
+        custom_items: customItems as any,
         updated_at: new Date().toISOString()
       });
       if (error) throw error;
@@ -107,7 +144,7 @@ export default function QuickWinsPage() {
   };
 
   // Auto-save with debounce
-  useDebounce(saveProgress, 1000, [completedItems, values, notes, multiple]);
+  useDebounce(saveProgress, 1000, [completedItems, values, notes, multiple, customItems]);
 
   useEffect(() => {
     if (!user) return;
@@ -130,6 +167,7 @@ export default function QuickWinsPage() {
         setNotes((data?.notes as Record<string, string>) || {});
         setValues(initialValues);
         setMultiple(data?.multiple || 5);
+        setCustomItems((data?.custom_items as any as CustomItem[]) || []);
       } catch (err) {
         console.error("Load error:", err);
       } finally {
@@ -149,9 +187,15 @@ export default function QuickWinsPage() {
       prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
     );
 
-  const totalAddBacks = Object.values(values).reduce((sum, v) => sum + v, 0);
+  // Calculate totals
+  const coreAddBacks = Object.values(values).reduce((sum, v) => sum + v, 0);
+  const customAddBacks = customItems.reduce((sum, item) => sum + (item.amount || 0), 0);
+  const totalAddBacks = coreAddBacks + customAddBacks;
   const valuationIncrease = totalAddBacks * multiple;
-  const completionPercent = Math.round((completedItems.length / QuickWinsModule.checklistItems.length) * 100);
+  const totalItems = QuickWinsModule.checklistItems.length + customItems.filter(item => item.title && item.amount > 0).length;
+  const completedCoreItems = completedItems.length;
+  const completedCustomItems = customItems.filter(item => item.title && item.amount > 0).length;
+  const completionPercent = totalItems > 0 ? Math.round(((completedCoreItems + completedCustomItems) / totalItems) * 100) : 0;
 
   if (loading) {
     return (
@@ -183,6 +227,7 @@ export default function QuickWinsPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Checklist Items */}
         <div className="lg:col-span-2 space-y-4">
+          {/* Core Items */}
           {QuickWinsModule.checklistItems.map((item) => {
             const isExpanded = expandedItems.includes(item.id);
             const isCompleted = completedItems.includes(item.id);
@@ -288,6 +333,115 @@ export default function QuickWinsPage() {
               </Card>
             );
           })}
+
+          {/* Custom Add-Backs Section */}
+          <div className="mt-8">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-xl font-semibold">Custom Add-Backs</h3>
+              <Button
+                onClick={addCustomItem}
+                className="flex items-center gap-2"
+                variant="outline"
+                size="sm"
+              >
+                <Plus className="h-4 w-4" />
+                Add Custom Add-Back
+              </Button>
+            </div>
+
+            {customItems.length > 0 && (
+              <div className="space-y-4">
+                {customItems.map((item) => (
+                  <Card key={item.id} className="bg-card/50 backdrop-blur-sm">
+                    <CardContent className="p-4">
+                      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div>
+                          <label className="block text-sm font-medium mb-1">
+                            Title
+                          </label>
+                          <Input
+                            value={item.title}
+                            onChange={(e) => updateCustomItem(item.id, 'title', e.target.value)}
+                            placeholder="e.g., Horse Boarding"
+                            className="w-full"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-medium mb-1">
+                            Category
+                          </label>
+                          <Select 
+                            value={item.category} 
+                            onValueChange={(value) => updateCustomItem(item.id, 'category', value)}
+                          >
+                            <SelectTrigger className="w-full">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="Discretionary Personal">Discretionary Personal</SelectItem>
+                              <SelectItem value="One-Time Events">One-Time Events</SelectItem>
+                              <SelectItem value="Family/Personal">Family/Personal</SelectItem>
+                              <SelectItem value="Professional Services">Professional Services</SelectItem>
+                              <SelectItem value="Other">Other</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-medium mb-1">
+                            Annual Amount
+                          </label>
+                          <Input
+                            type="number"
+                            value={item.amount || ''}
+                            onChange={(e) => updateCustomItem(item.id, 'amount', parseInt(e.target.value) || 0)}
+                            placeholder="0"
+                            className="w-full"
+                          />
+                        </div>
+
+                        <div className="flex items-end">
+                          <Button
+                            onClick={() => deleteCustomItem(item.id)}
+                            variant="ghost"
+                            size="sm"
+                            className="text-destructive hover:text-destructive/80"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </div>
+
+                      <div className="mt-3">
+                        <label className="block text-sm font-medium mb-1">
+                          Notes
+                        </label>
+                        <Textarea
+                          value={item.notes}
+                          onChange={(e) => updateCustomItem(item.id, 'notes', e.target.value)}
+                          placeholder="Additional details or justification..."
+                          className="w-full"
+                          rows={2}
+                        />
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
+
+            {customItems.length === 0 && (
+              <Card className="bg-card/50 backdrop-blur-sm border-dashed">
+                <CardContent className="p-6 text-center">
+                  <p className="text-muted-foreground mb-2">No custom add-backs yet</p>
+                  <p className="text-sm text-muted-foreground">
+                    Add items like horse boarding, boat maintenance, private school tuition, etc.
+                  </p>
+                </CardContent>
+              </Card>
+            )}
+          </div>
         </div>
 
         {/* Impact Calculator Sidebar */}
@@ -317,8 +471,18 @@ export default function QuickWinsPage() {
 
               <div className="pt-4 border-t border-border/50 space-y-3">
                 <div className="flex justify-between">
-                  <span className="text-sm text-muted-foreground">Total Add-Backs:</span>
-                  <span className="font-medium">{formatCurrency(totalAddBacks)}</span>
+                  <span className="text-sm text-muted-foreground">Core Add-Backs:</span>
+                  <span className="font-medium">{formatCurrency(coreAddBacks)}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-sm text-muted-foreground">Custom Add-Backs:</span>
+                  <span className="font-medium">{formatCurrency(customAddBacks)}</span>
+                </div>
+                <div className="border-t border-border/50 pt-2">
+                  <div className="flex justify-between">
+                    <span className="text-sm font-medium">Total Add-Backs:</span>
+                    <span className="font-bold">{formatCurrency(totalAddBacks)}</span>
+                  </div>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-sm text-muted-foreground">Multiple:</span>
@@ -342,9 +506,9 @@ export default function QuickWinsPage() {
                   />
                 </div>
                  <p className="text-xs text-muted-foreground mt-2">
-                   {completedItems.length} of {QuickWinsModule.checklistItems.length} items completed
+                   {completedCoreItems} core + {completedCustomItems} custom items completed
                  </p>
-               </div>
+                </div>
               </div>
             </CardContent>
           </Card>

@@ -418,6 +418,7 @@ export type Database = {
         Row: {
           completed_items: Json | null
           created_at: string
+          custom_items: Json | null
           id: string
           multiple: number | null
           notes: Json | null
@@ -428,6 +429,7 @@ export type Database = {
         Insert: {
           completed_items?: Json | null
           created_at?: string
+          custom_items?: Json | null
           id?: string
           multiple?: number | null
           notes?: Json | null
@@ -438,6 +440,7 @@ export type Database = {
         Update: {
           completed_items?: Json | null
           created_at?: string
+          custom_items?: Json | null
           id?: string
           multiple?: number | null
           notes?: Json | null
