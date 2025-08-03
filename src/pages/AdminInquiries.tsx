@@ -13,8 +13,8 @@ const AdminInquiries = () => {
   const [industryFilter, setIndustryFilter] = useState<string>('');
   
   const { data: inquiries, isLoading, error } = useInquiries({
-    status: statusFilter || undefined,
-    industry: industryFilter || undefined,
+    status: statusFilter && statusFilter !== 'all' ? statusFilter : undefined,
+    industry: industryFilter && industryFilter !== 'all' ? industryFilter : undefined,
   });
 
   const getStatusBadge = (status: string) => {
@@ -89,7 +89,7 @@ const AdminInquiries = () => {
                 <SelectValue placeholder="Status" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Status</SelectItem>
+                <SelectItem value="all">All Status</SelectItem>
                 <SelectItem value="new">New</SelectItem>
                 <SelectItem value="reviewing">Reviewing</SelectItem>
                 <SelectItem value="complete">Complete</SelectItem>
@@ -100,7 +100,7 @@ const AdminInquiries = () => {
                 <SelectValue placeholder="Industry" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Industries</SelectItem>
+                <SelectItem value="all">All Industries</SelectItem>
                 <SelectItem value="Technology">Technology</SelectItem>
                 <SelectItem value="Healthcare">Healthcare</SelectItem>
                 <SelectItem value="Manufacturing">Manufacturing</SelectItem>
