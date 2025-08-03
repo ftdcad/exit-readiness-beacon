@@ -62,7 +62,10 @@ const Footer = () => {
                 <p className="text-foreground-secondary text-sm mb-4">
                   Get your PE readiness assessment and maximize your exit value.
                 </p>
-                <Button className="w-full bg-accent hover:bg-accent/90 font-semibold button-shadow text-sm">
+                <Button 
+                  className="w-full bg-accent hover:bg-accent/90 font-semibold button-shadow text-sm"
+                  onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                >
                   Schedule Assessment
                 </Button>
                 
