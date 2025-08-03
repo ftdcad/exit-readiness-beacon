@@ -91,7 +91,7 @@ export const useAuth = () => {
 
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
+      (event, session) => {
         console.log('Auth state changed:', event, session?.user?.id);
         
         if (!mounted) return;
@@ -99,21 +99,25 @@ export const useAuth = () => {
         setSession(session);
         setUser(session?.user ?? null);
         
-        try {
-          if (session?.user) {
-            await fetchUserProfile(session.user.id);
-          } else {
+        // Use setTimeout to avoid blocking the auth state change callback
+        setTimeout(async () => {
+          if (!mounted) return;
+          
+          try {
+            if (session?.user) {
+              await fetchUserProfile(session.user.id);
+            } else {
+              setProfile(null);
+            }
+          } catch (error) {
+            console.error('Error in profile fetch:', error);
             setProfile(null);
+          } finally {
+            if (mounted) {
+              setLoading(false);
+            }
           }
-        } catch (error) {
-          console.error('Error in auth state change handler:', error);
-          setProfile(null);
-        } finally {
-          // Always set loading to false, regardless of success/failure
-          if (mounted) {
-            setLoading(false);
-          }
-        }
+        }, 0);
       }
     );
 
