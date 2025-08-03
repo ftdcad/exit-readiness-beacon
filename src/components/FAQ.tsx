@@ -302,6 +302,7 @@ const FAQ = () => {
                                 ? 'bg-accent hover:bg-accent/90 button-shadow' 
                                 : 'bg-background-card hover:bg-background-hover border border-border/50'
                             }`}
+                            onClick={() => window.open('https://calendly.com/your-username/15min', '_blank')}
                           >
                             {option.action}
                           </Button>
