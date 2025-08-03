@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -817,7 +818,7 @@ const PreAssessmentForm = () => {
                 )}
 
                 {/* Step 6: Owner Add-Back Questionnaire */}
-                {step === 6 && (
+                 {step === 6 && (
                   <div className="space-y-6">
                     <CardHeader className="px-0 pt-0">
                       <CardTitle className="flex items-center gap-2 text-xl">
@@ -829,13 +830,13 @@ const PreAssessmentForm = () => {
                       </p>
                     </CardHeader>
 
-                    <div className="space-y-6">
+                    <div className="grid gap-6">
                       <div className="space-y-4">
                         <Label className="text-base font-medium">
                           Select any personal expenses currently run through your business:
                         </Label>
                         
-                        <div className="grid gap-4">
+                        <div className="grid gap-3">
                           {[
                             { key: 'personalVehicles' as const, label: 'Personal vehicles (cars, trucks, boats, RVs)' },
                             { key: 'familySalaries' as const, label: 'Family member salaries (non-working family)' },
@@ -846,39 +847,40 @@ const PreAssessmentForm = () => {
                             { key: 'discretionarySpending' as const, label: 'Other discretionary owner spending' },
                             { key: 'other' as const, label: 'Other personal expenses' }
                           ].map((category) => (
-                            <div key={category.key} className="space-y-3 p-4 border border-border/50 rounded-lg bg-background-hover/30">
-                              <div className="flex items-center space-x-3">
-                                <input
-                                  type="checkbox"
+                            <div key={category.key} className="space-y-3">
+                              <div className="flex items-center space-x-2">
+                                <Checkbox
                                   id={category.key}
                                   checked={formData.addBacks[category.key].selected}
-                                  onChange={() => toggleAddBack(category.key)}
-                                  className="h-4 w-4 rounded border-border/50 text-accent focus:ring-accent"
+                                  onCheckedChange={() => toggleAddBack(category.key)}
                                 />
-                                <Label htmlFor={category.key} className="text-sm font-medium cursor-pointer">
+                                <Label htmlFor={category.key} className="cursor-pointer">
                                   {category.label}
                                 </Label>
                               </div>
                               
                               {formData.addBacks[category.key].selected && (
-                                <Textarea
-                                  placeholder="Describe the expense and estimated annual amount (e.g., 'Personal vehicle lease - $12,000/year')"
-                                  value={formData.addBacks[category.key].notes}
-                                  onChange={(e) => updateAddBackNotes(category.key, e.target.value)}
-                                  className="bg-background-hover border-border/50 text-sm"
-                                  rows={2}
-                                />
+                                <div className="mt-4 p-4 border-2 border-dashed border-border/50 rounded-lg bg-background-hover/30">
+                                  <Textarea
+                                    placeholder="Describe the expense and estimated annual amount (e.g., 'Personal vehicle lease - $12,000/year')"
+                                    value={formData.addBacks[category.key].notes}
+                                    onChange={(e) => updateAddBackNotes(category.key, e.target.value)}
+                                    className="bg-background border-border/50 text-sm"
+                                    rows={2}
+                                  />
+                                </div>
                               )}
                             </div>
                           ))}
                         </div>
                       </div>
 
-                      <div className="p-4 bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-                        <h4 className="text-sm font-semibold text-blue-900 dark:text-blue-100 mb-2">
-                          💡 Why This Matters
+                      <div className="p-4 bg-accent/10 border border-accent/20 rounded-lg">
+                        <h4 className="text-sm font-semibold text-accent mb-2 flex items-center gap-2">
+                          <Calculator className="h-4 w-4" />
+                          Why This Matters
                         </h4>
-                        <p className="text-xs text-blue-800 dark:text-blue-200">
+                        <p className="text-xs text-foreground-secondary">
                           These add-backs help normalize your EBITDA by removing personal expenses that won't continue after a sale. 
                           This typically increases your business valuation by improving the adjusted EBITDA multiple.
                         </p>
