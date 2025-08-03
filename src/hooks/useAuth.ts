@@ -20,47 +20,21 @@ export const useAuth = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let mounted = true;
+
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
+      (event, session) => {
+        console.log('Auth state changed:', event, session?.user?.id);
+        
+        if (!mounted) return;
+        
         setSession(session);
         setUser(session?.user ?? null);
         
         if (session?.user) {
-          // Fetch user profile with role
-          setTimeout(async () => {
-            try {
-              // First get the profile
-              const { data: profileData } = await (supabase as any)
-                .from('profiles')
-                .select('*')
-                .eq('id', session.user.id)
-                .single();
-
-              if (profileData) {
-                // Then get the role if role_id exists
-                let roleData = null;
-                if (profileData.role_id) {
-                  const { data: role } = await (supabase as any)
-                    .from('user_roles')
-                    .select('*')
-                    .eq('id', profileData.role_id)
-                    .single();
-                  roleData = role;
-                }
-
-                setProfile({
-                  id: profileData.id,
-                  email: profileData.email,
-                  full_name: profileData.full_name,
-                  role_id: profileData.role_id,
-                  role: roleData
-                });
-              }
-            } catch (error) {
-              console.error('Error fetching profile:', error);
-            }
-          }, 0);
+          // Fetch profile asynchronously without blocking
+          fetchUserProfile(session.user.id);
         } else {
           setProfile(null);
         }
@@ -69,14 +43,91 @@ export const useAuth = () => {
       }
     );
 
-    // Check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      setLoading(false);
-    });
+    // Fetch user profile function
+    const fetchUserProfile = async (userId: string) => {
+      try {
+        console.log('Fetching profile for user:', userId);
+        
+        // Get the profile
+        const { data: profileData, error: profileError } = await (supabase as any)
+          .from('profiles')
+          .select('*')
+          .eq('id', userId)
+          .maybeSingle();
 
-    return () => subscription.unsubscribe();
+        if (profileError) {
+          console.error('Error fetching profile:', profileError);
+          return;
+        }
+
+        if (profileData) {
+          // Get the role if role_id exists
+          let roleData = null;
+          if (profileData.role_id) {
+            const { data: role, error: roleError } = await (supabase as any)
+              .from('user_roles')
+              .select('*')
+              .eq('id', profileData.role_id)
+              .maybeSingle();
+            
+            if (roleError) {
+              console.error('Error fetching role:', roleError);
+            } else {
+              roleData = role;
+            }
+          }
+
+          if (mounted) {
+            setProfile({
+              id: profileData.id,
+              email: profileData.email,
+              full_name: profileData.full_name,
+              role_id: profileData.role_id,
+              role: roleData
+            });
+            console.log('Profile set:', { role: roleData?.name });
+          }
+        } else {
+          console.log('No profile found for user');
+        }
+      } catch (error) {
+        console.error('Error in fetchUserProfile:', error);
+      }
+    };
+
+    // Check for existing session
+    const getInitialSession = async () => {
+      try {
+        const { data: { session }, error } = await supabase.auth.getSession();
+        
+        if (error) {
+          console.error('Error getting session:', error);
+        }
+        
+        if (mounted) {
+          setSession(session);
+          setUser(session?.user ?? null);
+          
+          if (session?.user) {
+            fetchUserProfile(session.user.id);
+          }
+          
+          setLoading(false);
+        }
+      } catch (error) {
+        console.error('Error in getInitialSession:', error);
+        if (mounted) {
+          setLoading(false);
+        }
+      }
+    };
+
+    getInitialSession();
+
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+    };
   }, []);
 
   const signIn = async (email: string, password: string) => {
