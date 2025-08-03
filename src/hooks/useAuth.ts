@@ -27,12 +27,14 @@ export const useAuth = () => {
       try {
         console.log('Fetching profile for user:', userId);
         
-        // Get the profile
+        // Get the profile with role data in a single query using JOIN
         const { data: profileData, error: profileError } = await (supabase as any)
           .from('profiles')
-          .select('*')
+          .select('*, role:user_roles(*)')
           .eq('id', userId)
           .maybeSingle();
+
+        console.log('Profile with role:', profileData);
 
         if (profileError) {
           console.error('Error fetching profile:', profileError);
@@ -44,35 +46,15 @@ export const useAuth = () => {
         }
 
         if (profileData) {
-          // Get the role if role_id exists
-          let roleData = null;
-          if (profileData.role_id) {
-            try {
-              const { data: role, error: roleError } = await (supabase as any)
-                .from('user_roles')
-                .select('*')
-                .eq('id', profileData.role_id)
-                .maybeSingle();
-              
-              if (roleError) {
-                console.error('Error fetching role:', roleError);
-              } else {
-                roleData = role;
-              }
-            } catch (roleErr) {
-              console.error('Failed to fetch role:', roleErr);
-            }
-          }
-
           if (mounted) {
             setProfile({
               id: profileData.id,
               email: profileData.email,
               full_name: profileData.full_name,
               role_id: profileData.role_id,
-              role: roleData
+              role: profileData.role || null
             });
-            console.log('Profile set:', { role: roleData?.name });
+            console.log('Profile set:', { role: profileData.role?.name });
           }
         } else {
           console.log('No profile found for user');
