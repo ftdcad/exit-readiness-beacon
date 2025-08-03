@@ -158,7 +158,7 @@ Confidential. Strategic. Unbiased.`;
           </DialogTitle>
         </DialogHeader>
 
-        <div className="flex-1 overflow-y-auto space-y-6 pr-2">
+        <div className="flex-1 overflow-y-auto space-y-6 pr-2 pl-1">
           {/* Full NDA Content */}
           <div className="border border-border/30 rounded-lg">
             <ScrollArea className="h-48 p-4">
@@ -169,7 +169,7 @@ Confidential. Strategic. Unbiased.`;
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-4 pb-4">
+          <form onSubmit={handleSubmit} className="space-y-4 pb-4 px-1">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="firstName">First Name</Label>
