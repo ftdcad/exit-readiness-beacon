@@ -56,7 +56,7 @@ const HeroSection = () => {
                 className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold px-8 py-4 button-shadow transition-luxury"
                 asChild
               >
-                <Link to="/auth">User Login</Link>
+                <Link to="/auth?logout">User Login</Link>
               </Button>
             </div>
 
