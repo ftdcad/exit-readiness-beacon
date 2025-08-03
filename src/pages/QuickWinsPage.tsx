@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
-import { ChevronDown, ChevronUp, CheckCircle2, Circle } from "lucide-react";
+import { ChevronDown, ChevronUp, CheckCircle2, Circle, Target } from "lucide-react";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 // Custom debounce hook to avoid lodash dependency
 const useDebounce = (callback: () => void, delay: number, deps: any[]) => {
@@ -162,16 +163,22 @@ export default function QuickWinsPage() {
 
   return (
     <div className="space-y-8">
-      {/* Header */}
-      <div className="space-y-4">
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <CheckCircle2 className="h-4 w-4" />
-          <span>Week 1 • Module 2</span>
-        </div>
-        <h1 className="text-2xl font-bold">{QuickWinsModule.title}</h1>
-        <p className="text-muted-foreground text-lg">{QuickWinsModule.purpose}</p>
-        <p className="text-muted-foreground">{QuickWinsModule.introContent.reality}</p>
-      </div>
+      {/* Module Header */}
+      <Card className="border-primary/20 bg-gradient-to-r from-primary/5 to-primary/10 backdrop-blur-sm">
+        <CardHeader>
+          <div className="flex items-center gap-2 text-sm text-primary/80 mb-2">
+            <Target className="h-4 w-4" />
+            <span>Week 1 • Module 2</span>
+          </div>
+          <CardTitle className="text-2xl">{QuickWinsModule.title}</CardTitle>
+          <CardDescription className="text-base">
+            {QuickWinsModule.purpose}
+          </CardDescription>
+          <div className="pt-2">
+            <p className="text-muted-foreground">{QuickWinsModule.introContent.reality}</p>
+          </div>
+        </CardHeader>
+      </Card>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Checklist Items */}
@@ -182,10 +189,11 @@ export default function QuickWinsPage() {
             const currentValue = values[item.id] || getMidpoint(item.suggestedRange);
 
             return (
-              <div
+              <Card
                 key={item.id}
-                className="border border-border rounded-lg p-4 bg-card/50 backdrop-blur-sm"
+                className="bg-card/50 backdrop-blur-sm"
               >
+                <CardContent className="p-4">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-start gap-3 flex-1">
                     <button
@@ -276,21 +284,23 @@ export default function QuickWinsPage() {
                     </div>
                   </div>
                 )}
-              </div>
+                </CardContent>
+              </Card>
             );
           })}
         </div>
 
         {/* Impact Calculator Sidebar */}
         <div className="space-y-6">
-          <div className="border border-border rounded-lg p-6 bg-card/50 backdrop-blur-sm sticky top-6">
-            <h3 className="font-semibold mb-4 flex items-center gap-2">
+          <Card className="bg-card/50 backdrop-blur-sm sticky top-6">
+            <CardContent className="p-6">
+              <h3 className="font-semibold mb-4 flex items-center gap-2">
               <span>Impact Calculator</span>
               {saving && <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />}
             </h3>
             
-            <div className="space-y-4">
-              <div>
+              <div className="space-y-4">
+                <div>
                 <label className="block text-sm font-medium mb-2">
                   EBITDA Multiple
                 </label>
@@ -331,12 +341,13 @@ export default function QuickWinsPage() {
                     style={{ width: `${completionPercent}%` }}
                   />
                 </div>
-                <p className="text-xs text-muted-foreground mt-2">
-                  {completedItems.length} of {QuickWinsModule.checklistItems.length} items completed
-                </p>
+                 <p className="text-xs text-muted-foreground mt-2">
+                   {completedItems.length} of {QuickWinsModule.checklistItems.length} items completed
+                 </p>
+               </div>
               </div>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>
