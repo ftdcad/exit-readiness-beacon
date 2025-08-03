@@ -4,13 +4,20 @@ import OfferDetails from "@/components/OfferDetails";
 import FAQ from "@/components/FAQ";
 import Footer from "@/components/Footer";
 import { Link } from "react-router-dom";
-import { Shield } from "lucide-react";
+import { Shield, BookOpen } from "lucide-react";
 
 const Index = () => {
   return (
     <div className="min-h-screen bg-background">
-      {/* Admin Access Link */}
-      <div className="fixed top-4 right-4 z-50">
+      {/* Access Links */}
+      <div className="fixed top-4 right-4 z-50 flex gap-2">
+        <Link
+          to="/auth"
+          className="inline-flex items-center gap-2 px-3 py-2 text-xs bg-primary/10 backdrop-blur-sm border border-primary/20 rounded-lg text-primary hover:bg-primary/20 transition-luxury"
+        >
+          <BookOpen className="w-3 h-3" />
+          Client Portal
+        </Link>
         <Link
           to="/admin/login"
           className="inline-flex items-center gap-2 px-3 py-2 text-xs bg-background-card/80 backdrop-blur-sm border border-border rounded-lg text-foreground-secondary hover:text-foreground hover:bg-background-hover transition-luxury"
