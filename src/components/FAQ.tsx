@@ -225,13 +225,6 @@ const FAQ = () => {
       description: "15-minute intro call to discuss your situation",
       action: "Book Call",
       urgent: true
-    },
-    {
-      icon: Shield,
-      title: "Request NDA",
-      description: "Confidential discussion about your business",
-      action: "Get NDA",
-      urgent: false
     }
   ];
 
