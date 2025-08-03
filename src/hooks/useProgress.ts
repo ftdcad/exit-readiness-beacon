@@ -59,20 +59,9 @@ export const useProgress = () => {
         const totalCount = weekModuleCounts[week as keyof typeof weekModuleCounts];
         const progressPercent = Math.round((completedCount / totalCount) * 100);
         
-        // Unlock logic:
-        // For paying clients (role_id matches client role), unlock everything
-        // Week 1 is always unlocked for everyone else
-        let isUnlocked = week === 1;
-        if (user) {
-          // Check if user has client role - if so, unlock all weeks
-          const isClient = profile?.role_id === '25fafd5b-23ba-49a8-b632-01cd0179c3dc';
-          if (isClient) {
-            isUnlocked = true;
-          } else if (week > 1) {
-            const prevWeek = weekProgressData[week - 2];
-            isUnlocked = prevWeek ? prevWeek.progress >= 80 : false;
-          }
-        }
+        // TEMPORARY: Nuclear option - hardcode all weeks unlocked for testing
+        // TODO: Fix proper role-based unlocking logic with better async handling
+        let isUnlocked = true;
         
         weekProgressData.push({
           weekNumber: week,
