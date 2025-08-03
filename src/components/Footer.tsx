@@ -35,7 +35,11 @@ const Footer = () => {
                 </h3>
                 <p className="text-accent font-medium mb-4">{companyInfo.tagline}</p>
                 <p className="text-foreground-secondary text-sm leading-relaxed">
-                  Confidential consultation • No Pitch • No sales pressure • Honest assessment
+                  Discreet strategic advisory from founders who've been on both sides of the table. 
+                  We've raised capital and now invest in companies, but this service is purely educational 
+                  assistance - we will never make investment offers or attempt to purchase your company. 
+                  This is a completely discreet process designed solely to help you maximize your exit value 
+                  with genuine, no-strings-attached guidance from those who understand the process intimately.
                 </p>
               </div>
 
