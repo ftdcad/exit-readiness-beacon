@@ -35,6 +35,18 @@ interface ContactFormData {
   phone: string;
   preferredContact: string;
   
+  // Add-backs for EBITDA normalization
+  addBacks?: {
+    personalVehicles: { selected: boolean; notes: string };
+    familySalaries: { selected: boolean; notes: string };
+    ownerInsurance: { selected: boolean; notes: string };
+    travelEntertainment: { selected: boolean; notes: string };
+    personalProperty: { selected: boolean; notes: string };
+    professionalServices: { selected: boolean; notes: string };
+    discretionarySpending: { selected: boolean; notes: string };
+    other: { selected: boolean; notes: string };
+  };
+
   // Enhanced fields
   jobTitle?: string;
   companySize?: string;
@@ -81,6 +93,7 @@ export const useContactSubmission = () => {
           job_title: formData.jobTitle,
           company_size: formData.companySize,
           how_did_you_hear: formData.howDidYouHear,
+          add_backs: formData.addBacks,
           ip_address: ip,
           status: 'new'
         })

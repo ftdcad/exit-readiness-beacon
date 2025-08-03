@@ -7,7 +7,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { CheckCircle, Clock, Users, DollarSign, Scale, Plus, X, FileText, Upload, File } from "lucide-react";
+import { CheckCircle, Clock, Users, DollarSign, Scale, Plus, X, FileText, Upload, File, Calculator } from "lucide-react";
 import { AssessmentGuard } from "@/components/AssessmentGuard";
 import { useContactSubmission } from "@/hooks/useContactSubmission";
 import { useNDASubmission } from "@/hooks/useNDASubmission";
@@ -54,6 +54,18 @@ const PreAssessmentForm = () => {
     phone: "",
     preferredContact: "",
     
+    // Add-backs for EBITDA normalization
+    addBacks: {
+      personalVehicles: { selected: false, notes: "" },
+      familySalaries: { selected: false, notes: "" },
+      ownerInsurance: { selected: false, notes: "" },
+      travelEntertainment: { selected: false, notes: "" },
+      personalProperty: { selected: false, notes: "" },
+      professionalServices: { selected: false, notes: "" },
+      discretionarySpending: { selected: false, notes: "" },
+      other: { selected: false, notes: "" }
+    },
+
     // Enhanced fields
     jobTitle: "",
     companySize: "",
@@ -63,7 +75,7 @@ const PreAssessmentForm = () => {
   const { submitContact, isSubmitting } = useContactSubmission();
   const { checkNDAStatus } = useNDASubmission();
 
-  const totalSteps = 6;
+  const totalSteps = 8;
   const progress = (step / totalSteps) * 100;
 
   const handleNext = () => {
@@ -147,6 +159,33 @@ const PreAssessmentForm = () => {
     setFormData(prev => ({
       ...prev,
       [fieldMap[documentType]]: prev[fieldMap[documentType]].filter((_, i) => i !== index)
+    }));
+  };
+
+  // Add-back management functions
+  const toggleAddBack = (category: keyof typeof formData.addBacks) => {
+    setFormData(prev => ({
+      ...prev,
+      addBacks: {
+        ...prev.addBacks,
+        [category]: {
+          ...prev.addBacks[category],
+          selected: !prev.addBacks[category].selected
+        }
+      }
+    }));
+  };
+
+  const updateAddBackNotes = (category: keyof typeof formData.addBacks, notes: string) => {
+    setFormData(prev => ({
+      ...prev,
+      addBacks: {
+        ...prev.addBacks,
+        [category]: {
+          ...prev.addBacks[category],
+          notes
+        }
+      }
     }));
   };
 
@@ -777,14 +816,88 @@ const PreAssessmentForm = () => {
                   </div>
                 )}
 
-                {/* Step 6: Exit Strategy & Contact */}
+                {/* Step 6: Owner Add-Back Questionnaire */}
                 {step === 6 && (
                   <div className="space-y-6">
                     <CardHeader className="px-0 pt-0">
                       <CardTitle className="flex items-center gap-2 text-xl">
-                        <Clock className="h-5 w-5 text-accent" />
-                        Exit Strategy & Contact
+                        <Calculator className="h-5 w-5 text-accent" />
+                        Owner Add-Back Analysis
                       </CardTitle>
+                      <p className="text-sm text-foreground-secondary">
+                        Identify personal expenses currently run through the business that wouldn't carry over post-sale. This helps normalize EBITDA for more accurate valuation.
+                      </p>
+                    </CardHeader>
+
+                    <div className="space-y-6">
+                      <div className="space-y-4">
+                        <Label className="text-base font-medium">
+                          Select any personal expenses currently run through your business:
+                        </Label>
+                        
+                        <div className="grid gap-4">
+                          {[
+                            { key: 'personalVehicles' as const, label: 'Personal vehicles (cars, trucks, boats, RVs)' },
+                            { key: 'familySalaries' as const, label: 'Family member salaries (non-working family)' },
+                            { key: 'ownerInsurance' as const, label: 'Owner/family health, life, or disability insurance' },
+                            { key: 'travelEntertainment' as const, label: 'Personal travel and entertainment' },
+                            { key: 'personalProperty' as const, label: 'Personal property expenses (home office, etc.)' },
+                            { key: 'professionalServices' as const, label: 'One-time professional services (legal, consulting)' },
+                            { key: 'discretionarySpending' as const, label: 'Other discretionary owner spending' },
+                            { key: 'other' as const, label: 'Other personal expenses' }
+                          ].map((category) => (
+                            <div key={category.key} className="space-y-3 p-4 border border-border/50 rounded-lg bg-background-hover/30">
+                              <div className="flex items-center space-x-3">
+                                <input
+                                  type="checkbox"
+                                  id={category.key}
+                                  checked={formData.addBacks[category.key].selected}
+                                  onChange={() => toggleAddBack(category.key)}
+                                  className="h-4 w-4 rounded border-border/50 text-accent focus:ring-accent"
+                                />
+                                <Label htmlFor={category.key} className="text-sm font-medium cursor-pointer">
+                                  {category.label}
+                                </Label>
+                              </div>
+                              
+                              {formData.addBacks[category.key].selected && (
+                                <Textarea
+                                  placeholder="Describe the expense and estimated annual amount (e.g., 'Personal vehicle lease - $12,000/year')"
+                                  value={formData.addBacks[category.key].notes}
+                                  onChange={(e) => updateAddBackNotes(category.key, e.target.value)}
+                                  className="bg-background-hover border-border/50 text-sm"
+                                  rows={2}
+                                />
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="p-4 bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+                        <h4 className="text-sm font-semibold text-blue-900 dark:text-blue-100 mb-2">
+                          💡 Why This Matters
+                        </h4>
+                        <p className="text-xs text-blue-800 dark:text-blue-200">
+                          These add-backs help normalize your EBITDA by removing personal expenses that won't continue after a sale. 
+                          This typically increases your business valuation by improving the adjusted EBITDA multiple.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Step 7: Exit Strategy & Goals */}
+                {step === 7 && (
+                  <div className="space-y-6">
+                    <CardHeader className="px-0 pt-0">
+                      <CardTitle className="flex items-center gap-2 text-xl">
+                        <Clock className="h-5 w-5 text-accent" />
+                        Exit Strategy & Goals
+                      </CardTitle>
+                      <p className="text-sm text-foreground-secondary">
+                        Understanding your exit timeline and preferences helps us provide targeted guidance.
+                      </p>
                     </CardHeader>
 
                     <div className="grid gap-4">
@@ -837,7 +950,24 @@ const PreAssessmentForm = () => {
                           className="bg-background-hover border-border/50 min-h-[100px]"
                         />
                       </div>
+                    </div>
+                  </div>
+                )}
 
+                {/* Step 8: Contact Information */}
+                {step === 8 && (
+                  <div className="space-y-6">
+                    <CardHeader className="px-0 pt-0">
+                      <CardTitle className="flex items-center gap-2 text-xl">
+                        <Users className="h-5 w-5 text-accent" />
+                        Contact Information
+                      </CardTitle>
+                      <p className="text-sm text-foreground-secondary">
+                        We'll use this information to contact you with your personalized assessment results.
+                      </p>
+                    </CardHeader>
+
+                    <div className="grid gap-4">
                       <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
                           <Label htmlFor="phone">Phone Number</Label>
