@@ -21,7 +21,7 @@ export const ClientRoute = ({ children }: ClientRouteProps) => {
     return <Navigate to="/auth" replace />;
   }
 
-  const isClient = profile?.role?.name === 'client';
+  const isClient = profile?.role_id === '25fafd5b-23ba-49a8-b632-01cd0179c3dc';
   if (!isClient) {
     return <Navigate to="/" replace />;
   }
