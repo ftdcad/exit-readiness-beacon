@@ -68,12 +68,12 @@
     --transition-smooth: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
     --transition-bounce: all 300ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
-    /* Sidebar (keeping existing for compatibility) */
+    /* Sidebar - Enhanced visibility */
     --sidebar-background: 225 78% 9%;
     --sidebar-foreground: 225 25% 95%;
-    --sidebar-primary: 225 92% 8%;
+    --sidebar-primary: 217 91% 60%;
     --sidebar-primary-foreground: 225 25% 95%;
-    --sidebar-accent: 225 67% 13%;
+    --sidebar-accent: 225 67% 18%;
     --sidebar-accent-foreground: 225 25% 95%;
     --sidebar-border: 225 67% 13%;
     --sidebar-ring: 217 91% 60%;

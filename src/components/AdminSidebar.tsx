@@ -53,8 +53,6 @@ export function AdminSidebar() {
     await signOut();
   };
 
-  const getNavClass = ({ isActive }: { isActive: boolean }) =>
-    isActive ? 'bg-muted text-primary font-medium' : 'hover:bg-muted/50';
 
   return (
     <Sidebar className={collapsed ? 'w-14' : 'w-60'} collapsible="icon">
@@ -66,9 +64,19 @@ export function AdminSidebar() {
               {menuItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <NavLink to={item.url} end className={getNavClass}>
-                      <item.icon className="mr-2 h-4 w-4" />
-                      {!collapsed && <span>{item.title}</span>}
+                    <NavLink 
+                      to={item.url} 
+                      end 
+                      className={({ isActive }) =>
+                        `flex items-center px-3 py-2 rounded-md transition-colors ${
+                          isActive 
+                            ? 'bg-sidebar-accent text-sidebar-accent-foreground font-medium' 
+                            : 'text-sidebar-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground'
+                        }`
+                      }
+                    >
+                      <item.icon className="h-4 w-4" />
+                      {!collapsed && <span className="ml-2">{item.title}</span>}
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
