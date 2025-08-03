@@ -14,13 +14,211 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      activity_log: {
+        Row: {
+          action_metadata: Json | null
+          action_type: string
+          company_id: string | null
+          created_at: string | null
+          details: string | null
+          id: string
+          user_id: string | null
+        }
+        Insert: {
+          action_metadata?: Json | null
+          action_type: string
+          company_id?: string | null
+          created_at?: string | null
+          details?: string | null
+          id?: string
+          user_id?: string | null
+        }
+        Update: {
+          action_metadata?: Json | null
+          action_type?: string
+          company_id?: string | null
+          created_at?: string | null
+          details?: string | null
+          id?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "activity_log_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "contact_inquiries"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "activity_log_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      company_comments: {
+        Row: {
+          comment: string
+          comment_type: string | null
+          company_id: string | null
+          created_at: string | null
+          id: string
+          user_id: string | null
+        }
+        Insert: {
+          comment: string
+          comment_type?: string | null
+          company_id?: string | null
+          created_at?: string | null
+          id?: string
+          user_id?: string | null
+        }
+        Update: {
+          comment?: string
+          comment_type?: string | null
+          company_id?: string | null
+          created_at?: string | null
+          id?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "company_comments_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "contact_inquiries"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "company_comments_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      contact_inquiries: {
+        Row: {
+          admin_notes: string | null
+          annual_revenue: number | null
+          assigned_to: string | null
+          company_name: string
+          contact_email: string
+          contact_name: string | null
+          created_at: string | null
+          exit_timeline: string | null
+          id: string
+          industry: string | null
+          source_form_version: string | null
+          status: string | null
+        }
+        Insert: {
+          admin_notes?: string | null
+          annual_revenue?: number | null
+          assigned_to?: string | null
+          company_name: string
+          contact_email: string
+          contact_name?: string | null
+          created_at?: string | null
+          exit_timeline?: string | null
+          id?: string
+          industry?: string | null
+          source_form_version?: string | null
+          status?: string | null
+        }
+        Update: {
+          admin_notes?: string | null
+          annual_revenue?: number | null
+          assigned_to?: string | null
+          company_name?: string
+          contact_email?: string
+          contact_name?: string | null
+          created_at?: string | null
+          exit_timeline?: string | null
+          id?: string
+          industry?: string | null
+          source_form_version?: string | null
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contact_inquiries_assigned_to_fkey"
+            columns: ["assigned_to"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string | null
+          email: string
+          full_name: string | null
+          id: string
+          role_id: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          email: string
+          full_name?: string | null
+          id: string
+          role_id?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          email?: string
+          full_name?: string | null
+          id?: string
+          role_id?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profiles_role_id_fkey"
+            columns: ["role_id"]
+            isOneToOne: false
+            referencedRelation: "user_roles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_roles: {
+        Row: {
+          created_at: string | null
+          id: string
+          name: string
+          permissions: Json | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          name: string
+          permissions?: Json | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          name?: string
+          permissions?: Json | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_admin: {
+        Args: { user_id: string }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never
