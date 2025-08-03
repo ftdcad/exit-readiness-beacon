@@ -36,6 +36,10 @@ export const useAuth = () => {
 
         if (profileError) {
           console.error('Error fetching profile:', profileError);
+          // Set empty profile but don't block loading completion
+          if (mounted) {
+            setProfile(null);
+          }
           return;
         }
 
@@ -43,16 +47,20 @@ export const useAuth = () => {
           // Get the role if role_id exists
           let roleData = null;
           if (profileData.role_id) {
-            const { data: role, error: roleError } = await (supabase as any)
-              .from('user_roles')
-              .select('*')
-              .eq('id', profileData.role_id)
-              .maybeSingle();
-            
-            if (roleError) {
-              console.error('Error fetching role:', roleError);
-            } else {
-              roleData = role;
+            try {
+              const { data: role, error: roleError } = await (supabase as any)
+                .from('user_roles')
+                .select('*')
+                .eq('id', profileData.role_id)
+                .maybeSingle();
+              
+              if (roleError) {
+                console.error('Error fetching role:', roleError);
+              } else {
+                roleData = role;
+              }
+            } catch (roleErr) {
+              console.error('Failed to fetch role:', roleErr);
             }
           }
 
@@ -68,9 +76,16 @@ export const useAuth = () => {
           }
         } else {
           console.log('No profile found for user');
+          if (mounted) {
+            setProfile(null);
+          }
         }
       } catch (error) {
         console.error('Error in fetchUserProfile:', error);
+        // Ensure profile is set to null on any error
+        if (mounted) {
+          setProfile(null);
+        }
       }
     };
 
@@ -84,13 +99,21 @@ export const useAuth = () => {
         setSession(session);
         setUser(session?.user ?? null);
         
-        if (session?.user) {
-          await fetchUserProfile(session.user.id);
-        } else {
+        try {
+          if (session?.user) {
+            await fetchUserProfile(session.user.id);
+          } else {
+            setProfile(null);
+          }
+        } catch (error) {
+          console.error('Error in auth state change handler:', error);
           setProfile(null);
+        } finally {
+          // Always set loading to false, regardless of success/failure
+          if (mounted) {
+            setLoading(false);
+          }
         }
-        
-        setLoading(false);
       }
     );
 
