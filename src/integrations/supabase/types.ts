@@ -267,6 +267,57 @@ export type Database = {
           },
         ]
       }
+      company_industry_profile: {
+        Row: {
+          annual_revenue: number | null
+          calculated_multiple: number | null
+          created_at: string | null
+          customer_concentration: number | null
+          ebitda: number | null
+          enterprise_value: number | null
+          growth_rate_percent: number | null
+          id: string
+          industry_category: string
+          industry_subcategory: string | null
+          recurring_revenue_percent: number | null
+          updated_at: string | null
+          user_id: string | null
+          years_in_business: number | null
+        }
+        Insert: {
+          annual_revenue?: number | null
+          calculated_multiple?: number | null
+          created_at?: string | null
+          customer_concentration?: number | null
+          ebitda?: number | null
+          enterprise_value?: number | null
+          growth_rate_percent?: number | null
+          id?: string
+          industry_category: string
+          industry_subcategory?: string | null
+          recurring_revenue_percent?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+          years_in_business?: number | null
+        }
+        Update: {
+          annual_revenue?: number | null
+          calculated_multiple?: number | null
+          created_at?: string | null
+          customer_concentration?: number | null
+          ebitda?: number | null
+          enterprise_value?: number | null
+          growth_rate_percent?: number | null
+          id?: string
+          industry_category?: string
+          industry_subcategory?: string | null
+          recurring_revenue_percent?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+          years_in_business?: number | null
+        }
+        Relationships: []
+      }
       contact_inquiries: {
         Row: {
           admin_notes: string | null
@@ -621,6 +672,48 @@ export type Database = {
         }
         Relationships: []
       }
+      industry_multiples: {
+        Row: {
+          base_multiple: number
+          high_multiple: number
+          id: string
+          industry_category: string
+          industry_subcategory: string | null
+          max_ebitda: number | null
+          min_ebitda: number | null
+          notes: string | null
+          size_band: string
+          typical_margin_percent: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          base_multiple: number
+          high_multiple: number
+          id?: string
+          industry_category: string
+          industry_subcategory?: string | null
+          max_ebitda?: number | null
+          min_ebitda?: number | null
+          notes?: string | null
+          size_band: string
+          typical_margin_percent?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          base_multiple?: number
+          high_multiple?: number
+          id?: string
+          industry_category?: string
+          industry_subcategory?: string | null
+          max_ebitda?: number | null
+          min_ebitda?: number | null
+          notes?: string | null
+          size_band?: string
+          typical_margin_percent?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       kpi_metrics: {
         Row: {
           category: string | null
@@ -955,6 +1048,33 @@ export type Database = {
           id?: string
           name?: string
           permissions?: Json | null
+        }
+        Relationships: []
+      }
+      valuation_exports: {
+        Row: {
+          company_profile: Json
+          created_at: string | null
+          export_format: string | null
+          id: string
+          user_id: string | null
+          valuation_data: Json
+        }
+        Insert: {
+          company_profile: Json
+          created_at?: string | null
+          export_format?: string | null
+          id?: string
+          user_id?: string | null
+          valuation_data: Json
+        }
+        Update: {
+          company_profile?: Json
+          created_at?: string | null
+          export_format?: string | null
+          id?: string
+          user_id?: string | null
+          valuation_data?: Json
         }
         Relationships: []
       }

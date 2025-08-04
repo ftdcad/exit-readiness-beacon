@@ -27,6 +27,7 @@ import ExitReadinessAssessmentPage from "./pages/ExitReadinessAssessmentPage";
 import PEReadyMetricsPage from "./pages/PEReadyMetricsPage";
 import StrategyDocBuilderPage from "./pages/StrategyDocBuilderPage";
 import KPIandOKRPage from "./pages/KPIandOKRPage";
+import IndustryMultiplesPage from "./pages/IndustryMultiplesPage";
 
 const queryClient = new QueryClient();
 
@@ -200,6 +201,16 @@ const App = () => (
               <ClientRoute>
                 <ClientPortalLayout>
                   <EBITDACalculatorPage />
+                </ClientPortalLayout>
+              </ClientRoute>
+            } 
+          />
+          <Route 
+            path="/portal/week-2/industry-multiples" 
+            element={
+              <ClientRoute>
+                <ClientPortalLayout>
+                  <IndustryMultiplesPage />
                 </ClientPortalLayout>
               </ClientRoute>
             } 
