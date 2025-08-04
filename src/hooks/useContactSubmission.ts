@@ -32,6 +32,7 @@ interface ContactFormData {
   currentChallenges: string;
   
   // Contact Info
+  email: string;
   phone: string;
   preferredContact: string;
   
@@ -70,6 +71,7 @@ export const useContactSubmission = () => {
         .from('contact_inquiries')
         .insert({
           nda_record_id: ndaRecordId,
+          contact_email: formData.email,
           company_name: formData.companyName,
           industry: formData.industry,
           founded_year: formData.founded ? parseInt(formData.founded) : null,
