@@ -532,7 +532,7 @@ export default function EBITDACalculatorPage() {
             onClick={() => navigate('/portal/week-1/industry-multiples')}
             className="bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600 transition inline-flex items-center gap-2"
           >
-            Continue to Industry Multiples
+            Continue to Industry Multipliers
             <ArrowRight className="w-5 h-5" />
           </button>
         </div>

@@ -16,7 +16,7 @@ export const ModuleProgress = ({ currentModule }: ModuleProgressProps) => {
     { number: 2, name: 'Strategy Doc', status: 'completed' },
     { number: 3, name: 'KPIs & OKRs', status: 'completed' },
     { number: 4, name: 'EBITDA Calculator', status: 'completed' },
-    { number: 5, name: 'Industry Multiples', status: currentModule === 5 ? 'current' : currentModule > 5 ? 'completed' : 'upcoming' },
+    { number: 5, name: 'Industry Multipliers', status: currentModule === 5 ? 'current' : currentModule > 5 ? 'completed' : 'upcoming' },
     { number: 6, name: 'Scenario Planning', status: currentModule === 6 ? 'current' : currentModule > 6 ? 'completed' : 'upcoming' }
   ];
 
