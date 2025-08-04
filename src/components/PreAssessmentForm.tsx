@@ -253,61 +253,7 @@ const PreAssessmentForm = () => {
     const margin = 20;
     const textWidth = pageWidth - 2 * margin;
     
-    const fullNDAText = `📄 MUTUAL NON-DISCLOSURE AGREEMENT
-
-Effective Date: Upon acceptance via NDA Gate
-
-Parties:
-
-"Visitor": Any individual accessing this website or engaging with Exitus Advisory Group through the PE Readiness Assessment platform
-
-"Exitus Advisory Group": The confidential advisory services entity operating this website
-
-1. Purpose
-This Agreement governs the exchange of confidential business information between the Visitor and Exitus Advisory Group. The purpose is to allow for an honest evaluation of exit readiness, strategy alignment, and deal-related information while maintaining strict confidentiality on both sides.
-
-2. Definition of Confidential Information
-"Confidential Information" includes, but is not limited to:
-
-• All submitted data (financials, P&L, org charts, strategic goals, etc.)
-• Business conditions, customer lists, staffing structure
-• Uploaded or AI-generated assessments, scorecards, or exit roadmaps
-• LOIs, term sheets, valuations, and notes related to potential or ongoing transactions
-• All correspondence, call notes, and insights shared directly or indirectly through this platform
-
-3. Obligations
-Both parties agree to:
-
-• Keep all Confidential Information strictly private
-• Use it only for the purpose of the assessment or strategic planning
-• Not disclose, replicate, or share any materials with third parties without written consent
-• Take commercially reasonable steps to secure all data provided or received
-
-4. Exclusions
-This Agreement does not apply to information that:
-
-• Was publicly known at the time of disclosure
-• Becomes publicly available through no fault of either party
-• Was independently developed without access to the Confidential Information
-• Must be disclosed by law or legal process (notice will be provided if allowed)
-
-5. Enforcement & Legal Remedy
-This Agreement remains in effect for five (5) years from acceptance. A breach of confidentiality will result in immediate grounds for legal action, including but not limited to:
-
-• Injunctive relief
-• Recovery of compensatory damages
-• Forensic analysis of misuse
-
-Exitus Advisory Group may log IP addresses, store acceptance timestamps, and retain metadata to prove engagement and agreement.
-
-6. No License or Rights Transferred
-This Agreement does not transfer ownership or licensing rights of any intellectual property or proprietary content.
-
-7. Acceptance
-By clicking "I Agree" and accessing the site, both parties affirm they have read, understood, and agreed to be legally bound by this Mutual NDA.
-
-Exitus Advisory Group
-Confidential. Strategic. Unbiased.`;
+    const fullNDAText = "📄 MUTUAL NON-DISCLOSURE AGREEMENT\n\nEffective Date: Upon acceptance via NDA Gate\n\nParties:\n\n\"Visitor\": Any individual accessing this website or engaging with Exitus Advisory Group through the PE Readiness Assessment platform\n\n\"Exitus Advisory Group\": The confidential advisory services entity operating this website\n\n1. Purpose\nThis Agreement governs the exchange of confidential business information between the Visitor and Exitus Advisory Group. The purpose is to allow for an honest evaluation of exit readiness, strategy alignment, and deal-related information while maintaining strict confidentiality on both sides.\n\n2. Definition of Confidential Information\n\"Confidential Information\" includes, but is not limited to:\n\n• All submitted data (financials, P&L, org charts, strategic goals, etc.)\n• Business conditions, customer lists, staffing structure\n• Uploaded or AI-generated assessments, scorecards, or exit roadmaps\n• LOIs, term sheets, valuations, and notes related to potential or ongoing transactions\n• All correspondence, call notes, and insights shared directly or indirectly through this platform\n\n3. Obligations\nBoth parties agree to:\n\n• Keep all Confidential Information strictly private\n• Use it only for the purpose of the assessment or strategic planning\n• Not disclose, replicate, or share any materials with third parties without written consent\n• Take commercially reasonable steps to secure all data provided or received\n\n4. Exclusions\nThis Agreement does not apply to information that:\n\n• Was publicly known at the time of disclosure\n• Becomes publicly available through no fault of either party\n• Was independently developed without access to the Confidential Information\n• Must be disclosed by law or legal process (notice will be provided if allowed)\n\n5. Enforcement & Legal Remedy\nThis Agreement remains in effect for five (5) years from acceptance. A breach of confidentiality will result in immediate grounds for legal action, including but not limited to:\n\n• Injunctive relief\n• Recovery of compensatory damages\n• Forensic analysis of misuse\n\nExitus Advisory Group may log IP addresses, store acceptance timestamps, and retain metadata to prove engagement and agreement.\n\n6. No License or Rights Transferred\nThis Agreement does not transfer ownership or licensing rights of any intellectual property or proprietary content.\n\n7. Acceptance\nBy clicking \"I Agree\" and accessing the site, both parties affirm they have read, understood, and agreed to be legally bound by this Mutual NDA.\n\nExitus Advisory Group\nConfidential. Strategic. Unbiased.";
     
     // Add title
     doc.setFontSize(16);
