@@ -420,36 +420,17 @@ ${folder.uploadedDocs.map(doc => `- ${doc.documentName} (v${doc.version})`).join
           <p className="text-foreground/70">Build your PE-ready data room while learning exit readiness</p>
         </div>
 
-        {/* Readiness Score */}
+        {/* Data Room Information */}
         <div className="bg-card border rounded-xl p-6 mb-8 backdrop-blur-sm">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-xl font-semibold text-foreground mb-2">PE Readiness Score</h2>
-              <p className="text-foreground/60">
-                {readinessScore.totalDocuments} of {readinessScore.requiredDocuments} required documents uploaded
-              </p>
-            </div>
-            <div className={`text-6xl font-bold ${getScoreColor(readinessScore.overallScore)}`}>
-              {readinessScore.overallScore}
-            </div>
+          <h2 className="text-xl font-semibold text-foreground mb-4">Data Room</h2>
+          <div className="text-foreground/70 space-y-3">
+            <p>
+              A data room is your secure document repository for sharing information with potential buyers during due diligence.
+            </p>
+            <p>
+              <strong>Note:</strong> Some documents may need to be uploaded to multiple folders (e.g., an insurance certificate might go in both 'Insurance' and 'Warranties & Representations'). This redundancy is normal and expected in M&A transactions.
+            </p>
           </div>
-          
-          {readinessScore.missingCritical.length > 0 && (
-            <div className="mt-4 p-4 bg-destructive/10 border border-destructive/30 rounded-lg">
-              <p className="text-destructive font-medium mb-2">
-                <AlertCircle className="w-4 h-4 inline mr-1" />
-                Critical documents missing:
-              </p>
-              <ul className="text-sm text-destructive/80 space-y-1">
-                {readinessScore.missingCritical.slice(0, 5).map((doc, i) => (
-                  <li key={i}>• {doc}</li>
-                ))}
-                {readinessScore.missingCritical.length > 5 && (
-                  <li>• ...and {readinessScore.missingCritical.length - 5} more</li>
-                )}
-              </ul>
-            </div>
-          )}
         </div>
 
         {/* Main Content */}
