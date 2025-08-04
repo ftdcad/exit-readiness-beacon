@@ -74,9 +74,6 @@ export const useContactSubmission = () => {
       const { ip } = await ipResponse.json();
       console.log('Got IP address:', ip);
 
-      console.log('Current auth session:', await supabase.auth.getSession());
-      console.log('Current auth user:', await supabase.auth.getUser());
-      
       const insertData = {
         nda_record_id: ndaRecordId,
         contact_email: formData.email,
