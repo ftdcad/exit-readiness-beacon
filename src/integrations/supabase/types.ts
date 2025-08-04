@@ -783,6 +783,45 @@ export type Database = {
         }
         Relationships: []
       }
+      nda_records: {
+        Row: {
+          company: string
+          created_at: string | null
+          email: string
+          first_name: string
+          id: string
+          ip_address: unknown | null
+          last_name: string
+          status: string | null
+          updated_at: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          company: string
+          created_at?: string | null
+          email: string
+          first_name: string
+          id?: string
+          ip_address?: unknown | null
+          last_name: string
+          status?: string | null
+          updated_at?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          company?: string
+          created_at?: string | null
+          email?: string
+          first_name?: string
+          id?: string
+          ip_address?: unknown | null
+          last_name?: string
+          status?: string | null
+          updated_at?: string | null
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
       okr_key_results: {
         Row: {
           created_at: string | null
