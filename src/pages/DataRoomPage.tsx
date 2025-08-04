@@ -553,14 +553,18 @@ ${folder.uploadedDocs.map(doc => `- ${doc.documentName} (v${doc.version})`).join
                             )}
                             <button
                               onClick={() => toggleFolderCompletion(folder.category, folder.subcategory, folder.isCompleted)}
-                              className={`w-6 h-6 border-2 rounded flex items-center justify-center transition ${
-                                folder.isCompleted 
-                                  ? 'bg-green-500 border-green-500 text-white hover:bg-green-600' 
-                                  : 'border-border hover:border-primary/50'
-                              }`}
-                              title={folder.isCompleted ? 'Mark as incomplete' : 'Mark as complete'}
+                              className="flex items-center gap-2 px-3 py-1.5 border-2 border-blue-400 rounded-lg hover:border-blue-500 hover:bg-blue-50/10 transition-colors bg-background/50"
                             >
-                              {folder.isCompleted && <Check className="w-4 h-4" />}
+                              <div className={`w-4 h-4 border-2 rounded flex items-center justify-center ${
+                                folder.isCompleted 
+                                  ? 'bg-green-500 border-green-500' 
+                                  : 'border-blue-400 bg-background'
+                              }`}>
+                                {folder.isCompleted && <Check className="w-3 h-3 text-white" />}
+                              </div>
+                              <span className="text-sm font-medium text-foreground">
+                                Complete
+                              </span>
                             </button>
                           </div>
                         </div>
