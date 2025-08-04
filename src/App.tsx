@@ -22,6 +22,7 @@ import EBITDACalculatorPage from "./pages/EBITDACalculatorPage";
 import AssetWorkshopPage from "./pages/AssetWorkshopPage";
 import QuickWinsPage from "./pages/QuickWinsPage";
 import KnowYourBuyerPage from "./pages/KnowYourBuyerPage";
+import DataRoomPage from "./pages/DataRoomPage";
 import ExitReadinessAssessmentPage from "./pages/ExitReadinessAssessmentPage";
 import PEReadyMetricsPage from "./pages/PEReadyMetricsPage";
 import StrategyDocBuilderPage from "./pages/StrategyDocBuilderPage";
@@ -87,6 +88,16 @@ const App = () => (
               <ClientRoute>
                 <ClientPortalLayout>
                   <KnowYourBuyerPage />
+                </ClientPortalLayout>
+              </ClientRoute>
+            } 
+          />
+          <Route 
+            path="/portal/week-1/data-room" 
+            element={
+              <ClientRoute>
+                <ClientPortalLayout>
+                  <DataRoomPage />
                 </ClientPortalLayout>
               </ClientRoute>
             } 

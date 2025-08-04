@@ -320,6 +320,173 @@ export type Database = {
           },
         ]
       }
+      data_room_documents: {
+        Row: {
+          category: string
+          created_at: string | null
+          document_date: string | null
+          document_name: string
+          document_type: string | null
+          file_size: number | null
+          file_url: string
+          id: string
+          is_active: boolean | null
+          metadata: Json | null
+          previous_version_id: string | null
+          subcategory: string
+          updated_at: string | null
+          upload_date: string | null
+          user_id: string
+          version: number | null
+        }
+        Insert: {
+          category: string
+          created_at?: string | null
+          document_date?: string | null
+          document_name: string
+          document_type?: string | null
+          file_size?: number | null
+          file_url: string
+          id?: string
+          is_active?: boolean | null
+          metadata?: Json | null
+          previous_version_id?: string | null
+          subcategory: string
+          updated_at?: string | null
+          upload_date?: string | null
+          user_id: string
+          version?: number | null
+        }
+        Update: {
+          category?: string
+          created_at?: string | null
+          document_date?: string | null
+          document_name?: string
+          document_type?: string | null
+          file_size?: number | null
+          file_url?: string
+          id?: string
+          is_active?: boolean | null
+          metadata?: Json | null
+          previous_version_id?: string | null
+          subcategory?: string
+          updated_at?: string | null
+          upload_date?: string | null
+          user_id?: string
+          version?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "data_room_documents_previous_version_id_fkey"
+            columns: ["previous_version_id"]
+            isOneToOne: false
+            referencedRelation: "data_room_documents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      data_room_progress: {
+        Row: {
+          category: string
+          completion_percentage: number | null
+          created_at: string | null
+          id: string
+          last_upload_date: string | null
+          subcategory: string | null
+          total_required: number | null
+          total_uploaded: number | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          category: string
+          completion_percentage?: number | null
+          created_at?: string | null
+          id?: string
+          last_upload_date?: string | null
+          subcategory?: string | null
+          total_required?: number | null
+          total_uploaded?: number | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          category?: string
+          completion_percentage?: number | null
+          created_at?: string | null
+          id?: string
+          last_upload_date?: string | null
+          subcategory?: string | null
+          total_required?: number | null
+          total_uploaded?: number | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      data_room_readiness: {
+        Row: {
+          created_at: string | null
+          id: string
+          last_calculated: string | null
+          missing_critical: string[] | null
+          overall_score: string | null
+          required_documents: number | null
+          total_documents: number | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          last_calculated?: string | null
+          missing_critical?: string[] | null
+          overall_score?: string | null
+          required_documents?: number | null
+          total_documents?: number | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          last_calculated?: string | null
+          missing_critical?: string[] | null
+          overall_score?: string | null
+          required_documents?: number | null
+          total_documents?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      data_room_structure: {
+        Row: {
+          category: string
+          created_at: string | null
+          document_types: string[] | null
+          id: string
+          is_required: boolean | null
+          sort_order: number | null
+          subcategory: string
+        }
+        Insert: {
+          category: string
+          created_at?: string | null
+          document_types?: string[] | null
+          id?: string
+          is_required?: boolean | null
+          sort_order?: number | null
+          subcategory: string
+        }
+        Update: {
+          category?: string
+          created_at?: string | null
+          document_types?: string[] | null
+          id?: string
+          is_required?: boolean | null
+          sort_order?: number | null
+          subcategory?: string
+        }
+        Relationships: []
+      }
       exit_readiness_assessments: {
         Row: {
           answers: Json
