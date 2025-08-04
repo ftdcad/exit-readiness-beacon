@@ -54,6 +54,10 @@ export default function EBITDACalculatorPage() {
   const [calculatorB, setCalculatorB] = useState<CalculatorData>(emptyCalculatorData);
   const [baselineData, setBaselineData] = useState<CalculatorData>(emptyCalculatorData);
   
+  // Multiplier states
+  const [multiplierA] = useState(4.5); // Fixed for baseline
+  const [multiplierB, setMultiplierB] = useState(4.5); // Adjustable for scenario
+  
   // Labels for each calculator
   const [labelA, setLabelA] = useState('Actual Financials');
   const [labelB, setLabelB] = useState('Scenario Analysis');
@@ -217,7 +221,8 @@ export default function EBITDACalculatorPage() {
     revenue: calculatorB.revenue - calculatorA.revenue,
     ebitda: resultsB.adjustedEBITDA - resultsA.adjustedEBITDA,
     margin: resultsB.margin - resultsA.margin,
-    valuation: (resultsB.adjustedEBITDA * 4.5) - (resultsA.adjustedEBITDA * 4.5)
+    valuation: (resultsB.adjustedEBITDA * multiplierB) - (resultsA.adjustedEBITDA * multiplierA),
+    multiplier: multiplierB - multiplierA
   };
 
   if (loading) {
@@ -267,6 +272,8 @@ export default function EBITDACalculatorPage() {
     label,
     setLabel,
     calculatorId,
+    multiplier,
+    setMultiplier,
     onSave,
     onCopy,
     onReset,
@@ -278,6 +285,8 @@ export default function EBITDACalculatorPage() {
     label: string;
     setLabel: (label: string) => void;
     calculatorId: 'A' | 'B';
+    multiplier: number;
+    setMultiplier?: (multiplier: number) => void;
     onSave: () => void;
     onCopy: () => void;
     onReset: () => void;
@@ -429,12 +438,45 @@ export default function EBITDACalculatorPage() {
 
       {/* Valuation */}
       <div className="p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg mb-6">
-        <div className="flex justify-between items-center">
-          <span className="text-white/70">Estimated Valuation (4.5x)</span>
-          <span className="text-xl font-bold text-blue-400">
-            ${((results.adjustedEBITDA * 4.5) / 1000000).toFixed(2)}M
-          </span>
-        </div>
+        {calculatorId === 'B' && setMultiplier ? (
+          <div className="space-y-3">
+            <div className="flex justify-between items-center">
+              <span className="text-white/70">Valuation Multiplier</span>
+              <span className="text-white font-medium">{multiplier.toFixed(1)}x</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="text-xs text-white/50">2.0x</span>
+              <input
+                type="range"
+                min="2.0"
+                max="8.0"
+                step="0.1"
+                value={multiplier}
+                onChange={(e) => setMultiplier(Number(e.target.value))}
+                className="flex-1 h-2 bg-white/20 rounded-lg appearance-none cursor-pointer slider"
+              />
+              <span className="text-xs text-white/50">8.0x</span>
+            </div>
+            <div className="text-xs text-white/50 text-center">
+              Typical ranges: Service (3-6x), Manufacturing (4-7x), SaaS (8-15x)
+            </div>
+            <div className="border-t border-white/20 pt-3">
+              <div className="flex justify-between items-center">
+                <span className="text-white/70">Estimated Valuation ({multiplier.toFixed(1)}x)</span>
+                <span className="text-xl font-bold text-blue-400">
+                  ${((results.adjustedEBITDA * multiplier) / 1000000).toFixed(2)}M
+                </span>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="flex justify-between items-center">
+            <span className="text-white/70">Estimated Valuation ({multiplier.toFixed(1)}x)</span>
+            <span className="text-xl font-bold text-blue-400">
+              ${((results.adjustedEBITDA * multiplier) / 1000000).toFixed(2)}M
+            </span>
+          </div>
+        )}
       </div>
 
       {/* Save Button */}
@@ -466,7 +508,7 @@ export default function EBITDACalculatorPage() {
         {(calculatorA.revenue > 0 && calculatorB.revenue > 0) && (
           <div className="mb-8 bg-white/5 border border-white/10 rounded-xl p-6 backdrop-blur-sm">
             <h2 className="text-lg font-semibold text-white mb-4">Comparison Summary</h2>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
               <div className="text-center">
                 <p className="text-sm text-white/70">Revenue Delta</p>
                 <p className={`text-xl font-bold ${delta.revenue >= 0 ? 'text-green-400' : 'text-red-400'}`}>
@@ -483,6 +525,12 @@ export default function EBITDACalculatorPage() {
                 <p className="text-sm text-white/70">Margin Delta</p>
                 <p className={`text-xl font-bold ${delta.margin >= 0 ? 'text-green-400' : 'text-red-400'}`}>
                   {delta.margin >= 0 ? '+' : ''}{delta.margin.toFixed(1)}%
+                </p>
+              </div>
+              <div className="text-center">
+                <p className="text-sm text-white/70">Multiplier Delta</p>
+                <p className={`text-xl font-bold ${delta.multiplier >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                  {delta.multiplier >= 0 ? '+' : ''}{delta.multiplier.toFixed(1)}x
                 </p>
               </div>
               <div className="text-center">
@@ -505,6 +553,7 @@ export default function EBITDACalculatorPage() {
             label={labelA}
             setLabel={setLabelA}
             calculatorId="A"
+            multiplier={multiplierA}
             onSave={() => saveCalculatorData('A', calculatorA)}
             onCopy={() => copyToCalculator('A')}
             onReset={() => resetCalculator('A')}
@@ -519,6 +568,8 @@ export default function EBITDACalculatorPage() {
             label={labelB}
             setLabel={setLabelB}
             calculatorId="B"
+            multiplier={multiplierB}
+            setMultiplier={setMultiplierB}
             onSave={() => saveCalculatorData('B', calculatorB)}
             onCopy={() => copyToCalculator('B')}
             onReset={() => resetCalculator('B')}
