@@ -437,20 +437,6 @@ export default function DataRoomPage() {
     }
   };
 
-  const exportDataRoomIndex = () => {
-    const index = folderStructure.map(folder => 
-      `## ${folder.category} - ${folder.subcategory}
-${folder.uploadedDocs.map(doc => `- ${doc.documentName} (v${doc.version})`).join('\n')}
-`).join('\n');
-
-    const blob = new Blob([`# Data Room Index\nGenerated: ${new Date().toLocaleDateString()}\n\n${index}`], { type: 'text/markdown' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `DataRoom-Index-${new Date().toISOString().split('T')[0]}.md`;
-    a.click();
-    URL.revokeObjectURL(url);
-  };
 
   if (loading) {
     return <div className="flex items-center justify-center min-h-screen"><div className="text-foreground/70">Loading data room...</div></div>;
@@ -667,25 +653,10 @@ ${folder.uploadedDocs.map(doc => `- ${doc.documentName} (v${doc.version})`).join
         </div>
 
         {/* Actions */}
-        <div className="flex gap-4 mt-8">
-          <button
-            onClick={exportDataRoomIndex}
-            className="bg-secondary text-secondary-foreground py-3 px-6 rounded-lg hover:bg-secondary/80 transition flex items-center gap-2"
-          >
-            <Download className="w-5 h-5" />
-            Export Index
-          </button>
-          
-          <button
-            className="bg-secondary text-secondary-foreground py-3 px-6 rounded-lg hover:bg-secondary/80 transition flex items-center gap-2"
-          >
-            <Eye className="w-5 h-5" />
-            PE Buyer Preview
-          </button>
-          
+        <div className="flex justify-end mt-8">
           <button
             onClick={() => navigate('/portal/week-1/ebitda-mastery')}
-            className="ml-auto bg-primary text-primary-foreground py-3 px-6 rounded-lg hover:bg-primary/90 transition flex items-center gap-2"
+            className="bg-primary text-primary-foreground py-3 px-6 rounded-lg hover:bg-primary/90 transition flex items-center gap-2"
           >
             Continue to EBITDA Calculator
             <ChevronRight className="w-5 h-5" />
