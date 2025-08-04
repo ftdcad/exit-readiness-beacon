@@ -516,42 +516,90 @@ export type Database = {
         }
         Relationships: []
       }
-      strategy_initiatives: {
+      strategy_documents: {
         Row: {
+          core_values: Json | null
           created_at: string | null
-          description: string | null
+          ebitda_year1: number | null
+          ebitda_year2: number | null
+          ebitda_year3: number | null
+          ebitda_year4: number | null
+          ebitda_year5: number | null
+          goals_12_month: Json | null
+          goals_24_month: Json | null
           id: string
-          sort_order: number | null
-          timeline_30: string | null
-          timeline_60: string | null
-          timeline_90: string | null
-          title: string
+          initiatives_90_day: Json | null
+          last_saved: string | null
+          mission_statement: string | null
+          opportunities: Json | null
+          revenue_year1: number | null
+          revenue_year2: number | null
+          revenue_year3: number | null
+          revenue_year4: number | null
+          revenue_year5: number | null
+          strengths: Json | null
+          threats: Json | null
           updated_at: string | null
-          user_id: string
+          user_id: string | null
+          vision_5_year: string | null
+          vision_statement: string | null
+          weaknesses: Json | null
         }
         Insert: {
+          core_values?: Json | null
           created_at?: string | null
-          description?: string | null
+          ebitda_year1?: number | null
+          ebitda_year2?: number | null
+          ebitda_year3?: number | null
+          ebitda_year4?: number | null
+          ebitda_year5?: number | null
+          goals_12_month?: Json | null
+          goals_24_month?: Json | null
           id?: string
-          sort_order?: number | null
-          timeline_30?: string | null
-          timeline_60?: string | null
-          timeline_90?: string | null
-          title: string
+          initiatives_90_day?: Json | null
+          last_saved?: string | null
+          mission_statement?: string | null
+          opportunities?: Json | null
+          revenue_year1?: number | null
+          revenue_year2?: number | null
+          revenue_year3?: number | null
+          revenue_year4?: number | null
+          revenue_year5?: number | null
+          strengths?: Json | null
+          threats?: Json | null
           updated_at?: string | null
-          user_id: string
+          user_id?: string | null
+          vision_5_year?: string | null
+          vision_statement?: string | null
+          weaknesses?: Json | null
         }
         Update: {
+          core_values?: Json | null
           created_at?: string | null
-          description?: string | null
+          ebitda_year1?: number | null
+          ebitda_year2?: number | null
+          ebitda_year3?: number | null
+          ebitda_year4?: number | null
+          ebitda_year5?: number | null
+          goals_12_month?: Json | null
+          goals_24_month?: Json | null
           id?: string
-          sort_order?: number | null
-          timeline_30?: string | null
-          timeline_60?: string | null
-          timeline_90?: string | null
-          title?: string
+          initiatives_90_day?: Json | null
+          last_saved?: string | null
+          mission_statement?: string | null
+          opportunities?: Json | null
+          revenue_year1?: number | null
+          revenue_year2?: number | null
+          revenue_year3?: number | null
+          revenue_year4?: number | null
+          revenue_year5?: number | null
+          strengths?: Json | null
+          threats?: Json | null
           updated_at?: string | null
-          user_id?: string
+          user_id?: string | null
+          vision_5_year?: string | null
+          vision_statement?: string | null
+          weaknesses?: Json | null
         }
         Relationships: []
       }

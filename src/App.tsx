@@ -23,7 +23,7 @@ import QuickWinsPage from "./pages/QuickWinsPage";
 import KnowYourBuyerPage from "./pages/KnowYourBuyerPage";
 import ExitReadinessAssessmentPage from "./pages/ExitReadinessAssessmentPage";
 import PEReadyMetricsPage from "./pages/PEReadyMetricsPage";
-import { StrategyDocBuilderPage } from "./pages/StrategyDocBuilderPage";
+import StrategyDocBuilderPage from "./pages/StrategyDocBuilderPage";
 
 const queryClient = new QueryClient();
 
@@ -143,6 +143,16 @@ const App = () => (
           />
           <Route 
             path="/portal/week-2/value-builder" 
+            element={
+              <ClientRoute>
+                <ClientPortalLayout>
+                  <StrategyDocBuilderPage />
+                </ClientPortalLayout>
+              </ClientRoute>
+            } 
+          />
+          <Route 
+            path="/portal/week-2/strategy-builder" 
             element={
               <ClientRoute>
                 <ClientPortalLayout>
