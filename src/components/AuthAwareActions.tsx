@@ -66,14 +66,9 @@ export const AuthAwareActions = ({ className }: AuthAwareActionsProps) => {
       <Button 
         size="lg" 
         className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold px-8 py-4 button-shadow transition-luxury"
-        onClick={() => {
-          const assessmentSection = document.querySelector('#assessment-form');
-          if (assessmentSection) {
-            assessmentSection.scrollIntoView({ behavior: 'smooth' });
-          }
-        }}
+        asChild
       >
-        Start Assessment
+        <Link to="/assessment">Start Assessment</Link>
       </Button>
       <Button 
         size="lg" 

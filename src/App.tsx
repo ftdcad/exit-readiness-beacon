@@ -28,6 +28,7 @@ import PEReadyMetricsPage from "./pages/PEReadyMetricsPage";
 import StrategyDocBuilderPage from "./pages/StrategyDocBuilderPage";
 import KPIandOKRPage from "./pages/KPIandOKRPage";
 import IndustryMultiplesPage from "./pages/IndustryMultiplesPage";
+import AssessmentPage from "./pages/AssessmentPage";
 
 const queryClient = new QueryClient();
 
@@ -39,6 +40,7 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/assessment" element={<AssessmentPage />} />
           <Route path="/auth" element={<AuthPage />} />
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route 
