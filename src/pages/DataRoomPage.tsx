@@ -653,10 +653,10 @@ export default function DataRoomPage() {
         </div>
 
         {/* Actions */}
-        <div className="flex justify-end mt-8">
+        <div className="mt-8">
           <button
             onClick={() => navigate('/portal/week-1/ebitda-mastery')}
-            className="bg-primary text-primary-foreground py-3 px-6 rounded-lg hover:bg-primary/90 transition flex items-center gap-2"
+            className="w-full bg-primary text-primary-foreground py-3 px-6 rounded-lg hover:bg-primary/90 transition flex items-center justify-center gap-2"
           >
             Continue to EBITDA Calculator
             <ChevronRight className="w-5 h-5" />
