@@ -516,6 +516,45 @@ export type Database = {
         }
         Relationships: []
       }
+      strategy_initiatives: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string
+          sort_order: number | null
+          timeline_30: string | null
+          timeline_60: string | null
+          timeline_90: string | null
+          title: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          sort_order?: number | null
+          timeline_30?: string | null
+          timeline_60?: string | null
+          timeline_90?: string | null
+          title: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          sort_order?: number | null
+          timeline_30?: string | null
+          timeline_60?: string | null
+          timeline_90?: string | null
+          title?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string | null
