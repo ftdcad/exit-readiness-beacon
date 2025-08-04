@@ -1292,7 +1292,7 @@ Confidential. Strategic. Unbiased.`}
                           <Label htmlFor="companyWebsite">Company Website</Label>
                           <Input
                             id="companyWebsite"
-                            type="url"
+                            type="text"
                             value={formData.companyWebsite || ''}
                             onChange={(e) => setFormData(prev => ({ ...prev, companyWebsite: e.target.value }))}
                             className="bg-background-hover border-border/50"
