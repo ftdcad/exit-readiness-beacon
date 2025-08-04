@@ -97,6 +97,12 @@ const PreAssessmentForm = () => {
     if (ndaStatus) {
       setNdaSubmitted(true);
       setIsAgreed(true); // Pre-check the agreement if already signed
+      
+      // Populate email from stored NDA record
+      setFormData(prev => ({
+        ...prev,
+        email: ndaStatus.email || ''
+      }));
     }
   }, [checkNDAStatus]);
 
