@@ -229,7 +229,7 @@ export const StrategyDocBuilderPage = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {Object.keys(TEMPLATES).map((template) => (
                 <Button
                   key={template}
@@ -237,9 +237,9 @@ export const StrategyDocBuilderPage = () => {
                   className="h-auto p-4 text-left justify-start"
                   onClick={() => addTemplate(template)}
                 >
-                  <div>
+                  <div className="w-full">
                     <div className="font-medium">{template}</div>
-                    <div className="text-sm text-muted-foreground mt-1">
+                    <div className="text-xs text-muted-foreground mt-1 line-clamp-2">
                       {TEMPLATES[template as keyof typeof TEMPLATES].description}
                     </div>
                   </div>
