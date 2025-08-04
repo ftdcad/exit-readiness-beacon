@@ -48,7 +48,7 @@ export default function EBITDACalculatorPage() {
         .select('*')
         .eq('user_id', user.id)
         .eq('category', 'Financials')
-        .eq('subcategory', 'Financial Statements')
+        .eq('subcategory', 'Income Statements')
         .eq('is_active', true)
         .ilike('document_name', '%P&L%');
 
