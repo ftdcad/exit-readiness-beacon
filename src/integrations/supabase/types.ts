@@ -369,6 +369,7 @@ export type Database = {
           balance_sheets_availability: string | null
           company_name: string
           company_size: string | null
+          company_website: string | null
           contact_email: string
           contact_name: string | null
           created_at: string | null
@@ -406,6 +407,7 @@ export type Database = {
           balance_sheets_availability?: string | null
           company_name: string
           company_size?: string | null
+          company_website?: string | null
           contact_email: string
           contact_name?: string | null
           created_at?: string | null
@@ -443,6 +445,7 @@ export type Database = {
           balance_sheets_availability?: string | null
           company_name?: string
           company_size?: string | null
+          company_website?: string | null
           contact_email?: string
           contact_name?: string | null
           created_at?: string | null

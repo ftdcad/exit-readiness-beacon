@@ -77,6 +77,7 @@ const PreAssessmentForm = () => {
 
     // Enhanced fields
     jobTitle: "",
+    companyWebsite: "",
     companySize: "",
     howDidYouHear: "",
   });
@@ -1284,6 +1285,18 @@ Confidential. Strategic. Unbiased.`}
                             onChange={(e) => setFormData(prev => ({ ...prev, jobTitle: e.target.value }))}
                             className="bg-background-hover border-border/50"
                             placeholder="e.g., CEO, Founder, Owner"
+                          />
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label htmlFor="companyWebsite">Company Website</Label>
+                          <Input
+                            id="companyWebsite"
+                            type="url"
+                            value={formData.companyWebsite || ''}
+                            onChange={(e) => setFormData(prev => ({ ...prev, companyWebsite: e.target.value }))}
+                            className="bg-background-hover border-border/50"
+                            placeholder="https://example.com"
                           />
                         </div>
                       </div>
