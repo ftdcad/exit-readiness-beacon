@@ -96,7 +96,7 @@ const PreAssessmentForm = () => {
     const ndaStatus = checkNDAStatus();
     if (ndaStatus) {
       setNdaSubmitted(true);
-      setStep(2); // Skip to company basics if NDA already signed
+      setIsAgreed(true); // Pre-check the agreement if already signed
     }
   }, [checkNDAStatus]);
 
@@ -406,16 +406,23 @@ Confidential. Strategic. Unbiased.`;
             <CardContent className="p-8">
               <form onSubmit={handleSubmit}>
                 {/* Step 1: NDA Agreement */}
-                {step === 1 && !ndaSubmitted && (
+                {step === 1 && (
                   <div className="space-y-6">
                     <CardHeader className="px-0 pt-0">
                       <CardTitle className="flex items-center gap-2 text-xl">
                         <Shield className="h-5 w-5 text-accent" />
                         Non-Disclosure Agreement
                       </CardTitle>
-                      <p className="text-sm text-foreground-secondary">
-                        Our assessment contains confidential information. Please review and agree to our mutual NDA to continue.
-                      </p>
+                      {ndaSubmitted ? (
+                        <div className="flex items-center gap-2 text-sm text-success">
+                          <CheckCircle className="h-4 w-4" />
+                          NDA already signed - you can proceed to the assessment
+                        </div>
+                      ) : (
+                        <p className="text-sm text-foreground-secondary">
+                          Our assessment contains confidential information. Please review and agree to our mutual NDA to continue.
+                        </p>
+                      )}
                     </CardHeader>
 
                     {/* NDA Content */}
@@ -481,9 +488,10 @@ Confidential. Strategic. Unbiased.`}
                       </ScrollArea>
                     </div>
 
-                    {/* NDA Form */}
-                    <div className="space-y-4">
-                      <div className="grid grid-cols-2 gap-4">
+                    {/* NDA Form - only show if not already submitted */}
+                    {!ndaSubmitted && (
+                      <div className="space-y-4">
+                        <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
                           <Label htmlFor="firstName">First Name</Label>
                           <Input
@@ -558,8 +566,9 @@ Confidential. Strategic. Unbiased.`}
                           <Download className="h-4 w-4" />
                           Download NDA (PDF)
                         </Button>
-                      )}
-                    </div>
+                        )}
+                      </div>
+                    )}
                   </div>
                 )}
 
