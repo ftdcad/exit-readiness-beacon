@@ -391,6 +391,7 @@ export type Database = {
           completion_percentage: number | null
           created_at: string | null
           id: string
+          is_completed: boolean | null
           last_upload_date: string | null
           subcategory: string | null
           total_required: number | null
@@ -403,6 +404,7 @@ export type Database = {
           completion_percentage?: number | null
           created_at?: string | null
           id?: string
+          is_completed?: boolean | null
           last_upload_date?: string | null
           subcategory?: string | null
           total_required?: number | null
@@ -415,6 +417,7 @@ export type Database = {
           completion_percentage?: number | null
           created_at?: string | null
           id?: string
+          is_completed?: boolean | null
           last_upload_date?: string | null
           subcategory?: string | null
           total_required?: number | null

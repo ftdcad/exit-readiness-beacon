@@ -26,6 +26,7 @@ interface FolderStructure {
   uploadedDocs: DataRoomDocument[];
   completionPercentage: number;
   isCustom?: boolean;
+  isCompleted: boolean;
 }
 
 interface CustomFolderModal {
@@ -106,6 +107,12 @@ export default function DataRoomPage() {
         .eq('user_id', user.id)
         .eq('is_active', true);
 
+      // Load completion progress
+      const { data: progressData } = await supabase
+        .from('data_room_progress')
+        .select('*')
+        .eq('user_id', user.id);
+
       // Load readiness score
       const { data: readiness } = await supabase
         .from('data_room_readiness')
@@ -135,6 +142,12 @@ export default function DataRoomPage() {
             ? Math.round((uploadedDocs.length / folder.document_types.length) * 100)
             : 0;
 
+          // Check completion status from progress data
+          const progressRecord = progressData?.find(p => 
+            p.category === folder.category && p.subcategory === folder.subcategory
+          );
+          const isCompleted = progressRecord?.is_completed || false;
+
           return {
             category: folder.category,
             subcategory: folder.subcategory,
@@ -142,7 +155,8 @@ export default function DataRoomPage() {
             isRequired: folder.is_required || false,
             uploadedDocs,
             completionPercentage,
-            isCustom: folder.is_custom || false
+            isCustom: folder.is_custom || false,
+            isCompleted
           };
         });
 
@@ -392,6 +406,37 @@ export default function DataRoomPage() {
     }
   };
 
+  const toggleFolderCompletion = async (category: string, subcategory: string, currentStatus: boolean) => {
+    if (!user) return;
+
+    try {
+      // Upsert completion status
+      await supabase
+        .from('data_room_progress')
+        .upsert({
+          user_id: user.id,
+          category,
+          subcategory,
+          is_completed: !currentStatus,
+          updated_at: new Date().toISOString()
+        }, {
+          onConflict: 'user_id,category,subcategory'
+        });
+
+      // Update local state optimistically
+      setFolderStructure(prev => prev.map(folder => 
+        folder.category === category && folder.subcategory === subcategory
+          ? { ...folder, isCompleted: !currentStatus }
+          : folder
+      ));
+
+      toast.success(`Marked ${subcategory} as ${!currentStatus ? 'complete' : 'incomplete'}`);
+    } catch (error) {
+      console.error('Error toggling completion:', error);
+      toast.error('Failed to update completion status');
+    }
+  };
+
   const exportDataRoomIndex = () => {
     const index = folderStructure.map(folder => 
       `## ${folder.category} - ${folder.subcategory}
@@ -479,39 +524,46 @@ ${folder.uploadedDocs.map(doc => `- ${doc.documentName} (v${doc.version})`).join
                   {expandedCategories.has(category) && (
                     <div className="bg-muted/20">
                       {folders.map(folder => (
-                        <button
+                        <div
                           key={`${folder.category}-${folder.subcategory}`}
-                          onClick={() => {
-                            setSelectedCategory(folder.category);
-                            setSelectedSubcategory(folder.subcategory);
-                          }}
-                          className={`w-full px-6 py-3 hover:bg-muted/30 transition flex items-center justify-between text-left ${
+                          className={`w-full px-6 py-3 hover:bg-muted/30 transition flex items-center justify-between ${
                             selectedCategory === folder.category && selectedSubcategory === folder.subcategory
                               ? 'bg-primary/20 border-l-2 border-primary'
                               : ''
                           }`}
                         >
-                          <div className="flex items-center gap-3">
+                          <button
+                            onClick={() => {
+                              setSelectedCategory(folder.category);
+                              setSelectedSubcategory(folder.subcategory);
+                            }}
+                            className="flex items-center gap-3 flex-1 text-left"
+                          >
                             <Folder className="w-4 h-4 text-foreground/40" />
                             <div>
                               <p className="text-foreground text-sm">{folder.subcategory}</p>
                               <p className="text-foreground/40 text-xs">
-                                {folder.uploadedDocs.length}/{folder.documentTypes.length} documents
+                                {folder.uploadedDocs.length} docs
                               </p>
                             </div>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            {folder.isRequired && (
-                              <span className="text-xs bg-destructive/20 text-destructive px-2 py-1 rounded">Required</span>
-                            )}
+                          </button>
+                          <div className="flex items-center gap-3">
                             {folder.isCustom && (
                               <span className="text-xs bg-accent/20 text-accent px-2 py-1 rounded">Custom</span>
                             )}
-                            <div className="text-xs text-foreground/60">
-                              {folder.completionPercentage}%
-                            </div>
+                            <button
+                              onClick={() => toggleFolderCompletion(folder.category, folder.subcategory, folder.isCompleted)}
+                              className={`w-6 h-6 border-2 rounded flex items-center justify-center transition ${
+                                folder.isCompleted 
+                                  ? 'bg-green-500 border-green-500 text-white hover:bg-green-600' 
+                                  : 'border-border hover:border-primary/50'
+                              }`}
+                              title={folder.isCompleted ? 'Mark as incomplete' : 'Mark as complete'}
+                            >
+                              {folder.isCompleted && <Check className="w-4 h-4" />}
+                            </button>
                           </div>
-                        </button>
+                        </div>
                       ))}
                       
                       {/* Add Subfolder Button */}
