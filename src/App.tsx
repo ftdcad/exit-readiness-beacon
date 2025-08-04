@@ -18,6 +18,7 @@ import { ClientPortalLayout } from "./components/ClientPortalLayout";
 import ClientPortalDashboard from "./pages/ClientPortalDashboard";
 import GlossaryPage from "./pages/GlossaryPage";
 import EBITDACoursePage from "./pages/EBITDACoursePage";
+import EBITDACalculatorPage from "./pages/EBITDACalculatorPage";
 import AssetWorkshopPage from "./pages/AssetWorkshopPage";
 import QuickWinsPage from "./pages/QuickWinsPage";
 import KnowYourBuyerPage from "./pages/KnowYourBuyerPage";
@@ -178,6 +179,16 @@ const App = () => (
               <ClientRoute>
                 <ClientPortalLayout>
                   <KPIandOKRPage />
+                </ClientPortalLayout>
+              </ClientRoute>
+            } 
+          />
+          <Route 
+            path="/portal/week-2/ebitda-calculator" 
+            element={
+              <ClientRoute>
+                <ClientPortalLayout>
+                  <EBITDACalculatorPage />
                 </ClientPortalLayout>
               </ClientRoute>
             } 
