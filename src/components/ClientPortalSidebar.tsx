@@ -46,9 +46,9 @@ const weeks = [
       { name: 'Executive Discovery Interview', path: '/portal/week-2/assessment' },
       { name: 'Strategy Builder', path: '/portal/week-2/value-builder' },
       { name: 'Suggested KPIs and OKRs', path: '/portal/week-2/metrics' },
-      { name: 'Quantify the financial impact', path: '/portal/week-2/calculator' },
-      { name: 'Benchmark against market', path: '/portal/week-2/multiples' },
-      { name: 'Model different outcomes', path: '/portal/week-2/scenarios' }
+      { name: 'EBITDA Calculator', path: '/portal/week-2/calculator' },
+      { name: 'Industry Multiples', path: '/portal/week-2/multiples' },
+      { name: 'Scenario Planning', path: '/portal/week-2/scenarios' }
     ]
   },
   {
