@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { mockCompanyData, mockDocuments } from '@/lib/mockDocuments';
 import { toast } from 'sonner';
@@ -182,7 +182,7 @@ export const useSampleData = () => {
     }
   };
 
-  const checkSampleDataExists = async (userId: string) => {
+  const checkSampleDataExists = useCallback(async (userId: string) => {
     try {
       const { data: sampleDocs } = await supabase
         .from('data_room_documents')
@@ -198,7 +198,7 @@ export const useSampleData = () => {
       console.error('Error checking sample data:', error);
       return false;
     }
-  };
+  }, []);
 
   return {
     isLoading,

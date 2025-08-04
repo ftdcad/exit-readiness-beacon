@@ -32,8 +32,7 @@ export default function EBITDACalculatorPage() {
       try {
         const [data, hasDataRoomDocs] = await Promise.all([
           getBestFinancialData(user.id, assessment),
-          hasDataRoomFinancials(user.id),
-          checkSampleDataExists(user.id)
+          hasDataRoomFinancials(user.id)
         ]);
         
         setFinancialData(data);
@@ -46,7 +45,7 @@ export default function EBITDACalculatorPage() {
     };
 
     loadFinancialData();
-  }, [user?.id, assessment, checkSampleDataExists]);
+  }, [user?.id, assessment]);
 
   // Handle sample data loading
   const handleLoadSampleData = async () => {
