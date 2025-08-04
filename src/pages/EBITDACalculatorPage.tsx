@@ -327,7 +327,7 @@ export default function EBITDACalculatorPage() {
       }`}>
         <div className="flex items-center justify-between">
           <span className="text-lg font-medium text-white">{results.healthMessage}</span>
-          <span className="text-2xl font-bold text-white">{results.margin.toFixed(1)}%</span>
+          <span className="text-2xl font-bold text-white">{(results.margin || 0).toFixed(1)}%</span>
         </div>
       </div>
 
@@ -418,20 +418,20 @@ export default function EBITDACalculatorPage() {
       <div className="space-y-3 mb-6">
         <div className="flex justify-between text-sm">
           <span className="text-white/70">Gross Profit</span>
-          <span className="text-white">${results.grossProfit.toLocaleString()}</span>
+          <span className="text-white">${(results.grossProfit || 0).toLocaleString()}</span>
         </div>
         <div className="flex justify-between text-sm">
           <span className="text-white/70">Base EBITDA</span>
-          <span className="text-white">${results.baseEBITDA.toLocaleString()}</span>
+          <span className="text-white">${(results.baseEBITDA || 0).toLocaleString()}</span>
         </div>
         <div className="flex justify-between text-sm">
           <span className="text-white/70">Total Add-backs</span>
-          <span className="text-white">+${results.totalAddbacks.toLocaleString()}</span>
+          <span className="text-white">+${(results.totalAddbacks || 0).toLocaleString()}</span>
         </div>
         <div className="border-t border-white/20 pt-3">
           <div className="flex justify-between text-lg font-bold">
             <span className="text-white">Adjusted EBITDA</span>
-            <span className="text-white">${results.adjustedEBITDA.toLocaleString()}</span>
+            <span className="text-white">${(results.adjustedEBITDA || 0).toLocaleString()}</span>
           </div>
         </div>
       </div>
@@ -442,7 +442,7 @@ export default function EBITDACalculatorPage() {
           <div className="space-y-3">
             <div className="flex justify-between items-center">
               <span className="text-white/70">Valuation Multiplier</span>
-              <span className="text-white font-medium">{multiplier.toFixed(1)}x</span>
+              <span className="text-white font-medium">{(multiplier || 0).toFixed(1)}x</span>
             </div>
             <div className="flex items-center gap-3">
               <span className="text-xs text-white/50">2.0x</span>
@@ -462,18 +462,18 @@ export default function EBITDACalculatorPage() {
             </div>
             <div className="border-t border-white/20 pt-3">
               <div className="flex justify-between items-center">
-                <span className="text-white/70">Estimated Valuation ({multiplier.toFixed(1)}x)</span>
+                <span className="text-white/70">Estimated Valuation ({(multiplier || 0).toFixed(1)}x)</span>
                 <span className="text-xl font-bold text-blue-400">
-                  ${((results.adjustedEBITDA * multiplier) / 1000000).toFixed(2)}M
+                  ${(((results.adjustedEBITDA || 0) * (multiplier || 0)) / 1000000).toFixed(2)}M
                 </span>
               </div>
             </div>
           </div>
         ) : (
           <div className="flex justify-between items-center">
-            <span className="text-white/70">Estimated Valuation ({multiplier.toFixed(1)}x)</span>
+            <span className="text-white/70">Estimated Valuation ({(multiplier || 0).toFixed(1)}x)</span>
             <span className="text-xl font-bold text-blue-400">
-              ${((results.adjustedEBITDA * multiplier) / 1000000).toFixed(2)}M
+              ${(((results.adjustedEBITDA || 0) * (multiplier || 0)) / 1000000).toFixed(2)}M
             </span>
           </div>
         )}
@@ -511,32 +511,32 @@ export default function EBITDACalculatorPage() {
             <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
               <div className="text-center">
                 <p className="text-sm text-white/70">Revenue Delta</p>
-                <p className={`text-xl font-bold ${delta.revenue >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-                  {delta.revenue >= 0 ? '+' : ''}{(delta.revenue / 1000000).toFixed(2)}M
+                <p className={`text-xl font-bold ${(delta.revenue || 0) >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                  {(delta.revenue || 0) >= 0 ? '+' : ''}{((delta.revenue || 0) / 1000000).toFixed(2)}M
                 </p>
               </div>
               <div className="text-center">
                 <p className="text-sm text-white/70">EBITDA Delta</p>
-                <p className={`text-xl font-bold ${delta.ebitda >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-                  {delta.ebitda >= 0 ? '+' : ''}{(delta.ebitda / 1000000).toFixed(2)}M
+                <p className={`text-xl font-bold ${(delta.ebitda || 0) >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                  {(delta.ebitda || 0) >= 0 ? '+' : ''}{((delta.ebitda || 0) / 1000000).toFixed(2)}M
                 </p>
               </div>
               <div className="text-center">
                 <p className="text-sm text-white/70">Margin Delta</p>
-                <p className={`text-xl font-bold ${delta.margin >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-                  {delta.margin >= 0 ? '+' : ''}{delta.margin.toFixed(1)}%
+                <p className={`text-xl font-bold ${(delta.margin || 0) >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                  {(delta.margin || 0) >= 0 ? '+' : ''}{(delta.margin || 0).toFixed(1)}%
                 </p>
               </div>
               <div className="text-center">
                 <p className="text-sm text-white/70">Multiplier Delta</p>
-                <p className={`text-xl font-bold ${delta.multiplier >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-                  {delta.multiplier >= 0 ? '+' : ''}{delta.multiplier.toFixed(1)}x
+                <p className={`text-xl font-bold ${(delta.multiplier || 0) >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                  {(delta.multiplier || 0) >= 0 ? '+' : ''}{(delta.multiplier || 0).toFixed(1)}x
                 </p>
               </div>
               <div className="text-center">
                 <p className="text-sm text-white/70">Valuation Delta</p>
-                <p className={`text-xl font-bold ${delta.valuation >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-                  {delta.valuation >= 0 ? '+' : ''}{(delta.valuation / 1000000).toFixed(2)}M
+                <p className={`text-xl font-bold ${(delta.valuation || 0) >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                  {(delta.valuation || 0) >= 0 ? '+' : ''}{((delta.valuation || 0) / 1000000).toFixed(2)}M
                 </p>
               </div>
             </div>

@@ -29,35 +29,43 @@ export interface EBITDAResults {
 
 export function calculateEBITDA(data: FinancialData): EBITDAResults {
   // EXACT LOGIC FROM ADMIN PAGE - DO NOT MODIFY
-  const grossProfit = data.revenue - data.cogs;
-  const baseEBITDA = grossProfit - data.opex;
+  // Add defensive programming to handle invalid inputs
+  const revenue = Number(data.revenue) || 0;
+  const cogs = Number(data.cogs) || 0;
+  const opex = Number(data.opex) || 0;
+  
+  const grossProfit = revenue - cogs;
+  const baseEBITDA = grossProfit - opex;
   
   const totalAddbacks = Object.values(data.addbacks || {})
-    .reduce((sum, val) => sum + (val || 0), 0);
+    .reduce((sum, val) => sum + (Number(val) || 0), 0);
   
   const adjustedEBITDA = baseEBITDA + totalAddbacks;
-  const margin = data.revenue > 0 ? (adjustedEBITDA / data.revenue) * 100 : 0;
+  const margin = revenue > 0 ? (adjustedEBITDA / revenue) * 100 : 0;
+  
+  // Ensure all calculated values are valid numbers
+  const safeMargin = Number.isFinite(margin) ? margin : 0;
   
   // Traffic light status
   let healthStatus: 'red' | 'yellow' | 'green' = 'red';
   let healthMessage = 'Below PE Standards';
-  if (margin >= 15) {
+  if (safeMargin >= 15) {
     healthStatus = 'green';
     healthMessage = 'PE Ready';
-  } else if (margin >= 10) {
+  } else if (safeMargin >= 10) {
     healthStatus = 'yellow';
     healthMessage = 'Needs Improvement';
   }
   
   return {
-    revenue: data.revenue,
-    cogs: data.cogs,
-    opex: data.opex,
-    grossProfit,
-    baseEBITDA,
-    totalAddbacks,
-    adjustedEBITDA,
-    margin,
+    revenue: Number.isFinite(revenue) ? revenue : 0,
+    cogs: Number.isFinite(cogs) ? cogs : 0,
+    opex: Number.isFinite(opex) ? opex : 0,
+    grossProfit: Number.isFinite(grossProfit) ? grossProfit : 0,
+    baseEBITDA: Number.isFinite(baseEBITDA) ? baseEBITDA : 0,
+    totalAddbacks: Number.isFinite(totalAddbacks) ? totalAddbacks : 0,
+    adjustedEBITDA: Number.isFinite(adjustedEBITDA) ? adjustedEBITDA : 0,
+    margin: safeMargin,
     healthStatus,
     healthMessage
   };
