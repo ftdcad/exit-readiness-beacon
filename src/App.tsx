@@ -206,7 +206,7 @@ const App = () => (
             } 
           />
           <Route 
-            path="/portal/week-2/industry-multiples" 
+            path="/portal/week-2/multiples" 
             element={
               <ClientRoute>
                 <ClientPortalLayout>
