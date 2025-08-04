@@ -889,6 +889,54 @@ export type Database = {
         }
         Relationships: []
       }
+      user_financial_data: {
+        Row: {
+          cogs: number | null
+          created_at: string | null
+          id: string
+          legal_fees: number | null
+          opex: number | null
+          other_non_recurring: number | null
+          owner_salary: number | null
+          personal_vehicle: number | null
+          revenue: number | null
+          source: string | null
+          travel_meals: number | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          cogs?: number | null
+          created_at?: string | null
+          id?: string
+          legal_fees?: number | null
+          opex?: number | null
+          other_non_recurring?: number | null
+          owner_salary?: number | null
+          personal_vehicle?: number | null
+          revenue?: number | null
+          source?: string | null
+          travel_meals?: number | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          cogs?: number | null
+          created_at?: string | null
+          id?: string
+          legal_fees?: number | null
+          opex?: number | null
+          other_non_recurring?: number | null
+          owner_salary?: number | null
+          personal_vehicle?: number | null
+          revenue?: number | null
+          source?: string | null
+          travel_meals?: number | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string | null
