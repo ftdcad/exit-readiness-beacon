@@ -2,8 +2,6 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { LogOut, User, Shield } from "lucide-react";
-import { useState } from "react";
-import { NDAGate } from "./NDAGate";
 
 interface AuthAwareActionsProps {
   className?: string;
@@ -11,7 +9,6 @@ interface AuthAwareActionsProps {
 
 export const AuthAwareActions = ({ className }: AuthAwareActionsProps) => {
   const { user, profile, signOut } = useAuth();
-  const [showNDA, setShowNDA] = useState(false);
 
   // If user is logged in, show appropriate portal access
   if (user && profile) {
@@ -65,33 +62,22 @@ export const AuthAwareActions = ({ className }: AuthAwareActionsProps) => {
 
   // If not logged in, show the original actions
   return (
-    <>
-      <div className={`flex flex-col sm:flex-row gap-4 ${className}`}>
-        <Button 
-          size="lg" 
-          className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold px-8 py-4 button-shadow transition-luxury"
-          onClick={() => setShowNDA(true)}
-        >
-          Sign NDA
-        </Button>
-        <Button 
-          size="lg" 
-          className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold px-8 py-4 button-shadow transition-luxury"
-          onClick={() => setShowNDA(true)}
-        >
-          Start Assessment
-        </Button>
-        <Button 
-          size="lg" 
-          className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold px-8 py-4 button-shadow transition-luxury"
-          asChild
-        >
-          <Link to="/auth?logout">User Login</Link>
-        </Button>
-      </div>
-
-      {/* NDA Gate Modal */}
-      {showNDA && <NDAGate onClose={() => setShowNDA(false)} />}
-    </>
+    <div className={`flex flex-col sm:flex-row gap-4 ${className}`}>
+      <Button 
+        size="lg" 
+        className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold px-8 py-4 button-shadow transition-luxury"
+        asChild
+      >
+        <Link to="/exit-readiness-assessment">Start Assessment</Link>
+      </Button>
+      <Button 
+        size="lg" 
+        variant="outline"
+        className="font-semibold px-8 py-4 button-shadow transition-luxury"
+        asChild
+      >
+        <Link to="/auth">User Login</Link>
+      </Button>
+    </div>
   );
 };

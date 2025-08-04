@@ -17,12 +17,19 @@ export const useNDASubmission = () => {
     setIsSubmitting(true);
     
     try {
-      // Get user's IP address (for security logging)
-      const ipResponse = await fetch('https://api.ipify.org?format=json');
-      const { ip } = await ipResponse.json();
+      // Get user's IP address (optional - don't let this block submission)
+      let ip = null;
+      try {
+        const ipResponse = await fetch('https://api.ipify.org?format=json');
+        const ipData = await ipResponse.json();
+        ip = ipData.ip;
+      } catch (ipError) {
+        console.warn('Could not fetch IP address:', ipError);
+        // Continue without IP - don't block submission
+      }
 
       // Submit NDA record to Supabase
-      const { data, error } = await (supabase as any)
+      const { data, error } = await supabase
         .from('nda_records')
         .insert({
           first_name: formData.firstName,
