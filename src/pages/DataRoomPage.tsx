@@ -2,8 +2,10 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
-import { Upload, Folder, File, Check, X, AlertCircle, Download, Eye, ChevronRight, ChevronDown, Plus, Trash2, Edit } from "lucide-react";
+import { Upload, Folder, File, Check, X, AlertCircle, Download, Eye, ChevronRight, ChevronDown, Plus, Trash2, Edit, Database, Trash } from "lucide-react";
 import { toast } from "sonner";
+import { useSampleData } from "@/hooks/useSampleData";
+import { mockCompanyData } from "@/lib/mockDocuments";
 
 interface DataRoomDocument {
   id: string;
@@ -65,6 +67,7 @@ const documentPatterns: Record<string, RegExp> = {
 export default function DataRoomPage() {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { isLoading: sampleLoading, sampleDataLoaded, loadSampleData, clearSampleData, checkSampleDataExists } = useSampleData();
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [folderStructure, setFolderStructure] = useState<FolderStructure[]>([]);
@@ -88,7 +91,10 @@ export default function DataRoomPage() {
 
   useEffect(() => {
     loadDataRoom();
-  }, [user]);
+    if (user) {
+      checkSampleDataExists(user.id);
+    }
+  }, [user, checkSampleDataExists]);
 
   const loadDataRoom = async () => {
     if (!user) return;
@@ -463,6 +469,58 @@ export default function DataRoomPage() {
             </p>
           </div>
         </div>
+
+        {/* Sample Data Section */}
+        {sampleDataLoaded && (
+          <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/20 rounded-xl p-6 mb-8 backdrop-blur-sm">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <Database className="w-6 h-6 text-blue-500" />
+                <div>
+                  <h3 className="text-lg font-semibold text-foreground">Sample Data Active</h3>
+                  <p className="text-foreground/70 text-sm">
+                    Using sample data from {mockCompanyData.name} - upload your real documents when ready
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => user && clearSampleData(user.id).then(() => loadDataRoom())}
+                disabled={sampleLoading}
+                className="bg-red-500/20 hover:bg-red-500/30 text-red-400 border border-red-500/30 px-4 py-2 rounded-lg transition flex items-center gap-2 disabled:opacity-50"
+              >
+                <Trash className="w-4 h-4" />
+                Clear Sample Data
+              </button>
+            </div>
+          </div>
+        )}
+        
+        {!sampleDataLoaded && (
+          <div className="bg-card border rounded-xl p-6 mb-8 backdrop-blur-sm">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <Database className="w-6 h-6 text-primary" />
+                <div>
+                  <h3 className="text-lg font-semibold text-foreground">Try with Sample Data</h3>
+                  <p className="text-foreground/70 text-sm">
+                    Load sample documents from {mockCompanyData.name} to explore the system
+                  </p>
+                  <div className="text-xs text-foreground/60 mt-1">
+                    Includes: P&L Statement, Balance Sheet, Tax Return, Operating Agreement, Customer List
+                  </div>
+                </div>
+              </div>
+              <button
+                onClick={() => user && loadSampleData(user.id).then(() => loadDataRoom())}
+                disabled={sampleLoading}
+                className="bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-3 rounded-lg transition flex items-center gap-2 disabled:opacity-50"
+              >
+                <Database className="w-4 h-4" />
+                {sampleLoading ? 'Loading...' : 'Load Sample Company'}
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Main Content */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
