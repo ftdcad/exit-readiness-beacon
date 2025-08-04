@@ -44,7 +44,7 @@ const weeks = [
     icon: Calculator,
     modules: [
       { name: 'Executive Discovery Interview', path: '/portal/week-2/assessment' },
-      { name: 'Strategy Builder', path: '/portal/week-2/value-builder' },
+      { name: 'Strategy Doc Builder', path: '/portal/week-2/value-builder' },
       { name: 'KPIs and OKRs', path: '/portal/week-2/metrics' },
       { name: 'EBITDA Calculator', path: '/portal/week-2/calculator' },
       { name: 'Industry Multiples', path: '/portal/week-2/multiples' },
