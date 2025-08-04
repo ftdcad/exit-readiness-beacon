@@ -43,9 +43,9 @@ const weeks = [
     title: 'Deal Readiness',
     icon: Calculator,
     modules: [
-      { name: 'Exit Readiness Assessment', path: '/portal/week-2/assessment' },
-      { name: '90-Day Value Builder', path: '/portal/week-2/value-builder' },
-      { name: 'PE-Ready Metrics', path: '/portal/week-2/metrics' },
+      { name: 'Executive Discovery Interview', path: '/portal/week-2/assessment' },
+      { name: 'Strategy Builder', path: '/portal/week-2/value-builder' },
+      { name: 'Suggested KPIs and OKRs', path: '/portal/week-2/metrics' },
       { name: 'EBITDA Impact Calculator', path: '/portal/week-2/calculator' },
       { name: 'Industry Multiple Finder', path: '/portal/week-2/multiples' },
       { name: 'Exit Scenario Planner', path: '/portal/week-2/scenarios' }
