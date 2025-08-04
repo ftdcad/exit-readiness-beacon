@@ -380,7 +380,7 @@ Confidential. Strategic. Unbiased.`;
   ];
 
   return (
-    <section className="py-16 bg-background-card">
+    <section id="assessment-form" className="py-16 bg-background-card">
       <div className="container px-4 md:px-6">
         <div className="max-w-2xl mx-auto">
           {/* Header */}
