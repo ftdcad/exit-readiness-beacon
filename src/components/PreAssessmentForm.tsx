@@ -1262,6 +1262,21 @@ Confidential. Strategic. Unbiased.`}
                         </div>
 
                         <div className="space-y-2">
+                          <Label htmlFor="email">Email Address</Label>
+                          <Input
+                            id="email"
+                            type="email"
+                            value={formData.email || ''}
+                            onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                            className="bg-background-hover border-border/50"
+                            placeholder="your@email.com"
+                            required
+                          />
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
                           <Label htmlFor="jobTitle">Your Job Title</Label>
                           <Input
                             id="jobTitle"
