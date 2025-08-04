@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -8,14 +8,22 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { CheckCircle, Clock, Users, DollarSign, Scale, Plus, X, FileText, Upload, File, Calculator } from "lucide-react";
-import { AssessmentGuard } from "@/components/AssessmentGuard";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { CheckCircle, Clock, Users, DollarSign, Scale, Plus, X, FileText, Upload, File, Calculator, Shield, Download } from "lucide-react";
 import { useContactSubmission } from "@/hooks/useContactSubmission";
 import { useNDASubmission } from "@/hooks/useNDASubmission";
+import { useToast } from "@/hooks/use-toast";
+import jsPDF from 'jspdf';
 
 const PreAssessmentForm = () => {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
+    // NDA Information
+    firstName: "",
+    lastName: "",
+    email: "",
+    company: "",
+    
     // Company Basics
     companyName: "",
     industry: "",
@@ -73,13 +81,56 @@ const PreAssessmentForm = () => {
     howDidYouHear: "",
   });
   
+  const [isAgreed, setIsAgreed] = useState(false);
+  const [showDownloadButton, setShowDownloadButton] = useState(false);
+  const [ndaSubmitted, setNdaSubmitted] = useState(false);
   const { submitContact, isSubmitting } = useContactSubmission();
-  const { checkNDAStatus } = useNDASubmission();
+  const { submitNDA, checkNDAStatus, isSubmitting: isNDASubmitting } = useNDASubmission();
+  const { toast } = useToast();
 
-  const totalSteps = 8;
+  const totalSteps = 9;
   const progress = (step / totalSteps) * 100;
 
-  const handleNext = () => {
+  useEffect(() => {
+    // Check if NDA is already signed on component mount
+    const ndaStatus = checkNDAStatus();
+    if (ndaStatus) {
+      setNdaSubmitted(true);
+      setStep(2); // Skip to company basics if NDA already signed
+    }
+  }, [checkNDAStatus]);
+
+  const handleNext = async () => {
+    // Handle NDA submission on step 1
+    if (step === 1 && !ndaSubmitted) {
+      if (!isAgreed) {
+        toast({
+          title: "Agreement Required",
+          description: "Please agree to the NDA terms before continuing.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      const ndaData = {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        company: formData.company,
+      };
+
+      const result = await submitNDA(ndaData);
+      if (result.success) {
+        setNdaSubmitted(true);
+        // Auto-fill company name from NDA if not already filled
+        if (!formData.companyName) {
+          setFormData(prev => ({ ...prev, companyName: formData.company }));
+        }
+      } else {
+        return; // Don't proceed if NDA submission failed
+      }
+    }
+    
     if (step < totalSteps) setStep(step + 1);
   };
 
@@ -190,6 +241,115 @@ const PreAssessmentForm = () => {
     }));
   };
 
+  // NDA handlers
+  const handleCheckboxChange = (checked: boolean) => {
+    setIsAgreed(checked);
+    setShowDownloadButton(checked);
+  };
+
+  const generatePDF = () => {
+    const doc = new jsPDF();
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const margin = 20;
+    const textWidth = pageWidth - 2 * margin;
+    
+    const fullNDAText = `📄 MUTUAL NON-DISCLOSURE AGREEMENT
+
+Effective Date: Upon acceptance via NDA Gate
+
+Parties:
+
+"Visitor": Any individual accessing this website or engaging with Exitus Advisory Group through the PE Readiness Assessment platform
+
+"Exitus Advisory Group": The confidential advisory services entity operating this website
+
+1. Purpose
+This Agreement governs the exchange of confidential business information between the Visitor and Exitus Advisory Group. The purpose is to allow for an honest evaluation of exit readiness, strategy alignment, and deal-related information while maintaining strict confidentiality on both sides.
+
+2. Definition of Confidential Information
+"Confidential Information" includes, but is not limited to:
+
+• All submitted data (financials, P&L, org charts, strategic goals, etc.)
+• Business conditions, customer lists, staffing structure
+• Uploaded or AI-generated assessments, scorecards, or exit roadmaps
+• LOIs, term sheets, valuations, and notes related to potential or ongoing transactions
+• All correspondence, call notes, and insights shared directly or indirectly through this platform
+
+3. Obligations
+Both parties agree to:
+
+• Keep all Confidential Information strictly private
+• Use it only for the purpose of the assessment or strategic planning
+• Not disclose, replicate, or share any materials with third parties without written consent
+• Take commercially reasonable steps to secure all data provided or received
+
+4. Exclusions
+This Agreement does not apply to information that:
+
+• Was publicly known at the time of disclosure
+• Becomes publicly available through no fault of either party
+• Was independently developed without access to the Confidential Information
+• Must be disclosed by law or legal process (notice will be provided if allowed)
+
+5. Enforcement & Legal Remedy
+This Agreement remains in effect for five (5) years from acceptance. A breach of confidentiality will result in immediate grounds for legal action, including but not limited to:
+
+• Injunctive relief
+• Recovery of compensatory damages
+• Forensic analysis of misuse
+
+Exitus Advisory Group may log IP addresses, store acceptance timestamps, and retain metadata to prove engagement and agreement.
+
+6. No License or Rights Transferred
+This Agreement does not transfer ownership or licensing rights of any intellectual property or proprietary content.
+
+7. Acceptance
+By clicking "I Agree" and accessing the site, both parties affirm they have read, understood, and agreed to be legally bound by this Mutual NDA.
+
+Exitus Advisory Group
+Confidential. Strategic. Unbiased.`;
+    
+    // Add title
+    doc.setFontSize(16);
+    doc.setFont(undefined, 'bold');
+    doc.text('MUTUAL NON-DISCLOSURE AGREEMENT', pageWidth / 2, 30, { align: 'center' });
+    
+    // Add effective date
+    doc.setFontSize(12);
+    doc.setFont(undefined, 'normal');
+    doc.text(`Effective Date: ${new Date().toLocaleDateString()}`, pageWidth / 2, 45, { align: 'center' });
+    
+    // Add user information
+    let yPosition = 60;
+    doc.setFont(undefined, 'bold');
+    doc.text('Agreement Details:', margin, yPosition);
+    yPosition += 10;
+    doc.setFont(undefined, 'normal');
+    doc.text(`Name: ${formData.firstName} ${formData.lastName}`, margin, yPosition);
+    yPosition += 8;
+    doc.text(`Email: ${formData.email}`, margin, yPosition);
+    yPosition += 8;
+    doc.text(`Company: ${formData.company}`, margin, yPosition);
+    yPosition += 8;
+    doc.text(`Accepted: ${new Date().toLocaleString()}`, margin, yPosition);
+    yPosition += 20;
+    
+    // Add NDA content
+    const lines = doc.splitTextToSize(fullNDAText, textWidth);
+    
+    lines.forEach((line: string) => {
+      if (yPosition > 270) {
+        doc.addPage();
+        yPosition = 20;
+      }
+      doc.text(line, margin, yPosition);
+      yPosition += 6;
+    });
+    
+    // Save the PDF
+    doc.save(`NDA-ExitusAdvisory-${formData.firstName}${formData.lastName}-${new Date().toISOString().split('T')[0]}.pdf`);
+  };
+
   const industries = [
     "HVAC/Mechanical Services",
     "Electrical Services", 
@@ -223,7 +383,6 @@ const PreAssessmentForm = () => {
     <section className="py-16 bg-background-card">
       <div className="container px-4 md:px-6">
         <div className="max-w-2xl mx-auto">
-          <AssessmentGuard>
           {/* Header */}
           <div className="text-center space-y-4 mb-8">
             <h2 className="text-3xl md:text-4xl font-bold">
@@ -246,8 +405,166 @@ const PreAssessmentForm = () => {
           <Card className="glass-card border-border/50">
             <CardContent className="p-8">
               <form onSubmit={handleSubmit}>
-                {/* Step 1: Company Basics */}
-                {step === 1 && (
+                {/* Step 1: NDA Agreement */}
+                {step === 1 && !ndaSubmitted && (
+                  <div className="space-y-6">
+                    <CardHeader className="px-0 pt-0">
+                      <CardTitle className="flex items-center gap-2 text-xl">
+                        <Shield className="h-5 w-5 text-accent" />
+                        Non-Disclosure Agreement
+                      </CardTitle>
+                      <p className="text-sm text-foreground-secondary">
+                        Our assessment contains confidential information. Please review and agree to our mutual NDA to continue.
+                      </p>
+                    </CardHeader>
+
+                    {/* NDA Content */}
+                    <div className="border border-border/30 rounded-lg">
+                      <ScrollArea className="h-48 p-4">
+                        <div className="space-y-4 text-sm text-foreground-secondary leading-relaxed whitespace-pre-line">
+                          {`📄 MUTUAL NON-DISCLOSURE AGREEMENT
+
+Effective Date: Upon acceptance via NDA Gate
+
+Parties:
+
+"Visitor": Any individual accessing this website or engaging with Exitus Advisory Group through the PE Readiness Assessment platform
+
+"Exitus Advisory Group": The confidential advisory services entity operating this website
+
+1. Purpose
+This Agreement governs the exchange of confidential business information between the Visitor and Exitus Advisory Group. The purpose is to allow for an honest evaluation of exit readiness, strategy alignment, and deal-related information while maintaining strict confidentiality on both sides.
+
+2. Definition of Confidential Information
+"Confidential Information" includes, but is not limited to:
+
+• All submitted data (financials, P&L, org charts, strategic goals, etc.)
+• Business conditions, customer lists, staffing structure
+• Uploaded or AI-generated assessments, scorecards, or exit roadmaps
+• LOIs, term sheets, valuations, and notes related to potential or ongoing transactions
+• All correspondence, call notes, and insights shared directly or indirectly through this platform
+
+3. Obligations
+Both parties agree to:
+
+• Keep all Confidential Information strictly private
+• Use it only for the purpose of the assessment or strategic planning
+• Not disclose, replicate, or share any materials with third parties without written consent
+• Take commercially reasonable steps to secure all data provided or received
+
+4. Exclusions
+This Agreement does not apply to information that:
+
+• Was publicly known at the time of disclosure
+• Becomes publicly available through no fault of either party
+• Was independently developed without access to the Confidential Information
+• Must be disclosed by law or legal process (notice will be provided if allowed)
+
+5. Enforcement & Legal Remedy
+This Agreement remains in effect for five (5) years from acceptance. A breach of confidentiality will result in immediate grounds for legal action, including but not limited to:
+
+• Injunctive relief
+• Recovery of compensatory damages
+• Forensic analysis of misuse
+
+Exitus Advisory Group may log IP addresses, store acceptance timestamps, and retain metadata to prove engagement and agreement.
+
+6. No License or Rights Transferred
+This Agreement does not transfer ownership or licensing rights of any intellectual property or proprietary content.
+
+7. Acceptance
+By clicking "I Agree" and accessing the site, both parties affirm they have read, understood, and agreed to be legally bound by this Mutual NDA.
+
+Exitus Advisory Group
+Confidential. Strategic. Unbiased.`}
+                        </div>
+                      </ScrollArea>
+                    </div>
+
+                    {/* NDA Form */}
+                    <div className="space-y-4">
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="firstName">First Name</Label>
+                          <Input
+                            id="firstName"
+                            value={formData.firstName}
+                            onChange={(e) => setFormData(prev => ({ ...prev, firstName: e.target.value }))}
+                            className="bg-background-hover border-border/50"
+                            required
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="lastName">Last Name</Label>
+                          <Input
+                            id="lastName"
+                            value={formData.lastName}
+                            onChange={(e) => setFormData(prev => ({ ...prev, lastName: e.target.value }))}
+                            className="bg-background-hover border-border/50"
+                            required
+                          />
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="email">Business Email</Label>
+                        <Input
+                          id="email"
+                          type="email"
+                          value={formData.email}
+                          onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                          className="bg-background-hover border-border/50"
+                          required
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="company">Company Name</Label>
+                        <Input
+                          id="company"
+                          value={formData.company}
+                          onChange={(e) => setFormData(prev => ({ ...prev, company: e.target.value }))}
+                          className="bg-background-hover border-border/50"
+                          required
+                        />
+                      </div>
+
+                      {/* NDA Checkbox */}
+                      <div className="flex items-start space-x-3 pt-4">
+                        <Checkbox 
+                          id="nda"
+                          checked={isAgreed}
+                          onCheckedChange={handleCheckboxChange}
+                          className="mt-1 h-5 w-5 border-2 border-accent data-[state=checked]:bg-accent data-[state=checked]:border-accent"
+                        />
+                        <div className="space-y-1">
+                          <Label htmlFor="nda" className="text-sm leading-relaxed cursor-pointer">
+                            I agree to the mutual non-disclosure agreement and understand that all information shared during this assessment will remain strictly confidential.
+                          </Label>
+                          <p className="text-xs text-foreground-muted">
+                            A downloadable copy will be available once you agree
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Download Button */}
+                      {showDownloadButton && (
+                        <Button 
+                          type="button"
+                          variant="outline"
+                          onClick={generatePDF}
+                          className="w-full border-accent/30 hover:bg-accent/10 flex items-center gap-2"
+                        >
+                          <Download className="h-4 w-4" />
+                          Download NDA (PDF)
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Step 2: Company Basics */}
+                {step === 2 && (
                   <div className="space-y-6">
                     <CardHeader className="px-0 pt-0">
                       <CardTitle className="flex items-center gap-2 text-xl">
@@ -321,8 +638,8 @@ const PreAssessmentForm = () => {
                   </div>
                 )}
 
-                {/* Step 2: Business Performance */}
-                {step === 2 && (
+                {/* Step 3: Business Performance */}
+                {step === 3 && (
                   <div className="space-y-6">
                     <CardHeader className="px-0 pt-0">
                       <CardTitle className="flex items-center gap-2 text-xl">
@@ -418,8 +735,8 @@ const PreAssessmentForm = () => {
                   </div>
                 )}
 
-                {/* Step 3: Investment Type & Interest */}
-                {step === 3 && (
+                {/* Step 4: Investment Type & Interest */}
+                {step === 4 && (
                   <div className="space-y-6">
                     <CardHeader className="px-0 pt-0">
                       <CardTitle className="flex items-center gap-2 text-xl">
@@ -463,8 +780,8 @@ const PreAssessmentForm = () => {
                   </div>
                 )}
 
-                {/* Step 4: Business Structure & Ownership */}
-                {step === 4 && (
+                {/* Step 5: Business Structure & Ownership */}
+                {step === 5 && (
                   <div className="space-y-6">
                     <CardHeader className="px-0 pt-0">
                       <CardTitle className="flex items-center gap-2 text-xl">
@@ -590,8 +907,8 @@ const PreAssessmentForm = () => {
                   </div>
                 )}
 
-                {/* Step 5: Document Availability */}
-                {step === 5 && (
+                {/* Step 6: Document Availability */}
+                {step === 6 && (
                   <div className="space-y-6">
                     <CardHeader className="px-0 pt-0">
                       <CardTitle className="flex items-center gap-2 text-xl">
@@ -817,8 +1134,8 @@ const PreAssessmentForm = () => {
                   </div>
                 )}
 
-                {/* Step 6: Owner Add-Back Questionnaire */}
-                 {step === 6 && (
+                {/* Step 7: Owner Add-Back Questionnaire */}
+                 {step === 7 && (
                   <div className="space-y-6">
                     <CardHeader className="px-0 pt-0">
                       <CardTitle className="flex items-center gap-2 text-xl">
@@ -889,8 +1206,8 @@ const PreAssessmentForm = () => {
                   </div>
                 )}
 
-                {/* Step 7: Exit Strategy & Goals */}
-                {step === 7 && (
+                {/* Step 8: Exit Strategy & Goals */}
+                {step === 8 && (
                   <div className="space-y-6">
                     <CardHeader className="px-0 pt-0">
                       <CardTitle className="flex items-center gap-2 text-xl">
@@ -956,8 +1273,8 @@ const PreAssessmentForm = () => {
                   </div>
                 )}
 
-                {/* Step 8: Contact Information */}
-                {step === 8 && (
+                {/* Step 9: Contact Information */}
+                {step === 9 && (
                   <div className="space-y-6">
                     <CardHeader className="px-0 pt-0">
                       <CardTitle className="flex items-center gap-2 text-xl">
@@ -1056,9 +1373,12 @@ const PreAssessmentForm = () => {
                       <Button 
                         type="button" 
                         onClick={handleNext}
+                        disabled={(step === 1 && !isAgreed) || (step === 1 && isNDASubmitting)}
                         className="bg-accent hover:bg-accent/90 font-semibold button-shadow"
                       >
-                        Next Step
+                        {step === 1 && isNDASubmitting ? "Processing NDA..." : 
+                         step === 1 ? "Accept & Continue" : 
+                         "Next Step"}
                       </Button>
                     ) : (
                       <Button 
@@ -1082,7 +1402,7 @@ const PreAssessmentForm = () => {
               <span>Confidential & secure • No spam • 24hr response guarantee</span>
             </div>
           </div>
-          </AssessmentGuard>
+          
         </div>
       </div>
     </section>
