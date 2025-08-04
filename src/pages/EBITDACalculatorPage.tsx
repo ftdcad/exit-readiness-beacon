@@ -92,8 +92,8 @@ export default function EBITDACalculatorPage() {
         .maybeSingle();
 
       if (data) {
-        // Load actual data into Calculator A
-        setCalculatorA({
+        // Load actual data into both calculators with same baseline
+        const baselineData = {
           revenue: data.revenue || 0,
           cogs: data.cogs || 0,
           opex: data.opex || 0,
@@ -102,7 +102,10 @@ export default function EBITDACalculatorPage() {
           travelMeals: data.travel_meals || 0,
           legalFees: data.legal_fees || 0,
           otherNonRecurring: data.other_non_recurring || 0
-        });
+        };
+        
+        setCalculatorA(baselineData);
+        setCalculatorB(baselineData); // Start scenario with same baseline
       }
     } catch (error) {
       console.error('Error loading financial data:', error);
@@ -156,6 +159,7 @@ export default function EBITDACalculatorPage() {
     };
     
     setCalculatorA(mockData);
+    setCalculatorB(mockData); // Start scenario with same baseline
     toast.success('Mock data loaded - Acme Manufacturing LLC');
   };
 
