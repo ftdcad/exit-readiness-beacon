@@ -24,6 +24,7 @@ import KnowYourBuyerPage from "./pages/KnowYourBuyerPage";
 import ExitReadinessAssessmentPage from "./pages/ExitReadinessAssessmentPage";
 import PEReadyMetricsPage from "./pages/PEReadyMetricsPage";
 import StrategyDocBuilderPage from "./pages/StrategyDocBuilderPage";
+import KPIandOKRPage from "./pages/KPIandOKRPage";
 
 const queryClient = new QueryClient();
 
@@ -167,6 +168,16 @@ const App = () => (
               <ClientRoute>
                 <ClientPortalLayout>
                   <PEReadyMetricsPage />
+                </ClientPortalLayout>
+              </ClientRoute>
+            } 
+          />
+          <Route 
+            path="/portal/week-2/kpis-okrs" 
+            element={
+              <ClientRoute>
+                <ClientPortalLayout>
+                  <KPIandOKRPage />
                 </ClientPortalLayout>
               </ClientRoute>
             } 

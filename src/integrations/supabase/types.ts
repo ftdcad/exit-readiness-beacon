@@ -442,6 +442,113 @@ export type Database = {
         }
         Relationships: []
       }
+      kpi_metrics: {
+        Row: {
+          category: string | null
+          created_at: string | null
+          current_value: number | null
+          department: string | null
+          ebitda_impact: number | null
+          id: string
+          last_updated: string | null
+          measurement_frequency: string | null
+          metric_name: string
+          metric_type: string | null
+          owner: string | null
+          start_date: string | null
+          status: string | null
+          strategic_initiative_link: string | null
+          target_date: string | null
+          target_value: number | null
+          unit_of_measure: string | null
+          updated_at: string | null
+          user_id: string | null
+          valuation_impact: string | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string | null
+          current_value?: number | null
+          department?: string | null
+          ebitda_impact?: number | null
+          id?: string
+          last_updated?: string | null
+          measurement_frequency?: string | null
+          metric_name: string
+          metric_type?: string | null
+          owner?: string | null
+          start_date?: string | null
+          status?: string | null
+          strategic_initiative_link?: string | null
+          target_date?: string | null
+          target_value?: number | null
+          unit_of_measure?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          valuation_impact?: string | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string | null
+          current_value?: number | null
+          department?: string | null
+          ebitda_impact?: number | null
+          id?: string
+          last_updated?: string | null
+          measurement_frequency?: string | null
+          metric_name?: string
+          metric_type?: string | null
+          owner?: string | null
+          start_date?: string | null
+          status?: string | null
+          strategic_initiative_link?: string | null
+          target_date?: string | null
+          target_value?: number | null
+          unit_of_measure?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          valuation_impact?: string | null
+        }
+        Relationships: []
+      }
+      okr_key_results: {
+        Row: {
+          created_at: string | null
+          current_progress: number | null
+          id: string
+          key_result: string
+          objective_id: string | null
+          status: string | null
+          target_progress: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          current_progress?: number | null
+          id?: string
+          key_result: string
+          objective_id?: string | null
+          status?: string | null
+          target_progress?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          current_progress?: number | null
+          id?: string
+          key_result?: string
+          objective_id?: string | null
+          status?: string | null
+          target_progress?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "okr_key_results_objective_id_fkey"
+            columns: ["objective_id"]
+            isOneToOne: false
+            referencedRelation: "kpi_metrics"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           created_at: string | null
