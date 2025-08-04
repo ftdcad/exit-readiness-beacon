@@ -52,6 +52,7 @@ export default function EBITDACalculatorPage() {
   // Two separate calculator states
   const [calculatorA, setCalculatorA] = useState<CalculatorData>(emptyCalculatorData);
   const [calculatorB, setCalculatorB] = useState<CalculatorData>(emptyCalculatorData);
+  const [baselineData, setBaselineData] = useState<CalculatorData>(emptyCalculatorData);
   
   // Labels for each calculator
   const [labelA, setLabelA] = useState('Actual Financials');
@@ -104,6 +105,7 @@ export default function EBITDACalculatorPage() {
           otherNonRecurring: data.other_non_recurring || 0
         };
         
+        setBaselineData(baselineData);
         setCalculatorA(baselineData);
         setCalculatorB(baselineData); // Start scenario with same baseline
       }
@@ -158,6 +160,7 @@ export default function EBITDACalculatorPage() {
       otherNonRecurring: 0
     };
     
+    setBaselineData(mockData);
     setCalculatorA(mockData);
     setCalculatorB(mockData); // Start scenario with same baseline
     toast.success('Mock data loaded - Acme Manufacturing LLC');
@@ -175,9 +178,9 @@ export default function EBITDACalculatorPage() {
 
   const resetCalculator = (calculator: 'A' | 'B') => {
     if (calculator === 'A') {
-      setCalculatorA(emptyCalculatorData);
+      setCalculatorA(baselineData);
     } else {
-      setCalculatorB(emptyCalculatorData);
+      setCalculatorB(calculatorA); // Reset B to match current A values
     }
     toast.success(`Calculator ${calculator} reset`);
   };
