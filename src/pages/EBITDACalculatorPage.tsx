@@ -50,7 +50,7 @@ export default function EBITDACalculatorPage() {
         .eq('category', 'Financials')
         .eq('subcategory', 'Income Statements')
         .eq('is_active', true)
-        .ilike('document_name', '%P&L%');
+        .eq('document_type', 'Income Statement');
 
       setHasUploadedPnL(data && data.length > 0);
     } catch (error) {
