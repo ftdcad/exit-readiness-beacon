@@ -18,7 +18,7 @@ export const getDataRoomFinancials = async (userId: string): Promise<ExtractedFi
       .from('data_room_documents')
       .select('*')
       .eq('user_id', userId)
-      .eq('category', 'Financial Information')
+      .eq('category', 'Financials')
       .ilike('document_name', '%p%l%')
       .eq('is_active', true)
       .order('upload_date', { ascending: false })
@@ -112,7 +112,7 @@ export const hasDataRoomFinancials = async (userId: string): Promise<boolean> =>
       .from('data_room_documents')
       .select('id')
       .eq('user_id', userId)
-      .eq('category', 'Financial Information')
+      .eq('category', 'Financials')
       .eq('is_active', true)
       .limit(1);
 
