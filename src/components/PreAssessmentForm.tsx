@@ -1296,7 +1296,7 @@ Confidential. Strategic. Unbiased.`}
                             value={formData.companyWebsite || ''}
                             onChange={(e) => setFormData(prev => ({ ...prev, companyWebsite: e.target.value }))}
                             className="bg-background-hover border-border/50"
-                            placeholder="https://example.com"
+                            placeholder="https://example.com (optional)"
                           />
                         </div>
                       </div>
