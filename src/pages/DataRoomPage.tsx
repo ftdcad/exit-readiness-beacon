@@ -507,7 +507,6 @@ ${folder.uploadedDocs.map(doc => `- ${doc.documentName} (v${doc.version})`).join
                     className="w-full px-4 py-3 bg-muted/50 hover:bg-muted transition flex items-center justify-between text-left"
                   >
                     <div className="flex items-center gap-3">
-                      <span className="text-2xl">{categoryIcons[category]}</span>
                       <span className="text-foreground font-medium">{category}</span>
                     </div>
                     <div className="flex items-center gap-3">
