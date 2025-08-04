@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
-import { Upload, Folder, File, Check, X, AlertCircle, Download, Eye, ChevronRight, ChevronDown } from "lucide-react";
+import { Upload, Folder, File, Check, X, AlertCircle, Download, Eye, ChevronRight, ChevronDown, Plus, Trash2, Edit } from "lucide-react";
 import { toast } from "sonner";
 
 interface DataRoomDocument {
@@ -25,6 +25,13 @@ interface FolderStructure {
   isRequired: boolean;
   uploadedDocs: DataRoomDocument[];
   completionPercentage: number;
+  isCustom?: boolean;
+}
+
+interface CustomFolderModal {
+  isOpen: boolean;
+  mode: 'category' | 'subcategory';
+  parentCategory?: string;
 }
 
 interface ReadinessScore {
@@ -70,6 +77,13 @@ export default function DataRoomPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>('');
   const [selectedSubcategory, setSelectedSubcategory] = useState<string>('');
   const [dragActive, setDragActive] = useState(false);
+  const [customFolderModal, setCustomFolderModal] = useState<CustomFolderModal>({
+    isOpen: false,
+    mode: 'category'
+  });
+  const [newFolderName, setNewFolderName] = useState('');
+  const [newFolderIcon, setNewFolderIcon] = useState('📁');
+  const [newFolderRequired, setNewFolderRequired] = useState(false);
 
   useEffect(() => {
     loadDataRoom();
@@ -127,7 +141,8 @@ export default function DataRoomPage() {
             documentTypes: folder.document_types || [],
             isRequired: folder.is_required || false,
             uploadedDocs,
-            completionPercentage
+            completionPercentage,
+            isCustom: folder.is_custom || false
           };
         });
 
@@ -325,6 +340,58 @@ export default function DataRoomPage() {
     }
   };
 
+  const createCustomFolder = async () => {
+    if (!user || !newFolderName.trim()) return;
+
+    try {
+      if (customFolderModal.mode === 'category') {
+        // Create new major category
+        const { error } = await supabase
+          .from('data_room_structure')
+          .insert({
+            category: newFolderName,
+            subcategory: 'General',
+            document_types: [],
+            is_required: newFolderRequired,
+            is_custom: true,
+            created_by: user.id,
+            sort_order: 100 + folderStructure.length
+          });
+
+        if (error) throw error;
+        
+        // Update category icons
+        categoryIcons[newFolderName] = newFolderIcon;
+        
+      } else {
+        // Create new subcategory
+        const { error } = await supabase
+          .from('data_room_structure')
+          .insert({
+            category: customFolderModal.parentCategory,
+            subcategory: newFolderName,
+            document_types: [],
+            is_required: newFolderRequired,
+            is_custom: true,
+            created_by: user.id,
+            sort_order: 100 + folderStructure.filter(f => f.category === customFolderModal.parentCategory).length
+          });
+
+        if (error) throw error;
+      }
+
+      toast.success(`Created ${newFolderName}`);
+      setCustomFolderModal({ isOpen: false, mode: 'category' });
+      setNewFolderName('');
+      setNewFolderIcon('📁');
+      setNewFolderRequired(false);
+      await loadDataRoom();
+    } catch (error) {
+      console.error('Create folder error:', error);
+      toast.error('Failed to create folder');
+    }
+  };
+
   const exportDataRoomIndex = () => {
     const index = folderStructure.map(folder => 
       `## ${folder.category} - ${folder.subcategory}
@@ -392,6 +459,15 @@ ${folder.uploadedDocs.map(doc => `- ${doc.documentName} (v${doc.version})`).join
             <h2 className="text-xl font-semibold text-foreground mb-4">Document Folders</h2>
             
             <div className="space-y-2">
+              {/* Add New Section Button */}
+              <button
+                onClick={() => setCustomFolderModal({ isOpen: true, mode: 'category' })}
+                className="w-full px-4 py-3 bg-accent/20 hover:bg-accent/30 border border-accent/30 rounded-lg transition flex items-center justify-center gap-2 text-accent"
+              >
+                <Plus className="w-5 h-5" />
+                Add New Section
+              </button>
+
               {Object.entries(
                 folderStructure.reduce((acc, folder) => {
                   if (!acc[folder.category]) acc[folder.category] = [];
@@ -447,12 +523,28 @@ ${folder.uploadedDocs.map(doc => `- ${doc.documentName} (v${doc.version})`).join
                             {folder.isRequired && (
                               <span className="text-xs bg-destructive/20 text-destructive px-2 py-1 rounded">Required</span>
                             )}
+                            {folder.isCustom && (
+                              <span className="text-xs bg-accent/20 text-accent px-2 py-1 rounded">Custom</span>
+                            )}
                             <div className="text-xs text-foreground/60">
                               {folder.completionPercentage}%
                             </div>
                           </div>
                         </button>
                       ))}
+                      
+                      {/* Add Subfolder Button */}
+                      <button
+                        onClick={() => setCustomFolderModal({ 
+                          isOpen: true, 
+                          mode: 'subcategory', 
+                          parentCategory: category 
+                        })}
+                        className="w-full px-6 py-3 hover:bg-accent/10 transition flex items-center gap-3 text-accent text-sm"
+                      >
+                        <Plus className="w-4 h-4" />
+                        Add Subfolder
+                      </button>
                     </div>
                   )}
                 </div>
@@ -563,6 +655,78 @@ ${folder.uploadedDocs.map(doc => `- ${doc.documentName} (v${doc.version})`).join
             <ChevronRight className="w-5 h-5" />
           </button>
         </div>
+
+        {/* Custom Folder Modal */}
+        {customFolderModal.isOpen && (
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+            <div className="bg-card border rounded-xl p-6 w-full max-w-md">
+              <h3 className="text-xl font-semibold text-foreground mb-4">
+                Add New {customFolderModal.mode === 'category' ? 'Section' : 'Folder'}
+              </h3>
+              
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm text-foreground/70 mb-2">Name</label>
+                  <input
+                    type="text"
+                    value={newFolderName}
+                    onChange={(e) => setNewFolderName(e.target.value)}
+                    className="w-full bg-muted/30 border border-border rounded-lg px-4 py-2 text-foreground"
+                    placeholder={customFolderModal.mode === 'category' ? 'e.g., Clinical Documentation' : 'e.g., Vendor Contracts'}
+                    autoFocus
+                  />
+                </div>
+                
+                {customFolderModal.mode === 'category' && (
+                  <div>
+                    <label className="block text-sm text-foreground/70 mb-2">Icon</label>
+                    <div className="grid grid-cols-8 gap-2">
+                      {['📁', '🏥', '🏭', '💊', '🔬', '📊', '🏢', '⚕️', '🧬', '🔧', '🌿', '📱'].map(icon => (
+                        <button
+                          key={icon}
+                          onClick={() => setNewFolderIcon(icon)}
+                          className={`text-2xl p-2 rounded border ${
+                            newFolderIcon === icon 
+                              ? 'border-primary bg-primary/20' 
+                              : 'border-border hover:border-primary/50'
+                          }`}
+                        >
+                          {icon}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                
+                <label className="flex items-center gap-3">
+                  <input
+                    type="checkbox"
+                    checked={newFolderRequired}
+                    onChange={(e) => setNewFolderRequired(e.target.checked)}
+                    className="rounded border-border"
+                  />
+                  <span className="text-foreground">Mark as required for PE readiness</span>
+                </label>
+              </div>
+              
+              <div className="flex gap-3 mt-6">
+                <button
+                  onClick={() => setCustomFolderModal({ isOpen: false, mode: 'category' })}
+                  className="flex-1 bg-muted text-foreground py-2 px-4 rounded-lg hover:bg-muted/80 transition"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={createCustomFolder}
+                  disabled={!newFolderName.trim()}
+                  className="flex-1 bg-primary text-primary-foreground py-2 px-4 rounded-lg hover:bg-primary/90 transition disabled:opacity-50"
+                >
+                  Create {customFolderModal.mode === 'category' ? 'Section' : 'Folder'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

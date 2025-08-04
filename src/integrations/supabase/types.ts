@@ -460,27 +460,36 @@ export type Database = {
       data_room_structure: {
         Row: {
           category: string
+          company_type: string | null
           created_at: string | null
+          created_by: string | null
           document_types: string[] | null
           id: string
+          is_custom: boolean | null
           is_required: boolean | null
           sort_order: number | null
           subcategory: string
         }
         Insert: {
           category: string
+          company_type?: string | null
           created_at?: string | null
+          created_by?: string | null
           document_types?: string[] | null
           id?: string
+          is_custom?: boolean | null
           is_required?: boolean | null
           sort_order?: number | null
           subcategory: string
         }
         Update: {
           category?: string
+          company_type?: string | null
           created_at?: string | null
+          created_by?: string | null
           document_types?: string[] | null
           id?: string
+          is_custom?: boolean | null
           is_required?: boolean | null
           sort_order?: number | null
           subcategory?: string
