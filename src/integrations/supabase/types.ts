@@ -97,6 +97,48 @@ export type Database = {
           },
         ]
       }
+      assessment_access: {
+        Row: {
+          access_granted_at: string
+          contact_inquiry_id: string | null
+          created_at: string
+          id: string
+          ip_address: unknown | null
+          nda_record_id: string | null
+        }
+        Insert: {
+          access_granted_at?: string
+          contact_inquiry_id?: string | null
+          created_at?: string
+          id?: string
+          ip_address?: unknown | null
+          nda_record_id?: string | null
+        }
+        Update: {
+          access_granted_at?: string
+          contact_inquiry_id?: string | null
+          created_at?: string
+          id?: string
+          ip_address?: unknown | null
+          nda_record_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assessment_access_contact_inquiry_id_fkey"
+            columns: ["contact_inquiry_id"]
+            isOneToOne: false
+            referencedRelation: "contact_inquiries"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assessment_access_nda_record_id_fkey"
+            columns: ["nda_record_id"]
+            isOneToOne: false
+            referencedRelation: "nda_records"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       assessment_sessions: {
         Row: {
           assessment_id: string
@@ -320,46 +362,115 @@ export type Database = {
       }
       contact_inquiries: {
         Row: {
+          add_backs: Json | null
           admin_notes: string | null
           annual_revenue: number | null
           assigned_to: string | null
+          balance_sheets_availability: string | null
           company_name: string
+          company_size: string | null
           contact_email: string
           contact_name: string | null
           created_at: string | null
+          current_challenges: string | null
+          employee_count: string | null
+          entity_type: string | null
           exit_timeline: string | null
+          exit_type: string | null
+          founded_year: number | null
+          how_did_you_hear: string | null
           id: string
           industry: string | null
+          investment_type: string | null
+          ip_address: unknown | null
+          job_title: string | null
+          nda_record_id: string | null
+          ownership_structure: Json | null
+          ownership_type: string | null
+          phone: string | null
+          pnl_availability: string | null
+          preferred_contact: string | null
+          revenue_2022: string | null
+          revenue_2023: string | null
+          revenue_2024: string | null
+          revenue_2025: string | null
           source_form_version: string | null
           status: string | null
+          tax_returns_availability: string | null
         }
         Insert: {
+          add_backs?: Json | null
           admin_notes?: string | null
           annual_revenue?: number | null
           assigned_to?: string | null
+          balance_sheets_availability?: string | null
           company_name: string
+          company_size?: string | null
           contact_email: string
           contact_name?: string | null
           created_at?: string | null
+          current_challenges?: string | null
+          employee_count?: string | null
+          entity_type?: string | null
           exit_timeline?: string | null
+          exit_type?: string | null
+          founded_year?: number | null
+          how_did_you_hear?: string | null
           id?: string
           industry?: string | null
+          investment_type?: string | null
+          ip_address?: unknown | null
+          job_title?: string | null
+          nda_record_id?: string | null
+          ownership_structure?: Json | null
+          ownership_type?: string | null
+          phone?: string | null
+          pnl_availability?: string | null
+          preferred_contact?: string | null
+          revenue_2022?: string | null
+          revenue_2023?: string | null
+          revenue_2024?: string | null
+          revenue_2025?: string | null
           source_form_version?: string | null
           status?: string | null
+          tax_returns_availability?: string | null
         }
         Update: {
+          add_backs?: Json | null
           admin_notes?: string | null
           annual_revenue?: number | null
           assigned_to?: string | null
+          balance_sheets_availability?: string | null
           company_name?: string
+          company_size?: string | null
           contact_email?: string
           contact_name?: string | null
           created_at?: string | null
+          current_challenges?: string | null
+          employee_count?: string | null
+          entity_type?: string | null
           exit_timeline?: string | null
+          exit_type?: string | null
+          founded_year?: number | null
+          how_did_you_hear?: string | null
           id?: string
           industry?: string | null
+          investment_type?: string | null
+          ip_address?: unknown | null
+          job_title?: string | null
+          nda_record_id?: string | null
+          ownership_structure?: Json | null
+          ownership_type?: string | null
+          phone?: string | null
+          pnl_availability?: string | null
+          preferred_contact?: string | null
+          revenue_2022?: string | null
+          revenue_2023?: string | null
+          revenue_2024?: string | null
+          revenue_2025?: string | null
           source_form_version?: string | null
           status?: string | null
+          tax_returns_availability?: string | null
         }
         Relationships: [
           {
