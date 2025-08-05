@@ -160,16 +160,6 @@ const App = () => (
             } 
           />
           <Route 
-            path="/portal/week-2/assessment" 
-            element={
-              <ClientRoute>
-                <ClientPortalLayout>
-                  <AssessmentPage />
-                </ClientPortalLayout>
-              </ClientRoute>
-            } 
-          />
-          <Route 
             path="/portal/week-2/value-builder" 
             element={
               <ClientRoute>
