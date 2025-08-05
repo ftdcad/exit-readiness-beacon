@@ -78,6 +78,8 @@ const PreAssessmentForm = () => {
     jobTitle: "",
     companySize: "",
     howDidYouHear: "",
+    phone: "",
+    companyWebsite: "",
   });
   
   const [isAgreed, setIsAgreed] = useState(false);
@@ -1306,6 +1308,20 @@ Confidential. Strategic. Unbiased.`}
                         </div>
 
                         <div className="space-y-2">
+                          <Label htmlFor="phone">Phone Number</Label>
+                          <Input
+                            id="phone"
+                            type="tel"
+                            value={formData.phone || ''}
+                            onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
+                            className="bg-background-hover border-border/50"
+                            placeholder="(555) 123-4567"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
                           <Label htmlFor="jobTitle">Your Job Title</Label>
                           <Input
                             id="jobTitle"
@@ -1313,6 +1329,18 @@ Confidential. Strategic. Unbiased.`}
                             onChange={(e) => setFormData(prev => ({ ...prev, jobTitle: e.target.value }))}
                             className="bg-background-hover border-border/50"
                             placeholder="e.g., CEO, Founder, Owner"
+                          />
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label htmlFor="companyWebsite">Company Website</Label>
+                          <Input
+                            id="companyWebsite"
+                            type="text"
+                            value={formData.companyWebsite || ''}
+                            onChange={(e) => setFormData(prev => ({ ...prev, companyWebsite: e.target.value }))}
+                            className="bg-background-hover border-border/50"
+                            placeholder="www.example.com (optional)"
                           />
                         </div>
                       </div>
