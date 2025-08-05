@@ -637,7 +637,7 @@ ${i + 1}. ${kr.keyResult}
         <Card className="mb-8 bg-white/5 border-white/10">
           <div 
             className="p-4 flex items-center justify-between cursor-pointer hover:bg-white/5 transition-colors"
-            onClick={() => !isEditing && setShowSetup(!showSetup)}
+            onClick={() => setShowSetup(!showSetup)}
           >
             <div className="flex items-center gap-3">
               <Edit3 className="w-5 h-5 text-blue-400" />
