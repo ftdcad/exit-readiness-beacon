@@ -483,6 +483,9 @@ export default function KPIandOKRPage() {
     };
 
     setMetrics([...metrics, newMetric]);
+    setActiveTab(type);
+    setShowTemplates(false);
+    setShowSetup(true); // Keep setup panel open
     
     if (type === 'OKR') {
       setKeyResults({
@@ -810,21 +813,13 @@ ${i + 1}. ${kr.keyResult}
               )}
 
               {/* Save buttons */}
-              <div className="flex gap-4">
+              <div className="flex gap-4 justify-end">
                 <Button
                   onClick={saveMetrics}
                   disabled={saving}
-                  className="bg-green-500 hover:bg-green-600 text-white"
+                  className="bg-blue-500 hover:bg-blue-600 text-white"
                 >
                   {saving ? 'Saving...' : 'Save Metrics'}
-                </Button>
-                <Button
-                  onClick={exportMetrics}
-                  variant="outline"
-                  className="border-white/20 text-white hover:bg-white/10"
-                >
-                  <Download className="w-4 h-4 mr-2" />
-                  Export
                 </Button>
               </div>
             </div>
@@ -832,202 +827,151 @@ ${i + 1}. ${kr.keyResult}
         </Card>
 
         {/* Dashboard Section (Always Visible) */}
-        {metrics.length > 0 && (
-          <>
-            {/* Executive Summary - 3 Cards Only */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-              <Card className="bg-gradient-to-br from-green-500/20 to-emerald-600/20 border-green-500/30 p-6">
-                <div className="flex items-center justify-between mb-2">
-                  <DollarSign className="w-8 h-8 text-green-400" />
-                  <span className="text-xs text-green-400 font-medium">OPPORTUNITY</span>
-                </div>
-                <p className="text-3xl font-bold text-white mb-1">
-                  ${(summaryData.remainingOpportunity / 1000000).toFixed(1)}M
-                </p>
-                <p className="text-sm text-white/70">Additional value available</p>
-              </Card>
-              
-              <Card className="bg-gradient-to-br from-blue-500/20 to-indigo-600/20 border-blue-500/30 p-6">
-                <div className="flex items-center justify-between mb-2">
-                  <Target className="w-8 h-8 text-blue-400" />
-                  <span className="text-xs text-blue-400 font-medium">CAPTURED</span>
-                </div>
-                <p className="text-3xl font-bold text-white mb-1">
-                  ${(summaryData.capturedValue / 1000000).toFixed(1)}M
-                </p>
-                <p className="text-sm text-white/70">Value already created</p>
-              </Card>
-              
-              <Card className={`bg-gradient-to-br ${
-                summaryData.overallHealth === 'green' 
-                  ? 'from-green-500/20 to-green-600/20 border-green-500/30'
-                  : summaryData.overallHealth === 'amber'
-                  ? 'from-yellow-500/20 to-amber-600/20 border-yellow-500/30'
-                  : 'from-red-500/20 to-red-600/20 border-red-500/30'
-              } p-6`}>
-                <div className="flex items-center justify-between mb-2">
-                  {summaryData.overallHealth === 'green' ? (
-                    <CheckCircle className="w-8 h-8 text-green-400" />
-                  ) : (
-                    <AlertTriangle className={`w-8 h-8 ${
-                      summaryData.overallHealth === 'amber' ? 'text-yellow-400' : 'text-red-400'
-                    }`} />
-                  )}
-                  <span className={`text-xs font-medium ${
-                    summaryData.overallHealth === 'green' ? 'text-green-400' :
-                    summaryData.overallHealth === 'amber' ? 'text-yellow-400' : 'text-red-400'
-                  }`}>STATUS</span>
-                </div>
-                <p className="text-3xl font-bold text-white mb-1 capitalize">
-                  {summaryData.overallHealth}
-                </p>
-                <p className="text-sm text-white/70">Overall health score</p>
-              </Card>
-            </div>
-
-            {/* Main Content Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-              {/* Metrics Overview - 2 columns */}
-              <div className="lg:col-span-2">
-                <Card className="bg-white/5 border-white/10 p-6">
-                  <h2 className="text-xl font-semibold text-white mb-6">Performance Overview</h2>
-                  
-                  {/* Top 3 Gauges */}
-                  <div className="grid grid-cols-3 gap-4 mb-6">
-                    {dashboardMetrics.slice(0, 3).map(metric => (
-                      <SimpleGauge
-                        key={metric.id}
-                        value={metric.progress}
-                        label={metric.name}
-                        status={metric.status}
-                      />
-                    ))}
-                  </div>
-                  
-                  {/* All Metrics List */}
-                  <div className="space-y-3">
-                    {dashboardMetrics.map(metric => (
-                      <div key={metric.id} className="bg-black/20 rounded-lg p-4">
-                        <div className="flex items-center justify-between mb-2">
-                          <div className="flex items-center gap-3">
-                            <div className={`w-2 h-2 rounded-full ${
-                              metric.status === 'green' ? 'bg-green-400' :
-                              metric.status === 'amber' ? 'bg-yellow-400' :
-                              'bg-red-400'
-                            }`} />
-                            <h3 className="font-medium text-white">{metric.name}</h3>
-                          </div>
-                          <TrendLine 
-                            data={metric.trend} 
-                            positive={metric.trend[metric.trend.length - 1] > metric.trend[0]}
-                          />
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <div className="flex-1">
-                            <div className="flex items-baseline gap-2 mb-1">
-                              <span className="text-2xl font-bold text-white">
-                                {metric.current}{metric.unit}
-                              </span>
-                              <span className="text-sm text-white/60">
-                                / {metric.target}{metric.unit}
-                              </span>
-                            </div>
-                            <Progress value={metric.progress} className="h-1.5" />
-                          </div>
-                          <div className="text-right ml-4">
-                            <p className="text-sm font-medium text-green-400">
-                              +${(metric.valueImpact / 1000).toFixed(0)}K
-                            </p>
-                            <p className="text-xs text-white/60">potential</p>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </Card>
-              </div>
-
-              {/* Action Focus - 1 column */}
-              <div>
-                <Card className="bg-gradient-to-br from-amber-500/20 to-orange-500/20 border-amber-500/30 p-6">
-                  <div className="flex items-center gap-2 mb-4">
-                    <AlertTriangle className="w-5 h-5 text-amber-400" />
-                    <h2 className="text-lg font-semibold text-white">Focus Actions</h2>
-                  </div>
-                  
-                  <p className="text-sm text-white/70 mb-4">
-                    Complete these for maximum impact:
-                  </p>
-                  
-                  <div className="space-y-3">
-                    {topOpportunities.map((metric, index) => (
-                      <div key={metric.id} className="bg-black/20 rounded-lg p-3">
-                        <div className="flex items-start justify-between mb-2">
-                          <span className="text-xs font-bold text-amber-400">
-                            #{index + 1} PRIORITY
-                          </span>
-                          <span className="text-xs text-green-400 font-medium">
-                            +${(metric.valueImpact / 1000).toFixed(0)}K
-                          </span>
-                        </div>
-                        <h4 className="font-medium text-white mb-1">{metric.name}</h4>
-                        <p className="text-sm text-white/80 mb-2">{metric.action}</p>
-                        <button className="text-xs text-amber-400 hover:text-amber-300 flex items-center gap-1">
-                          Get detailed plan
-                          <ArrowRight className="w-3 h-3" />
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                  
-                  <div className="mt-6 p-3 bg-green-500/10 border border-green-500/30 rounded-lg">
-                    <p className="text-xs text-white/70 mb-1">Complete all 3 actions:</p>
-                    <p className="text-lg font-bold text-green-400">
-                      +${(topOpportunities.reduce((sum, m) => sum + m.valueImpact, 0) / 1000000).toFixed(1)}M
-                    </p>
-                    <p className="text-xs text-white/70">in additional value</p>
-                  </div>
-                </Card>
-              </div>
-            </div>
-
-            {/* Bottom CTA */}
-            <Card className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 border-blue-500/30 p-6">
+        <div className="space-y-8">
+          {/* Executive Summary */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <Card className="glass-card p-6">
               <div className="flex items-center justify-between">
-                <div className="flex items-start gap-4">
-                  <Info className="w-6 h-6 text-blue-400 flex-shrink-0" />
-                  <div>
-                    <h3 className="text-lg font-semibold text-white mb-1">
-                      Next Review: {summaryData.daysToNextReview} days
-                    </h3>
-                    <p className="text-white/70">
-                      Stay on track with monthly performance reviews to maximize your exit value.
-                    </p>
-                  </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Total KPIs</p>
+                  <p className="text-3xl font-bold text-primary">
+                    {metrics.filter(m => m.metricType === 'KPI').length}
+                  </p>
                 </div>
-                <button className="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition whitespace-nowrap">
-                  Schedule Review
-                </button>
+                <TrendingUp className="w-8 h-8 text-primary" />
               </div>
             </Card>
-          </>
-        )}
+            
+            <Card className="glass-card p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground">Active OKRs</p>
+                  <p className="text-3xl font-bold text-primary">
+                    {metrics.filter(m => m.metricType === 'OKR').length}
+                  </p>
+                </div>
+                <Target className="w-8 h-8 text-primary" />
+              </div>
+            </Card>
+            
+            <Card className="glass-card p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground">Avg. Progress</p>
+                  <p className="text-3xl font-bold text-primary">
+                    {metrics.length > 0 ? Math.round(metrics.reduce((acc, m) => acc + calculateProgress(m), 0) / metrics.length) : 0}%
+                  </p>
+                </div>
+                <BarChart3 className="w-8 h-8 text-primary" />
+              </div>
+            </Card>
+          </div>
 
-        {/* Empty state when no metrics */}
-        {metrics.length === 0 && !showSetup && (
-          <Card className="bg-white/5 border-white/10 p-8 text-center">
-            <Target className="w-16 h-16 text-white/40 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-white mb-2">No KPIs defined yet</h3>
-            <p className="text-white/70 mb-4">Create your first value drivers to see your performance dashboard</p>
-            <Button 
-              onClick={() => setShowSetup(true)}
-              className="bg-blue-500 hover:bg-blue-600 text-white"
-            >
-              <Plus className="w-4 h-4 mr-2" />
-              Create Your First KPI
-            </Button>
-          </Card>
-        )}
+          {metrics.length > 0 ? (
+            <>
+              {/* Performance Overview */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <Card className="glass-card p-6">
+                  <h3 className="text-xl font-semibold mb-6 flex items-center gap-2">
+                    <Target className="w-5 h-5" />
+                    Performance Gauges
+                  </h3>
+                  <div className="grid grid-cols-2 gap-4">
+                    {metrics.slice(0, 4).map((metric) => (
+                      <div key={metric.id} className="text-center">
+                        <SimpleGauge 
+                          value={calculateProgress(metric)} 
+                          label={metric.metricName || 'Untitled Metric'}
+                          status={metric.status === 'Achieved' ? 'green' : metric.status === 'On Track' ? 'amber' : 'red'}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </Card>
+
+                <Card className="glass-card p-6">
+                  <h3 className="text-xl font-semibold mb-6 flex items-center gap-2">
+                    <TrendingUp className="w-5 h-5" />
+                    Metrics Overview
+                  </h3>
+                  <div className="space-y-4">
+                    {metrics.slice(0, 5).map((metric) => (
+                      <div key={metric.id} className="flex items-center justify-between">
+                        <div className="flex-1">
+                          <p className="font-medium">{metric.metricName || 'Untitled Metric'}</p>
+                          <p className="text-sm text-muted-foreground">
+                            {metric.currentValue} / {metric.targetValue} {metric.unitOfMeasure}
+                          </p>
+                        </div>
+                        <div className="text-right">
+                          <p className={`text-sm font-medium ${getStatusColor(metric.status)}`}>
+                            {calculateProgress(metric)}%
+                          </p>
+                          <p className="text-xs text-muted-foreground">{metric.status}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </Card>
+              </div>
+
+              {/* Action Focus Section */}
+              <Card className="glass-card p-6">
+                <h3 className="text-xl font-semibold mb-6 flex items-center gap-2">
+                  <AlertCircle className="w-5 h-5" />
+                  Action Focus
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {metrics
+                    .filter(m => calculateProgress(m) < 70)
+                    .slice(0, 3)
+                    .map((metric) => (
+                      <div key={metric.id} className="p-4 bg-orange-500/10 border border-orange-500/20 rounded-lg">
+                        <div className="flex items-center gap-2 mb-2">
+                          <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+                          <span className="text-sm font-medium">{metric.metricType}</span>
+                        </div>
+                        <p className="font-semibold">{metric.metricName || 'Untitled Metric'}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {calculateProgress(metric)}% complete - Needs attention
+                        </p>
+                        <div className="mt-2">
+                          <div className="w-full bg-orange-900/20 rounded-full h-2">
+                            <div 
+                              className="bg-orange-500 h-2 rounded-full transition-all duration-300"
+                              style={{ width: `${calculateProgress(metric)}%` }}
+                            ></div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  {metrics.filter(m => calculateProgress(m) < 70).length === 0 && (
+                    <div className="col-span-full text-center py-8 text-muted-foreground">
+                      <CheckCircle className="w-12 h-12 mx-auto mb-2 text-green-500" />
+                      <p>All metrics are performing well!</p>
+                    </div>
+                  )}
+                </div>
+              </Card>
+            </>
+          ) : (
+            <Card className="glass-card p-12 text-center">
+              <Target className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
+              <h3 className="text-xl font-semibold mb-2">No KPIs or OKRs Yet</h3>
+              <p className="text-muted-foreground mb-6">
+                Start tracking your performance by adding your first KPI or OKR above.
+              </p>
+              <Button 
+                onClick={() => setShowSetup(true)}
+                className="bg-blue-500 hover:bg-blue-600 text-white"
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                Get Started
+              </Button>
+            </Card>
+          )}
+        </div>
+
       </div>
     </div>
   );
