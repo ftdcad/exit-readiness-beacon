@@ -17,6 +17,11 @@ export const useNDASubmission = () => {
     setIsSubmitting(true);
     
     try {
+      // Debug logging
+      console.log('=== NDA SUBMISSION DEBUG ===');
+      console.log('Supabase client available:', !!supabase);
+      console.log('Supabase client type:', typeof supabase);
+
       // Get user's IP address (optional - don't let this block submission)
       let ip = null;
       try {
@@ -30,8 +35,13 @@ export const useNDASubmission = () => {
 
       // Submit NDA record to Supabase
       const session = await supabase.auth.getSession();
-      console.log('Supabase client auth session:', JSON.stringify(session, null, 2));
-      console.log('About to insert:', JSON.stringify({
+      console.log('Current session:', JSON.stringify(session, null, 2));
+
+      // Check auth state
+      console.log('Auth available:', !!supabase.auth);
+      console.log('Session data available:', !!session.data.session);
+
+      console.log('Data being inserted:', JSON.stringify({
         first_name: formData.firstName,
         last_name: formData.lastName,
         email: formData.email,
