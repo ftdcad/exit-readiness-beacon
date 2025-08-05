@@ -29,9 +29,9 @@ export const useNDASubmission = () => {
       }
 
       // Submit NDA record to Supabase
-      console.log('Supabase client auth:', supabase.auth);
-      console.log('Supabase client instance:', supabase);
-      console.log('About to insert:', {
+      const session = await supabase.auth.getSession();
+      console.log('Supabase client auth session:', JSON.stringify(session, null, 2));
+      console.log('About to insert:', JSON.stringify({
         first_name: formData.firstName,
         last_name: formData.lastName,
         email: formData.email,
@@ -39,7 +39,7 @@ export const useNDASubmission = () => {
         ip_address: ip,
         user_agent: navigator.userAgent,
         status: 'accepted'
-      });
+      }, null, 2));
 
       const { data, error } = await supabase
         .from('nda_records')
