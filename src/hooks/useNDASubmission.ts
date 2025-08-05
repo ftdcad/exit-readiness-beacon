@@ -19,8 +19,9 @@ export const useNDASubmission = () => {
     try {
       // At the very top of submitNDA:
       console.log('=== DEBUGGING 401 ERROR ===');
-      console.log('Supabase client available:', !!supabase);
-      console.log('Supabase client type:', typeof supabase);
+      console.log('Supabase URL:', (supabase as any).supabaseUrl);
+      console.log('Supabase Key exists:', !!(supabase as any).supabaseKey);
+      console.log('Supabase Key first 10 chars:', (supabase as any).supabaseKey?.substring(0, 10));
 
       // Get user's IP address (optional - don't let this block submission)
       let ip = null;
@@ -36,7 +37,7 @@ export const useNDASubmission = () => {
       // Before the insert:
       const { data: session } = await supabase.auth.getSession();
       console.log('Session:', session);
-      console.log('Auth header check - session exists:', !!session);
+      console.log('Auth header:', (supabase as any).rest.headers?.Authorization || 'NO AUTH HEADER');
 
       console.log('Data being inserted:', JSON.stringify({
         first_name: formData.firstName,
