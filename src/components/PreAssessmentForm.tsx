@@ -60,6 +60,8 @@ const PreAssessmentForm = () => {
     currentChallenges: "",
     
     // Contact
+    phone: "",
+    companyWebsite: "",
     preferredContact: "",
     
     // Add-backs for EBITDA normalization
@@ -1284,7 +1286,7 @@ Confidential. Strategic. Unbiased.`}
                       </p>
                     </CardHeader>
 
-                     <div className="grid gap-4">
+                      <div className="grid gap-4">
                       <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
                           <Label htmlFor="email">Email Address</Label>
@@ -1297,6 +1299,32 @@ Confidential. Strategic. Unbiased.`}
                             placeholder="your@email.com"
                           />
                         </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-white/80 mb-2">
+                          Phone Number
+                        </label>
+                        <input
+                          type="tel"
+                          value={formData.phone || ''}
+                          onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                          className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-white/50 focus:border-white/20 focus:outline-none"
+                          placeholder="(555) 123-4567"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-white/80 mb-2">
+                          Company Website
+                        </label>
+                        <input
+                          type="text"
+                          value={formData.companyWebsite || ''}
+                          onChange={(e) => setFormData({...formData, companyWebsite: e.target.value})}
+                          className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-white/50 focus:border-white/20 focus:outline-none"
+                          placeholder="www.example.com"
+                        />
                       </div>
 
                       <div className="space-y-2">

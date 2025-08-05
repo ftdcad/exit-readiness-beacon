@@ -33,6 +33,8 @@ interface ContactFormData {
   
   // Contact Info
   email: string;
+  phone?: string;
+  companyWebsite?: string;
   preferredContact: string;
   
   // Add-backs for EBITDA normalization
