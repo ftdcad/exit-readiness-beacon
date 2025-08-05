@@ -23,13 +23,12 @@ import AssetWorkshopPage from "./pages/AssetWorkshopPage";
 import QuickWinsPage from "./pages/QuickWinsPage";
 import KnowYourBuyerPage from "./pages/KnowYourBuyerPage";
 import DataRoomPage from "./pages/DataRoomPage";
-import ExitReadinessAssessmentPage from "./pages/ExitReadinessAssessmentPage";
+import ExecutiveDiscoveryInterviewPage from "./pages/ExecutiveDiscoveryInterviewPage";
 import PEReadyMetricsPage from "./pages/PEReadyMetricsPage";
 import StrategyDocBuilderPage from "./pages/StrategyDocBuilderPage";
 import KPIandOKRPage from "./pages/KPIandOKRPage";
 import IndustryMultiplesPage from "./pages/IndustryMultiplesPage";
 import AssessmentPage from "./pages/AssessmentPage";
-import PathDiscoveryPage from "./pages/PathDiscoveryPage";
 import { ScenarioPlanningPage } from "./pages/ScenarioPlanningPage";
 import { ScheduleConsultationPage } from "./pages/ScheduleConsultationPage";
 
@@ -99,11 +98,11 @@ const App = () => (
             } 
           />
           <Route 
-            path="/portal/week-1/path-discovery" 
+            path="/portal/week-1/executive-discovery" 
             element={
               <ClientRoute>
                 <ClientPortalLayout>
-                  <PathDiscoveryPage />
+                  <ExecutiveDiscoveryInterviewPage />
                 </ClientPortalLayout>
               </ClientRoute>
             } 
@@ -160,16 +159,6 @@ const App = () => (
           />
           
           {/* Week 2 Routes */}
-          <Route 
-            path="/portal/week-2/assessment" 
-            element={
-              <ClientRoute>
-                <ClientPortalLayout>
-                  <ExitReadinessAssessmentPage />
-                </ClientPortalLayout>
-              </ClientRoute>
-            } 
-          />
           <Route 
             path="/portal/week-2/value-builder" 
             element={
