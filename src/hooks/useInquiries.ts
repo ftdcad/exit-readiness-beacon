@@ -92,6 +92,85 @@ export const useUpdateInquiry = () => {
   });
 };
 
+export const useDeleteInquiry = () => {
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+
+  return useMutation({
+    mutationFn: async (inquiryId: string) => {
+      // First, log the deletion
+      const { data: inquiry } = await supabase
+        .from('contact_inquiries')
+        .select('company_name')
+        .eq('id', inquiryId)
+        .single();
+
+      await supabase.from('activity_log').insert({
+        action_type: 'company_deleted',
+        company_id: inquiryId,
+        details: `Deleted company ${inquiry?.company_name || 'Unknown'}`
+      });
+
+      // Delete related records in correct order
+      // 1. Delete add_back_categories (via financial_assessments)
+      const { data: assessments } = await supabase
+        .from('financial_assessments')
+        .select('id')
+        .eq('company_id', inquiryId);
+
+      if (assessments?.length) {
+        const assessmentIds = assessments.map(a => a.id);
+        await supabase
+          .from('add_back_categories')
+          .delete()
+          .in('assessment_id', assessmentIds);
+      }
+
+      // 2. Delete financial_assessments
+      await supabase
+        .from('financial_assessments')
+        .delete()
+        .eq('company_id', inquiryId);
+
+      // 3. Delete company_comments
+      await supabase
+        .from('company_comments')
+        .delete()
+        .eq('company_id', inquiryId);
+
+      // 4. Delete assessment_access
+      await supabase
+        .from('assessment_access')
+        .delete()
+        .eq('contact_inquiry_id', inquiryId);
+
+      // 5. Delete main contact_inquiries record
+      const { error } = await supabase
+        .from('contact_inquiries')
+        .delete()
+        .eq('id', inquiryId);
+
+      if (error) throw error;
+      return inquiryId;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['inquiries'] });
+      queryClient.invalidateQueries({ queryKey: ['inquiry-stats'] });
+      toast({
+        title: "Success",
+        description: "Company and all related data deleted successfully",
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: "Failed to delete company: " + error.message,
+        variant: "destructive",
+      });
+    },
+  });
+};
+
 export const useInquiryStats = () => {
   return useQuery({
     queryKey: ['inquiry-stats'],

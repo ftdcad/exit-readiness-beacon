@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { useInquiries } from '@/hooks/useInquiries';
+import { useInquiries, useDeleteInquiry } from '@/hooks/useInquiries';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Eye, Filter } from 'lucide-react';
+import { Eye, Filter, Trash2 } from 'lucide-react';
 
 const AdminInquiries = () => {
   const [statusFilter, setStatusFilter] = useState<string>('');
@@ -16,6 +16,18 @@ const AdminInquiries = () => {
     status: statusFilter && statusFilter !== 'all' ? statusFilter : undefined,
     industry: industryFilter && industryFilter !== 'all' ? industryFilter : undefined,
   });
+
+  const deleteInquiry = useDeleteInquiry();
+
+  const handleDelete = async (inquiry: any) => {
+    const confirmed = window.confirm(
+      `Delete Company: ${inquiry.company_name}?\n\nThis will permanently delete:\n• Company information\n• Financial assessments\n• Comments and notes\n• All related data\n\nThis action cannot be undone.`
+    );
+    
+    if (confirmed) {
+      deleteInquiry.mutate(inquiry.id);
+    }
+  };
 
   const getStatusBadge = (status: string) => {
     const variants = {
@@ -155,13 +167,24 @@ const AdminInquiries = () => {
                       {formatDate(inquiry.created_at)}
                     </TableCell>
                     <TableCell>
-                      <Button 
-                        variant="ghost" 
-                        size="sm"
-                        onClick={() => window.location.href = `/admin/companies/${inquiry.id}`}
-                      >
-                        <Eye className="h-4 w-4" />
-                      </Button>
+                      <div className="flex items-center gap-2">
+                        <Button 
+                          variant="ghost" 
+                          size="sm"
+                          onClick={() => window.location.href = `/admin/companies/${inquiry.id}`}
+                        >
+                          <Eye className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleDelete(inquiry)}
+                          disabled={deleteInquiry.isPending}
+                          className="text-destructive hover:text-destructive"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
                     </TableCell>
                   </TableRow>
                 )) || []}
