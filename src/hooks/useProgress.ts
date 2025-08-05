@@ -25,8 +25,8 @@ export const useProgress = () => {
 
   // Module counts per week (matches sidebar data)
   const weekModuleCounts = {
-    1: 5, // Interactive Glossary, Know Your Buyer, EBITDA Mastery, Asset Workshop, Quick Wins
-    2: 6, // Exit Readiness Assessment, 90-Day Value Builder, PE-Ready Metrics, EBITDA Impact Calculator, Industry Multiple Finder, Exit Scenario Planner
+    1: 7, // Interactive Glossary, Know Your Buyer, Executive Discovery, Data Room, EBITDA Mastery, Asset Workshop, Quick Wins
+    2: 5, // Strategy Doc Builder, KPIs and OKRs, EBITDA Calculator, Industry Multipliers, Scenario Planning
     3: 3, // KPI Dashboard, PE Benchmarks, Management Scorecard
     4: 3  // Due Diligence Checklist, LOI Review, Final Report
   };
