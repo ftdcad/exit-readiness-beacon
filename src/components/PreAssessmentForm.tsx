@@ -60,7 +60,6 @@ const PreAssessmentForm = () => {
     currentChallenges: "",
     
     // Contact
-    phone: "",
     preferredContact: "",
     
     // Add-backs for EBITDA normalization
@@ -77,7 +76,6 @@ const PreAssessmentForm = () => {
 
     // Enhanced fields
     jobTitle: "",
-    companyWebsite: "",
     companySize: "",
     howDidYouHear: "",
   });
@@ -148,10 +146,8 @@ const PreAssessmentForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // DEBUG: Log EXACTLY what's in the problem fields
-    console.log('Phone:', formData.phone, 'Type:', typeof formData.phone);
-    console.log('Website:', formData.companyWebsite, 'Type:', typeof formData.companyWebsite);
-    console.log('Full formData:', JSON.stringify(formData, null, 2));
+    // DEBUG: Check if form submits without phone/website fields
+    console.log('Form data without phone/website:', JSON.stringify(formData, null, 2));
 
     // Get NDA record ID if available
     const ndaStatus = checkNDAStatus();
@@ -182,14 +178,14 @@ const PreAssessmentForm = () => {
 
     console.log('Submitting with ndaRecordId:', ndaRecordId);
     
-    // Before submitting, clean the data
-    const cleanedData = {
+    // Temporarily provide empty values for removed fields
+    const dataWithRequiredFields = {
       ...formData,
-      phone: formData.phone || '',
-      companyWebsite: formData.companyWebsite || ''
+      phone: '', // Temporarily removed
+      companyWebsite: '' // Temporarily removed
     };
     
-    const result = await submitContact(cleanedData, ndaRecordId);
+    const result = await submitContact(dataWithRequiredFields, ndaRecordId);
     
     if (result.success) {
       // Could redirect to thank you page or show success state
@@ -1279,19 +1275,8 @@ Confidential. Strategic. Unbiased.`}
                       </p>
                     </CardHeader>
 
-                    <div className="grid gap-4">
+                     <div className="grid gap-4">
                       <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="phone">Phone Number</Label>
-                          <Input
-                            id="phone"
-                            type="text"
-                            value={formData.phone}
-                            onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
-                            className="bg-background-hover border-border/50"
-                          />
-                        </div>
-
                         <div className="space-y-2">
                           <Label htmlFor="email">Email Address</Label>
                           <Input
@@ -1303,9 +1288,7 @@ Confidential. Strategic. Unbiased.`}
                             placeholder="your@email.com"
                           />
                         </div>
-                      </div>
 
-                      <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
                           <Label htmlFor="jobTitle">Your Job Title</Label>
                           <Input
@@ -1314,18 +1297,6 @@ Confidential. Strategic. Unbiased.`}
                             onChange={(e) => setFormData(prev => ({ ...prev, jobTitle: e.target.value }))}
                             className="bg-background-hover border-border/50"
                             placeholder="e.g., CEO, Founder, Owner"
-                          />
-                        </div>
-
-                        <div className="space-y-2">
-                          <Label htmlFor="companyWebsite">Company Website</Label>
-                          <Input
-                            id="companyWebsite"
-                            type="text"
-                            value={formData.companyWebsite || ''}
-                            onChange={(e) => setFormData(prev => ({ ...prev, companyWebsite: e.target.value }))}
-                            className="bg-background-hover border-border/50"
-                            placeholder="https://example.com (optional)"
                           />
                         </div>
                       </div>
