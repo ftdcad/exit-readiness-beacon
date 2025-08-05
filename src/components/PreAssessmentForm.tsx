@@ -146,6 +146,13 @@ const PreAssessmentForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    // CRITICAL FIX: Only allow submission if we're on the final step
+    // This prevents auto-submission when reaching step 9
+    if (step !== totalSteps) {
+      console.log('Form submission prevented - not on final step. Current step:', step, 'Total steps:', totalSteps);
+      return;
+    }
+    
     console.log('=== FORM SUBMISSION DEBUG ===');
     console.log('Form data:', JSON.stringify(formData, null, 2));
     console.log('Attempting submission...');
@@ -1380,7 +1387,8 @@ Confidential. Strategic. Unbiased.`}
                       </Button>
                     ) : (
                       <Button 
-                        type="submit" 
+                        type="button"
+                        onClick={handleSubmit}
                         disabled={isSubmitting}
                         className="bg-success hover:bg-success/90 font-semibold button-shadow"
                       >
