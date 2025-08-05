@@ -98,53 +98,83 @@ export const useDeleteInquiry = () => {
 
   return useMutation({
     mutationFn: async (inquiryId: string) => {
+      console.log('Starting delete process for company:', inquiryId);
+      
       // Delete in EXACT order to avoid foreign key violations:
       
       // 1. First delete all activity_log entries for this company
-      await supabase
+      console.log('Step 1: Checking activity_log entries...');
+      const { data: activities } = await supabase
+        .from('activity_log')
+        .select('*')
+        .eq('company_id', inquiryId);
+      console.log('Found activities to delete:', activities?.length || 0, activities);
+      
+      console.log('Step 1: Deleting activity_log entries...');
+      const { error: activityError } = await supabase
         .from('activity_log')
         .delete()
         .eq('company_id', inquiryId);
+      console.log('Activity log delete result:', activityError);
+      if (activityError) throw new Error(`Failed to delete activity_log: ${activityError.message}`);
       
       // 2. Delete company_comments
-      await supabase
+      console.log('Step 2: Deleting company_comments...');
+      const { error: commentsError } = await supabase
         .from('company_comments')
         .delete()
         .eq('company_id', inquiryId);
+      console.log('Comments delete result:', commentsError);
+      if (commentsError) throw new Error(`Failed to delete company_comments: ${commentsError.message}`);
       
       // 3. Delete assessment_access records
-      await supabase
+      console.log('Step 3: Deleting assessment_access...');
+      const { error: accessError } = await supabase
         .from('assessment_access')
         .delete()
         .eq('contact_inquiry_id', inquiryId);
+      console.log('Assessment access delete result:', accessError);
+      if (accessError) throw new Error(`Failed to delete assessment_access: ${accessError.message}`);
       
       // 4. Delete add_back_categories (via financial_assessments)
-      const { data: assessments } = await supabase
+      console.log('Step 4: Finding financial assessments...');
+      const { data: assessments, error: assessmentsSelectError } = await supabase
         .from('financial_assessments')
         .select('id')
         .eq('company_id', inquiryId);
+      console.log('Found assessments:', assessments?.length || 0, assessments);
+      if (assessmentsSelectError) throw new Error(`Failed to select assessments: ${assessmentsSelectError.message}`);
 
       if (assessments?.length) {
+        console.log('Step 4: Deleting add_back_categories...');
         const assessmentIds = assessments.map(a => a.id);
-        await supabase
+        const { error: addBacksError } = await supabase
           .from('add_back_categories')
           .delete()
           .in('assessment_id', assessmentIds);
+        console.log('Add backs delete result:', addBacksError);
+        if (addBacksError) throw new Error(`Failed to delete add_back_categories: ${addBacksError.message}`);
       }
 
       // 5. Delete financial_assessments
-      await supabase
+      console.log('Step 5: Deleting financial_assessments...');
+      const { error: financialError } = await supabase
         .from('financial_assessments')
         .delete()
         .eq('company_id', inquiryId);
+      console.log('Financial assessments delete result:', financialError);
+      if (financialError) throw new Error(`Failed to delete financial_assessments: ${financialError.message}`);
       
       // 6. Finally delete the main contact_inquiries record
-      const { error } = await supabase
+      console.log('Step 6: Deleting main contact_inquiries record...');
+      const { error: mainError } = await supabase
         .from('contact_inquiries')
         .delete()
         .eq('id', inquiryId);
+      console.log('Main record delete result:', mainError);
+      if (mainError) throw new Error(`Failed to delete contact_inquiries: ${mainError.message}`);
 
-      if (error) throw error;
+      console.log('Delete process completed successfully for company:', inquiryId);
       return inquiryId;
     },
     onSuccess: () => {
