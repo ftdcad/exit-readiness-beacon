@@ -108,8 +108,11 @@ export const useContactSubmission = () => {
       
       console.log('Attempting to insert data:', insertData);
 
+      // Ensure we're making an anonymous request by clearing any cached auth
+      await supabase.auth.signOut();
+      
       // Submit contact inquiry to Supabase
-      const { data, error } = await (supabase as any)
+      const { data, error } = await supabase
         .from('contact_inquiries')
         .insert(insertData)
         .select()
