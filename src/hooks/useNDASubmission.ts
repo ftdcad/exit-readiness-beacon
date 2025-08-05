@@ -17,12 +17,6 @@ export const useNDASubmission = () => {
     setIsSubmitting(true);
     
     try {
-      // At the very top of submitNDA:
-      console.log('=== DEBUGGING 401 ERROR ===');
-      console.log('Supabase URL:', (supabase as any).supabaseUrl);
-      console.log('Supabase Key exists:', !!(supabase as any).supabaseKey);
-      console.log('Supabase Key first 10 chars:', (supabase as any).supabaseKey?.substring(0, 10));
-
       // Get user's IP address (optional - don't let this block submission)
       let ip = null;
       try {
@@ -33,21 +27,6 @@ export const useNDASubmission = () => {
         console.warn('Could not fetch IP address:', ipError);
         // Continue without IP - don't block submission
       }
-
-      // Before the insert:
-      const { data: session } = await supabase.auth.getSession();
-      console.log('Session:', session);
-      console.log('Auth header:', (supabase as any).rest.headers?.Authorization || 'NO AUTH HEADER');
-
-      console.log('Data being inserted:', JSON.stringify({
-        first_name: formData.firstName,
-        last_name: formData.lastName,
-        email: formData.email,
-        company: formData.company,
-        ip_address: ip,
-        user_agent: navigator.userAgent,
-        status: 'accepted'
-      }, null, 2));
 
       const { data, error } = await supabase
         .from('nda_records')
