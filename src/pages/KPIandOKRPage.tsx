@@ -181,6 +181,7 @@ export default function KPIandOKRPage() {
   const [activeTab, setActiveTab] = useState<'KPI' | 'OKR'>('KPI');
   const [showTemplates, setShowTemplates] = useState(false);
   const [showSetup, setShowSetup] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   // Dashboard state
   const [dashboardMetrics, setDashboardMetrics] = useState([
@@ -485,7 +486,8 @@ export default function KPIandOKRPage() {
     setMetrics([...metrics, newMetric]);
     setActiveTab(type);
     setShowTemplates(false);
-    setShowSetup(true); // Keep setup panel open
+    setShowSetup(true); // CRITICAL: Keep setup panel open
+    setIsEditing(true); // Mark as actively editing
     
     if (type === 'OKR') {
       setKeyResults({
@@ -635,7 +637,7 @@ ${i + 1}. ${kr.keyResult}
         <Card className="mb-8 bg-white/5 border-white/10">
           <div 
             className="p-4 flex items-center justify-between cursor-pointer hover:bg-white/5 transition-colors"
-            onClick={() => setShowSetup(!showSetup)}
+            onClick={() => !isEditing && setShowSetup(!showSetup)}
           >
             <div className="flex items-center gap-3">
               <Edit3 className="w-5 h-5 text-blue-400" />
@@ -666,30 +668,37 @@ ${i + 1}. ${kr.keyResult}
 
               {/* Tab Navigation */}
               <div className="flex items-center gap-4 mt-6 mb-6">
-                <div className="flex gap-2">
-                  <button
+                <div className="grid grid-cols-2 gap-2 w-64">
+                  <Button
                     onClick={() => setActiveTab('KPI')}
-                    className={`px-6 py-3 rounded-lg transition flex-1 min-w-[120px] ${
-                      activeTab === 'KPI' ? 'bg-blue-500 text-white' : 'bg-white/10 text-white/70 hover:bg-white/20'
+                    variant={activeTab === 'KPI' ? 'default' : 'outline'}
+                    className={`h-12 ${
+                      activeTab === 'KPI' 
+                        ? 'bg-blue-500 text-white border-blue-500 hover:bg-blue-600' 
+                        : 'bg-white/10 text-white/70 border-white/20 hover:bg-white/20'
                     }`}
                   >
                     KPIs ({metrics.filter(m => m.metricType === 'KPI').length})
-                  </button>
-                  <button
+                  </Button>
+                  <Button
                     onClick={() => setActiveTab('OKR')}
-                    className={`px-6 py-3 rounded-lg transition flex-1 min-w-[120px] ${
-                      activeTab === 'OKR' ? 'bg-blue-500 text-white' : 'bg-white/10 text-white/70 hover:bg-white/20'
+                    variant={activeTab === 'OKR' ? 'default' : 'outline'}
+                    className={`h-12 ${
+                      activeTab === 'OKR' 
+                        ? 'bg-blue-500 text-white border-blue-500 hover:bg-blue-600' 
+                        : 'bg-white/10 text-white/70 border-white/20 hover:bg-white/20'
                     }`}
                   >
                     OKRs ({metrics.filter(m => m.metricType === 'OKR').length})
-                  </button>
+                  </Button>
                 </div>
-                <button
+                <Button
                   onClick={() => setShowTemplates(!showTemplates)}
-                  className="ml-auto px-4 py-3 bg-green-500/20 text-green-400 rounded-lg hover:bg-green-500/30 transition"
+                  variant="outline"
+                  className="ml-auto bg-green-500/20 text-green-400 border-green-500/30 hover:bg-green-500/30"
                 >
                   PE Value Drivers
-                </button>
+                </Button>
               </div>
 
               {/* Templates */}
@@ -716,17 +725,17 @@ ${i + 1}. ${kr.keyResult}
               )}
 
               {/* Add buttons */}
-              <div className="flex gap-4 mb-6">
+              <div className="grid grid-cols-2 gap-4 mb-6 max-w-md">
                 <Button 
                   onClick={() => addMetric('KPI')}
-                  className="bg-blue-500 hover:bg-blue-600 text-white flex-1 max-w-[200px]"
+                  className="bg-blue-500 hover:bg-blue-600 text-white h-12"
                 >
                   <Plus className="w-4 h-4 mr-2" />
                   Add KPI
                 </Button>
                 <Button 
                   onClick={() => addMetric('OKR')}
-                  className="bg-blue-500 hover:bg-blue-600 text-white flex-1 max-w-[200px]"
+                  className="bg-blue-500 hover:bg-blue-600 text-white h-12"
                 >
                   <Plus className="w-4 h-4 mr-2" />
                   Add OKR
@@ -815,7 +824,10 @@ ${i + 1}. ${kr.keyResult}
               {/* Save buttons */}
               <div className="flex gap-4 justify-end">
                 <Button
-                  onClick={saveMetrics}
+                  onClick={() => {
+                    saveMetrics();
+                    setIsEditing(false);
+                  }}
                   disabled={saving}
                   className="bg-blue-500 hover:bg-blue-600 text-white"
                 >
