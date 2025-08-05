@@ -146,50 +146,59 @@ const PreAssessmentForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // DEBUG: Check if form submits without phone/website fields
-    console.log('Form data without phone/website:', JSON.stringify(formData, null, 2));
+    console.log('=== FORM SUBMISSION DEBUG ===');
+    console.log('Form data:', JSON.stringify(formData, null, 2));
+    console.log('Attempting submission...');
 
-    // Get NDA record ID if available
-    const ndaStatus = checkNDAStatus();
-    
-    // FIX: Make sure ndaRecordId is a string or null, NOT an object
-    let ndaRecordId = null;
-    
-    if (ndaStatus) {
-      // If it's a string, use it
-      if (typeof ndaStatus === 'string') {
-        ndaRecordId = ndaStatus;
-      } 
-      // If it's an object with id property, use that
-      else if (ndaStatus.id && typeof ndaStatus.id === 'string') {
-        ndaRecordId = ndaStatus.id;
+    try {
+      // Get NDA record ID if available
+      const ndaStatus = checkNDAStatus();
+      
+      // FIX: Make sure ndaRecordId is a string or null, NOT an object
+      let ndaRecordId = null;
+      
+      if (ndaStatus) {
+        // If it's a string, use it
+        if (typeof ndaStatus === 'string') {
+          ndaRecordId = ndaStatus;
+        } 
+        // If it's an object with id property, use that
+        else if (ndaStatus.id && typeof ndaStatus.id === 'string') {
+          ndaRecordId = ndaStatus.id;
+        }
+        // If it's the weird object format, extract value
+        else if (ndaStatus.value && ndaStatus.value !== 'undefined') {
+          ndaRecordId = ndaStatus.value;
+        }
       }
-      // If it's the weird object format, extract value
-      else if (ndaStatus.value && ndaStatus.value !== 'undefined') {
-        ndaRecordId = ndaStatus.value;
+      
+      // Final safety check - must be string or null
+      if (ndaRecordId && typeof ndaRecordId !== 'string') {
+        console.error('Invalid ndaRecordId format:', ndaRecordId);
+        ndaRecordId = null;
       }
-    }
-    
-    // Final safety check - must be string or null
-    if (ndaRecordId && typeof ndaRecordId !== 'string') {
-      console.error('Invalid ndaRecordId format:', ndaRecordId);
-      ndaRecordId = null;
-    }
 
-    console.log('Submitting with ndaRecordId:', ndaRecordId);
-    
-    // Temporarily provide empty values for removed fields
-    const dataWithRequiredFields = {
-      ...formData,
-      phone: '', // Temporarily removed
-      companyWebsite: '' // Temporarily removed
-    };
-    
-    const result = await submitContact(dataWithRequiredFields, ndaRecordId);
-    
-    if (result.success) {
-      // Could redirect to thank you page or show success state
-      // For now, form will show success message via toast
+      console.log('Submitting with ndaRecordId:', ndaRecordId);
+      
+      // Temporarily provide empty values for removed fields
+      const dataWithRequiredFields = {
+        ...formData,
+        phone: '', // Temporarily removed
+        companyWebsite: '' // Temporarily removed
+      };
+      
+      const result = await submitContact(dataWithRequiredFields, ndaRecordId);
+      
+      if (result.success) {
+        // Could redirect to thank you page or show success state
+        // For now, form will show success message via toast
+      }
+    } catch (error) {
+      console.error('=== SUBMISSION ERROR ===');
+      console.error('Full error object:', error);
+      console.error('Error message:', error.message);
+      console.error('Error code:', error.code);
+      console.error('=== END ERROR ===');
     }
   };
 
