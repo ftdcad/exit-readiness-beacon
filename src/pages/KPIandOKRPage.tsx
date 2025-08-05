@@ -263,8 +263,10 @@ export default function KPIandOKRPage() {
 
   // Determine if setup should be shown by default
   useEffect(() => {
-    setShowSetup(metrics.length === 0);
-  }, [metrics]);
+    if (!isEditing && metrics.length === 0) {
+      setShowSetup(true);
+    }
+  }, [isEditing]);
 
   const loadMetrics = async () => {
     if (!user) return;
