@@ -147,6 +147,11 @@ const PreAssessmentForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // DEBUG: Log EXACTLY what's in the problem fields
+    console.log('Phone:', formData.phone, 'Type:', typeof formData.phone);
+    console.log('Website:', formData.companyWebsite, 'Type:', typeof formData.companyWebsite);
+    console.log('Full formData:', JSON.stringify(formData, null, 2));
 
     // Get NDA record ID if available
     const ndaStatus = checkNDAStatus();
@@ -177,7 +182,14 @@ const PreAssessmentForm = () => {
 
     console.log('Submitting with ndaRecordId:', ndaRecordId);
     
-    const result = await submitContact(formData, ndaRecordId);
+    // Before submitting, clean the data
+    const cleanedData = {
+      ...formData,
+      phone: formData.phone || '',
+      companyWebsite: formData.companyWebsite || ''
+    };
+    
+    const result = await submitContact(cleanedData, ndaRecordId);
     
     if (result.success) {
       // Could redirect to thank you page or show success state
