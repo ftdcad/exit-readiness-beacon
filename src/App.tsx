@@ -29,6 +29,9 @@ import StrategyDocBuilderPage from "./pages/StrategyDocBuilderPage";
 import KPIandOKRPage from "./pages/KPIandOKRPage";
 import IndustryMultiplesPage from "./pages/IndustryMultiplesPage";
 import AssessmentPage from "./pages/AssessmentPage";
+import PathDiscoveryPage from "./pages/PathDiscoveryPage";
+import { ScenarioPlanningPage } from "./pages/ScenarioPlanningPage";
+import { ScheduleConsultationPage } from "./pages/ScheduleConsultationPage";
 
 const queryClient = new QueryClient();
 
@@ -91,6 +94,16 @@ const App = () => (
               <ClientRoute>
                 <ClientPortalLayout>
                   <KnowYourBuyerPage />
+                </ClientPortalLayout>
+              </ClientRoute>
+            } 
+          />
+          <Route 
+            path="/portal/week-1/path-discovery" 
+            element={
+              <ClientRoute>
+                <ClientPortalLayout>
+                  <PathDiscoveryPage />
                 </ClientPortalLayout>
               </ClientRoute>
             } 
@@ -213,6 +226,26 @@ const App = () => (
               <ClientRoute>
                 <ClientPortalLayout>
                   <IndustryMultiplesPage />
+                </ClientPortalLayout>
+              </ClientRoute>
+            } 
+          />
+          <Route 
+            path="/portal/week-2/scenarios" 
+            element={
+              <ClientRoute>
+                <ClientPortalLayout>
+                  <ScenarioPlanningPage />
+                </ClientPortalLayout>
+              </ClientRoute>
+            } 
+          />
+          <Route 
+            path="/portal/schedule-consultation" 
+            element={
+              <ClientRoute>
+                <ClientPortalLayout>
+                  <ScheduleConsultationPage />
                 </ClientPortalLayout>
               </ClientRoute>
             } 
