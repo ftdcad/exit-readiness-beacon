@@ -477,7 +477,6 @@ Confidential. Strategic. Unbiased.`}
                             value={formData.firstName}
                             onChange={(e) => setFormData(prev => ({ ...prev, firstName: e.target.value }))}
                             className="bg-background-hover border-border/50"
-                            required
                           />
                         </div>
                         <div className="space-y-2">
@@ -487,7 +486,6 @@ Confidential. Strategic. Unbiased.`}
                             value={formData.lastName}
                             onChange={(e) => setFormData(prev => ({ ...prev, lastName: e.target.value }))}
                             className="bg-background-hover border-border/50"
-                            required
                           />
                         </div>
                       </div>
@@ -496,11 +494,10 @@ Confidential. Strategic. Unbiased.`}
                         <Label htmlFor="email">Business Email</Label>
                         <Input
                           id="email"
-                          type="email"
+                          type="text"
                           value={formData.email}
                           onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
                           className="bg-background-hover border-border/50"
-                          required
                         />
                       </div>
 
@@ -511,7 +508,6 @@ Confidential. Strategic. Unbiased.`}
                           value={formData.company}
                           onChange={(e) => setFormData(prev => ({ ...prev, company: e.target.value }))}
                           className="bg-background-hover border-border/50"
-                          required
                         />
                       </div>
 
@@ -568,7 +564,6 @@ Confidential. Strategic. Unbiased.`}
                           value={formData.companyName}
                           onChange={(e) => setFormData(prev => ({ ...prev, companyName: e.target.value }))}
                           className="bg-background-hover border-border/50"
-                          required
                         />
                       </div>
 
@@ -600,7 +595,6 @@ Confidential. Strategic. Unbiased.`}
                             value={formData.founded}
                             onChange={(e) => setFormData(prev => ({ ...prev, founded: e.target.value }))}
                             className="bg-background-hover border-border/50"
-                            required
                           />
                         </div>
                       </div>
@@ -1279,11 +1273,10 @@ Confidential. Strategic. Unbiased.`}
                           <Label htmlFor="phone">Phone Number</Label>
                           <Input
                             id="phone"
-                            type="tel"
+                            type="text"
                             value={formData.phone}
                             onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
                             className="bg-background-hover border-border/50"
-                            required
                           />
                         </div>
 
@@ -1291,12 +1284,11 @@ Confidential. Strategic. Unbiased.`}
                           <Label htmlFor="email">Email Address</Label>
                           <Input
                             id="email"
-                            type="email"
+                            type="text"
                             value={formData.email || ''}
                             onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
                             className="bg-background-hover border-border/50"
                             placeholder="your@email.com"
-                            required
                           />
                         </div>
                       </div>
