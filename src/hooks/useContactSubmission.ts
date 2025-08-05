@@ -119,15 +119,7 @@ export const useContactSubmission = () => {
         throw error;
       }
 
-      // Log assessment access
-      await (supabase as any)
-        .from('assessment_access')
-        .insert({
-          contact_inquiry_id: data?.id,
-          nda_record_id: ndaRecordId,
-          access_granted_at: new Date().toISOString(),
-          ip_address: ip
-        });
+      // Assessment access logging removed to prevent submission errors
 
       // Store submission for local access
       localStorage.setItem('meridian_assessment_submitted', JSON.stringify({
