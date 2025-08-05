@@ -94,10 +94,10 @@ export function ScenarioPlanningPage() {
 
   const getRiskColor = (risk: string) => {
     switch (risk) {
-      case 'Low': return 'bg-green-100 text-green-800';
-      case 'Medium': return 'bg-yellow-100 text-yellow-800';
-      case 'High': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'Low': return 'bg-green-500/20 text-green-400';
+      case 'Medium': return 'bg-yellow-500/20 text-yellow-400';
+      case 'High': return 'bg-red-500/20 text-red-400';
+      default: return 'bg-gray-500/20 text-gray-400';
     }
   };
 
@@ -203,9 +203,9 @@ export function ScenarioPlanningPage() {
       </Card>
 
       {/* Recommended Scenario */}
-      <Card className="bg-gradient-to-r from-green-50 to-emerald-50 border-green-200">
+      <Card className="bg-gradient-to-r from-green-500/10 to-emerald-500/10 border-green-500/30 ring-1 ring-green-500/20">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-green-800">
+          <CardTitle className="flex items-center gap-2 text-green-400">
             <Target className="h-6 w-6" />
             Recommended for You
           </CardTitle>
@@ -213,12 +213,12 @@ export function ScenarioPlanningPage() {
         <CardContent>
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-xl font-semibold text-green-800">{bestScenario.title}</h3>
-              <p className="text-green-700">{bestScenario.description}</p>
+              <h3 className="text-xl font-semibold text-green-400">{bestScenario.title}</h3>
+              <p className="text-green-300">{bestScenario.description}</p>
             </div>
             <div className="text-right">
-              <p className="text-sm text-green-600">Projected Value</p>
-              <p className="text-2xl font-bold text-green-800">
+              <p className="text-sm text-green-300">Projected Value</p>
+              <p className="text-2xl font-bold text-green-400">
                 {formatCurrency(calculateScenarioValue(bestScenario))}
               </p>
             </div>
