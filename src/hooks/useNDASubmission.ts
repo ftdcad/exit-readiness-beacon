@@ -17,8 +17,8 @@ export const useNDASubmission = () => {
     setIsSubmitting(true);
     
     try {
-      // Debug logging
-      console.log('=== NDA SUBMISSION DEBUG ===');
+      // At the very top of submitNDA:
+      console.log('=== DEBUGGING 401 ERROR ===');
       console.log('Supabase client available:', !!supabase);
       console.log('Supabase client type:', typeof supabase);
 
@@ -33,13 +33,10 @@ export const useNDASubmission = () => {
         // Continue without IP - don't block submission
       }
 
-      // Submit NDA record to Supabase
-      const session = await supabase.auth.getSession();
-      console.log('Current session:', JSON.stringify(session, null, 2));
-
-      // Check auth state
-      console.log('Auth available:', !!supabase.auth);
-      console.log('Session data available:', !!session.data.session);
+      // Before the insert:
+      const { data: session } = await supabase.auth.getSession();
+      console.log('Session:', session);
+      console.log('Auth header check - session exists:', !!session);
 
       console.log('Data being inserted:', JSON.stringify({
         first_name: formData.firstName,
