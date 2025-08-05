@@ -778,6 +778,30 @@ ${i + 1}. ${kr.keyResult}
                           />
                         </div>
                       </div>
+
+                      {/* Owner and Department row */}
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label className="text-xs text-white/60">Owner</label>
+                          <input
+                            type="text"
+                            value={metric.owner || ''}
+                            onChange={(e) => updateMetric(metric.id, { owner: e.target.value })}
+                            className="w-full bg-black/20 border border-white/20 text-white p-2 rounded text-sm"
+                            placeholder="Responsible person"
+                          />
+                        </div>
+                        <div>
+                          <label className="text-xs text-white/60">Department</label>
+                          <input
+                            type="text"
+                            value={metric.department || ''}
+                            onChange={(e) => updateMetric(metric.id, { department: e.target.value })}
+                            className="w-full bg-black/20 border border-white/20 text-white p-2 rounded text-sm"
+                            placeholder="e.g., Sales, Marketing"
+                          />
+                        </div>
+                      </div>
                     </div>
                   ))}
                 </div>
