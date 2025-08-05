@@ -20,6 +20,8 @@ import {
 import { toast } from 'sonner';
 import { PathRecommendation } from '@/components/PathRecommendation';
 import { ServiceROI } from '@/components/ServiceROI';
+import { ValueWaterfall } from '@/components/ValueWaterfall';
+import { WhatIfSliders } from '@/components/WhatIfSliders';
 
 interface CalculatorData {
   revenue: number;
@@ -63,6 +65,14 @@ export default function EBITDACalculatorPage() {
   // Labels for each calculator
   const [labelA, setLabelA] = useState('Actual Financials');
   const [labelB, setLabelB] = useState('Scenario Analysis');
+  
+  // What-If scenario state
+  const [whatIfScenario, setWhatIfScenario] = useState({
+    timelineMonths: 24,
+    investmentAmount: 150000,
+    growthRate: 15,
+    riskTolerance: 'Medium' as 'Low' | 'Medium' | 'High'
+  });
 
   useEffect(() => {
     checkDataRoomDocuments();
@@ -544,6 +554,38 @@ export default function EBITDACalculatorPage() {
             </div>
           </div>
         )}
+        
+        {/* Enhanced Components Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+          {/* Value Waterfall */}
+          <ValueWaterfall
+            currentValue={resultsA.adjustedEBITDA * multiplierA}
+            revenueGrowth={((calculatorB.revenue - calculatorA.revenue) / calculatorA.revenue) * (resultsA.adjustedEBITDA * multiplierA) * 0.3}
+            marginImprovement={(resultsB.margin - resultsA.margin) * 0.01 * calculatorB.revenue}
+            multipleExpansion={(multiplierB - multiplierA) * resultsB.adjustedEBITDA}
+          />
+          
+          {/* What-If Sliders */}
+          <WhatIfSliders
+            scenario={whatIfScenario}
+            onScenarioChange={setWhatIfScenario}
+          />
+        </div>
+        
+        {/* Service ROI and Path Recommendation */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+          <ServiceROI 
+            currentValuation={resultsA.adjustedEBITDA * multiplierA}
+            projectedValuation={resultsB.adjustedEBITDA * multiplierB}
+            consultingCost={whatIfScenario.investmentAmount}
+          />
+          
+          <PathRecommendation
+            ebitda={resultsB.adjustedEBITDA}
+            peScore={resultsB.margin > 15 ? 85 : resultsB.margin > 10 ? 65 : 45}
+            timeline={whatIfScenario.timelineMonths <= 18 ? 'quick' : whatIfScenario.timelineMonths <= 36 ? 'standard' : 'long'}
+          />
+        </div>
         
         {/* Side by Side Calculators */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">

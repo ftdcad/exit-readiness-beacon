@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { LogOut, Users, Building2, FileText, TrendingUp } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { MarketMakerOpportunities } from '@/components/MarketMakerOpportunities';
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -111,6 +112,9 @@ const AdminDashboard = () => {
           )}
         </CardContent>
       </Card>
+      
+      {/* Market Maker Opportunities Widget */}
+      <MarketMakerOpportunities />
     </div>
   );
 };
