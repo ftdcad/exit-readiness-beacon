@@ -39,6 +39,11 @@ const menuItems = [
     icon: Users,
   },
   {
+    title: 'Market Makers',
+    url: '/admin/market-makers',
+    icon: Building2,
+  },
+  {
     title: 'Activity',
     url: '/admin/activity',
     icon: Activity,

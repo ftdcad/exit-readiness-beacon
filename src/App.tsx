@@ -219,6 +219,26 @@ const App = () => (
               </ClientRoute>
             } 
           />
+          <Route 
+            path="/portal/turnaround" 
+            element={
+              <ClientRoute>
+                <ClientPortalLayout>
+                  <TurnaroundPlannerPage />
+                </ClientPortalLayout>
+              </ClientRoute>
+            } 
+          />
+          <Route 
+            path="/portal/rollup-builder" 
+            element={
+              <ClientRoute>
+                <ClientPortalLayout>
+                  <RollupBuilderPage />
+                </ClientPortalLayout>
+              </ClientRoute>
+            } 
+          />
           
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
