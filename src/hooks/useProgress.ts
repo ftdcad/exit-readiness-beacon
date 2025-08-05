@@ -27,7 +27,7 @@ export const useProgress = () => {
   const weekModuleCounts = {
     1: 6, // Interactive Glossary, Know Your Buyer, Data Room, EBITDA Mastery, Asset Workshop, Quick Wins
     2: 6, // Executive Discovery Interview, Strategy Doc Builder, KPIs and OKRs, EBITDA Calculator, Industry Multipliers, Scenario Planning
-    3: 3, // KPI Dashboard, PE Benchmarks, Management Scorecard
+    3: 2, // PE Benchmarks, Management Scorecard
     4: 3  // Due Diligence Checklist, LOI Review, Final Report
   };
 

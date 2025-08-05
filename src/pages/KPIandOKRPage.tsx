@@ -2,8 +2,28 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
-import { Plus, Trash2, Download, ChevronRight, BarChart3, Target, TrendingUp, AlertCircle } from "lucide-react";
+import { 
+  Plus, 
+  Trash2, 
+  Download, 
+  ChevronRight, 
+  BarChart3, 
+  Target, 
+  TrendingUp, 
+  AlertCircle,
+  TrendingDown,
+  AlertTriangle,
+  CheckCircle,
+  DollarSign,
+  ArrowRight,
+  Info,
+  Edit3,
+  ChevronDown
+} from "lucide-react";
 import { toast } from "sonner";
+import { Card } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
+import { Button } from '@/components/ui/button';
 
 interface KPIMetric {
   id: string;
@@ -31,6 +51,77 @@ interface KeyResult {
   targetProgress: number;
   status: 'Not Started' | 'In Progress' | 'Completed';
 }
+
+// Simplified Gauge Component
+const SimpleGauge = ({ value, label, status }: any) => {
+  const getColor = () => {
+    if (status === 'green') return 'text-green-400';
+    if (status === 'amber') return 'text-yellow-400';
+    return 'text-red-400';
+  };
+  
+  return (
+    <div className="text-center">
+      <div className="relative w-28 h-28 mx-auto">
+        <svg className="transform -rotate-90 w-28 h-28">
+          <circle
+            cx="56"
+            cy="56"
+            r="48"
+            stroke="currentColor"
+            strokeWidth="10"
+            fill="none"
+            className="text-white/10"
+          />
+          <circle
+            cx="56"
+            cy="56"
+            r="48"
+            stroke="currentColor"
+            strokeWidth="10"
+            fill="none"
+            strokeDasharray={`${value * 3.01} 301.59`}
+            className={getColor()}
+          />
+        </svg>
+        <div className="absolute inset-0 flex flex-col items-center justify-center">
+          <span className="text-3xl font-bold text-white">{value}%</span>
+        </div>
+      </div>
+      <p className="text-sm text-white/70 mt-2">{label}</p>
+    </div>
+  );
+};
+
+// Trend Sparkline Component
+const TrendLine = ({ data, positive }: any) => {
+  const max = Math.max(...data);
+  const min = Math.min(...data);
+  const points = data.map((val: number, i: number) => {
+    const x = (i / (data.length - 1)) * 100;
+    const y = 100 - ((val - min) / (max - min)) * 100;
+    return `${x},${y}`;
+  }).join(' ');
+  
+  return (
+    <div className="flex items-center gap-2">
+      <svg className="w-20 h-10" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <polyline
+          points={points}
+          fill="none"
+          stroke={positive ? '#10b981' : '#ef4444'}
+          strokeWidth="3"
+          vectorEffect="non-scaling-stroke"
+        />
+      </svg>
+      {positive ? (
+        <TrendingUp className="w-4 h-4 text-green-400" />
+      ) : (
+        <TrendingDown className="w-4 h-4 text-red-400" />
+      )}
+    </div>
+  );
+};
 
 const peValueDriverTemplates = [
   {
@@ -89,11 +180,90 @@ export default function KPIandOKRPage() {
   const [saving, setSaving] = useState(false);
   const [activeTab, setActiveTab] = useState<'KPI' | 'OKR'>('KPI');
   const [showTemplates, setShowTemplates] = useState(false);
+  const [showSetup, setShowSetup] = useState(false);
+
+  // Dashboard state
+  const [dashboardMetrics, setDashboardMetrics] = useState([
+    {
+      id: '1',
+      name: 'EBITDA Margin',
+      current: 18,
+      target: 25,
+      unit: '%',
+      trend: [15, 16, 16, 17, 17, 18, 18, 18],
+      valueImpact: 1200000,
+      status: 'amber',
+      action: 'Reduce operating expenses by 10%',
+      progress: 52
+    },
+    {
+      id: '2',
+      name: 'Customer Concentration',
+      current: 35,
+      target: 20,
+      unit: '%',
+      trend: [45, 44, 42, 40, 38, 36, 35, 35],
+      valueImpact: 1500000,
+      status: 'red',
+      action: 'Add 5 new customers over $100K',
+      progress: 33,
+      inverse: true
+    },
+    {
+      id: '3',
+      name: 'Recurring Revenue',
+      current: 45,
+      target: 70,
+      unit: '%',
+      trend: [30, 32, 35, 38, 40, 42, 45, 45],
+      valueImpact: 900000,
+      status: 'amber',
+      action: 'Convert 10 project clients to retainers',
+      progress: 56
+    },
+    {
+      id: '4',
+      name: 'Revenue Growth YoY',
+      current: 22,
+      target: 30,
+      unit: '%',
+      trend: [10, 12, 15, 18, 20, 22, 22, 22],
+      valueImpact: 800000,
+      status: 'green',
+      action: 'Launch new service line Q2',
+      progress: 73
+    },
+    {
+      id: '5',
+      name: 'Customer Retention',
+      current: 85,
+      target: 95,
+      unit: '%',
+      trend: [80, 82, 83, 84, 84, 85, 85, 85],
+      valueImpact: 600000,
+      status: 'amber',
+      action: 'Implement quarterly business reviews',
+      progress: 50
+    }
+  ]);
+
+  const [summaryData, setSummaryData] = useState({
+    totalValueAtRisk: 5000000,
+    capturedValue: 1800000,
+    remainingOpportunity: 3200000,
+    overallHealth: 'amber',
+    daysToNextReview: 28
+  });
 
   useEffect(() => {
     loadMetrics();
     loadStrategyInitiatives();
   }, [user]);
+
+  // Determine if setup should be shown by default
+  useEffect(() => {
+    setShowSetup(metrics.length === 0);
+  }, [metrics]);
 
   const loadMetrics = async () => {
     if (!user) return;
@@ -128,6 +298,23 @@ export default function KPIandOKRPage() {
         }));
         
         setMetrics(formattedMetrics);
+        
+        // Convert database metrics to dashboard format
+        if (formattedMetrics.length > 0) {
+          const convertedDashboardMetrics = formattedMetrics.slice(0, 5).map((metric, index) => ({
+            id: metric.id,
+            name: metric.metricName,
+            current: metric.currentValue,
+            target: metric.targetValue,
+            unit: metric.unitOfMeasure,
+            trend: [metric.currentValue * 0.7, metric.currentValue * 0.8, metric.currentValue * 0.9, metric.currentValue],
+            valueImpact: metric.ebitdaImpact,
+            status: metric.status === 'Achieved' ? 'green' : metric.status === 'On Track' ? 'amber' : 'red',
+            action: `Improve ${metric.metricName.toLowerCase()}`,
+            progress: calculateProgress(metric)
+          }));
+          setDashboardMetrics(convertedDashboardMetrics);
+        }
         
         // Load OKR key results
         const okrIds = formattedMetrics.filter(m => m.metricType === 'OKR').map(m => m.id);
@@ -260,6 +447,8 @@ export default function KPIandOKRPage() {
       }
       
       toast.success("KPIs and OKRs saved!");
+      // Refresh dashboard data
+      loadMetrics();
     } catch (err) {
       toast.error("Failed to save metrics");
       console.error("Save error:", err);
@@ -373,6 +562,13 @@ export default function KPIandOKRPage() {
     }
   };
 
+  const getTopOpportunities = () => {
+    return dashboardMetrics
+      .filter(m => m.status !== 'green')
+      .sort((a, b) => b.valueImpact - a.valueImpact)
+      .slice(0, 3);
+  };
+
   const exportMetrics = () => {
     const doc = `# KPIs and OKRs
 Generated: ${new Date().toLocaleDateString()}
@@ -418,392 +614,394 @@ ${i + 1}. ${kr.keyResult}
   };
 
   if (loading) {
-    return <div className="flex items-center justify-center min-h-screen"><div className="text-white/70">Loading...</div></div>;
+    return <div className="flex items-center justify-center min-h-screen"><div className="text-white/70">Loading your value drivers...</div></div>;
   }
+
+  const topOpportunities = getTopOpportunities();
 
   return (
     <div className="min-h-screen p-6">
       <div className="max-w-7xl mx-auto">
+        {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">KPIs & OKRs</h1>
-          <p className="text-white/70">Define and track the metrics that drive your business value</p>
-          <div className="mt-4 p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg">
-            <p className="text-sm text-blue-300">
-              <BarChart3 className="w-4 h-4 inline mr-1" />
-              Total EBITDA Impact: <span className="font-bold">${getTotalEBITDAImpact().toLocaleString()}</span>
-            </p>
-          </div>
+          <h1 className="text-3xl font-bold text-white mb-2">KPIs & Performance Dashboard</h1>
+          <p className="text-white/70">Define, track, and optimize your value drivers</p>
         </div>
 
-        {/* Tab Navigation */}
-        <div className="flex gap-2 mb-6">
-          <button
-            onClick={() => setActiveTab('KPI')}
-            className={`px-6 py-3 rounded-lg transition ${
-              activeTab === 'KPI' ? 'bg-blue-500 text-white' : 'bg-white/10 text-white/70 hover:bg-white/20'
-            }`}
+        {/* Setup Section (Collapsible) */}
+        <Card className="mb-8 bg-white/5 border-white/10">
+          <div 
+            className="p-4 flex items-center justify-between cursor-pointer hover:bg-white/5 transition-colors"
+            onClick={() => setShowSetup(!showSetup)}
           >
-            KPIs ({metrics.filter(m => m.metricType === 'KPI').length})
-          </button>
-          <button
-            onClick={() => setActiveTab('OKR')}
-            className={`px-6 py-3 rounded-lg transition ${
-              activeTab === 'OKR' ? 'bg-blue-500 text-white' : 'bg-white/10 text-white/70 hover:bg-white/20'
-            }`}
-          >
-            OKRs ({metrics.filter(m => m.metricType === 'OKR').length})
-          </button>
-          <button
-            onClick={() => setShowTemplates(!showTemplates)}
-            className="ml-auto px-4 py-3 bg-green-500/20 text-green-400 rounded-lg hover:bg-green-500/30 transition"
-          >
-            PE Value Drivers
-          </button>
-        </div>
-
-        {/* Templates */}
-        {showTemplates && (
-          <div className="mb-6 p-4 bg-green-500/10 border border-green-500/30 rounded-lg">
-            <h3 className="text-white font-semibold mb-3">Quick Add: PE Value Driver Templates</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-              {peValueDriverTemplates.map((template, index) => (
-                <button
-                  key={index}
-                  onClick={() => {
-                    addMetric('KPI', template);
-                    setShowTemplates(false);
-                  }}
-                  className="text-left p-3 bg-black/30 border border-white/10 rounded-lg hover:bg-white/10 transition"
-                >
-                  <p className="text-white text-sm font-medium">{template.metricName}</p>
-                  <p className="text-white/60 text-xs">{template.currentValue} → {template.targetValue} {template.unitOfMeasure}</p>
-                  <p className="text-green-400 text-xs mt-1">+${template.ebitdaImpact.toLocaleString()} EBITDA</p>
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* KPI Tab */}
-        {activeTab === 'KPI' && (
-          <div className="space-y-4">
-            {metrics.filter(m => m.metricType === 'KPI').map((kpi) => (
-              <div key={kpi.id} className="bg-white/5 border border-white/10 rounded-xl p-6 backdrop-blur-sm">
-                <div className="flex justify-between items-start mb-4">
-                  <div className="flex-1">
-                    <input
-                      type="text"
-                      value={kpi.metricName}
-                      onChange={(e) => updateMetric(kpi.id, { metricName: e.target.value })}
-                      className="text-lg font-semibold bg-transparent border-b border-white/20 text-white mb-2 w-full"
-                      placeholder="KPI Name"
-                    />
-                    <div className="flex items-center gap-4 text-sm">
-                      <span className={getStatusColor(kpi.status)}>{kpi.status}</span>
-                      <span className="text-white/60">Progress: {calculateProgress(kpi)}%</span>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => removeMetric(kpi.id)}
-                    className="text-red-400 hover:text-red-300 ml-4"
-                  >
-                    <Trash2 className="w-5 h-5" />
-                  </button>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                  <div>
-                    <label className="block text-sm text-white/70 mb-1">Category</label>
-                    <select
-                      value={kpi.category}
-                      onChange={(e) => updateMetric(kpi.id, { category: e.target.value as KPIMetric['category'] })}
-                      className="w-full bg-black/30 border border-white/10 rounded-lg px-3 py-2 text-white"
-                    >
-                      <option value="Financial">Financial</option>
-                      <option value="Operational">Operational</option>
-                      <option value="Customer">Customer</option>
-                      <option value="Growth">Growth</option>
-                      <option value="Quality">Quality</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm text-white/70 mb-1">Current Value</label>
-                    <div className="flex gap-2">
-                      <input
-                        type="number"
-                        value={kpi.currentValue}
-                        onChange={(e) => updateMetric(kpi.id, { currentValue: Number(e.target.value) })}
-                        className="flex-1 bg-black/30 border border-white/10 rounded-lg px-3 py-2 text-white"
-                      />
-                      <input
-                        type="text"
-                        value={kpi.unitOfMeasure}
-                        onChange={(e) => updateMetric(kpi.id, { unitOfMeasure: e.target.value })}
-                        className="w-20 bg-black/30 border border-white/10 rounded-lg px-3 py-2 text-white"
-                        placeholder="unit"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm text-white/70 mb-1">Target Value</label>
-                    <input
-                      type="number"
-                      value={kpi.targetValue}
-                      onChange={(e) => updateMetric(kpi.id, { targetValue: Number(e.target.value) })}
-                      className="w-full bg-black/30 border border-white/10 rounded-lg px-3 py-2 text-white"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
-                  <div>
-                    <label className="block text-sm text-white/70 mb-1">Owner</label>
-                    <input
-                      type="text"
-                      value={kpi.owner}
-                      onChange={(e) => updateMetric(kpi.id, { owner: e.target.value })}
-                      className="w-full bg-black/30 border border-white/10 rounded-lg px-3 py-2 text-white"
-                      placeholder="e.g., CFO"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm text-white/70 mb-1">Frequency</label>
-                    <select
-                      value={kpi.measurementFrequency}
-                      onChange={(e) => updateMetric(kpi.id, { measurementFrequency: e.target.value as KPIMetric['measurementFrequency'] })}
-                      className="w-full bg-black/30 border border-white/10 rounded-lg px-3 py-2 text-white"
-                    >
-                      <option value="Daily">Daily</option>
-                      <option value="Weekly">Weekly</option>
-                      <option value="Monthly">Monthly</option>
-                      <option value="Quarterly">Quarterly</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm text-white/70 mb-1">Valuation Impact</label>
-                    <select
-                      value={kpi.valuationImpact}
-                      onChange={(e) => updateMetric(kpi.id, { valuationImpact: e.target.value as KPIMetric['valuationImpact'] })}
-                      className="w-full bg-black/30 border border-white/10 rounded-lg px-3 py-2 text-white"
-                    >
-                      <option value="High">High</option>
-                      <option value="Medium">Medium</option>
-                      <option value="Low">Low</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm text-white/70 mb-1">EBITDA Impact</label>
-                    <input
-                      type="number"
-                      value={kpi.ebitdaImpact}
-                      onChange={(e) => updateMetric(kpi.id, { ebitdaImpact: Number(e.target.value) })}
-                      className="w-full bg-black/30 border border-white/10 rounded-lg px-3 py-2 text-white"
-                      placeholder="$"
-                    />
-                  </div>
-                </div>
-
-                <div className="flex gap-4">
-                  <div className="flex-1">
-                    <label className="block text-sm text-white/70 mb-1">Linked Initiative</label>
-                    <input
-                      type="text"
-                      value={kpi.strategicInitiativeLink}
-                      onChange={(e) => updateMetric(kpi.id, { strategicInitiativeLink: e.target.value })}
-                      className="w-full bg-black/30 border border-white/10 rounded-lg px-3 py-2 text-white"
-                      placeholder="e.g., Customer Diversification Sprint"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm text-white/70 mb-1">Status</label>
-                    <select
-                      value={kpi.status}
-                      onChange={(e) => updateMetric(kpi.id, { status: e.target.value as KPIMetric['status'] })}
-                      className="bg-black/30 border border-white/10 rounded-lg px-3 py-2 text-white"
-                    >
-                      <option value="Not Started">Not Started</option>
-                      <option value="On Track">On Track</option>
-                      <option value="At Risk">At Risk</option>
-                      <option value="Behind">Behind</option>
-                      <option value="Achieved">Achieved</option>
-                    </select>
-                  </div>
-                </div>
-
-                {/* Progress Bar */}
-                <div className="mt-4">
-                  <div className="flex justify-between text-sm mb-1">
-                    <span className="text-white/60">Progress</span>
-                    <span className="text-white">{calculateProgress(kpi)}%</span>
-                  </div>
-                  <div className="w-full bg-black/30 rounded-full h-2">
-                    <div 
-                      className="bg-blue-500 h-2 rounded-full transition-all duration-300"
-                      style={{ width: `${calculateProgress(kpi)}%` }}
-                    />
-                  </div>
-                </div>
+            <div className="flex items-center gap-3">
+              <Edit3 className="w-5 h-5 text-blue-400" />
+              <div>
+                <h2 className="text-lg font-semibold text-white">
+                  {metrics.length === 0 ? "Let's define your first value drivers" : "Edit Metrics"}
+                </h2>
+                <p className="text-white/70 text-sm">
+                  {metrics.length === 0 
+                    ? "Start by creating KPIs and OKRs that drive your business value"
+                    : `${metrics.length} metrics defined • Click to modify`
+                  }
+                </p>
               </div>
-            ))}
-
-            {metrics.filter(m => m.metricType === 'KPI').length < 10 && (
-              <button
-                onClick={() => addMetric('KPI')}
-                className="w-full bg-white/5 border border-white/10 rounded-lg py-4 text-white/70 hover:bg-white/10 transition flex items-center justify-center gap-2"
-              >
-                <Plus className="w-5 h-5" /> Add KPI
-              </button>
-            )}
+            </div>
+            <ChevronDown className={`w-5 h-5 text-white/70 transition-transform ${showSetup ? 'rotate-180' : ''}`} />
           </div>
-        )}
+          
+          {showSetup && (
+            <div className="px-6 pb-6 border-t border-white/10">
+              {/* Setup content - existing KPI/OKR creation functionality */}
+              <div className="mt-4 p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg">
+                <p className="text-sm text-blue-300">
+                  <BarChart3 className="w-4 h-4 inline mr-1" />
+                  Total EBITDA Impact: <span className="font-bold">${getTotalEBITDAImpact().toLocaleString()}</span>
+                </p>
+              </div>
 
-        {/* OKR Tab */}
-        {activeTab === 'OKR' && (
-          <div className="space-y-4">
-            {metrics.filter(m => m.metricType === 'OKR').map((okr) => (
-              <div key={okr.id} className="bg-white/5 border border-white/10 rounded-xl p-6 backdrop-blur-sm">
-                <div className="flex justify-between items-start mb-4">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Target className="w-5 h-5 text-blue-400" />
-                      <input
-                        type="text"
-                        value={okr.metricName}
-                        onChange={(e) => updateMetric(okr.id, { metricName: e.target.value })}
-                        className="text-lg font-semibold bg-transparent border-b border-white/20 text-white flex-1"
-                        placeholder="Objective"
-                      />
-                    </div>
-                    <div className="flex items-center gap-4">
-                      <input
-                        type="text"
-                        value={okr.owner}
-                        onChange={(e) => updateMetric(okr.id, { owner: e.target.value })}
-                        className="bg-black/30 border border-white/10 rounded-lg px-3 py-1 text-white text-sm"
-                        placeholder="Owner"
-                      />
-                      <select
-                        value={okr.valuationImpact}
-                        onChange={(e) => updateMetric(okr.id, { valuationImpact: e.target.value as KPIMetric['valuationImpact'] })}
-                        className="bg-black/30 border border-white/10 rounded-lg px-3 py-1 text-white text-sm"
+              {/* Tab Navigation */}
+              <div className="flex gap-2 mt-6 mb-6">
+                <button
+                  onClick={() => setActiveTab('KPI')}
+                  className={`px-6 py-3 rounded-lg transition ${
+                    activeTab === 'KPI' ? 'bg-blue-500 text-white' : 'bg-white/10 text-white/70 hover:bg-white/20'
+                  }`}
+                >
+                  KPIs ({metrics.filter(m => m.metricType === 'KPI').length})
+                </button>
+                <button
+                  onClick={() => setActiveTab('OKR')}
+                  className={`px-6 py-3 rounded-lg transition ${
+                    activeTab === 'OKR' ? 'bg-blue-500 text-white' : 'bg-white/10 text-white/70 hover:bg-white/20'
+                  }`}
+                >
+                  OKRs ({metrics.filter(m => m.metricType === 'OKR').length})
+                </button>
+                <button
+                  onClick={() => setShowTemplates(!showTemplates)}
+                  className="ml-auto px-4 py-3 bg-green-500/20 text-green-400 rounded-lg hover:bg-green-500/30 transition"
+                >
+                  PE Value Drivers
+                </button>
+              </div>
+
+              {/* Templates */}
+              {showTemplates && (
+                <div className="mb-6 p-4 bg-green-500/10 border border-green-500/30 rounded-lg">
+                  <h3 className="text-white font-semibold mb-3">Quick Add: PE Value Driver Templates</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                    {peValueDriverTemplates.map((template, index) => (
+                      <button
+                        key={index}
+                        onClick={() => {
+                          addMetric('KPI', template);
+                          setShowTemplates(false);
+                        }}
+                        className="text-left p-3 bg-black/30 border border-white/10 rounded-lg hover:bg-white/10 transition"
                       >
-                        <option value="High">High Impact</option>
-                        <option value="Medium">Medium Impact</option>
-                        <option value="Low">Low Impact</option>
-                      </select>
-                      <span className={`text-sm ${getStatusColor(okr.status)}`}>{okr.status}</span>
-                    </div>
+                        <p className="text-white text-sm font-medium">{template.metricName}</p>
+                        <p className="text-white/60 text-xs">{template.currentValue} → {template.targetValue} {template.unitOfMeasure}</p>
+                        <p className="text-green-400 text-xs mt-1">+${template.ebitdaImpact.toLocaleString()} EBITDA</p>
+                      </button>
+                    ))}
                   </div>
-                  <button
-                    onClick={() => removeMetric(okr.id)}
-                    className="text-red-400 hover:text-red-300 ml-4"
-                  >
-                    <Trash2 className="w-5 h-5" />
-                  </button>
                 </div>
+              )}
 
-                {/* Key Results */}
-                <div className="ml-7 space-y-3">
-                  <h4 className="text-sm font-medium text-white/70 mb-2">Key Results:</h4>
-                  {(keyResults[okr.id] || []).map((kr, index) => (
-                    <div key={kr.id} className="bg-black/20 rounded-lg p-3">
-                      <div className="flex items-start gap-3">
-                        <span className="text-white/50 text-sm mt-1">{index + 1}.</span>
-                        <div className="flex-1">
+              {/* Add buttons */}
+              <div className="flex gap-4 mb-6">
+                <Button 
+                  onClick={() => addMetric('KPI')}
+                  className="bg-blue-500 hover:bg-blue-600 text-white"
+                >
+                  <Plus className="w-4 h-4 mr-2" />
+                  Add KPI
+                </Button>
+                <Button 
+                  onClick={() => addMetric('OKR')}
+                  className="bg-purple-500 hover:bg-purple-600 text-white"
+                >
+                  <Plus className="w-4 h-4 mr-2" />
+                  Add OKR
+                </Button>
+              </div>
+
+              {/* Simplified metrics list for setup */}
+              {metrics.length > 0 && (
+                <div className="space-y-3 mb-6">
+                  {metrics.filter(m => m.metricType === activeTab).map((metric) => (
+                    <div key={metric.id} className="bg-black/20 rounded-lg p-4">
+                      <div className="flex justify-between items-start mb-2">
+                        <input
+                          type="text"
+                          value={metric.metricName}
+                          onChange={(e) => updateMetric(metric.id, { metricName: e.target.value })}
+                          className="text-lg font-semibold bg-transparent border-b border-white/20 text-white mb-2 flex-1"
+                          placeholder="Metric Name"
+                        />
+                        <button
+                          onClick={() => removeMetric(metric.id)}
+                          className="text-red-400 hover:text-red-300 ml-4"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                      <div className="grid grid-cols-3 gap-4">
+                        <div>
+                          <label className="text-xs text-white/60">Current Value</label>
+                          <input
+                            type="number"
+                            value={metric.currentValue}
+                            onChange={(e) => updateMetric(metric.id, { currentValue: Number(e.target.value) })}
+                            className="w-full bg-black/20 border border-white/20 text-white p-2 rounded text-sm"
+                          />
+                        </div>
+                        <div>
+                          <label className="text-xs text-white/60">Target Value</label>
+                          <input
+                            type="number"
+                            value={metric.targetValue}
+                            onChange={(e) => updateMetric(metric.id, { targetValue: Number(e.target.value) })}
+                            className="w-full bg-black/20 border border-white/20 text-white p-2 rounded text-sm"
+                          />
+                        </div>
+                        <div>
+                          <label className="text-xs text-white/60">Unit</label>
                           <input
                             type="text"
-                            value={kr.keyResult}
-                            onChange={(e) => updateKeyResult(okr.id, kr.id, { keyResult: e.target.value })}
-                            className="w-full bg-transparent border-b border-white/20 text-white mb-2"
-                            placeholder="Key result"
+                            value={metric.unitOfMeasure}
+                            onChange={(e) => updateMetric(metric.id, { unitOfMeasure: e.target.value })}
+                            className="w-full bg-black/20 border border-white/20 text-white p-2 rounded text-sm"
+                            placeholder="%,$,etc"
                           />
-                          <div className="flex items-center gap-4">
-                            <div className="flex-1">
-                              <div className="flex justify-between text-xs mb-1">
-                                <span className="text-white/50">Progress</span>
-                                <span className="text-white">{kr.currentProgress}%</span>
-                              </div>
-                              <input
-                                type="range"
-                                min="0"
-                                max="100"
-                                value={kr.currentProgress}
-                                onChange={(e) => updateKeyResult(okr.id, kr.id, { currentProgress: Number(e.target.value) })}
-                                className="w-full"
-                              />
-                            </div>
-                            <select
-                              value={kr.status}
-                              onChange={(e) => updateKeyResult(okr.id, kr.id, { status: e.target.value as KeyResult['status'] })}
-                              className="bg-black/30 border border-white/10 rounded px-2 py-1 text-xs text-white"
-                            >
-                              <option value="Not Started">Not Started</option>
-                              <option value="In Progress">In Progress</option>
-                              <option value="Completed">Completed</option>
-                            </select>
-                            <button
-                              onClick={() => removeKeyResult(okr.id, kr.id)}
-                              className="text-red-400 hover:text-red-300"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </button>
-                          </div>
                         </div>
                       </div>
                     </div>
                   ))}
-                  {(!keyResults[okr.id] || keyResults[okr.id].length < 5) && (
-                    <button
-                      onClick={() => addKeyResult(okr.id)}
-                      className="text-blue-400 hover:text-blue-300 text-sm"
-                    >
-                      + Add Key Result
-                    </button>
-                  )}
                 </div>
-              </div>
-            ))}
+              )}
 
-            {metrics.filter(m => m.metricType === 'OKR').length < 5 && (
-              <button
-                onClick={() => addMetric('OKR')}
-                className="w-full bg-white/5 border border-white/10 rounded-lg py-4 text-white/70 hover:bg-white/10 transition flex items-center justify-center gap-2"
-              >
-                <Plus className="w-5 h-5" /> Add Objective
-              </button>
-            )}
-          </div>
+              {/* Save buttons */}
+              <div className="flex gap-4">
+                <Button
+                  onClick={saveMetrics}
+                  disabled={saving}
+                  className="bg-green-500 hover:bg-green-600 text-white"
+                >
+                  {saving ? 'Saving...' : 'Save Metrics'}
+                </Button>
+                <Button
+                  onClick={exportMetrics}
+                  variant="outline"
+                  className="border-white/20 text-white hover:bg-white/10"
+                >
+                  <Download className="w-4 h-4 mr-2" />
+                  Export
+                </Button>
+              </div>
+            </div>
+          )}
+        </Card>
+
+        {/* Dashboard Section (Always Visible) */}
+        {metrics.length > 0 && (
+          <>
+            {/* Executive Summary - 3 Cards Only */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+              <Card className="bg-gradient-to-br from-green-500/20 to-emerald-600/20 border-green-500/30 p-6">
+                <div className="flex items-center justify-between mb-2">
+                  <DollarSign className="w-8 h-8 text-green-400" />
+                  <span className="text-xs text-green-400 font-medium">OPPORTUNITY</span>
+                </div>
+                <p className="text-3xl font-bold text-white mb-1">
+                  ${(summaryData.remainingOpportunity / 1000000).toFixed(1)}M
+                </p>
+                <p className="text-sm text-white/70">Additional value available</p>
+              </Card>
+              
+              <Card className="bg-gradient-to-br from-blue-500/20 to-indigo-600/20 border-blue-500/30 p-6">
+                <div className="flex items-center justify-between mb-2">
+                  <Target className="w-8 h-8 text-blue-400" />
+                  <span className="text-xs text-blue-400 font-medium">CAPTURED</span>
+                </div>
+                <p className="text-3xl font-bold text-white mb-1">
+                  ${(summaryData.capturedValue / 1000000).toFixed(1)}M
+                </p>
+                <p className="text-sm text-white/70">Value already created</p>
+              </Card>
+              
+              <Card className={`bg-gradient-to-br ${
+                summaryData.overallHealth === 'green' 
+                  ? 'from-green-500/20 to-green-600/20 border-green-500/30'
+                  : summaryData.overallHealth === 'amber'
+                  ? 'from-yellow-500/20 to-amber-600/20 border-yellow-500/30'
+                  : 'from-red-500/20 to-red-600/20 border-red-500/30'
+              } p-6`}>
+                <div className="flex items-center justify-between mb-2">
+                  {summaryData.overallHealth === 'green' ? (
+                    <CheckCircle className="w-8 h-8 text-green-400" />
+                  ) : (
+                    <AlertTriangle className={`w-8 h-8 ${
+                      summaryData.overallHealth === 'amber' ? 'text-yellow-400' : 'text-red-400'
+                    }`} />
+                  )}
+                  <span className={`text-xs font-medium ${
+                    summaryData.overallHealth === 'green' ? 'text-green-400' :
+                    summaryData.overallHealth === 'amber' ? 'text-yellow-400' : 'text-red-400'
+                  }`}>STATUS</span>
+                </div>
+                <p className="text-3xl font-bold text-white mb-1 capitalize">
+                  {summaryData.overallHealth}
+                </p>
+                <p className="text-sm text-white/70">Overall health score</p>
+              </Card>
+            </div>
+
+            {/* Main Content Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+              {/* Metrics Overview - 2 columns */}
+              <div className="lg:col-span-2">
+                <Card className="bg-white/5 border-white/10 p-6">
+                  <h2 className="text-xl font-semibold text-white mb-6">Performance Overview</h2>
+                  
+                  {/* Top 3 Gauges */}
+                  <div className="grid grid-cols-3 gap-4 mb-6">
+                    {dashboardMetrics.slice(0, 3).map(metric => (
+                      <SimpleGauge
+                        key={metric.id}
+                        value={metric.progress}
+                        label={metric.name}
+                        status={metric.status}
+                      />
+                    ))}
+                  </div>
+                  
+                  {/* All Metrics List */}
+                  <div className="space-y-3">
+                    {dashboardMetrics.map(metric => (
+                      <div key={metric.id} className="bg-black/20 rounded-lg p-4">
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="flex items-center gap-3">
+                            <div className={`w-2 h-2 rounded-full ${
+                              metric.status === 'green' ? 'bg-green-400' :
+                              metric.status === 'amber' ? 'bg-yellow-400' :
+                              'bg-red-400'
+                            }`} />
+                            <h3 className="font-medium text-white">{metric.name}</h3>
+                          </div>
+                          <TrendLine 
+                            data={metric.trend} 
+                            positive={metric.trend[metric.trend.length - 1] > metric.trend[0]}
+                          />
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <div className="flex-1">
+                            <div className="flex items-baseline gap-2 mb-1">
+                              <span className="text-2xl font-bold text-white">
+                                {metric.current}{metric.unit}
+                              </span>
+                              <span className="text-sm text-white/60">
+                                / {metric.target}{metric.unit}
+                              </span>
+                            </div>
+                            <Progress value={metric.progress} className="h-1.5" />
+                          </div>
+                          <div className="text-right ml-4">
+                            <p className="text-sm font-medium text-green-400">
+                              +${(metric.valueImpact / 1000).toFixed(0)}K
+                            </p>
+                            <p className="text-xs text-white/60">potential</p>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </Card>
+              </div>
+
+              {/* Action Focus - 1 column */}
+              <div>
+                <Card className="bg-gradient-to-br from-amber-500/20 to-orange-500/20 border-amber-500/30 p-6">
+                  <div className="flex items-center gap-2 mb-4">
+                    <AlertTriangle className="w-5 h-5 text-amber-400" />
+                    <h2 className="text-lg font-semibold text-white">Focus Actions</h2>
+                  </div>
+                  
+                  <p className="text-sm text-white/70 mb-4">
+                    Complete these for maximum impact:
+                  </p>
+                  
+                  <div className="space-y-3">
+                    {topOpportunities.map((metric, index) => (
+                      <div key={metric.id} className="bg-black/20 rounded-lg p-3">
+                        <div className="flex items-start justify-between mb-2">
+                          <span className="text-xs font-bold text-amber-400">
+                            #{index + 1} PRIORITY
+                          </span>
+                          <span className="text-xs text-green-400 font-medium">
+                            +${(metric.valueImpact / 1000).toFixed(0)}K
+                          </span>
+                        </div>
+                        <h4 className="font-medium text-white mb-1">{metric.name}</h4>
+                        <p className="text-sm text-white/80 mb-2">{metric.action}</p>
+                        <button className="text-xs text-amber-400 hover:text-amber-300 flex items-center gap-1">
+                          Get detailed plan
+                          <ArrowRight className="w-3 h-3" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  <div className="mt-6 p-3 bg-green-500/10 border border-green-500/30 rounded-lg">
+                    <p className="text-xs text-white/70 mb-1">Complete all 3 actions:</p>
+                    <p className="text-lg font-bold text-green-400">
+                      +${(topOpportunities.reduce((sum, m) => sum + m.valueImpact, 0) / 1000000).toFixed(1)}M
+                    </p>
+                    <p className="text-xs text-white/70">in additional value</p>
+                  </div>
+                </Card>
+              </div>
+            </div>
+
+            {/* Bottom CTA */}
+            <Card className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 border-blue-500/30 p-6">
+              <div className="flex items-center justify-between">
+                <div className="flex items-start gap-4">
+                  <Info className="w-6 h-6 text-blue-400 flex-shrink-0" />
+                  <div>
+                    <h3 className="text-lg font-semibold text-white mb-1">
+                      Next Review: {summaryData.daysToNextReview} days
+                    </h3>
+                    <p className="text-white/70">
+                      Stay on track with monthly performance reviews to maximize your exit value.
+                    </p>
+                  </div>
+                </div>
+                <button className="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition whitespace-nowrap">
+                  Schedule Review
+                </button>
+              </div>
+            </Card>
+          </>
         )}
 
-        {/* Action Buttons */}
-        <div className="flex gap-4 mt-8">
-          <button
-            onClick={saveMetrics}
-            disabled={saving}
-            className="flex-1 bg-blue-500 text-white py-3 px-6 rounded-lg hover:bg-blue-600 transition disabled:opacity-50"
-          >
-            {saving ? "Saving..." : "Save Metrics"}
-          </button>
-          
-          <button
-            onClick={exportMetrics}
-            className="bg-white/10 text-white py-3 px-6 rounded-lg hover:bg-white/20 transition"
-          >
-            <Download className="w-5 h-5 inline mr-2" /> Export
-          </button>
-          
-          <button
-            onClick={() => navigate("/portal/week-2/ebitda-calculator")}
-            className="bg-green-500 text-white py-3 px-6 rounded-lg hover:bg-green-600 transition flex items-center gap-2"
-          >
-            Next: EBITDA Impact <ChevronRight className="w-5 h-5" />
-          </button>
-        </div>
+        {/* Empty state when no metrics */}
+        {metrics.length === 0 && !showSetup && (
+          <Card className="bg-white/5 border-white/10 p-8 text-center">
+            <Target className="w-16 h-16 text-white/40 mx-auto mb-4" />
+            <h3 className="text-xl font-semibold text-white mb-2">No KPIs defined yet</h3>
+            <p className="text-white/70 mb-4">Create your first value drivers to see your performance dashboard</p>
+            <Button 
+              onClick={() => setShowSetup(true)}
+              className="bg-blue-500 hover:bg-blue-600 text-white"
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              Create Your First KPI
+            </Button>
+          </Card>
+        )}
       </div>
     </div>
   );

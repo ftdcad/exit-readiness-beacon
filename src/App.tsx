@@ -24,7 +24,7 @@ import QuickWinsPage from "./pages/QuickWinsPage";
 import KnowYourBuyerPage from "./pages/KnowYourBuyerPage";
 import DataRoomPage from "./pages/DataRoomPage";
 import ExecutiveDiscoveryInterviewPage from "./pages/ExecutiveDiscoveryInterviewPage";
-import PEReadyMetricsPage from "./pages/PEReadyMetricsPage";
+
 import StrategyDocBuilderPage from "./pages/StrategyDocBuilderPage";
 import KPIandOKRPage from "./pages/KPIandOKRPage";
 import IndustryMultiplesPage from "./pages/IndustryMultiplesPage";
@@ -175,16 +175,6 @@ const App = () => (
               <ClientRoute>
                 <ClientPortalLayout>
                   <StrategyDocBuilderPage />
-                </ClientPortalLayout>
-              </ClientRoute>
-            } 
-          />
-          <Route 
-            path="/portal/week-2/metrics" 
-            element={
-              <ClientRoute>
-                <ClientPortalLayout>
-                  <PEReadyMetricsPage />
                 </ClientPortalLayout>
               </ClientRoute>
             } 

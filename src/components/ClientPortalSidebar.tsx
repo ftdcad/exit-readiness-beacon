@@ -57,7 +57,6 @@ const weeks = [
     title: 'Performance Readiness',
     icon: TrendingUp,
     modules: [
-      { name: 'KPI Dashboard', path: '/portal/week-3/kpis' },
       { name: 'PE Benchmarks', path: '/portal/week-3/benchmarks' },
       { name: 'Management Scorecard', path: '/portal/week-3/scorecard' }
     ]
