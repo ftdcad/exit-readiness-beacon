@@ -33,7 +33,6 @@ interface ContactFormData {
   
   // Contact Info
   email: string;
-  phone: string;
   preferredContact: string;
   
   // Add-backs for EBITDA normalization
@@ -50,7 +49,6 @@ interface ContactFormData {
 
   // Enhanced fields
   jobTitle?: string;
-  companyWebsite?: string;
   companySize?: string;
   howDidYouHear?: string;
 }
@@ -95,10 +93,8 @@ export const useContactSubmission = () => {
         exit_timeline: formData.exitTimeline,
         exit_type: formData.exitType,
         current_challenges: formData.currentChallenges,
-        phone: formData.phone,
         preferred_contact: formData.preferredContact,
         job_title: formData.jobTitle,
-        company_website: formData.companyWebsite,
         company_size: formData.companySize,
         how_did_you_hear: formData.howDidYouHear,
         add_backs: formData.addBacks,
