@@ -662,23 +662,25 @@ ${i + 1}. ${kr.keyResult}
               </div>
 
               {/* Tab Navigation */}
-              <div className="flex gap-2 mt-6 mb-6">
-                <button
-                  onClick={() => setActiveTab('KPI')}
-                  className={`px-6 py-3 rounded-lg transition ${
-                    activeTab === 'KPI' ? 'bg-blue-500 text-white' : 'bg-white/10 text-white/70 hover:bg-white/20'
-                  }`}
-                >
-                  KPIs ({metrics.filter(m => m.metricType === 'KPI').length})
-                </button>
-                <button
-                  onClick={() => setActiveTab('OKR')}
-                  className={`px-6 py-3 rounded-lg transition ${
-                    activeTab === 'OKR' ? 'bg-blue-500 text-white' : 'bg-white/10 text-white/70 hover:bg-white/20'
-                  }`}
-                >
-                  OKRs ({metrics.filter(m => m.metricType === 'OKR').length})
-                </button>
+              <div className="flex items-center gap-4 mt-6 mb-6">
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setActiveTab('KPI')}
+                    className={`px-6 py-3 rounded-lg transition flex-1 min-w-[120px] ${
+                      activeTab === 'KPI' ? 'bg-blue-500 text-white' : 'bg-white/10 text-white/70 hover:bg-white/20'
+                    }`}
+                  >
+                    KPIs ({metrics.filter(m => m.metricType === 'KPI').length})
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('OKR')}
+                    className={`px-6 py-3 rounded-lg transition flex-1 min-w-[120px] ${
+                      activeTab === 'OKR' ? 'bg-blue-500 text-white' : 'bg-white/10 text-white/70 hover:bg-white/20'
+                    }`}
+                  >
+                    OKRs ({metrics.filter(m => m.metricType === 'OKR').length})
+                  </button>
+                </div>
                 <button
                   onClick={() => setShowTemplates(!showTemplates)}
                   className="ml-auto px-4 py-3 bg-green-500/20 text-green-400 rounded-lg hover:bg-green-500/30 transition"
@@ -714,14 +716,14 @@ ${i + 1}. ${kr.keyResult}
               <div className="flex gap-4 mb-6">
                 <Button 
                   onClick={() => addMetric('KPI')}
-                  className="bg-blue-500 hover:bg-blue-600 text-white"
+                  className="bg-blue-500 hover:bg-blue-600 text-white flex-1 max-w-[200px]"
                 >
                   <Plus className="w-4 h-4 mr-2" />
                   Add KPI
                 </Button>
                 <Button 
                   onClick={() => addMetric('OKR')}
-                  className="bg-purple-500 hover:bg-purple-600 text-white"
+                  className="bg-blue-500 hover:bg-blue-600 text-white flex-1 max-w-[200px]"
                 >
                   <Plus className="w-4 h-4 mr-2" />
                   Add OKR
