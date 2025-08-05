@@ -98,16 +98,6 @@ const App = () => (
             } 
           />
           <Route 
-            path="/portal/week-1/executive-discovery" 
-            element={
-              <ClientRoute>
-                <ClientPortalLayout>
-                  <ExecutiveDiscoveryInterviewPage />
-                </ClientPortalLayout>
-              </ClientRoute>
-            } 
-          />
-          <Route 
             path="/portal/week-1/data-room" 
             element={
               <ClientRoute>
@@ -159,6 +149,26 @@ const App = () => (
           />
           
           {/* Week 2 Routes */}
+          <Route 
+            path="/portal/week-2/executive-discovery" 
+            element={
+              <ClientRoute>
+                <ClientPortalLayout>
+                  <ExecutiveDiscoveryInterviewPage />
+                </ClientPortalLayout>
+              </ClientRoute>
+            } 
+          />
+          <Route 
+            path="/portal/week-2/assessment" 
+            element={
+              <ClientRoute>
+                <ClientPortalLayout>
+                  <AssessmentPage />
+                </ClientPortalLayout>
+              </ClientRoute>
+            } 
+          />
           <Route 
             path="/portal/week-2/value-builder" 
             element={

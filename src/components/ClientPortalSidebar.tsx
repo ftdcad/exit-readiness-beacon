@@ -33,7 +33,6 @@ const weeks = [
     modules: [
       { name: 'Interactive Glossary', path: '/portal/week-1/glossary' },
       { name: 'Know Your Buyer', path: '/portal/week-1/know-your-buyer' },
-      { name: 'Executive Discovery', path: '/portal/week-1/executive-discovery' },
       { name: 'Data Room', path: '/portal/week-1/data-room' },
       { name: 'EBITDA Mastery', path: '/portal/week-1/ebitda-course' },
       { name: 'Asset Workshop', path: '/portal/week-1/asset-workshop' },
@@ -45,10 +44,10 @@ const weeks = [
     title: 'Deal Readiness',
     icon: Calculator,
     modules: [
-      { name: 'Strategy Doc Builder', path: '/portal/week-2/value-builder' },
-      { name: 'KPIs and OKRs', path: '/portal/week-2/kpis-okrs' },
-      { name: 'EBITDA Calculator', path: '/portal/week-2/ebitda-calculator' },
-      { name: 'Industry Multipliers', path: '/portal/week-2/multiples' },
+      { name: 'Executive Discovery Interview', path: '/portal/week-2/executive-discovery' },
+      { name: 'Assessment Building', path: '/portal/week-2/assessment' },
+      { name: 'KPI Optimization', path: '/portal/week-2/kpis-okrs' },
+      { name: 'Industry Multiples', path: '/portal/week-2/multiples' },
       { name: 'Scenario Planning', path: '/portal/week-2/scenarios' }
     ]
   },
