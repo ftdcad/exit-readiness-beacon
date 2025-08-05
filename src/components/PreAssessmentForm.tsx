@@ -150,8 +150,33 @@ const PreAssessmentForm = () => {
 
     // Get NDA record ID if available
     const ndaStatus = checkNDAStatus();
-    const ndaRecordId = ndaStatus?.id;
+    
+    // FIX: Make sure ndaRecordId is a string or null, NOT an object
+    let ndaRecordId = null;
+    
+    if (ndaStatus) {
+      // If it's a string, use it
+      if (typeof ndaStatus === 'string') {
+        ndaRecordId = ndaStatus;
+      } 
+      // If it's an object with id property, use that
+      else if (ndaStatus.id && typeof ndaStatus.id === 'string') {
+        ndaRecordId = ndaStatus.id;
+      }
+      // If it's the weird object format, extract value
+      else if (ndaStatus.value && ndaStatus.value !== 'undefined') {
+        ndaRecordId = ndaStatus.value;
+      }
+    }
+    
+    // Final safety check - must be string or null
+    if (ndaRecordId && typeof ndaRecordId !== 'string') {
+      console.error('Invalid ndaRecordId format:', ndaRecordId);
+      ndaRecordId = null;
+    }
 
+    console.log('Submitting with ndaRecordId:', ndaRecordId);
+    
     const result = await submitContact(formData, ndaRecordId);
     
     if (result.success) {
