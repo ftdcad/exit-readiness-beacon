@@ -29,8 +29,6 @@ import StrategyDocBuilderPage from "./pages/StrategyDocBuilderPage";
 import KPIandOKRPage from "./pages/KPIandOKRPage";
 import IndustryMultiplesPage from "./pages/IndustryMultiplesPage";
 import AssessmentPage from "./pages/AssessmentPage";
-import TurnaroundPlannerPage from "./pages/TurnaroundPlannerPage";
-import RollupBuilderPage from "./pages/RollupBuilderPage";
 
 const queryClient = new QueryClient();
 
@@ -215,26 +213,6 @@ const App = () => (
               <ClientRoute>
                 <ClientPortalLayout>
                   <IndustryMultiplesPage />
-                </ClientPortalLayout>
-              </ClientRoute>
-            } 
-          />
-          <Route 
-            path="/portal/turnaround" 
-            element={
-              <ClientRoute>
-                <ClientPortalLayout>
-                  <TurnaroundPlannerPage />
-                </ClientPortalLayout>
-              </ClientRoute>
-            } 
-          />
-          <Route 
-            path="/portal/rollup-builder" 
-            element={
-              <ClientRoute>
-                <ClientPortalLayout>
-                  <RollupBuilderPage />
                 </ClientPortalLayout>
               </ClientRoute>
             } 
