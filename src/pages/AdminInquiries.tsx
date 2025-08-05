@@ -93,7 +93,7 @@ const AdminInquiries = () => {
     <div className="min-h-screen bg-background p-6">
       <div className="space-y-6">
         <div className="flex items-center justify-between">
-          <h1 className="text-3xl font-bold text-foreground">Contact Inquiries</h1>
+          <h1 className="text-3xl font-bold text-foreground">Companies</h1>
           <div className="flex items-center gap-2">
             <Filter className="h-4 w-4 text-muted-foreground" />
             <Select value={statusFilter} onValueChange={setStatusFilter}>
@@ -125,7 +125,7 @@ const AdminInquiries = () => {
 
         <Card>
           <CardHeader>
-            <CardTitle>Company Submissions</CardTitle>
+            <CardTitle>Company Inquiries</CardTitle>
           </CardHeader>
           <CardContent>
             <Table>
