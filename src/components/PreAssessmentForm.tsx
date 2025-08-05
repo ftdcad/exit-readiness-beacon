@@ -1288,93 +1288,93 @@ Confidential. Strategic. Unbiased.`}
 
                       <div className="grid gap-4">
                       <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="email">Email Address</Label>
-                          <Input
-                            id="email"
-                            type="text"
+                        <div>
+                          <label className="block text-sm font-medium text-white/80 mb-2">
+                            Email Address
+                          </label>
+                          <input
+                            type="email"
                             value={formData.email || ''}
-                            onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
-                            className="bg-background-hover border-border/50"
+                            onChange={(e) => setFormData({...formData, email: e.target.value})}
+                            className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-white/50 focus:border-white/20 focus:outline-none"
                             placeholder="your@email.com"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-white/80 mb-2">
+                            Phone Number
+                          </label>
+                          <input
+                            type="tel"
+                            value={formData.phone || ''}
+                            onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                            className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-white/50 focus:border-white/20 focus:outline-none"
+                            placeholder="(555) 123-4567"
                           />
                         </div>
                       </div>
 
-                      <div>
-                        <label className="block text-sm font-medium text-white/80 mb-2">
-                          Phone Number
-                        </label>
-                        <input
-                          type="tel"
-                          value={formData.phone || ''}
-                          onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                          className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-white/50 focus:border-white/20 focus:outline-none"
-                          placeholder="(555) 123-4567"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-white/80 mb-2">
-                          Company Website
-                        </label>
-                        <input
-                          type="text"
-                          value={formData.companyWebsite || ''}
-                          onChange={(e) => setFormData({...formData, companyWebsite: e.target.value})}
-                          className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-white/50 focus:border-white/20 focus:outline-none"
-                          placeholder="www.example.com"
-                        />
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label htmlFor="jobTitle">Your Job Title</Label>
-                        <Input
-                          id="jobTitle"
-                          value={formData.jobTitle}
-                          onChange={(e) => setFormData(prev => ({ ...prev, jobTitle: e.target.value }))}
-                          className="bg-background-hover border-border/50"
-                          placeholder="e.g., CEO, Founder, Owner"
-                        />
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-medium text-white/80 mb-2">
+                            Your Job Title
+                          </label>
+                          <input
+                            type="text"
+                            value={formData.jobTitle || ''}
+                            onChange={(e) => setFormData({...formData, jobTitle: e.target.value})}
+                            className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-white/50 focus:border-white/20 focus:outline-none"
+                            placeholder="e.g., CEO, Founder, Owner"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-white/80 mb-2">
+                            Company Website
+                          </label>
+                          <input
+                            type="text"
+                            value={formData.companyWebsite || ''}
+                            onChange={(e) => setFormData({...formData, companyWebsite: e.target.value})}
+                            className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-white/50 focus:border-white/20 focus:outline-none"
+                            placeholder="www.example.com"
+                          />
+                        </div>
                       </div>
 
                       <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="preferredContact">Preferred Contact Method</Label>
-                          <Select
+                        <div>
+                          <label className="block text-sm font-medium text-white/80 mb-2">
+                            Preferred Contact Method
+                          </label>
+                          <select
                             value={formData.preferredContact}
-                            onValueChange={(value) => setFormData(prev => ({ ...prev, preferredContact: value }))}
+                            onChange={(e) => setFormData({...formData, preferredContact: e.target.value})}
+                            className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-white/20 focus:outline-none"
                           >
-                            <SelectTrigger className="bg-background-hover border-border/50">
-                              <SelectValue placeholder="Select method" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="phone">Phone Call</SelectItem>
-                              <SelectItem value="email">Email</SelectItem>
-                              <SelectItem value="video">Video Call</SelectItem>
-                              <SelectItem value="in-person">In-Person Meeting</SelectItem>
-                            </SelectContent>
-                          </Select>
+                            <option value="">Select method</option>
+                            <option value="phone">Phone Call</option>
+                            <option value="email">Email</option>
+                            <option value="video">Video Call</option>
+                            <option value="in-person">In-Person Meeting</option>
+                          </select>
                         </div>
-
-                        <div className="space-y-2">
-                          <Label htmlFor="howDidYouHear">How did you hear about us?</Label>
-                          <Select
+                        <div>
+                          <label className="block text-sm font-medium text-white/80 mb-2">
+                            How did you hear about us?
+                          </label>
+                          <select
                             value={formData.howDidYouHear}
-                            onValueChange={(value) => setFormData(prev => ({ ...prev, howDidYouHear: value }))}
+                            onChange={(e) => setFormData({...formData, howDidYouHear: e.target.value})}
+                            className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-white/20 focus:outline-none"
                           >
-                            <SelectTrigger className="bg-background-hover border-border/50">
-                              <SelectValue placeholder="Select source" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="google">Google Search</SelectItem>
-                              <SelectItem value="linkedin">LinkedIn</SelectItem>
-                              <SelectItem value="referral">Referral</SelectItem>
-                              <SelectItem value="social-media">Social Media</SelectItem>
-                              <SelectItem value="industry-event">Industry Event</SelectItem>
-                              <SelectItem value="other">Other</SelectItem>
-                            </SelectContent>
-                          </Select>
+                            <option value="">Select source</option>
+                            <option value="google">Google Search</option>
+                            <option value="linkedin">LinkedIn</option>
+                            <option value="referral">Referral</option>
+                            <option value="social-media">Social Media</option>
+                            <option value="industry-event">Industry Event</option>
+                            <option value="other">Other</option>
+                          </select>
                         </div>
                       </div>
                     </div>
