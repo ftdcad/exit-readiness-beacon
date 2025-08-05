@@ -98,18 +98,12 @@ export const useDeleteInquiry = () => {
 
   return useMutation({
     mutationFn: async (inquiryId: string) => {
-      // First, log the deletion
+      // Get company name for logging
       const { data: inquiry } = await supabase
         .from('contact_inquiries')
         .select('company_name')
         .eq('id', inquiryId)
         .single();
-
-      await supabase.from('activity_log').insert({
-        action_type: 'company_deleted',
-        company_id: inquiryId,
-        details: `Deleted company ${inquiry?.company_name || 'Unknown'}`
-      });
 
       // Delete related records in correct order
       // 1. Delete add_back_categories (via financial_assessments)
@@ -144,13 +138,26 @@ export const useDeleteInquiry = () => {
         .delete()
         .eq('contact_inquiry_id', inquiryId);
 
-      // 5. Delete main contact_inquiries record
+      // 5. Delete existing activity_log records for this company
+      await supabase
+        .from('activity_log')
+        .delete()
+        .eq('company_id', inquiryId);
+
+      // 6. Delete main contact_inquiries record
       const { error } = await supabase
         .from('contact_inquiries')
         .delete()
         .eq('id', inquiryId);
 
       if (error) throw error;
+
+      // 7. Log the successful deletion AFTER deletion is complete
+      await supabase.from('activity_log').insert({
+        action_type: 'company_deleted',
+        details: `Successfully deleted company: ${inquiry?.company_name || 'Unknown'}`
+      });
+
       return inquiryId;
     },
     onSuccess: () => {
