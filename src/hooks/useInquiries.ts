@@ -98,15 +98,27 @@ export const useDeleteInquiry = () => {
 
   return useMutation({
     mutationFn: async (inquiryId: string) => {
-      // Get company name for logging
-      const { data: inquiry } = await supabase
-        .from('contact_inquiries')
-        .select('company_name')
-        .eq('id', inquiryId)
-        .single();
-
-      // Delete related records in correct order
-      // 1. Delete add_back_categories (via financial_assessments)
+      // Delete in EXACT order to avoid foreign key violations:
+      
+      // 1. First delete all activity_log entries for this company
+      await supabase
+        .from('activity_log')
+        .delete()
+        .eq('company_id', inquiryId);
+      
+      // 2. Delete company_comments
+      await supabase
+        .from('company_comments')
+        .delete()
+        .eq('company_id', inquiryId);
+      
+      // 3. Delete assessment_access records
+      await supabase
+        .from('assessment_access')
+        .delete()
+        .eq('contact_inquiry_id', inquiryId);
+      
+      // 4. Delete add_back_categories (via financial_assessments)
       const { data: assessments } = await supabase
         .from('financial_assessments')
         .select('id')
@@ -120,44 +132,19 @@ export const useDeleteInquiry = () => {
           .in('assessment_id', assessmentIds);
       }
 
-      // 2. Delete financial_assessments
+      // 5. Delete financial_assessments
       await supabase
         .from('financial_assessments')
         .delete()
         .eq('company_id', inquiryId);
-
-      // 3. Delete company_comments
-      await supabase
-        .from('company_comments')
-        .delete()
-        .eq('company_id', inquiryId);
-
-      // 4. Delete assessment_access
-      await supabase
-        .from('assessment_access')
-        .delete()
-        .eq('contact_inquiry_id', inquiryId);
-
-      // 5. Delete existing activity_log records for this company
-      await supabase
-        .from('activity_log')
-        .delete()
-        .eq('company_id', inquiryId);
-
-      // 6. Delete main contact_inquiries record
+      
+      // 6. Finally delete the main contact_inquiries record
       const { error } = await supabase
         .from('contact_inquiries')
         .delete()
         .eq('id', inquiryId);
 
       if (error) throw error;
-
-      // 7. Log the successful deletion AFTER deletion is complete
-      await supabase.from('activity_log').insert({
-        action_type: 'company_deleted',
-        details: `Successfully deleted company: ${inquiry?.company_name || 'Unknown'}`
-      });
-
       return inquiryId;
     },
     onSuccess: () => {
