@@ -49,7 +49,9 @@ const weeks = [
       { name: 'KPIs and OKRs', path: '/portal/week-2/kpis-okrs' },
       { name: 'EBITDA Calculator', path: '/portal/week-2/ebitda-calculator' },
       { name: 'Industry Multipliers', path: '/portal/week-2/multiples' },
-      { name: 'Scenario Planning', path: '/portal/week-2/scenarios' }
+      { name: 'Scenario Planning', path: '/portal/week-2/scenarios' },
+      { name: 'Turnaround Planner', path: '/portal/turnaround' },
+      { name: 'Roll-up Builder', path: '/portal/rollup-builder' }
     ]
   },
   {

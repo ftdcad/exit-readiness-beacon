@@ -18,6 +18,8 @@ import {
   Loader2
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { PathRecommendation } from '@/components/PathRecommendation';
+import { ServiceROI } from '@/components/ServiceROI';
 
 interface CalculatorData {
   revenue: number;
