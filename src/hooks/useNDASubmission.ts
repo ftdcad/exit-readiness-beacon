@@ -29,6 +29,18 @@ export const useNDASubmission = () => {
       }
 
       // Submit NDA record to Supabase
+      console.log('Supabase client auth:', supabase.auth);
+      console.log('Supabase client instance:', supabase);
+      console.log('About to insert:', {
+        first_name: formData.firstName,
+        last_name: formData.lastName,
+        email: formData.email,
+        company: formData.company,
+        ip_address: ip,
+        user_agent: navigator.userAgent,
+        status: 'accepted'
+      });
+
       const { data, error } = await supabase
         .from('nda_records')
         .insert({
