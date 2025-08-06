@@ -406,7 +406,41 @@ const AssetWorkshopPage = () => {
               </Card>
 
               <div className="space-y-3">
-                <Button className="w-full bg-gradient-to-r from-accent to-primary hover:from-accent/90 hover:to-primary/90 text-white shadow-lg" variant="default">
+                <Button 
+                  className="w-full bg-gradient-to-r from-accent to-primary hover:from-accent/90 hover:to-primary/90 text-white shadow-lg" 
+                  variant="default"
+                  onClick={() => {
+                    // Generate CSV content
+                    const csvContent = [
+                      'Asset Name,Value,Category,Description,Notes',
+                      ...assets.map(asset => 
+                        `"${asset.name}","${asset.value}","${asset.currentCategory}","${asset.description}","${asset.notes}"`
+                      ),
+                      '',
+                      'Summary:',
+                      `Total Assets,${impact.totalAssets}`,
+                      `Value Destroyers,${impact.destroyerValue}`,
+                      `Buyer Discount,${impact.discountAmount}`,
+                      `Adjusted Valuation,${impact.adjustedValuation}`
+                    ].join('\n');
+
+                    // Create and download CSV file
+                    const blob = new Blob([csvContent], { type: 'text/csv' });
+                    const url = window.URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = `asset-workshop-analysis-${new Date().toISOString().split('T')[0]}.csv`;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    window.URL.revokeObjectURL(url);
+
+                    toast({
+                      title: "Analysis Exported!",
+                      description: "Your asset analysis has been downloaded as a CSV file.",
+                    });
+                  }}
+                >
                   <Download className="h-4 w-4 mr-2" />
                   Export Analysis
                 </Button>
@@ -415,6 +449,15 @@ const AssetWorkshopPage = () => {
                   className="w-full"
                   variant="outline"
                   onClick={async () => {
+                    if (!user) {
+                      toast({
+                        title: "Error",
+                        description: "You must be logged in to complete modules.",
+                        variant: "destructive",
+                      });
+                      return;
+                    }
+
                     try {
                       await markModuleComplete('Asset Workshop', 1);
                       toast({
@@ -422,6 +465,7 @@ const AssetWorkshopPage = () => {
                         description: "You've completed the Asset Workshop module.",
                       });
                     } catch (error) {
+                      console.error('Error completing module:', error);
                       toast({
                         title: "Error",
                         description: "Failed to mark module as complete.",
