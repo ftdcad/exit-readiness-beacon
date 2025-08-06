@@ -966,6 +966,126 @@ const glossaryTerms: GlossaryTerm[] = [
     category: 'valuation-metrics',
     example: 'Google in search, Facebook in social media dominate their markets.',
     relatedTerms: ['Market Dynamics', 'Network Effects', 'Competitive Position']
+  },
+  {
+    id: '117',
+    term: 'Churn Rate',
+    definition: 'The percentage rate at which customers stop subscribing to a service during a given time period.',
+    category: 'accounting-financial',
+    example: 'SaaS company with 5% monthly churn loses 5 out of every 100 customers each month.',
+    relatedTerms: ['Customer Retention', 'SaaS (Software as a Service)', 'MRR', 'ARR']
+  },
+  {
+    id: '118',
+    term: 'COGS (Cost of Goods Sold)',
+    definition: 'Direct costs attributable to the production of goods or services sold by a company.',
+    category: 'accounting-financial',
+    example: 'Manufacturing company with $2M revenue and $800K in materials/labor has 40% COGS.',
+    relatedTerms: ['Gross Margin', 'Operating Expenses', 'Gross Profit']
+  },
+  {
+    id: '119',
+    term: 'Depreciation',
+    definition: 'Accounting method of allocating the cost of a tangible asset over its useful life.',
+    category: 'accounting-financial',
+    example: '$100K equipment depreciated over 10 years results in $10K annual depreciation expense.',
+    relatedTerms: ['Amortization', 'Asset Value', 'Tax Benefits']
+  },
+  {
+    id: '120',
+    term: 'Amortization',
+    definition: 'Process of spreading the cost of an intangible asset over its useful life or loan payments over time.',
+    category: 'accounting-financial',
+    example: 'Patent worth $500K amortized over 5-year life shows $100K annual expense.',
+    relatedTerms: ['Depreciation', 'Intangible Assets', 'Debt Service']
+  },
+  {
+    id: '121',
+    term: 'Net Debt',
+    definition: 'Total debt minus cash and cash equivalents, showing actual debt burden.',
+    category: 'accounting-financial',
+    example: 'Company with $5M debt and $1M cash has $4M net debt.',
+    relatedTerms: ['Debt-to-Equity', 'Leverage', 'Working Capital']
+  },
+  {
+    id: '122',
+    term: 'Operating Margin',
+    definition: 'Operating income expressed as a percentage of revenue, measuring operational efficiency.',
+    category: 'accounting-financial',
+    example: 'Company with $10M revenue and $2M operating income has 20% operating margin.',
+    relatedTerms: ['EBITDA Margin', 'Gross Margin', 'Profitability']
+  },
+  {
+    id: '123',
+    term: 'Return on Capital',
+    definition: 'Measure of how efficiently a company uses its capital to generate profits.',
+    category: 'valuation-metrics',
+    example: 'Company earning $2M profit on $10M invested capital has 20% return on capital.',
+    relatedTerms: ['ROI', 'Capital Efficiency', 'Asset Utilization']
+  },
+  {
+    id: '124',
+    term: 'Asset Light',
+    definition: 'Business model requiring minimal physical assets to generate revenue and profits.',
+    category: 'deal-structure',
+    example: 'Software companies, consulting firms, and marketplaces are typically asset-light businesses.',
+    relatedTerms: ['Scalability', 'Capital Requirements', 'Return on Assets']
+  },
+  {
+    id: '125',
+    term: 'Barriers to Entry',
+    definition: 'Economic, legal, or technological factors that prevent new competitors from entering a market.',
+    category: 'valuation-metrics',
+    example: 'High capital requirements, patents, or regulatory licenses create barriers to entry.',
+    relatedTerms: ['Competitive Moat', 'Market Position', 'Defensibility']
+  },
+  {
+    id: '126',
+    term: 'Cyclicality',
+    definition: 'Business performance pattern that rises and falls with economic or seasonal cycles.',
+    category: 'valuation-metrics',
+    example: 'Construction companies show cyclical patterns tied to economic growth and interest rates.',
+    relatedTerms: ['Market Dynamics', 'Economic Sensitivity', 'Revenue Predictability']
+  },
+  {
+    id: '127',
+    term: 'Patents',
+    definition: 'Legal protection granting exclusive rights to an invention or process for a specified period.',
+    category: 'legal-contract',
+    example: 'Pharmaceutical company with drug patent has exclusive 20-year manufacturing rights.',
+    relatedTerms: ['Intellectual Property', 'Competitive Advantage', 'Barriers to Entry']
+  },
+  {
+    id: '128',
+    term: 'Tech Debt',
+    definition: 'Cost of choosing quick, easy software solutions over better approaches that would take longer.',
+    category: 'pe-specific',
+    example: 'Company using outdated systems faces $2M tech debt to modernize infrastructure.',
+    relatedTerms: ['Digital Transformation', 'System Modernization', 'Operational Risk']
+  },
+  {
+    id: '129',
+    term: 'Digital Transformation',
+    definition: 'Process of adopting digital technologies to fundamentally change business operations and customer value.',
+    category: 'pe-specific',
+    example: 'Retailer implementing e-commerce, mobile apps, and data analytics for digital transformation.',
+    relatedTerms: ['Technology Upgrade', 'Operational Efficiency', 'Customer Experience']
+  },
+  {
+    id: '130',
+    term: 'Warrants',
+    definition: 'Financial instruments giving the holder the right to purchase company equity at a predetermined price.',
+    category: 'deal-structure',
+    example: 'Warrant allows purchase of shares at $10 each when current market price is $15.',
+    relatedTerms: ['Equity Participation', 'Stock Options', 'Upside Participation']
+  },
+  {
+    id: '131',
+    term: 'SBA Financing',
+    definition: 'Small Business Administration loan programs providing government-backed financing for business acquisitions.',
+    category: 'deal-structure',
+    example: 'Buyer uses SBA 7(a) loan for 70% of $2M acquisition with favorable terms and lower down payment.',
+    relatedTerms: ['Debt Financing', 'Government Programs', 'Acquisition Financing']
   }
 ];
 
