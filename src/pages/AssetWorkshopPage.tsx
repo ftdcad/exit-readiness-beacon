@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Download, Plus, DollarSign, AlertTriangle, CheckCircle2, Minus } from 'lucide-react';
-import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
+
 import { useProgress } from '@/hooks/useProgress';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
@@ -281,10 +281,73 @@ const AssetWorkshopPage = () => {
           </CardContent>
         </Card>
 
-        <ResizablePanelGroup direction="horizontal" className="min-h-[800px]">
-          {/* Left Panel - Categorizer */}
-          <ResizablePanel defaultSize={65}>
-            <div className="space-y-6 pr-6">
+        {/* Valuation Impact Summary Bar */}
+        <Card className="border-primary/20 bg-gradient-to-br from-accent/10 to-primary/5 backdrop-blur-lg">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-accent">
+              <DollarSign className="h-5 w-5" />
+              Valuation Impact
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div className="text-center p-4 rounded-lg bg-background/20 backdrop-blur-sm">
+                <div className="text-2xl font-bold text-accent">${impact.totalAssets.toLocaleString()}</div>
+                <div className="text-sm text-muted-foreground">Total Assets</div>
+              </div>
+              <div className="text-center p-4 rounded-lg bg-background/20 backdrop-blur-sm">
+                <div className="text-2xl font-bold text-red-400">${impact.destroyerValue.toLocaleString()}</div>
+                <div className="text-sm text-muted-foreground">Not Core Assets</div>
+              </div>
+              <div className="text-center p-4 rounded-lg bg-background/20 backdrop-blur-sm">
+                <div className="text-2xl font-bold text-red-400">-${impact.discountAmount.toLocaleString()}</div>
+                <div className="text-sm text-muted-foreground">Buyer Discount (20%)</div>
+              </div>
+              <div className="text-center p-4 rounded-lg bg-background/20 backdrop-blur-sm">
+                <div className={`text-2xl font-bold ${impact.deltaFromBaseline < 0 ? 'text-red-400' : 'text-emerald-400'}`}>
+                  ${impact.adjustedValuation.toLocaleString()}
+                </div>
+                <div className="text-sm text-muted-foreground">Adjusted Valuation</div>
+              </div>
+            </div>
+            
+            {impact.deltaFromBaseline < 0 && (
+              <div className="mt-4 p-4 rounded-lg bg-gradient-to-r from-red-900/20 to-red-900/10 border border-red-400/30 backdrop-blur-sm">
+                <p className="text-red-400 text-sm font-medium text-center">
+                  ⚠️ Non-core assets are reducing your valuation by ${Math.abs(impact.deltaFromBaseline).toLocaleString()}
+                </p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Asset Summary Bar */}
+        <Card className="border-primary/20 bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-lg">
+          <CardHeader>
+            <CardTitle className="text-accent">Asset Summary</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              {categories.map((category) => {
+                const count = assets.filter(asset => asset.currentCategory === category.key).length;
+                const value = assets
+                  .filter(asset => asset.currentCategory === category.key)
+                  .reduce((sum, asset) => sum + asset.value, 0);
+                
+                return (
+                  <div key={category.key} className="text-center p-4 rounded-lg bg-background/20 backdrop-blur-sm">
+                    <div className={`text-xl font-bold ${category.textColor}`}>{count}</div>
+                    <div className="text-sm text-muted-foreground">{category.title}</div>
+                    <div className="text-xs text-muted-foreground/80">${value.toLocaleString()}</div>
+                  </div>
+                );
+              })}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Full Width Asset Management */}
+        <div className="space-y-6">
               {/* Add New Asset */}
               <Card className="border-primary/20 bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-lg">
                 <CardHeader>
@@ -437,117 +500,42 @@ const AssetWorkshopPage = () => {
                 })}
               </div>
             </div>
-          </ResizablePanel>
 
-          <ResizableHandle withHandle />
+        {/* Complete Module Button */}
+        <div className="flex justify-center">
+          <Button 
+            className="px-8 py-3"
+            onClick={async () => {
+              if (!user) {
+                toast({
+                  title: "Login Required",
+                  description: "Please log in to save your progress",
+                  variant: "destructive"
+                });
+                return;
+              }
 
-          {/* Right Panel - Valuation Impact */}
-          <ResizablePanel defaultSize={35}>
-            <div className="pl-6 space-y-6">
-              <Card className="border-primary/20 bg-gradient-to-br from-accent/10 to-primary/5 backdrop-blur-lg">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-accent">
-                    <DollarSign className="h-5 w-5" />
-                    Valuation Impact
-                  </CardTitle>
-                  <CardDescription className="text-muted-foreground/80">Live preview of buyer discount</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="space-y-3">
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Total Assets:</span>
-                      <span className="font-semibold text-accent">${impact.totalAssets.toLocaleString()}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Not Core:</span>
-                      <span className="font-semibold text-red-400">${impact.destroyerValue.toLocaleString()}</span>
-                    </div>
-                    <Separator className="bg-border/50" />
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Buyer Discount (20%):</span>
-                      <span className="font-semibold text-red-400">-${impact.discountAmount.toLocaleString()}</span>
-                    </div>
-                    <div className="flex justify-between text-lg font-bold">
-                      <span className="text-foreground">Adjusted Valuation:</span>
-                      <span className={impact.deltaFromBaseline < 0 ? 'text-red-400' : 'text-emerald-400'}>
-                        ${impact.adjustedValuation.toLocaleString()}
-                      </span>
-                    </div>
-                  </div>
-
-                  {impact.deltaFromBaseline < 0 && (
-                    <div className="p-4 rounded-lg bg-gradient-to-r from-red-900/20 to-red-900/10 border border-red-400/30 backdrop-blur-sm">
-                      <p className="text-red-400 text-sm font-medium">
-                        ⚠️ Non-core assets are reducing your valuation by ${Math.abs(impact.deltaFromBaseline).toLocaleString()}
-                      </p>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-
-              <Card className="border-primary/20 bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-lg">
-                <CardHeader>
-                  <CardTitle className="text-accent">Asset Summary</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    {categories.map((category) => {
-                      const count = assets.filter(asset => asset.currentCategory === category.key).length;
-                      const value = assets
-                        .filter(asset => asset.currentCategory === category.key)
-                        .reduce((sum, asset) => sum + asset.value, 0);
-                      
-                      return (
-                        <div key={category.key} className="flex justify-between items-center">
-                          <span className={`text-sm font-medium ${category.textColor}`}>{category.title}:</span>
-                          <div className="text-right">
-                            <div className="text-sm font-semibold text-foreground">{count} assets</div>
-                            <div className="text-xs text-muted-foreground">${value.toLocaleString()}</div>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </CardContent>
-              </Card>
-
-              <div className="space-y-3">
-                <Button 
-                  className="w-full"
-                  onClick={async () => {
-                    if (!user) {
-                      toast({
-                        title: "Login Required",
-                        description: "Please log in to save your progress",
-                        variant: "destructive"
-                      });
-                      return;
-                    }
-
-                    try {
-                      await markModuleComplete('Asset Workshop', 1);
-                      toast({
-                        title: "Module Completed!",
-                        description: "Asset Categorization Workshop marked as complete"
-                      });
-                    } catch (error) {
-                      console.error('Error completing module:', error);
-                      toast({
-                        title: "Error",
-                        description: "Failed to mark module as complete.",
-                        variant: "destructive",
-                      });
-                    }
-                  }}
-                  disabled={isModuleCompleted('Asset Workshop', 1)}
-                >
-                  <CheckCircle2 className="h-4 w-4 mr-2" />
-                  {isModuleCompleted('Asset Workshop', 1) ? '✓ Module Complete' : 'Complete Module'}
-                </Button>
-              </div>
-            </div>
-          </ResizablePanel>
-        </ResizablePanelGroup>
+              try {
+                await markModuleComplete('Asset Workshop', 1);
+                toast({
+                  title: "Module Completed!",
+                  description: "Asset Categorization Workshop marked as complete"
+                });
+              } catch (error) {
+                console.error('Error completing module:', error);
+                toast({
+                  title: "Error",
+                  description: "Failed to mark module as complete.",
+                  variant: "destructive",
+                });
+              }
+            }}
+            disabled={isModuleCompleted('Asset Workshop', 1)}
+          >
+            <CheckCircle2 className="h-4 w-4 mr-2" />
+            {isModuleCompleted('Asset Workshop', 1) ? '✓ Module Complete' : 'Complete Module'}
+          </Button>
+        </div>
     </div>
   );
 };
