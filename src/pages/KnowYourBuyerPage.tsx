@@ -188,8 +188,11 @@ export default function KnowYourBuyerPage() {
         buyer_scores: buyerScores,
         selected_buyer: selectedBuyer,
         updated_at: new Date().toISOString()
+      }, {
+        onConflict: 'user_id'
       });
       if (error) throw error;
+      toast.success("Analysis saved successfully!");
     } catch (err) {
       toast.error("Failed to save analysis");
       console.error("Save error:", err);
@@ -277,6 +280,7 @@ export default function KnowYourBuyerPage() {
         {/* Buyer Results */}
         <div className="mb-12">
           <h2 className="text-xl font-semibold text-white mb-6">Your Best-Fit Buyers</h2>
+          <p className="text-white/60 mb-6 text-sm">💡 Click any buyer card below to see detailed information about what they value and how to prepare for them.</p>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {getSortedBuyers().map((buyer, index) => {
               const score = buyerScores[buyer.id] || 0;
