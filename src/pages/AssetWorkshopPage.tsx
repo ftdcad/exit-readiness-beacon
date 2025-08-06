@@ -404,59 +404,102 @@ const AssetWorkshopPage = () => {
                 </CardContent>
               </Card>
 
-              {/* Asset List Display */}
-              {assets.length > 0 && (
-                <Card className="border-primary/20 bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-lg">
-                  <CardHeader>
-                    <CardTitle className="text-accent">Your Assets ({assets.length})</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-3">
-                    {assets.map((asset) => (
-                      <div
-                        key={asset.id}
-                        className="p-4 rounded-lg bg-background/30 backdrop-blur-sm border border-border/50"
-                      >
-                        <div className="flex justify-between items-start mb-2">
-                          <h4 className="font-medium text-foreground">{asset.name}</h4>
-                          <div className="flex items-center gap-2">
-                            <Badge variant="outline" className="text-accent">
-                              ${asset.value.toLocaleString()}
-                            </Badge>
-                            <Badge 
-                              variant="outline" 
-                              className={`${
-                                asset.currentCategory === 'Core' ? 'text-green-400' :
-                                asset.currentCategory === 'Negotiable' ? 'text-yellow-400' :
-                                asset.currentCategory === 'Destroyer' ? 'text-red-400' :
-                                'text-slate-400'
-                              }`}
+              {/* Categories */}
+              <div className="grid grid-cols-1 gap-6">
+                {categories.map((category) => {
+                  const Icon = category.icon;
+                  const categoryAssets = assets.filter(asset => asset.currentCategory === category.key);
+                  
+                  return (
+                    <Card 
+                      key={category.key}
+                      className={`border-primary/20 bg-gradient-to-br from-${category.key === 'Core' ? 'emerald' : category.key === 'Destroyer' ? 'red' : 'amber'}-900/20 to-${category.key === 'Core' ? 'emerald' : category.key === 'Destroyer' ? 'red' : 'amber'}-900/5 backdrop-blur-lg transition-all duration-200 hover:shadow-lg`}
+                      onDragOver={handleDragOver}
+                      onDrop={(e) => handleDrop(e, category.key)}
+                    >
+                      <CardHeader>
+                        <CardTitle className={`flex items-center gap-2 ${category.textColor}`}>
+                          <Icon className="h-5 w-5" />
+                          {category.title}
+                          <Badge variant="outline" className={`${category.textColor} border-current bg-background/20`}>
+                            {categoryAssets.length}
+                          </Badge>
+                        </CardTitle>
+                        <CardDescription className="text-muted-foreground/80">{category.description}</CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-3">
+                          {categoryAssets.map((asset) => (
+                            <div
+                              key={asset.id}
+                              draggable
+                              onDragStart={(e) => handleDragStart(e, asset.id)}
+                              className="p-4 rounded-lg bg-gradient-to-r from-background/80 to-background/60 border border-border/50 cursor-move hover:from-background/90 hover:to-background/70 transition-all duration-200 backdrop-blur-sm shadow-sm hover:shadow-md"
                             >
-                              {asset.currentCategory}
-                            </Badge>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => removeAsset(asset.id)}
-                              className="h-8 w-8 p-0 text-muted-foreground hover:text-red-400"
-                            >
-                              <Minus className="h-4 w-4" />
-                            </Button>
-                          </div>
+                              <div className="flex items-start justify-between">
+                                <div className="flex-1">
+                                  <h4 className="font-semibold text-foreground">{asset.name}</h4>
+                                  <p className="text-sm text-muted-foreground/80">{asset.description}</p>
+                                  <p className="text-sm font-semibold text-accent mt-1">
+                                    ${asset.value.toLocaleString()}
+                                  </p>
+                                  
+                                  {/* Smart Warning System */}
+                                  {asset.warningLevel && asset.warningLevel !== 'green' && (
+                                    <div className={`mt-2 p-2 rounded text-xs ${
+                                      asset.warningLevel === 'red' 
+                                        ? 'bg-red-900/20 text-red-400 border border-red-400/30' 
+                                        : 'bg-yellow-900/20 text-yellow-400 border border-yellow-400/30'
+                                    }`}>
+                                      <p className="font-medium">
+                                        {asset.warningLevel === 'red' ? '🔴' : '🟡'} {asset.warningMessage}
+                                      </p>
+                                    </div>
+                                  )}
+                                  
+                                  {asset.warningLevel === 'green' && asset.warningMessage && (
+                                    <div className="mt-2 p-2 rounded text-xs bg-green-900/20 text-green-400 border border-green-400/30">
+                                      <p className="font-medium">✅ {asset.warningMessage}</p>
+                                    </div>
+                                  )}
+                                </div>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => removeAsset(asset.id)}
+                                  className="text-muted-foreground hover:text-destructive opacity-60 hover:opacity-100"
+                                >
+                                  <Minus className="h-4 w-4" />
+                                </Button>
+                              </div>
+                              
+                              {/* Explanation required for warnings */}
+                              {asset.warningLevel && asset.warningLevel !== 'green' && (
+                                <Textarea
+                                  placeholder={`Required: Explain why this is ${category.key.toLowerCase()} for your ${userIndustry} business...`}
+                                  value={asset.explanation || ''}
+                                  onChange={(e) => updateAssetExplanation(asset.id, e.target.value)}
+                                  className="mt-3 text-sm bg-background/30 backdrop-blur-sm border-yellow-400/30"
+                                  rows={2}
+                                />
+                              )}
+                              
+                              <Textarea
+                                placeholder="Add notes..."
+                                value={asset.notes}
+                                onChange={(e) => updateAssetNotes(asset.id, e.target.value)}
+                                className="mt-3 text-sm bg-background/30 backdrop-blur-sm"
+                                rows={2}
+                              />
+                            </div>
+                          ))}
                         </div>
-                        
-                        {asset.description && (
-                          <p className="text-sm text-muted-foreground mb-2">{asset.description}</p>
-                        )}
-                        
-                        {asset.notes && (
-                          <p className="text-sm text-muted-foreground/80 italic">Notes: {asset.notes}</p>
-                        )}
-                      </div>
-                    ))}
-                  </CardContent>
-                </Card>
-              )}
-        </div>
+                      </CardContent>
+                    </Card>
+                  );
+                })}
+              </div>
+            </div>
 
         {/* Complete Module Button */}
         <div className="flex justify-center">
