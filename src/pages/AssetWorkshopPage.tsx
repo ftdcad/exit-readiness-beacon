@@ -304,13 +304,24 @@ const AssetWorkshopPage = () => {
                       onChange={(e) => setNewAsset(prev => ({ ...prev, name: e.target.value }))}
                       className="bg-background/50 backdrop-blur-sm text-foreground placeholder:text-muted-foreground"
                     />
-                    <Input
-                      type="number"
-                      placeholder="Value ($)"
-                      value={newAsset.value}
-                      onChange={(e) => setNewAsset(prev => ({ ...prev, value: e.target.value }))}
-                      className="bg-background/50 backdrop-blur-sm text-foreground placeholder:text-muted-foreground"
-                    />
+                    <div className="space-y-2">
+                      <Input
+                        type="number"
+                        placeholder="Value ($)"
+                        value={newAsset.value}
+                        onChange={(e) => setNewAsset(prev => ({ ...prev, value: e.target.value }))}
+                        className="bg-background/50 backdrop-blur-sm text-foreground placeholder:text-muted-foreground"
+                      />
+                      <select 
+                        className="w-full h-10 px-3 py-2 bg-background/50 backdrop-blur-sm text-foreground border border-input rounded-md text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                        defaultValue=""
+                      >
+                        <option value="" disabled>Select category</option>
+                        <option value="Core">Core Asset</option>
+                        <option value="Negotiable">Negotiable</option>
+                        <option value="Destroyer">Non-Core</option>
+                      </select>
+                    </div>
                   </div>
                   <Input
                     placeholder="Description"
