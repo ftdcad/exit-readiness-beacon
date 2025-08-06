@@ -279,7 +279,7 @@ const AssetWorkshopPage = () => {
             </p>
             <div className="mt-6 p-4 rounded-lg bg-gradient-to-r from-accent/10 to-primary/10 backdrop-blur-sm border border-accent/20">
               <p className="font-medium text-accent">
-                💡 This module helps you identify which assets to divest or separate *before* buyers discount your deal.
+                This module helps you identify which assets to divest or separate *before* buyers discount your deal.
               </p>
             </div>
           </CardContent>
