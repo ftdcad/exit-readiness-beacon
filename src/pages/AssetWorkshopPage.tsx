@@ -320,7 +320,7 @@ const AssetWorkshopPage = () => {
                     {/* Right Column */}
                     <div className="space-y-4">
                       <Select defaultValue="">
-                        <SelectTrigger className="bg-background/50 backdrop-blur-sm text-foreground">
+                        <SelectTrigger className="bg-background/50 backdrop-blur-sm text-foreground placeholder:text-muted-foreground">
                           <SelectValue placeholder="Select category" />
                         </SelectTrigger>
                         <SelectContent className="bg-background/95 backdrop-blur-sm border-input">
