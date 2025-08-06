@@ -13,6 +13,7 @@ import { useContactSubmission } from "@/hooks/useContactSubmission";
 import { useToast } from "@/hooks/use-toast";
 
 const PreAssessmentForm = () => {
+  console.log("PreAssessmentForm loaded - NDA system removed");
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     // Company Basics
