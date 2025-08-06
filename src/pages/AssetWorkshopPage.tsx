@@ -501,39 +501,6 @@ const AssetWorkshopPage = () => {
 
               <div className="space-y-3">
                 <Button 
-                  className="w-full bg-gradient-to-r from-accent to-primary hover:from-accent/90 hover:to-primary/90 text-white shadow-lg" 
-                  variant="default"
-                  onClick={() => {
-                    // Generate CSV export with warnings and explanations
-                     const csvContent = [
-                      'Asset Name,Value,Description,Category,Warning Level,Warning Message,Explanation,Notes',
-                      ...assets.map(asset => 
-                        `"${asset.name}","${asset.value}","${asset.description}","${asset.currentCategory}","${asset.warningLevel || 'none'}","${asset.warningMessage || ''}","${asset.explanation || ''}","${asset.notes}"`
-                      )
-                    ].join('\n');
-
-                    // Create and download CSV file
-                    const blob = new Blob([csvContent], { type: 'text/csv' });
-                    const url = window.URL.createObjectURL(blob);
-                    const link = document.createElement('a');
-                    link.href = url;
-                    link.download = `asset-analysis-${userIndustry.toLowerCase()}-${new Date().toISOString().split('T')[0]}.csv`;
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                    window.URL.revokeObjectURL(url);
-
-                    toast({
-                      title: "Export Complete",
-                      description: `Asset analysis for ${userIndustry} business exported successfully`
-                    });
-                  }}
-                >
-                  <Download className="h-4 w-4 mr-2" />
-                  Export Analysis
-                </Button>
-                
-                <Button 
                   className="w-full"
                   onClick={async () => {
                     if (!user) {
