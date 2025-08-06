@@ -352,11 +352,6 @@ export default function KnowYourBuyerPage() {
           </div>
         )}
 
-        {saving && (
-          <div className="fixed bottom-6 right-6 text-xs text-blue-400 animate-pulse">
-            Saving analysis...
-          </div>
-        )}
       </div>
     </div>
   );
