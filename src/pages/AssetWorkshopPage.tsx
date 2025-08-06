@@ -240,7 +240,7 @@ const AssetWorkshopPage = () => {
     },
     {
       key: 'Destroyer' as const,
-      title: 'Value Destroyers',
+      title: 'Not Core',
       description: 'Non-essential or personal assets that reduce your multiple or kill deals.',
       bgColor: 'bg-red-900/10',
       borderColor: 'border-red-400/20',
@@ -447,7 +447,7 @@ const AssetWorkshopPage = () => {
                       <span className="font-semibold text-accent">${impact.totalAssets.toLocaleString()}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Value Destroyers:</span>
+                      <span className="text-muted-foreground">Not Core:</span>
                       <span className="font-semibold text-red-400">${impact.destroyerValue.toLocaleString()}</span>
                     </div>
                     <Separator className="bg-border/50" />
@@ -466,7 +466,7 @@ const AssetWorkshopPage = () => {
                   {impact.deltaFromBaseline < 0 && (
                     <div className="p-4 rounded-lg bg-gradient-to-r from-red-900/20 to-red-900/10 border border-red-400/30 backdrop-blur-sm">
                       <p className="text-red-400 text-sm font-medium">
-                        ⚠️ Value destroyers are reducing your valuation by ${Math.abs(impact.deltaFromBaseline).toLocaleString()}
+                        ⚠️ Non-core assets are reducing your valuation by ${Math.abs(impact.deltaFromBaseline).toLocaleString()}
                       </p>
                     </div>
                   )}
