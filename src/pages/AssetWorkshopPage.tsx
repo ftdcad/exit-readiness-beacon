@@ -430,11 +430,6 @@ const AssetWorkshopPage = () => {
                               />
                             </div>
                           ))}
-                          {categoryAssets.length === 0 && (
-                            <div className="p-8 text-center text-muted-foreground/60 border-2 border-dashed border-border/30 rounded-lg bg-background/10 backdrop-blur-sm">
-                              Drag assets here to categorize
-                            </div>
-                          )}
                         </div>
                       </CardContent>
                     </Card>
