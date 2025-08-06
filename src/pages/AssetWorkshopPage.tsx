@@ -272,13 +272,13 @@ const AssetWorkshopPage = () => {
             <CardTitle className="text-accent">Founder's Story</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-accent/90 leading-relaxed text-lg">
+            <p className="text-accent/90 leading-relaxed text-base">
               "When I sold my company, I didn't realize the building I owned in the company's name was tanking our valuation. 
               Private equity wanted no part of it. That moment taught me a hard lesson: buyers want streamlined, operationally 
               essential businesses. Everything else? Dead weight."
             </p>
             <div className="mt-6 p-4 rounded-lg bg-gradient-to-r from-accent/10 to-primary/10 backdrop-blur-sm border border-accent/20">
-              <p className="font-medium text-accent">
+              <p className="text-accent text-sm">
                 This module helps you identify which assets to divest or separate *before* buyers discount your deal.
               </p>
             </div>
