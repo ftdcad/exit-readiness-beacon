@@ -361,6 +361,14 @@ const glossaryTerms: GlossaryTerm[] = [
     example: 'IOI proposing $8-10M purchase price range with 45-day due diligence timeline to gauge mutual interest.',
     relatedTerms: ['LOI', 'Due Diligence', 'Purchase Agreement']
   },
+  {
+    id: '102',
+    term: 'SaaS (Software as a Service)',
+    definition: 'Companies that provide software applications over the internet through subscription model. Customers access via web browser instead of installing software locally.',
+    category: 'accounting-financial',
+    example: 'Salesforce, Slack, and Zoom are SaaS companies charging monthly subscriptions for cloud-based software access.',
+    relatedTerms: ['ARR', 'MRR', 'Recurring Revenue', 'Churn Rate']
+  },
   
   // DEAL STRUCTURE TERMS
   {
