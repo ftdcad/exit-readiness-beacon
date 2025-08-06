@@ -293,6 +293,55 @@ const glossaryTerms: GlossaryTerm[] = [
     category: 'deal-structure',
     example: 'Buyer uses SBA 7(a) loan for 70% of $2M acquisition purchase price.'
   },
+  {
+    id: '132',
+    term: 'Data Room',
+    definition: 'Secure digital repository where all company documents are organized for buyer review during due diligence. Think of it as a digital file cabinet for your deal.',
+    category: 'legal-contract',
+    example: 'Virtual data room containing 3 years of financials, contracts, HR files, and IP documentation for buyer access.'
+  },
+  {
+    id: '133',
+    term: 'KPIs (Key Performance Indicators)',
+    definition: 'Measurable values that demonstrate how effectively your business is achieving key objectives. Critical for PE buyers to understand operational performance.',
+    category: 'pe-specific',
+    example: 'Monthly revenue, customer acquisition cost, employee retention rate, and gross margin percentage.'
+  },
+  {
+    id: '134',
+    term: 'OKRs (Objectives and Key Results)',
+    definition: 'Goal-setting framework where objectives are qualitative goals and key results are measurable outcomes. Used to align teams and track progress.',
+    category: 'pe-specific',
+    example: 'Objective: Improve customer satisfaction. Key Results: Increase NPS to 70+, reduce churn to <5%, achieve 95% support response rate.'
+  },
+  {
+    id: '135',
+    term: 'Strategy Document',
+    definition: 'Comprehensive business plan outlining your company\'s mission, vision, goals, and growth strategy. Essential for demonstrating strategic thinking to buyers.',
+    category: 'pe-specific',
+    example: '3-year strategic plan with market expansion goals, product roadmap, and financial projections.'
+  },
+  {
+    id: '136',
+    term: 'Executive Discovery Interview',
+    definition: 'Structured interview process where PE professionals assess management team\'s capabilities, vision, and readiness for partnership.',
+    category: 'pe-specific',
+    example: '2-hour interview covering leadership experience, growth plans, operational challenges, and cultural fit with PE partner.'
+  },
+  {
+    id: '137',
+    term: 'Industry Multiples',
+    definition: 'Valuation benchmarks showing what companies in your industry typically sell for as a multiple of EBITDA. Used to estimate your company\'s market value.',
+    category: 'valuation-metrics',
+    example: 'SaaS companies trade at 8-12x EBITDA while manufacturing businesses trade at 4-6x EBITDA.'
+  },
+  {
+    id: '138',
+    term: 'Asset Workshop',
+    definition: 'Structured session to identify and optimize your company\'s key assets (physical, intellectual, human capital) to maximize value before a transaction.',
+    category: 'pe-specific',
+    example: 'Workshop identifying $2M in undervalued equipment, proprietary processes worth $500K, and key employee retention strategies.'
+  },
   
   // LEGAL & CONTRACT TERMS
   {
