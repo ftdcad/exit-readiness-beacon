@@ -1,6 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Search, Heart, BookOpen, DollarSign, Scale, Settings, TrendingUp } from 'lucide-react';
-import { Input } from '@/components/ui/input';
+import { Heart, BookOpen, DollarSign, Scale, Settings, TrendingUp } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -973,37 +972,22 @@ const categoryColors = {
 };
 
 export function InteractiveGlossary() {
-  const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [favorites, setFavorites] = useState<string[]>([]);
 
-  // Function to handle clicking on related terms
-  const handleRelatedTermClick = (term: string) => {
-    setSearchTerm(term);
-    setSelectedCategory('all');
-  };
-
-  // Function to clear search
-  const clearSearch = () => {
-    setSearchTerm('');
-  };
-
   const filteredTerms = useMemo(() => {
     return glossaryTerms.filter(term => {
-      const matchesSearch = term.term.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          term.definition.toLowerCase().includes(searchTerm.toLowerCase());
-      
       if (selectedCategory === 'favorites') {
-        return matchesSearch && favorites.includes(term.id);
+        return favorites.includes(term.id);
       }
       
       if (selectedCategory === 'all') {
-        return matchesSearch;
+        return true;
       }
       
-      return matchesSearch && term.category === selectedCategory;
+      return term.category === selectedCategory;
     });
-  }, [searchTerm, selectedCategory, favorites]);
+  }, [selectedCategory, favorites]);
 
   const toggleFavorite = (termId: string) => {
     setFavorites(prev => 
@@ -1032,28 +1016,6 @@ export function InteractiveGlossary() {
         </p>
       </div>
 
-      {/* Search */}
-      <div className="relative max-w-md mx-auto">
-        <Search 
-          className={`absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 ${searchTerm ? 'text-primary cursor-pointer hover:text-primary/80' : 'text-muted-foreground'}`}
-          onClick={searchTerm ? clearSearch : undefined}
-        />
-        <Input
-          placeholder="Search terms and definitions..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="pl-10 pr-8 text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-primary focus-visible:ring-primary"
-        />
-        {searchTerm && (
-          <button
-            onClick={clearSearch}
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground text-sm font-medium"
-          >
-            ✕
-          </button>
-        )}
-      </div>
-
       {/* Category Tabs */}
       <Tabs value={selectedCategory} onValueChange={setSelectedCategory} className="w-full">
         <TabsList className="grid w-full grid-cols-6">
@@ -1069,7 +1031,7 @@ export function InteractiveGlossary() {
             <Card>
               <CardContent className="text-center py-8">
                 <p className="text-muted-foreground">
-                  {searchTerm ? 'No terms found matching your search.' : 'No terms in this category yet.'}
+                  No terms in this category yet.
                 </p>
               </CardContent>
             </Card>
@@ -1122,12 +1084,7 @@ export function InteractiveGlossary() {
                            <p className="text-xs font-medium text-muted-foreground mb-2">Related Terms:</p>
                            <div className="flex flex-wrap gap-1">
                              {term.relatedTerms.map((relatedTerm) => (
-                               <Badge 
-                                 key={relatedTerm} 
-                                 variant="outline" 
-                                 className="text-xs cursor-pointer hover:bg-primary/10 hover:border-primary transition-colors"
-                                 onClick={() => handleRelatedTermClick(relatedTerm)}
-                               >
+                               <Badge key={relatedTerm} variant="outline" className="text-xs">
                                  {relatedTerm}
                                </Badge>
                              ))}
