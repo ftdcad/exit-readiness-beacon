@@ -331,8 +331,8 @@ const AssetWorkshopPage = () => {
                         placeholder="Description"
                         value={newAsset.description}
                         onChange={(e) => setNewAsset(prev => ({ ...prev, description: e.target.value }))}
-                        rows={2}
-                        className="w-full px-3 py-2 bg-background/50 backdrop-blur-sm text-foreground placeholder:text-muted-foreground border border-input rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 resize-none"
+                        rows={1}
+                        className="w-full h-10 px-3 py-2 bg-background/50 backdrop-blur-sm text-foreground placeholder:text-muted-foreground border border-input rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 resize-none"
                       />
                     </div>
                   </div>
