@@ -5,26 +5,38 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Crown, Clock, Trophy, ArrowRight, Play } from 'lucide-react';
 import { Link } from 'react-router-dom';
-
 export default function ClientPortalDashboard() {
   // This would come from user progress data in real implementation
   const weekProgress = {
-    1: { completed: 0, total: 4, unlocked: true },
-    2: { completed: 0, total: 4, unlocked: false },
-    3: { completed: 0, total: 4, unlocked: false },
-    4: { completed: 0, total: 4, unlocked: false }
+    1: {
+      completed: 0,
+      total: 4,
+      unlocked: true
+    },
+    2: {
+      completed: 0,
+      total: 4,
+      unlocked: false
+    },
+    3: {
+      completed: 0,
+      total: 4,
+      unlocked: false
+    },
+    4: {
+      completed: 0,
+      total: 4,
+      unlocked: false
+    }
   };
-
   const overallProgress = 0; // 0% for new user
   const currentWeek = 1;
-
-  return (
-    <div className="space-y-8">
+  return <div className="space-y-8">
       {/* Welcome Header */}
       <div className="text-center space-y-4">
         <div className="flex items-center justify-center gap-2 text-primary">
           <Crown className="h-8 w-8" />
-          <h1 className="text-4xl font-bold">Welcome to Your Deal Room</h1>
+          <h1 className="text-4xl font-bold text-slate-50">Welcome to Your Deal Room</h1>
         </div>
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
           Your exclusive 4-week journey to maximize exit value. Let's transform your business into a PE-ready powerhouse.
@@ -55,20 +67,14 @@ export default function ClientPortalDashboard() {
           </div>
           
           <div className="grid grid-cols-4 gap-4 mt-6">
-            {Object.entries(weekProgress).map(([week, progress]) => (
-              <div key={week} className="text-center">
-                <div className={`w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-2 ${
-                  progress.unlocked 
-                    ? 'bg-primary text-primary-foreground' 
-                    : 'bg-muted text-muted-foreground'
-                }`}>
+            {Object.entries(weekProgress).map(([week, progress]) => <div key={week} className="text-center">
+                <div className={`w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-2 ${progress.unlocked ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'}`}>
                   {week}
                 </div>
                 <div className="text-xs text-muted-foreground">
                   {progress.completed}/{progress.total} modules
                 </div>
-              </div>
-            ))}
+              </div>)}
           </div>
         </CardContent>
       </Card>
@@ -170,6 +176,5 @@ export default function ClientPortalDashboard() {
           </Button>
         </CardContent>
       </Card>
-    </div>
-  );
+    </div>;
 }
