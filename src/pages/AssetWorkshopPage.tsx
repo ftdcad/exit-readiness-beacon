@@ -167,15 +167,6 @@ const AssetWorkshopPage = () => {
       icon: CheckCircle2
     },
     {
-      key: 'Destroyer' as const,
-      title: 'Value Destroyers',
-      description: 'Non-essential or personal assets that reduce your multiple or kill deals.',
-      bgColor: 'bg-red-900/10',
-      borderColor: 'border-red-400/20',
-      textColor: 'text-red-400',
-      icon: AlertTriangle
-    },
-    {
       key: 'Negotiable' as const,
       title: 'Negotiable',
       description: 'Could go either way depending on the buyer\'s strategy or risk tolerance.',
@@ -183,6 +174,15 @@ const AssetWorkshopPage = () => {
       borderColor: 'border-yellow-400/20',
       textColor: 'text-yellow-400',
       icon: DollarSign
+    },
+    {
+      key: 'Destroyer' as const,
+      title: 'Value Destroyers',
+      description: 'Non-essential or personal assets that reduce your multiple or kill deals.',
+      bgColor: 'bg-red-900/10',
+      borderColor: 'border-red-400/20',
+      textColor: 'text-red-400',
+      icon: AlertTriangle
     }
   ];
 
