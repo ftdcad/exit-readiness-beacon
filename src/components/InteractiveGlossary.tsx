@@ -988,6 +988,13 @@ const glossaryTerms: GlossaryTerm[] = [
     definition: 'Government clearance required for certain transactions, especially larger deals or specific industries.',
     category: 'legal-contract',
     example: 'FTC approval required for $100M acquisition that creates market concentration.'
+  },
+  {
+    id: '117',
+    term: 'Core Assets',
+    definition: 'Assets that are essential to business operations and revenue generation. These assets must stay with the business for it to function, and PE buyers expect them to be included in the transaction.',
+    category: 'pe-specific',
+    example: 'Manufacturing equipment, customer databases, and operational facilities are core assets, while executive vacation properties or redundant real estate are typically non-core.'
   }
 ];
 
