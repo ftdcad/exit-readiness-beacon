@@ -297,44 +297,46 @@ const AssetWorkshopPage = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  {/* Row 1: Asset name (full width) */}
-                  <Input
-                    placeholder="Asset name"
-                    value={newAsset.name}
-                    onChange={(e) => setNewAsset(prev => ({ ...prev, name: e.target.value }))}
-                    className="bg-background/50 backdrop-blur-sm text-foreground placeholder:text-muted-foreground"
-                  />
-                  
-                  {/* Row 2: Value and Category (side by side, 50/50) */}
-                  <div className="grid grid-cols-2 gap-6">
-                    <Input
-                      type="number"
-                      placeholder="Value ($)"
-                      value={newAsset.value}
-                      onChange={(e) => setNewAsset(prev => ({ ...prev, value: e.target.value }))}
-                      className="bg-background/50 backdrop-blur-sm text-foreground placeholder:text-muted-foreground"
-                    />
-                    <select 
-                      className="w-full h-10 px-3 py-2 bg-background/50 backdrop-blur-sm text-foreground border border-input rounded-md text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-                      defaultValue=""
-                    >
-                      <option value="" disabled>Select category</option>
-                      <option value="Core">Core Asset</option>
-                      <option value="Negotiable">Negotiable</option>
-                      <option value="Destroyer">Non-Core</option>
-                    </select>
+                  {/* 2x2 Grid Layout */}
+                  <div className="grid grid-cols-2 gap-4">
+                    {/* Left Column */}
+                    <div className="space-y-4">
+                      <Input
+                        placeholder="Asset name"
+                        value={newAsset.name}
+                        onChange={(e) => setNewAsset(prev => ({ ...prev, name: e.target.value }))}
+                        className="bg-background/50 backdrop-blur-sm text-foreground placeholder:text-muted-foreground"
+                      />
+                      <Input
+                        type="number"
+                        placeholder="Value ($)"
+                        value={newAsset.value}
+                        onChange={(e) => setNewAsset(prev => ({ ...prev, value: e.target.value }))}
+                        className="bg-background/50 backdrop-blur-sm text-foreground placeholder:text-muted-foreground"
+                      />
+                    </div>
+                    
+                    {/* Right Column */}
+                    <div className="space-y-4">
+                      <select 
+                        className="w-full h-10 px-3 py-2 bg-background/50 backdrop-blur-sm text-foreground border border-input rounded-md text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                        defaultValue=""
+                      >
+                        <option value="" disabled>Select category</option>
+                        <option value="Core">Core Asset</option>
+                        <option value="Negotiable">Negotiable</option>
+                        <option value="Destroyer">Non-Core</option>
+                      </select>
+                      <textarea
+                        placeholder="Description"
+                        value={newAsset.description}
+                        onChange={(e) => setNewAsset(prev => ({ ...prev, description: e.target.value }))}
+                        rows={2}
+                        className="w-full px-3 py-2 bg-background/50 backdrop-blur-sm text-foreground placeholder:text-muted-foreground border border-input rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 resize-none"
+                      />
+                    </div>
                   </div>
                   
-                  {/* Row 3: Description (reasonable textarea) */}
-                  <textarea
-                    placeholder="Description"
-                    value={newAsset.description}
-                    onChange={(e) => setNewAsset(prev => ({ ...prev, description: e.target.value }))}
-                    rows={3}
-                    className="w-full px-3 py-2 bg-background/50 backdrop-blur-sm text-foreground placeholder:text-muted-foreground border border-input rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 resize-none"
-                  />
-                  
-                  {/* Row 4: Add Asset button */}
                   <Button onClick={addAsset} disabled={!newAsset.name || !newAsset.value} className="w-full">
                     Add Asset
                   </Button>
