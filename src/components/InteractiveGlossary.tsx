@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 
 
 interface GlossaryTerm {
@@ -9,7 +8,6 @@ interface GlossaryTerm {
   definition: string;
   category: 'accounting-financial' | 'legal-contract' | 'deal-structure' | 'pe-specific' | 'valuation-metrics';
   example?: string;
-  relatedTerms?: string[];
   isFavorite?: boolean;
 }
 
@@ -20,200 +18,280 @@ const glossaryTerms: GlossaryTerm[] = [
     term: 'EBITDA',
     definition: 'Earnings Before Interest, Taxes, Depreciation, Amortization. Your operating profit before financing and non-cash expenses. The #1 metric buyers use.',
     category: 'accounting-financial',
-    example: 'A company with $2M revenue, $1.5M operating expenses has $500K EBITDA.',
-    relatedTerms: ['Add-Backs', 'Multiple', 'Quality of Earnings']
+    example: 'A company with $2M revenue, $1.5M operating expenses has $500K EBITDA.'
   },
   {
     id: '2',
     term: 'Add-Backs',
     definition: 'Expenses added back to profit to show "normalized" EBITDA. Common examples: owner\'s excessive salary, personal vehicle, one-time legal fees.',
     category: 'accounting-financial',
-    example: 'Adding back $50K in owner\'s personal expenses and $25K in one-time legal fees to increase EBITDA by $75K.',
-    relatedTerms: ['EBITDA', 'Quality of Earnings', 'Normalization']
+    example: 'Adding back $50K in owner\'s personal expenses and $25K in one-time legal fees to increase EBITDA by $75K.'
   },
   {
     id: '3',
     term: 'Working Capital',
     definition: 'Current assets minus current liabilities. The cash needed to run day-to-day operations.',
     category: 'accounting-financial',
-    example: 'Current assets of $500K minus current liabilities of $300K equals $200K working capital.',
-    relatedTerms: ['Working Capital Adjustment', 'Cash Flow', 'Operating Capital']
+    example: 'Current assets of $500K minus current liabilities of $300K equals $200K working capital.'
   },
   {
     id: '4',
     term: 'Working Capital Adjustment',
     definition: 'Post-closing true-up ensuring business has normal operating cash. Like agreeing on gas in tank when selling a car.',
     category: 'accounting-financial',
-    example: 'Normal working capital is $200K; at closing it\'s $150K, so purchase price reduced by $50K.',
-    relatedTerms: ['Working Capital', 'Closing', 'Purchase Price Adjustment']
+    example: 'Normal working capital is $200K; at closing it\'s $150K, so purchase price reduced by $50K.'
   },
   {
     id: '5',
     term: 'Quality of Earnings (QoE)',
     definition: 'Deep financial analysis to verify your EBITDA is real and sustainable. Like an audit focused on cash flow quality.',
     category: 'accounting-financial',
-    example: 'QoE finds $200K in non-recurring revenue, reducing adjusted EBITDA from $1.2M to $1M.',
-    relatedTerms: ['EBITDA', 'Add-Backs', 'Due Diligence']
+    example: 'QoE finds $200K in non-recurring revenue, reducing adjusted EBITDA from $1.2M to $1M.'
   },
   {
     id: '6',
     term: 'Revenue Recognition',
     definition: 'Accounting rules for when revenue is recorded. Critical for subscription businesses and long-term contracts.',
     category: 'accounting-financial',
-    example: 'SaaS company collects $12K annual subscription but recognizes $1K monthly.',
-    relatedTerms: ['GAAP', 'Deferred Revenue', 'ARR']
+    example: 'SaaS company collects $12K annual subscription but recognizes $1K monthly.'
   },
   {
     id: '7',
     term: 'Gross Margin',
     definition: 'Revenue minus direct costs, expressed as percentage. Higher margins = more valuable business.',
     category: 'accounting-financial',
-    example: '$1M revenue with $300K direct costs = 70% gross margin.',
-    relatedTerms: ['EBITDA', 'Cost of Goods Sold', 'Operating Margin']
+    example: '$1M revenue with $300K direct costs = 70% gross margin.'
   },
   {
     id: '8',
     term: 'Cash Flow',
     definition: 'Actual cash moving in and out of business. Different from profit due to timing differences.',
     category: 'accounting-financial',
-    example: 'Profitable company with slow collections may have negative cash flow.',
-    relatedTerms: ['Working Capital', 'Free Cash Flow', 'EBITDA']
+    example: 'Profitable company with slow collections may have negative cash flow.'
   },
   {
     id: '9',
     term: 'Free Cash Flow',
     definition: 'Cash from operations minus capital expenditures. What\'s left after keeping business running.',
     category: 'accounting-financial',
-    example: '$800K operating cash flow minus $200K equipment purchases = $600K free cash flow.',
-    relatedTerms: ['Cash Flow', 'CapEx', 'EBITDA']
+    example: '$800K operating cash flow minus $200K equipment purchases = $600K free cash flow.'
   },
   {
     id: '10',
     term: 'CapEx (Capital Expenditures)',
     definition: 'Money spent on equipment, property, and assets that last multiple years.',
     category: 'accounting-financial',
-    example: 'Buying $100K manufacturing equipment recorded as CapEx, not expense.',
-    relatedTerms: ['Free Cash Flow', 'Depreciation', 'Asset Purchase']
+    example: 'Buying $100K manufacturing equipment recorded as CapEx, not expense.'
   },
   {
     id: '11',
     term: 'Accounts Receivable (AR)',
     definition: 'Money customers owe you. High AR relative to revenue suggests collection problems.',
     category: 'accounting-financial',
-    example: '$200K AR on $1.2M annual revenue = 60 days sales outstanding.',
-    relatedTerms: ['DSO', 'Working Capital', 'Cash Flow']
+    example: '$200K AR on $1.2M annual revenue = 60 days sales outstanding.'
   },
   {
     id: '12',
     term: 'DSO (Days Sales Outstanding)',
     definition: 'Average days to collect payment. Lower is better for cash flow.',
     category: 'accounting-financial',
-    example: '45 DSO means customers pay in 45 days on average.',
-    relatedTerms: ['Accounts Receivable', 'Cash Flow', 'Collection Period']
+    example: '45 DSO means customers pay in 45 days on average.'
   },
   {
     id: '13',
     term: 'Inventory Turnover',
     definition: 'How quickly inventory sells. Higher turnover = better cash flow and less obsolete stock.',
     category: 'accounting-financial',
-    example: '$500K annual COGS ÷ $100K inventory = 5x turnover (sells inventory 5 times per year).',
-    relatedTerms: ['Working Capital', 'Cash Flow', 'Inventory Management']
+    example: '$500K annual COGS ÷ $100K inventory = 5x turnover (sells inventory 5 times per year).'
   },
   {
     id: '14',
     term: 'Burn Rate',
     definition: 'Monthly cash consumption for loss-making businesses. Critical for startups and growth companies.',
     category: 'accounting-financial',
-    example: 'Company loses $50K monthly = $50K burn rate.',
-    relatedTerms: ['Cash Flow', 'Runway', 'Growth Investment']
+    example: 'Company loses $50K monthly = $50K burn rate.'
   },
   {
     id: '15',
     term: 'Runway',
     definition: 'Months of cash remaining at current burn rate. How long until money runs out.',
     category: 'accounting-financial',
-    example: '$500K cash ÷ $50K monthly burn = 10 months runway.',
-    relatedTerms: ['Burn Rate', 'Cash Flow', 'Working Capital']
+    example: '$500K cash ÷ $50K monthly burn = 10 months runway.'
   },
   {
     id: '16',
     term: 'GAAP',
     definition: 'Generally Accepted Accounting Principles. Standard accounting rules buyers expect you to follow.',
     category: 'accounting-financial',
-    example: 'Cash-basis accounting converted to GAAP accrual for sale preparation.',
-    relatedTerms: ['Revenue Recognition', 'Financial Statements', 'Audit']
+    example: 'Cash-basis accounting converted to GAAP accrual for sale preparation.'
   },
   {
     id: '17',
     term: 'Accrual Accounting',
     definition: 'Recording transactions when they occur, not when cash changes hands. Required for larger sales.',
     category: 'accounting-financial',
-    example: 'Record December sale in December even if customer pays in January.',
-    relatedTerms: ['GAAP', 'Cash Basis', 'Revenue Recognition']
+    example: 'Record December sale in December even if customer pays in January.'
   },
   {
     id: '18',
     term: 'Deferred Revenue',
     definition: 'Cash received for services not yet delivered. Liability on balance sheet.',
     category: 'accounting-financial',
-    example: 'Annual subscription paid upfront creates $12K deferred revenue liability.',
-    relatedTerms: ['Revenue Recognition', 'SaaS Metrics', 'ARR']
+    example: 'Annual subscription paid upfront creates $12K deferred revenue liability.'
   },
   {
     id: '19',
     term: 'Recurring Revenue',
     definition: 'Predictable revenue from subscriptions, contracts, or repeat customers. Highly valued by buyers.',
     category: 'accounting-financial',
-    example: 'SaaS company with $100K monthly recurring revenue.',
-    relatedTerms: ['ARR', 'MRR', 'Customer Retention']
+    example: 'SaaS company with $100K monthly recurring revenue.'
   },
   {
     id: '20',
     term: 'ARR (Annual Recurring Revenue)',
     definition: 'Yearly value of subscription revenue. Standard metric for SaaS businesses.',
     category: 'accounting-financial',
-    example: '$10K monthly subscriptions = $120K ARR.',
-    relatedTerms: ['MRR', 'Recurring Revenue', 'SaaS Metrics']
+    example: '$10K monthly subscriptions = $120K ARR.'
   },
   {
     id: '21',
     term: 'MRR (Monthly Recurring Revenue)',
     definition: 'Monthly subscription revenue. Key SaaS metric tracked closely by buyers.',
     category: 'accounting-financial',
-    example: '100 customers × $100/month = $10K MRR.',
-    relatedTerms: ['ARR', 'Churn Rate', 'Customer LTV']
+    example: '100 customers × $100/month = $10K MRR.'
   },
   {
     id: '22',
     term: 'Customer Churn Rate',
     definition: 'Percentage of customers lost monthly. Lower churn = higher valuation.',
     category: 'accounting-financial',
-    example: 'Lost 5 of 100 customers = 5% monthly churn rate.',
-    relatedTerms: ['MRR', 'Customer Retention', 'LTV']
+    example: 'Lost 5 of 100 customers = 5% monthly churn rate.'
   },
   {
     id: '23',
     term: 'LTV (Customer Lifetime Value)',
     definition: 'Total revenue expected from average customer over their lifetime.',
     category: 'accounting-financial',
-    example: '$100 monthly × 24 months average = $2,400 LTV.',
-    relatedTerms: ['CAC', 'Churn Rate', 'Unit Economics']
+    example: '$100 monthly × 24 months average = $2,400 LTV.'
   },
   {
     id: '24',
     term: 'CAC (Customer Acquisition Cost)',
     definition: 'Total cost to acquire one new customer. Should be much lower than LTV.',
     category: 'accounting-financial',
-    example: '$10K marketing spend ÷ 50 new customers = $200 CAC.',
-    relatedTerms: ['LTV', 'Marketing ROI', 'Unit Economics']
+    example: '$10K marketing spend ÷ 50 new customers = $200 CAC.'
   },
   {
     id: '25',
     term: 'Unit Economics',
     definition: 'Profit per customer or unit sold. Must be positive for sustainable growth.',
     category: 'accounting-financial',
-    example: '$2,400 LTV - $200 CAC = $2,200 unit profit.',
-    relatedTerms: ['LTV', 'CAC', 'Contribution Margin']
+    example: '$2,400 LTV - $200 CAC = $2,200 unit profit.'
+  },
+  {
+    id: '117',
+    term: 'Churn Rate',
+    definition: 'Percentage of customers who stop using your service over a given period. Critical metric for subscription businesses.',
+    category: 'accounting-financial',
+    example: 'Lost 10 customers out of 200 in a month = 5% monthly churn rate.'
+  },
+  {
+    id: '118',
+    term: 'COGS (Cost of Goods Sold)',
+    definition: 'Direct costs to produce goods or services sold. Used to calculate gross margin.',
+    category: 'accounting-financial',
+    example: 'Manufacturing costs of $300K for products that generated $1M revenue.'
+  },
+  {
+    id: '119',
+    term: 'Depreciation',
+    definition: 'Accounting method to spread asset costs over its useful life. Non-cash expense added back to EBITDA.',
+    category: 'accounting-financial',
+    example: '$100K machine depreciated over 10 years = $10K annual depreciation expense.'
+  },
+  {
+    id: '120',
+    term: 'Amortization',
+    definition: 'Similar to depreciation but for intangible assets like patents or goodwill. Non-cash expense.',
+    category: 'accounting-financial',
+    example: '$500K goodwill amortized over 15 years = $33K annual amortization.'
+  },
+  {
+    id: '121',
+    term: 'Net Debt',
+    definition: 'Total debt minus cash and cash equivalents. Key metric in enterprise value calculations.',
+    category: 'accounting-financial',
+    example: '$2M in loans minus $300K cash = $1.7M net debt.'
+  },
+  {
+    id: '122',
+    term: 'Operating Margin',
+    definition: 'Operating income as percentage of revenue. Shows efficiency of core business operations.',
+    category: 'accounting-financial',
+    example: '$400K operating income on $2M revenue = 20% operating margin.'
+  },
+  {
+    id: '123',
+    term: 'Return on Capital',
+    definition: 'Measures how efficiently company uses capital to generate profits. Higher is better.',
+    category: 'accounting-financial',
+    example: '$500K EBITDA on $2M invested capital = 25% return on capital.'
+  },
+  {
+    id: '124',
+    term: 'Asset Light',
+    definition: 'Business model requiring minimal physical assets. Often valued higher due to scalability.',
+    category: 'pe-specific',
+    example: 'Software company with no inventory or equipment vs. manufacturing business.'
+  },
+  {
+    id: '125',
+    term: 'Barriers to Entry',
+    definition: 'Factors that make it difficult for competitors to enter your market. Increase business value.',
+    category: 'pe-specific',
+    example: 'Patents, regulatory licenses, or exclusive supplier relationships.'
+  },
+  {
+    id: '126',
+    term: 'Cyclicality',
+    definition: 'How much business performance varies with economic cycles. Lower cyclicality valued higher.',
+    category: 'pe-specific',
+    example: 'Construction company (highly cyclical) vs. grocery store (low cyclicality).'
+  },
+  {
+    id: '127',
+    term: 'Patents',
+    definition: 'Legal protection for inventions. Creates competitive moats and can significantly increase valuation.',
+    category: 'legal-contract',
+    example: 'Pharmaceutical company with 10-year patent protection on key drug.'
+  },
+  {
+    id: '128',
+    term: 'Tech Debt',
+    definition: 'Cost of additional work caused by choosing quick solutions instead of better approaches.',
+    category: 'pe-specific',
+    example: 'Legacy software requiring $200K upgrade before company can scale.'
+  },
+  {
+    id: '129',
+    term: 'Digital Transformation',
+    definition: 'Modernizing business processes with technology. Often drives operational efficiency gains.',
+    category: 'pe-specific',
+    example: 'Moving from paper-based to cloud-based customer management system.'
+  },
+  {
+    id: '130',
+    term: 'Warrants',
+    definition: 'Right to buy additional shares at predetermined price. Often part of complex deal structures.',
+    category: 'deal-structure',
+    example: 'Warrants to purchase 10% additional equity at $5M valuation within 5 years.'
+  },
+  {
+    id: '131',
+    term: 'SBA Financing',
+    definition: 'Small Business Administration loans that buyers can use for acquisitions. Makes deals accessible.',
+    category: 'deal-structure',
+    example: 'Buyer uses SBA 7(a) loan for 70% of $2M acquisition purchase price.'
   },
   
   // LEGAL & CONTRACT TERMS
@@ -222,152 +300,133 @@ const glossaryTerms: GlossaryTerm[] = [
     term: 'LOI (Letter of Intent)',
     definition: 'Non-binding offer outlining price and terms. Once signed, you enter exclusive negotiations.',
     category: 'legal-contract',
-    example: 'An LOI proposing $10M purchase price with 30-day exclusivity period.',
-    relatedTerms: ['Purchase Agreement', 'Due Diligence', 'Closing']
+    example: 'An LOI proposing $10M purchase price with 30-day exclusivity period.'
   },
   {
     id: '27',
     term: 'Due Diligence',
     definition: 'The buyer\'s deep investigation of your business. Expect requests for every document imaginable.',
     category: 'legal-contract',
-    example: 'Reviewing 3 years of financial statements, customer contracts, and operational procedures.',
-    relatedTerms: ['Quality of Earnings', 'Reps & Warranties', 'Management Presentation']
+    example: 'Reviewing 3 years of financial statements, customer contracts, and operational procedures.'
   },
   {
     id: '28',
     term: 'Purchase Agreement',
     definition: 'Final binding contract for the sale. Hundreds of pages defining every detail.',
     category: 'legal-contract',
-    example: 'Legal document specifying $10M price, closing conditions, and post-sale obligations.',
-    relatedTerms: ['LOI', 'Closing', 'Reps & Warranties']
+    example: 'Legal document specifying $10M price, closing conditions, and post-sale obligations.'
   },
   {
     id: '29',
     term: 'Reps & Warranties',
     definition: 'Your promises about the business being true. If wrong, triggers indemnification.',
     category: 'legal-contract',
-    example: 'Warranty that financial statements are accurate; representation that all taxes are current.',
-    relatedTerms: ['Indemnification', 'Escrow/Holdback', 'Due Diligence']
+    example: 'Warranty that financial statements are accurate; representation that all taxes are current.'
   },
   {
     id: '30',
     term: 'Indemnification',
     definition: 'Your promise to pay buyer back if certain problems arise post-sale. Usually capped.',
     category: 'legal-contract',
-    example: 'You indemnify buyer for tax issues up to $1M (10% of purchase price) for 3 years.',
-    relatedTerms: ['Reps & Warranties', 'Escrow/Holdback', 'RWI']
+    example: 'You indemnify buyer for tax issues up to $1M (10% of purchase price) for 3 years.'
   },
   {
     id: '31',
     term: 'RWI (Reps & Warranties Insurance)',
     definition: 'Insurance that covers breaches instead of you paying from escrow. Good for sellers.',
     category: 'legal-contract',
-    example: '$1M RWI policy covers warranty breaches, allowing lower escrow and faster release.',
-    relatedTerms: ['Reps & Warranties', 'Escrow/Holdback', 'Indemnification']
+    example: '$1M RWI policy covers warranty breaches, allowing lower escrow and faster release.'
   },
   {
     id: '32',
     term: 'Covenants',
     definition: 'Promises to do or not do something. These are legally binding obligations.',
     category: 'legal-contract',
-    example: 'Non-compete covenant preventing you from starting similar business for 3 years.',
-    relatedTerms: ['Non-Compete', 'Purchase Agreement', 'Post-Closing Obligations']
+    example: 'Non-compete covenant preventing you from starting similar business for 3 years.'
   },
   {
     id: '33',
     term: 'Non-Compete Agreement',
     definition: 'Contract preventing you from competing in same industry/geography for specified time.',
     category: 'legal-contract',
-    example: 'Cannot start competing HVAC business within 50 miles for 3 years.',
-    relatedTerms: ['Covenants', 'Non-Solicitation', 'Employment Agreement']
+    example: 'Cannot start competing HVAC business within 50 miles for 3 years.'
   },
   {
     id: '34',
     term: 'Non-Solicitation Agreement',
     definition: 'Cannot recruit employees or customers from sold business for specified period.',
     category: 'legal-contract',
-    example: 'Cannot hire former employees or contact customer list for 2 years.',
-    relatedTerms: ['Non-Compete', 'Employment Agreement', 'Customer Protection']
+    example: 'Cannot hire former employees or contact customer list for 2 years.'
   },
   {
     id: '35',
     term: 'Employment Agreement',
     definition: 'Contract if you stay post-sale. Defines role, salary, termination conditions.',
     category: 'legal-contract',
-    example: '2-year employment as GM at $200K salary with performance bonuses.',
-    relatedTerms: ['Transition Period', 'Key Person', 'Earnout']
+    example: '2-year employment as GM at $200K salary with performance bonuses.'
   },
   {
     id: '36',
     term: 'Closing',
     definition: 'The day ownership transfers and money changes hands. You sign docs and get paid.',
     category: 'legal-contract',
-    example: 'Closing day: Sign purchase agreement, receive $8.5M wire, transfer ownership.',
-    relatedTerms: ['Escrow/Holdback', 'Working Capital Adjustment', 'Reps & Warranties']
+    example: 'Closing day: Sign purchase agreement, receive $8.5M wire, transfer ownership.'
   },
   {
     id: '37',
     term: 'Closing Conditions',
     definition: 'Requirements that must be met before sale completes. Protect both parties.',
     category: 'legal-contract',
-    example: 'Satisfactory due diligence, no material adverse changes, financing approval.',
-    relatedTerms: ['Due Diligence', 'MAC Clause', 'Financing Contingency']
+    example: 'Satisfactory due diligence, no material adverse changes, financing approval.'
   },
   {
     id: '38',
     term: 'MAC Clause (Material Adverse Change)',
     definition: 'Allows buyer to walk away if something major negatively impacts the business.',
     category: 'legal-contract',
-    example: 'Lost of largest customer representing 40% of revenue triggers MAC clause.',
-    relatedTerms: ['Closing Conditions', 'Risk Allocation', 'Deal Protection']
+    example: 'Lost of largest customer representing 40% of revenue triggers MAC clause.'
   },
   {
     id: '39',
     term: 'Redlining',
     definition: 'Marking up contracts with proposed changes. Normal part of negotiations.',
     category: 'legal-contract',
-    example: 'Buyer redlines purchase agreement to extend due diligence period from 30 to 45 days.',
-    relatedTerms: ['Purchase Agreement', 'Legal Review', 'Negotiation']
+    example: 'Buyer redlines purchase agreement to extend due diligence period from 30 to 45 days.'
   },
   {
     id: '40',
     term: 'Break-Up Fee',
     definition: 'Penalty paid if deal falls through due to seller\'s fault. Protects buyer\'s costs.',
     category: 'legal-contract',
-    example: '$500K break-up fee if seller accepts competing offer during exclusivity.',
-    relatedTerms: ['Exclusivity Period', 'Deal Protection', 'LOI']
+    example: '$500K break-up fee if seller accepts competing offer during exclusivity.'
   },
   {
     id: '41',
     term: 'Exclusivity Period',
     definition: 'Time when you can only negotiate with one buyer. Usually 30-90 days.',
     category: 'legal-contract',
-    example: '60-day exclusivity period starting from LOI signature.',
-    relatedTerms: ['LOI', 'Due Diligence', 'Break-Up Fee']
+    example: '60-day exclusivity period starting from LOI signature.'
   },
   {
     id: '42',
     term: 'Confidentiality Agreement (NDA)',
     definition: 'Legal protection preventing disclosure of sensitive business information.',
     category: 'legal-contract',
-    example: 'Buyer signs NDA before seeing detailed financials or customer list.',
-    relatedTerms: ['Due Diligence', 'Information Sharing', 'Trade Secrets']
+    example: 'Buyer signs NDA before seeing detailed financials or customer list.'
   },
   {
     id: '101',
     term: 'IOI (Indication of Interest)',
     definition: 'Preliminary, non-binding document expressing buyer\'s serious intent to acquire your company. Comes before LOI to screen serious buyers.',
     category: 'legal-contract',
-    example: 'IOI proposing $8-10M purchase price range with 45-day due diligence timeline to gauge mutual interest.',
-    relatedTerms: ['LOI', 'Due Diligence', 'Purchase Agreement']
+    example: 'IOI proposing $8-10M purchase price range with 45-day due diligence timeline to gauge mutual interest.'
   },
   {
     id: '102',
     term: 'SaaS (Software as a Service)',
     definition: 'Companies that provide software applications over the internet through subscription model. Customers access via web browser instead of installing software locally.',
     category: 'accounting-financial',
-    example: 'Salesforce, Slack, and Zoom are SaaS companies charging monthly subscriptions for cloud-based software access.',
-    relatedTerms: ['ARR', 'MRR', 'Recurring Revenue', 'Churn Rate']
+    example: 'Salesforce, Slack, and Zoom are SaaS companies charging monthly subscriptions for cloud-based software access.'
   },
   
   // DEAL STRUCTURE TERMS
@@ -376,764 +435,543 @@ const glossaryTerms: GlossaryTerm[] = [
     term: 'Asset Purchase vs Stock Purchase',
     definition: 'Asset purchase: Buy specific assets/liabilities. Stock purchase: Buy entire entity including all obligations.',
     category: 'deal-structure',
-    example: 'Asset purchase excludes lawsuit liability; stock purchase includes everything.',
-    relatedTerms: ['Tax Implications', 'Liability Transfer', 'Transaction Structure']
+    example: 'Asset purchase excludes lawsuit liability; stock purchase includes everything.'
   },
   {
     id: '44',
     term: 'Cash-Free, Debt-Free',
     definition: 'Standard transaction basis. Seller keeps cash, pays off debt. Purchase price for operations only.',
     category: 'deal-structure',
-    example: '$10M deal: Seller gets $10M + keeps $200K cash - pays $300K debt = $9.9M net.',
-    relatedTerms: ['Enterprise Value', 'Working Capital', 'Transaction Basis']
+    example: '$10M deal: Seller gets $10M + keeps $200K cash - pays $300K debt = $9.9M net.'
   },
   {
     id: '45',
     term: 'Earnout',
     definition: 'Part of purchase price paid later IF business hits targets. Risky for sellers.',
     category: 'deal-structure',
-    example: '$8M at closing + $2M earnout if company achieves $15M revenue in Year 1.',
-    relatedTerms: ['Rollover Equity', 'Performance Metrics', 'Risk Sharing']
+    example: '$8M at closing + $2M earnout if company achieves $15M revenue in Year 1.'
   },
   {
     id: '46',
     term: 'Escrow/Holdback',
     definition: 'Money held back from purchase price for 12-18 months to cover potential claims.',
     category: 'deal-structure',
-    example: '$10M sale with $1.5M held in escrow for 18 months.',
-    relatedTerms: ['Indemnification', 'Reps & Warranties', 'RWI']
+    example: '$10M sale with $1.5M held in escrow for 18 months.'
   },
   {
     id: '47',
     term: 'Rollover Equity',
     definition: 'Keeping ownership stake in new company structure. Future upside potential.',
     category: 'deal-structure',
-    example: 'Selling 80% for $8M cash while rolling over 20% equity.',
-    relatedTerms: ['Holding Company', 'Second Bite', 'Equity Participation']
+    example: 'Selling 80% for $8M cash while rolling over 20% equity.'
   },
   {
     id: '48',
     term: 'Second Bite of the Apple',
-    definition: 'Getting paid again when PE sells your business in 3-7 years via rollover equity.',
+    definition: 'Future liquidity from rollover equity when PE firm sells. Could be bigger than first bite.',
     category: 'deal-structure',
-    example: '20% rollover that becomes worth $5M when PE exits at higher valuation.',
-    relatedTerms: ['Rollover Equity', 'PE Exit Strategy', 'Value Creation']
+    example: 'Initial $8M + $5M from second bite when PE sells company 5 years later.'
   },
   {
     id: '49',
-    term: 'Management Rollover',
-    definition: 'Management team reinvests part of proceeds to maintain ownership stake.',
+    term: 'Seller Note',
+    definition: 'You lend part of purchase price back to buyer. Reduces upfront cash but adds risk.',
     category: 'deal-structure',
-    example: 'Management reinvests $2M of sale proceeds for 15% ongoing ownership.',
-    relatedTerms: ['Rollover Equity', 'Management Incentives', 'Alignment']
+    example: '$8M cash + $2M seller note at 6% interest over 5 years.'
   },
   {
     id: '50',
-    term: 'Leveraged Buyout (LBO)',
-    definition: 'Acquisition using mostly debt. Company takes on loans to finance its own purchase.',
+    term: 'Management Buyout (MBO)',
+    definition: 'Your management team buys the company. Often with PE backing.',
     category: 'deal-structure',
-    example: '$10M acquisition using $3M equity + $7M debt secured by company assets.',
-    relatedTerms: ['Debt Financing', 'Interest Coverage', 'Financial Leverage']
+    example: 'CEO and CFO partner with PE firm to acquire company from retiring founder.'
   },
   {
     id: '51',
-    term: 'Management Buyout (MBO)',
-    definition: 'Existing management team buys the business, often with PE backing.',
+    term: 'Holding Company',
+    definition: 'Entity that owns operating companies. PE firms often use for tax optimization.',
     category: 'deal-structure',
-    example: 'CEO and CFO partner with PE to buy company from current owners.',
-    relatedTerms: ['Management Team', 'Leveraged Buyout', 'Internal Sale']
+    example: 'PE creates holding company to own your business and two similar companies.'
   },
   {
     id: '52',
-    term: 'Holding Company (HoldCo)',
-    definition: 'Parent company created to own your business. If you roll equity, you own HoldCo shares.',
+    term: 'Dividend Recapitalization',
+    definition: 'Taking debt to pay special dividend. Allows PE to get money out while keeping ownership.',
     category: 'deal-structure',
-    example: 'PE creates HoldCo to own your operating company; you roll 20% equity into HoldCo.',
-    relatedTerms: ['Rollover Equity', 'Corporate Structure', 'Tax Optimization']
+    example: 'Company borrows $5M to pay PE firm special dividend.'
   },
   {
     id: '53',
-    term: 'Dividend Recapitalization',
-    definition: 'Company borrows money to pay special dividend to owners. Common PE strategy.',
+    term: 'Refinancing',
+    definition: 'Replacing existing debt with new debt at better terms. Improves cash flow.',
     category: 'deal-structure',
-    example: 'Company takes $5M loan to pay dividend to PE investors.',
-    relatedTerms: ['Debt Financing', 'Return of Capital', 'Financial Engineering']
+    example: 'Replacing 8% bank loan with 5% loan saves $150K annually on $5M debt.'
   },
   {
     id: '54',
-    term: 'Refinancing',
-    definition: 'Replacing existing debt with new debt, often at better terms.',
+    term: 'Mezzanine Financing',
+    definition: 'Hybrid debt/equity financing. Higher cost but flexible terms.',
     category: 'deal-structure',
-    example: 'Replace 8% bank loan with 5% new facility, improving cash flow.',
-    relatedTerms: ['Debt Optimization', 'Interest Savings', 'Capital Structure']
+    example: '$2M mezzanine loan at 12% interest plus equity warrants.'
   },
   {
     id: '55',
-    term: 'Mezzanine Financing',
-    definition: 'Hybrid debt/equity financing. Higher interest but includes equity upside.',
+    term: 'Preferred Equity',
+    definition: 'Equity with priority over common stock for dividends and liquidation.',
     category: 'deal-structure',
-    example: '12% interest loan with warrants for 10% equity if company hits targets.',
-    relatedTerms: ['Hybrid Securities', 'Growth Capital', 'Warrants']
+    example: 'Preferred shares get paid first if company is sold or pays dividends.'
   },
   {
     id: '56',
-    term: 'Preferred Equity',
-    definition: 'Equity with priority over common stock. Gets paid first in liquidation.',
+    term: 'Common Equity',
+    definition: 'Standard ownership shares. Last to get paid but unlimited upside potential.',
     category: 'deal-structure',
-    example: '$2M preferred equity with 8% dividend paid before common shareholders.',
-    relatedTerms: ['Liquidation Preference', 'Capital Structure', 'Priority Rights']
-  },
-  {
-    id: '57',
-    term: 'Waterfall Structure',
-    definition: 'Order of payments in liquidation. Shows who gets paid first and how much.',
-    category: 'deal-structure',
-    example: 'First: debt, second: preferred equity, third: common equity.',
-    relatedTerms: ['Liquidation Preference', 'Distribution Rights', 'Capital Structure']
+    example: 'Common shareholders benefit most if company value increases significantly.'
   },
   
   // PE-SPECIFIC TERMS
   {
-    id: '58',
+    id: '57',
     term: 'Platform Company',
-    definition: 'The main company PE builds around in an industry. Gets highest multiples.',
+    definition: 'First acquisition in PE buy-and-build strategy. Foundation for add-on acquisitions.',
     category: 'pe-specific',
-    example: 'PE buys HVAC company at 6x multiple as platform, then adds bolt-ons at 4x.',
-    relatedTerms: ['Bolt-On Acquisition', 'Roll-Up Strategy', 'Buy-and-Build']
+    example: 'PE buys regional HVAC company as platform, then adds 5 smaller companies.'
+  },
+  {
+    id: '58',
+    term: 'Add-On Acquisition',
+    definition: 'Smaller companies bought and merged into platform company. Drives growth.',
+    category: 'pe-specific',
+    example: 'Platform HVAC company acquires 3 local competitors to expand territory.'
   },
   {
     id: '59',
     term: 'Bolt-On Acquisition',
-    definition: 'Smaller company added to platform. Keeps some identity but operates under platform control.',
+    definition: 'Small strategic acquisition to fill specific gaps or add capabilities.',
     category: 'pe-specific',
-    example: 'Platform company buys $1M EBITDA bolt-on at 4x multiple for geographic expansion.',
-    relatedTerms: ['Platform Company', 'Tuck-In Acquisition', 'Add-On Strategy']
+    example: 'Software company acquires small AI startup for specific technology.'
   },
   {
     id: '60',
-    term: 'Tuck-In Acquisition',
-    definition: 'Tiny company completely absorbed into platform. Bought for customers, not systems.',
+    term: 'Buy-and-Build Strategy',
+    definition: 'PE strategy of buying platform company then consolidating industry through add-ons.',
     category: 'pe-specific',
-    example: 'Platform buys $300K EBITDA company at 3x multiple purely for customer integration.',
-    relatedTerms: ['Platform Company', 'Customer Acquisition', 'Market Consolidation']
+    example: 'Buying largest plumbing company in region then acquiring 10 smaller ones.'
   },
   {
     id: '61',
-    term: 'Buy-and-Build Strategy',
-    definition: 'PE strategy of acquiring platform then adding multiple bolt-ons to create larger entity.',
+    term: 'Roll-Up Strategy',
+    definition: 'Consolidating fragmented industry by acquiring many small players.',
     category: 'pe-specific',
-    example: 'Buy $5M EBITDA platform, add 5 bolt-ons, exit at $20M EBITDA.',
-    relatedTerms: ['Platform Company', 'Roll-Up', 'Value Creation']
+    example: 'Creating national pest control company by buying 50 local operators.'
   },
   {
     id: '62',
-    term: 'Roll-Up',
-    definition: 'Strategy of buying multiple companies in same industry to create consolidated platform.',
+    term: 'Operational Improvements',
+    definition: 'Changes PE makes to increase efficiency and profitability. Their value-add.',
     category: 'pe-specific',
-    example: 'PE buys 5 regional HVAC companies and combines into $50M revenue platform.',
-    relatedTerms: ['Platform Company', 'Industry Consolidation', 'Economies of Scale']
+    example: 'Implementing ERP system, streamlining operations, improving pricing.'
   },
   {
     id: '63',
-    term: 'Search Fund/ETA',
-    definition: 'Individual entrepreneur raising money to buy and run one business. Often SBA-backed.',
+    term: 'EBITDA Multiple Expansion',
+    definition: 'Increasing the multiple buyers pay for your EBITDA. Major value driver.',
     category: 'pe-specific',
-    example: 'MBA graduate raises $3M search fund to buy and operate manufacturing company.',
-    relatedTerms: ['SBA Financing', 'Entrepreneurship Through Acquisition', 'Individual Buyer']
+    example: 'Growing from 4x to 6x multiple adds $2M value on $1M EBITDA.'
   },
   {
     id: '64',
-    term: 'SBA-backed PE',
-    definition: 'PE structure using Small Business Administration loans. Requires seller to stay 1-2 years.',
+    term: 'Exit Strategy',
+    definition: 'PE firm\'s plan to sell company in 3-7 years. Could be strategic sale or IPO.',
     category: 'pe-specific',
-    example: 'Buyer puts down $1M cash + $2M SBA loan, but seller must stay 18 months.',
-    relatedTerms: ['Search Fund', 'Government Financing', 'Transition Period']
+    example: 'PE plans to sell portfolio company to strategic buyer after doubling EBITDA.'
   },
   {
     id: '65',
-    term: 'Fund Vintage',
-    definition: 'Year PE fund was raised. Affects return expectations and hold period.',
+    term: 'Fund Life Cycle',
+    definition: 'PE funds typically last 10 years: 5 to invest, 5 to exit. Affects timing.',
     category: 'pe-specific',
-    example: '2020 vintage fund has 5-7 years left to exit investments.',
-    relatedTerms: ['Fund Life Cycle', 'Investment Timeline', 'Exit Pressure']
+    example: '8-year-old fund needs to sell companies soon to return money to investors.'
   },
   {
     id: '66',
-    term: 'Fund Life Cycle',
-    definition: 'Typical 10-year fund life: 3-5 years investing, 5-7 years exiting.',
+    term: 'IRR (Internal Rate of Return)',
+    definition: 'PE firm\'s annual return target. Usually 20-25% for successful funds.',
     category: 'pe-specific',
-    example: '2018 fund now in exit mode, creating urgency to sell portfolio companies.',
-    relatedTerms: ['Fund Vintage', 'Exit Timeline', 'Return Pressure']
+    example: 'PE needs 3x return in 5 years to achieve 25% IRR.'
   },
   {
     id: '67',
-    term: 'Dry Powder',
-    definition: 'Uninvested capital PE funds have available for new deals.',
+    term: 'Money Multiple',
+    definition: 'Total return divided by initial investment. Simple measure of PE success.',
     category: 'pe-specific',
-    example: 'PE fund has $50M dry powder available for platform and bolt-on acquisitions.',
-    relatedTerms: ['Available Capital', 'Investment Capacity', 'Market Competition']
+    example: '$5M investment returning $15M = 3x money multiple.'
   },
   {
     id: '68',
-    term: 'Management Fee',
-    definition: 'Annual fee PE charges investors (usually 2%) regardless of performance.',
+    term: 'Dry Powder',
+    definition: 'Unspent money PE firms have raised. Indicates buying capacity.',
     category: 'pe-specific',
-    example: '$100M fund charges $2M annual management fee to cover operations.',
-    relatedTerms: ['Carried Interest', 'Fee Structure', 'Fund Economics']
+    example: 'PE firm has $500M dry powder available for new acquisitions.'
   },
   {
     id: '69',
-    term: 'Carried Interest (Carry)',
-    definition: 'PE\'s share of profits (usually 20%) after returning investor capital.',
+    term: 'Portfolio Company',
+    definition: 'Company owned by PE firm. You become portfolio company after acquisition.',
     category: 'pe-specific',
-    example: 'After returning $100M to investors, PE keeps 20% of additional profits.',
-    relatedTerms: ['Management Fee', 'Hurdle Rate', 'Performance Fee']
+    example: 'PE firm\'s portfolio includes 15 companies across different industries.'
   },
   {
     id: '70',
-    term: 'Hurdle Rate',
-    definition: 'Minimum return investors must receive before PE gets carried interest.',
+    term: 'Investment Committee',
+    definition: 'Group that approves PE investments. Key decision makers you need to convince.',
     category: 'pe-specific',
-    example: '8% hurdle rate means investors get first 8% annual return.',
-    relatedTerms: ['Carried Interest', 'Preferred Return', 'Waterfall']
+    example: 'Deal must be approved by 5-person investment committee at PE firm.'
   },
   {
     id: '71',
-    term: 'IRR (Internal Rate of Return)',
-    definition: 'Annualized return PE targets (usually 20-25%). Key performance metric.',
+    term: 'Thesis',
+    definition: 'PE firm\'s investment strategy and rationale. Why they buy certain companies.',
     category: 'pe-specific',
-    example: 'PE needs 3x return in 5 years to achieve 25% IRR.',
-    relatedTerms: ['Multiple of Money', 'Return Targets', 'Performance Measurement']
+    example: 'PE thesis: consolidating fragmented healthcare services industry.'
   },
   {
     id: '72',
-    term: 'Multiple of Money (MoM)',
-    definition: 'Total return as multiple of invested capital. "3x" means $3 returned for every $1 invested.',
+    term: 'Value Creation Plan',
+    definition: 'PE firm\'s strategy to increase company value over ownership period.',
     category: 'pe-specific',
-    example: 'PE invests $10M, exits for $30M = 3x multiple of money.',
-    relatedTerms: ['IRR', 'Return Calculation', 'Investment Performance']
+    example: 'Plan to double EBITDA through acquisitions, operational improvements, and geographic expansion.'
   },
   {
     id: '73',
-    term: 'Value Creation Plan',
-    definition: 'PE\'s strategy for improving business to justify higher exit valuation.',
+    term: 'Management Presentations',
+    definition: 'Your pitch to PE firms explaining business, growth plans, and value proposition.',
     category: 'pe-specific',
-    example: 'Plan: improve margins 5%, grow revenue 50%, exit at higher multiple.',
-    relatedTerms: ['Operational Improvements', 'Growth Strategy', 'Exit Planning']
+    example: '2-hour presentation covering market position, financial performance, and growth strategy.'
   },
   {
     id: '74',
-    term: 'Portfolio Company',
-    definition: 'Business owned by PE fund. Part of diversified investment portfolio.',
+    term: 'Key Person Risk',
+    definition: 'Risk that business depends too heavily on one person (usually the owner).',
     category: 'pe-specific',
-    example: 'PE fund owns 12 portfolio companies across different industries.',
-    relatedTerms: ['Investment Portfolio', 'Diversification', 'Risk Management']
+    example: 'Owner handles all major customer relationships and key operational decisions.'
   },
   {
     id: '75',
-    term: 'Limited Partner (LP)',
-    definition: 'Investors in PE fund (pension funds, endowments, wealthy individuals).',
+    term: 'Institutional Investor',
+    definition: 'Large organizations that invest in PE funds. Pension funds, endowments, etc.',
     category: 'pe-specific',
-    example: 'University endowment invests $25M as LP in PE fund.',
-    relatedTerms: ['General Partner', 'Fund Structure', 'Investor Base']
+    example: 'University endowment invests $50M in PE fund targeting middle-market companies.'
   },
   {
     id: '76',
-    term: 'General Partner (GP)',
-    definition: 'PE firm that manages the fund and makes investment decisions.',
+    term: 'Limited Partner (LP)',
+    definition: 'Investors in PE funds. Provide capital but don\'t manage investments.',
     category: 'pe-specific',
-    example: 'GP charges management fees and receives carried interest for fund management.',
-    relatedTerms: ['Limited Partner', 'Fund Management', 'Investment Committee']
+    example: 'Pension fund is LP in PE fund, providing capital but not making investment decisions.'
   },
   {
     id: '77',
-    term: 'Investment Committee',
-    definition: 'Group of PE partners who approve or reject investment opportunities.',
+    term: 'General Partner (GP)',
+    definition: 'PE firm managing the fund. Makes investment decisions and manages portfolio.',
     category: 'pe-specific',
-    example: 'Deal must pass investment committee vote before LOI can be signed.',
-    relatedTerms: ['Decision Process', 'Investment Approval', 'Due Diligence']
+    example: 'PE firm is GP, responsible for finding deals and managing portfolio companies.'
   },
   {
     id: '78',
-    term: 'Add-On Strategy',
-    definition: 'Plan to acquire additional companies after platform purchase.',
+    term: 'Management Fee',
+    definition: 'Annual fee PE firms charge (usually 2%) regardless of performance.',
     category: 'pe-specific',
-    example: 'After buying platform, PE plans to acquire 3-5 bolt-ons per year.',
-    relatedTerms: ['Buy-and-Build', 'Bolt-On Acquisition', 'Growth Strategy']
+    example: '2% management fee on $100M fund = $2M annual fee to PE firm.'
   },
   {
     id: '79',
-    term: 'Exit Strategy',
-    definition: 'PE\'s plan for eventually selling the business (strategic sale, IPO, secondary buyout).',
+    term: 'Carried Interest',
+    definition: 'PE firm\'s share of profits (usually 20%) above minimum return threshold.',
     category: 'pe-specific',
-    example: 'Plan to exit via strategic sale to industry consolidator in years 4-5.',
-    relatedTerms: ['Strategic Sale', 'Secondary Buyout', 'IPO']
+    example: 'PE gets 20% of profits above 8% annual return to investors.'
   },
   {
     id: '80',
-    term: 'Secondary Buyout',
-    definition: 'PE selling portfolio company to another PE firm.',
+    term: 'Hurdle Rate',
+    definition: 'Minimum return investors must receive before PE firm gets carried interest.',
     category: 'pe-specific',
-    example: 'Selling platform company to larger PE fund for continued growth.',
-    relatedTerms: ['Exit Strategy', 'PE-to-PE Sale', 'Continuation']
+    example: 'Investors must get 8% annual return before PE firm earns any carried interest.'
   },
-  
-  // VALUATION & METRICS TERMS
   {
     id: '81',
-    term: 'Multiple (Valuation Multiple)',
-    definition: 'What buyers pay relative to EBITDA. Higher margins and growth = higher multiples.',
-    category: 'valuation-metrics',
-    example: 'A 5x multiple on $1M EBITDA values the business at $5M.',
-    relatedTerms: ['EBITDA', 'Enterprise Value', 'Valuation']
+    term: 'Clawback',
+    definition: 'Mechanism requiring PE firm to return excess carried interest if later deals perform poorly.',
+    category: 'pe-specific',
+    example: 'PE must return fees if overall fund returns fall below agreed threshold.'
   },
   {
     id: '82',
-    term: 'Enterprise Value (EV)',
-    definition: 'Total value of business operations. Market cap + debt - cash.',
-    category: 'valuation-metrics',
-    example: '$10M purchase price + $2M debt - $500K cash = $11.5M enterprise value.',
-    relatedTerms: ['Multiple', 'Equity Value', 'Transaction Value']
+    term: 'Capital Call',
+    definition: 'PE fund requesting money from LPs for specific investment. Not all money invested upfront.',
+    category: 'pe-specific',
+    example: 'PE calls $10M from LPs to fund acquisition of manufacturing company.'
   },
   {
     id: '83',
-    term: 'Equity Value',
-    definition: 'Value attributable to equity holders. Enterprise value minus net debt.',
-    category: 'valuation-metrics',
-    example: '$12M enterprise value - $2M net debt = $10M equity value.',
-    relatedTerms: ['Enterprise Value', 'Net Debt', 'Shareholder Value']
+    term: 'Distribution',
+    definition: 'Money returned to LPs when PE sells portfolio companies.',
+    category: 'pe-specific',
+    example: 'PE sells company for $50M, distributing proceeds to LPs after fees.'
   },
   {
     id: '84',
-    term: 'Revenue Multiple',
-    definition: 'Valuation based on revenue rather than EBITDA. Common for high-growth, low-margin businesses.',
-    category: 'valuation-metrics',
-    example: 'SaaS company valued at 5x revenue = $25M valuation on $5M revenue.',
-    relatedTerms: ['EBITDA Multiple', 'SaaS Valuation', 'Growth Premium']
+    term: 'J-Curve',
+    definition: 'PE fund performance pattern: negative early returns, positive later as companies sold.',
+    category: 'pe-specific',
+    example: 'Fund shows losses first 3 years, then strong returns as portfolio companies exit.'
   },
+  
+  // VALUATION METRICS
   {
     id: '85',
-    term: 'Trailing Twelve Months (TTM)',
-    definition: 'Financial metrics for the most recent 12-month period. Standard valuation basis.',
+    term: 'Multiple',
+    definition: 'What buyers pay relative to EBITDA. Higher multiples = higher valuation.',
     category: 'valuation-metrics',
-    example: 'TTM EBITDA of $2M used for 5x multiple = $10M valuation.',
-    relatedTerms: ['LTM', 'Run Rate', 'Historical Performance']
+    example: '5x multiple on $2M EBITDA = $10M enterprise value.'
   },
   {
     id: '86',
-    term: 'Run Rate',
-    definition: 'Annualized performance based on recent results. Forward-looking metric.',
+    term: 'Enterprise Value',
+    definition: 'Total company value including debt. Purchase price + debt - cash.',
     category: 'valuation-metrics',
-    example: '$500K quarterly EBITDA × 4 = $2M annual run rate.',
-    relatedTerms: ['TTM', 'Forward EBITDA', 'Projection']
+    example: '$10M purchase price + $2M debt - $500K cash = $11.5M enterprise value.'
   },
   {
     id: '87',
-    term: 'SDE (Seller\'s Discretionary Earnings)',
-    definition: 'EBITDA plus owner\'s salary and benefits. Common for smaller businesses.',
+    term: 'Revenue Multiple',
+    definition: 'Valuation relative to annual revenue. Common for high-growth companies.',
     category: 'valuation-metrics',
-    example: '$300K EBITDA + $150K owner salary = $450K SDE.',
-    relatedTerms: ['EBITDA', 'Owner Benefits', 'Small Business Valuation']
+    example: '$20M revenue × 2.5x multiple = $50M enterprise value.'
   },
   {
     id: '88',
-    term: 'EBIT (Earnings Before Interest and Taxes)',
-    definition: 'Operating profit before financing costs. EBITDA minus depreciation/amortization.',
+    term: 'SDE (Seller\'s Discretionary Earnings)',
+    definition: 'EBITDA plus owner\'s salary and benefits. Used for smaller businesses.',
     category: 'valuation-metrics',
-    example: '$1M EBITDA - $200K depreciation = $800K EBIT.',
-    relatedTerms: ['EBITDA', 'Operating Income', 'Depreciation']
+    example: '$500K EBITDA + $150K owner salary + $50K benefits = $700K SDE.'
   },
   {
     id: '89',
-    term: 'Comparable Company Analysis (Comps)',
-    definition: 'Valuation method using multiples of similar public companies.',
+    term: 'Comparable Company Analysis',
+    definition: 'Valuing your business based on what similar companies sold for.',
     category: 'valuation-metrics',
-    example: 'Public SaaS companies trade at 8x revenue, so private SaaS valued at 6x.',
-    relatedTerms: ['Trading Multiples', 'Public Markets', 'Discount Rate']
+    example: 'Similar HVAC companies sold for 4-6x EBITDA, so yours worth 5x.'
   },
   {
     id: '90',
-    term: 'Precedent Transaction Analysis',
-    definition: 'Valuation based on multiples paid in recent M&A transactions.',
+    term: 'DCF (Discounted Cash Flow)',
+    definition: 'Valuation method based on projected future cash flows. Academic but important.',
     category: 'valuation-metrics',
-    example: 'Recent HVAC acquisitions at 5-6x EBITDA suggests similar valuation.',
-    relatedTerms: ['Transaction Multiples', 'M&A Comps', 'Market Data']
+    example: 'Projecting 5 years of cash flows and discounting back to present value.'
   },
   {
     id: '91',
-    term: 'DCF (Discounted Cash Flow)',
-    definition: 'Valuation method projecting future cash flows and discounting to present value.',
+    term: 'Terminal Value',
+    definition: 'Company value beyond projection period in DCF analysis. Usually most of total value.',
     category: 'valuation-metrics',
-    example: 'Project 5 years of cash flows, discount at 12% = present value.',
-    relatedTerms: ['NPV', 'Discount Rate', 'Terminal Value']
+    example: 'Terminal value represents 70% of total DCF valuation.'
   },
   {
     id: '92',
-    term: 'Terminal Value',
-    definition: 'Estimated value of business beyond projection period in DCF analysis.',
+    term: 'WACC (Weighted Average Cost of Capital)',
+    definition: 'Discount rate used in DCF analysis. Reflects company\'s risk profile.',
     category: 'valuation-metrics',
-    example: 'Terminal value represents 60-80% of total DCF valuation.',
-    relatedTerms: ['DCF', 'Exit Multiple', 'Perpetuity Growth']
+    example: '12% WACC means investors require 12% annual return for this risk level.'
   },
   {
     id: '93',
-    term: 'Discount Rate (WACC)',
-    definition: 'Rate used to discount future cash flows to present value. Reflects risk.',
+    term: 'Beta',
+    definition: 'Measure of stock price volatility relative to market. Higher beta = higher risk.',
     category: 'valuation-metrics',
-    example: '12% discount rate for mid-market company reflects business risk.',
-    relatedTerms: ['DCF', 'Cost of Capital', 'Risk Premium']
+    example: 'Beta of 1.2 means stock moves 20% more than overall market.'
   },
   {
     id: '94',
-    term: 'Growth Rate',
-    definition: 'Annual increase in revenue or EBITDA. Key driver of valuation multiples.',
+    term: 'Premium/Discount',
+    definition: 'How your multiple compares to industry average. Shows relative attractiveness.',
     category: 'valuation-metrics',
-    example: '25% annual growth justifies premium multiple vs. 5% growth.',
-    relatedTerms: ['Multiple Expansion', 'Growth Premium', 'CAGR']
+    example: 'Industry average 4.5x, your 5.5x = 22% premium for superior quality.'
   },
   {
     id: '95',
-    term: 'CAGR (Compound Annual Growth Rate)',
-    definition: 'Smoothed annual growth rate over multiple years.',
+    term: 'Control Premium',
+    definition: 'Extra amount buyers pay for controlling interest vs. minority stake.',
     category: 'valuation-metrics',
-    example: 'Revenue grew from $1M to $2.44M over 3 years = 35% CAGR.',
-    relatedTerms: ['Growth Rate', 'Historical Performance', 'Trend Analysis']
+    example: '100% ownership worth 20% more than pro-rata minority stake value.'
   },
   {
     id: '96',
-    term: 'Margin Profile',
-    definition: 'Gross and EBITDA margins relative to industry benchmarks.',
+    term: 'Illiquidity Discount',
+    definition: 'Reduction in value because private company shares can\'t be easily sold.',
     category: 'valuation-metrics',
-    example: '75% gross margin, 25% EBITDA margin suggests premium valuation.',
-    relatedTerms: ['Profitability', 'Operating Leverage', 'Efficiency']
+    example: 'Private company worth 20% less than similar public company.'
   },
   {
     id: '97',
-    term: 'Scalability',
-    definition: 'Ability to grow revenue without proportional cost increases.',
+    term: 'Size Premium',
+    definition: 'Larger companies typically trade at higher multiples than smaller ones.',
     category: 'valuation-metrics',
-    example: 'SaaS business can add customers with minimal incremental costs.',
-    relatedTerms: ['Operating Leverage', 'Margin Expansion', 'Variable Costs']
+    example: '$50M revenue company gets higher multiple than $5M revenue company.'
   },
   {
     id: '98',
-    term: 'Market Position',
-    definition: 'Competitive strength and market share in target industry.',
+    term: 'Quality Premium',
+    definition: 'Better businesses (recurring revenue, growth, margins) command higher multiples.',
     category: 'valuation-metrics',
-    example: '#1 market position in niche geography commands premium multiple.',
-    relatedTerms: ['Competitive Moat', 'Market Share', 'Pricing Power']
+    example: 'SaaS business gets 8x multiple while manufacturing gets 4x.'
   },
   {
     id: '99',
-    term: 'Customer Concentration',
-    definition: 'Percentage of revenue from top customers. High concentration = lower valuation.',
+    term: 'Market Conditions',
+    definition: 'Economic environment affects valuations. Hot markets = higher multiples.',
     category: 'valuation-metrics',
-    example: 'Top 3 customers = 60% of revenue creates valuation discount.',
-    relatedTerms: ['Customer Diversification', 'Revenue Risk', 'Client Dependency']
+    example: 'Bull market drives multiples from 4x to 6x for same business quality.'
   },
   {
     id: '100',
-    term: 'Recurring Revenue %',
-    definition: 'Percentage of revenue that repeats annually. Higher % = higher multiple.',
+    term: 'Auction Process',
+    definition: 'Competitive bidding process driving up valuations. Investment banker managed.',
     category: 'valuation-metrics',
-    example: '80% recurring revenue justifies premium vs. 20% recurring.',
-    relatedTerms: ['Predictability', 'Revenue Quality', 'Subscription Model']
+    example: '8 buyers bidding drives price from $8M initial offer to $12M final.'
   },
-  {
-    id: '101',
-    term: 'Management Depth',
-    definition: 'Strength of management team beyond founder. Key for PE investment.',
-    category: 'valuation-metrics',
-    example: 'Strong CFO and VP Sales reduce founder dependency premium.',
-    relatedTerms: ['Key Person Risk', 'Succession Planning', 'Team Strength']
-  },
-  {
-    id: '102',
-    term: 'Industry Tailwinds',
-    definition: 'Positive industry trends that support growth and valuation.',
-    category: 'valuation-metrics',
-    example: 'Aging population creates tailwinds for healthcare services.',
-    relatedTerms: ['Market Growth', 'Secular Trends', 'Industry Dynamics']
-  },
+  
+  // Additional Important Terms
   {
     id: '103',
-    term: 'ESG Factors',
-    definition: 'Environmental, Social, Governance factors increasingly important to buyers.',
-    category: 'valuation-metrics',
-    example: 'Strong governance and environmental practices command premium.',
-    relatedTerms: ['Sustainability', 'Corporate Governance', 'Social Impact']
+    term: 'Investment Banking Fees',
+    definition: 'Typically 3-10% of transaction value paid to investment bank for managing sale process. Percentage decreases as deal size increases.',
+    category: 'deal-structure',
+    example: 'Investment bank charges 5% fee on $10M sale = $500K in advisory fees at closing.'
   },
   {
     id: '104',
-    term: 'Tech Stack Quality',
-    definition: 'Modern, scalable technology infrastructure valued by buyers.',
-    category: 'valuation-metrics',
-    example: 'Cloud-based systems vs. legacy on-premise affects valuation.',
-    relatedTerms: ['Digital Transformation', 'Scalability', 'Tech Debt']
+    term: 'Book Building',
+    definition: 'Process where investment banker creates list of potential buyers and manages initial outreach to gauge interest levels.',
+    category: 'pe-specific',
+    example: 'Investment banker contacts 150 potential buyers, gets 20 NDAs signed, and 8 IOIs submitted.'
   },
   {
     id: '105',
-    term: 'Regulatory Risk',
-    definition: 'Potential for government regulation to impact business model.',
-    category: 'valuation-metrics',
-    example: 'Healthcare businesses face higher regulatory risk than manufacturing.',
-    relatedTerms: ['Industry Risk', 'Compliance', 'Government Relations']
+    term: 'Management Roadshow',
+    definition: 'Series of presentations to potential buyers where management team presents business overview and growth strategy.',
+    category: 'pe-specific',
+    example: 'CEO and CFO present to 12 PE firms over 3 weeks, explaining market position and value creation opportunities.'
   },
   {
     id: '106',
-    term: 'Geographic Diversification',
-    definition: 'Revenue spread across multiple geographic markets reduces risk.',
-    category: 'valuation-metrics',
-    example: 'National footprint vs. single-city concentration affects multiple.',
-    relatedTerms: ['Market Diversification', 'Geographic Risk', 'Expansion Opportunity']
+    term: 'Data Room',
+    definition: 'Secure online repository containing all company documents for buyer review during due diligence process.',
+    category: 'legal-contract',
+    example: 'Virtual data room contains 500+ documents including financials, contracts, HR records, and legal documents.'
   },
   {
     id: '107',
-    term: 'Organic vs Acquired Growth',
-    definition: 'Growth from existing operations vs. acquisitions. Organic preferred.',
-    category: 'valuation-metrics',
-    example: '90% organic growth demonstrates core business strength.',
-    relatedTerms: ['Growth Quality', 'Operational Excellence', 'Acquisition Integration']
+    term: 'Teaser Document',
+    definition: 'One-page anonymous summary of investment opportunity sent to potential buyers before signing NDAs.',
+    category: 'pe-specific',
+    example: 'Teaser describes "leading regional HVAC company with $15M revenue" without revealing company name.'
   },
   {
     id: '108',
-    term: 'Working Capital Intensity',
-    definition: 'Amount of working capital needed to support revenue growth.',
-    category: 'valuation-metrics',
-    example: 'Low working capital needs = better cash conversion.',
-    relatedTerms: ['Cash Generation', 'Capital Efficiency', 'Growth Investment']
+    term: 'CIM (Confidential Information Memorandum)',
+    definition: 'Detailed 30-50 page document describing company, market, financials, and investment opportunity.',
+    category: 'pe-specific',
+    example: 'CIM includes company history, management bios, 3-year financial performance, and market analysis.'
   },
   {
     id: '109',
-    term: 'Seasonality',
-    definition: 'Predictable fluctuations in business performance throughout the year.',
-    category: 'valuation-metrics',
-    example: 'Landscaping business has strong Q2-Q3, weak Q1-Q4.',
-    relatedTerms: ['Cyclicality', 'Cash Flow Timing', 'Working Capital']
+    term: 'Process Letter',
+    definition: 'Document outlining sale process timeline, bid requirements, and due diligence procedures.',
+    category: 'pe-specific',
+    example: 'Process letter sets LOI deadline for March 15th and final bids due April 30th.'
   },
   {
     id: '110',
-    term: 'Moat Width',
-    definition: 'Strength of competitive advantages protecting market position.',
-    category: 'valuation-metrics',
-    example: 'Patents, exclusive contracts, network effects create wide moat.',
-    relatedTerms: ['Competitive Advantage', 'Barriers to Entry', 'Defensibility']
+    term: 'Stalking Horse Bid',
+    definition: 'Initial bid that sets floor price and terms for auction process. Provides downside protection.',
+    category: 'deal-structure',
+    example: 'PE firm provides $8M stalking horse bid, ensuring minimum sale price while auction seeks higher offers.'
   },
   {
     id: '111',
-    term: 'Capital Intensity',
-    definition: 'Amount of capital investment required to maintain/grow business.',
-    category: 'valuation-metrics',
-    example: 'Software (low capital) vs. manufacturing (high capital) intensity.',
-    relatedTerms: ['CapEx Requirements', 'Asset Light', 'Return on Capital']
+    term: 'Go-Shop Period',
+    definition: 'Time after signing definitive agreement when seller can still solicit higher offers.',
+    category: 'deal-structure',
+    example: '45-day go-shop period allows seller to find better offer even after signing with initial buyer.'
   },
   {
     id: '112',
-    term: 'Normalized EBITDA',
-    definition: 'EBITDA adjusted for one-time items and owner discretionary expenses.',
-    category: 'valuation-metrics',
-    example: 'Reported $800K + $200K add-backs = $1M normalized EBITDA.',
-    relatedTerms: ['Add-Backs', 'Quality of Earnings', 'Adjusted EBITDA']
+    term: 'No-Shop Clause',
+    definition: 'Provision preventing seller from soliciting other offers once deal is signed.',
+    category: 'legal-contract',
+    example: 'No-shop clause prevents engaging with other buyers during 60-day closing period.'
   },
   {
     id: '113',
-    term: 'Pro Forma',
-    definition: 'Financial statements adjusted for hypothetical changes or transactions.',
-    category: 'valuation-metrics',
-    example: 'Pro forma EBITDA shows results as if acquisition happened Jan 1.',
-    relatedTerms: ['Adjusted Financials', 'As-If Basis', 'Hypothetical Performance']
+    term: 'Fiduciary Out',
+    definition: 'Allows seller to consider superior proposals even under no-shop clause to fulfill fiduciary duties.',
+    category: 'legal-contract',
+    example: 'Board can consider unsolicited offer 20% higher than signed deal due to fiduciary out provision.'
   },
   {
     id: '114',
-    term: 'Synergies',
-    definition: 'Cost savings or revenue increases from combining two businesses.',
-    category: 'valuation-metrics',
-    example: 'Eliminating duplicate overhead saves $500K annually.',
-    relatedTerms: ['Cost Synergies', 'Revenue Synergies', 'Integration']
+    term: 'Deal Certainty',
+    definition: 'Probability that proposed transaction will actually close. Affects buyer attractiveness.',
+    category: 'deal-structure',
+    example: 'Strategic buyer with cash offers higher deal certainty than leveraged buyout requiring financing.'
   },
   {
     id: '115',
-    term: 'Network Effects',
-    definition: 'Business becomes more valuable as more people use it.',
-    category: 'valuation-metrics',
-    example: 'Marketplace with more buyers attracts more sellers, creating value.',
-    relatedTerms: ['Competitive Moat', 'Platform Business', 'Viral Growth']
+    term: 'Financing Risk',
+    definition: 'Risk that buyer cannot secure necessary funding to complete transaction.',
+    category: 'deal-structure',
+    example: 'Debt-financed deal has financing risk if credit markets tighten before closing.'
   },
   {
     id: '116',
-    term: 'Winner-Take-All Market',
-    definition: 'Market where dominant player captures disproportionate value.',
-    category: 'valuation-metrics',
-    example: 'Google in search, Facebook in social media dominate their markets.',
-    relatedTerms: ['Market Dynamics', 'Network Effects', 'Competitive Position']
-  },
-  {
-    id: '117',
-    term: 'Churn Rate',
-    definition: 'The percentage rate at which customers stop subscribing to a service during a given time period.',
-    category: 'accounting-financial',
-    example: 'SaaS company with 5% monthly churn loses 5 out of every 100 customers each month.',
-    relatedTerms: ['Customer Retention', 'SaaS (Software as a Service)', 'MRR', 'ARR']
-  },
-  {
-    id: '118',
-    term: 'COGS (Cost of Goods Sold)',
-    definition: 'Direct costs attributable to the production of goods or services sold by a company.',
-    category: 'accounting-financial',
-    example: 'Manufacturing company with $2M revenue and $800K in materials/labor has 40% COGS.',
-    relatedTerms: ['Gross Margin', 'Operating Expenses', 'Gross Profit']
-  },
-  {
-    id: '119',
-    term: 'Depreciation',
-    definition: 'Accounting method of allocating the cost of a tangible asset over its useful life.',
-    category: 'accounting-financial',
-    example: '$100K equipment depreciated over 10 years results in $10K annual depreciation expense.',
-    relatedTerms: ['Amortization', 'Asset Value', 'Tax Benefits']
-  },
-  {
-    id: '120',
-    term: 'Amortization',
-    definition: 'Process of spreading the cost of an intangible asset over its useful life or loan payments over time.',
-    category: 'accounting-financial',
-    example: 'Patent worth $500K amortized over 5-year life shows $100K annual expense.',
-    relatedTerms: ['Depreciation', 'Intangible Assets', 'Debt Service']
-  },
-  {
-    id: '121',
-    term: 'Net Debt',
-    definition: 'Total debt minus cash and cash equivalents, showing actual debt burden.',
-    category: 'accounting-financial',
-    example: 'Company with $5M debt and $1M cash has $4M net debt.',
-    relatedTerms: ['Debt-to-Equity', 'Leverage', 'Working Capital']
-  },
-  {
-    id: '122',
-    term: 'Operating Margin',
-    definition: 'Operating income expressed as a percentage of revenue, measuring operational efficiency.',
-    category: 'accounting-financial',
-    example: 'Company with $10M revenue and $2M operating income has 20% operating margin.',
-    relatedTerms: ['EBITDA Margin', 'Gross Margin', 'Profitability']
-  },
-  {
-    id: '123',
-    term: 'Return on Capital',
-    definition: 'Measure of how efficiently a company uses its capital to generate profits.',
-    category: 'valuation-metrics',
-    example: 'Company earning $2M profit on $10M invested capital has 20% return on capital.',
-    relatedTerms: ['ROI', 'Capital Efficiency', 'Asset Utilization']
-  },
-  {
-    id: '124',
-    term: 'Asset Light',
-    definition: 'Business model requiring minimal physical assets to generate revenue and profits.',
-    category: 'deal-structure',
-    example: 'Software companies, consulting firms, and marketplaces are typically asset-light businesses.',
-    relatedTerms: ['Scalability', 'Capital Requirements', 'Return on Assets']
-  },
-  {
-    id: '125',
-    term: 'Barriers to Entry',
-    definition: 'Economic, legal, or technological factors that prevent new competitors from entering a market.',
-    category: 'valuation-metrics',
-    example: 'High capital requirements, patents, or regulatory licenses create barriers to entry.',
-    relatedTerms: ['Competitive Moat', 'Market Position', 'Defensibility']
-  },
-  {
-    id: '126',
-    term: 'Cyclicality',
-    definition: 'Business performance pattern that rises and falls with economic or seasonal cycles.',
-    category: 'valuation-metrics',
-    example: 'Construction companies show cyclical patterns tied to economic growth and interest rates.',
-    relatedTerms: ['Market Dynamics', 'Economic Sensitivity', 'Revenue Predictability']
-  },
-  {
-    id: '127',
-    term: 'Patents',
-    definition: 'Legal protection granting exclusive rights to an invention or process for a specified period.',
+    term: 'Regulatory Approval',
+    definition: 'Government clearance required for certain transactions, especially larger deals or specific industries.',
     category: 'legal-contract',
-    example: 'Pharmaceutical company with drug patent has exclusive 20-year manufacturing rights.',
-    relatedTerms: ['Intellectual Property', 'Competitive Advantage', 'Barriers to Entry']
-  },
-  {
-    id: '128',
-    term: 'Tech Debt',
-    definition: 'Cost of choosing quick, easy software solutions over better approaches that would take longer.',
-    category: 'pe-specific',
-    example: 'Company using outdated systems faces $2M tech debt to modernize infrastructure.',
-    relatedTerms: ['Digital Transformation', 'System Modernization', 'Operational Risk']
-  },
-  {
-    id: '129',
-    term: 'Digital Transformation',
-    definition: 'Process of adopting digital technologies to fundamentally change business operations and customer value.',
-    category: 'pe-specific',
-    example: 'Retailer implementing e-commerce, mobile apps, and data analytics for digital transformation.',
-    relatedTerms: ['Technology Upgrade', 'Operational Efficiency', 'Customer Experience']
-  },
-  {
-    id: '130',
-    term: 'Warrants',
-    definition: 'Financial instruments giving the holder the right to purchase company equity at a predetermined price.',
-    category: 'deal-structure',
-    example: 'Warrant allows purchase of shares at $10 each when current market price is $15.',
-    relatedTerms: ['Equity Participation', 'Stock Options', 'Upside Participation']
-  },
-  {
-    id: '131',
-    term: 'SBA Financing',
-    definition: 'Small Business Administration loan programs providing government-backed financing for business acquisitions.',
-    category: 'deal-structure',
-    example: 'Buyer uses SBA 7(a) loan for 70% of $2M acquisition with favorable terms and lower down payment.',
-    relatedTerms: ['Debt Financing', 'Government Programs', 'Acquisition Financing']
+    example: 'FTC approval required for $100M acquisition that creates market concentration.'
   }
 ];
-
 
 export function InteractiveGlossary() {
   const sortedTerms = useMemo(() => {
     return [...glossaryTerms].sort((a, b) => a.term.localeCompare(b.term));
   }, []);
 
-
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h1 className="text-3xl font-bold text-foreground mb-2">Interactive Glossary</h1>
-        <p className="text-lg text-muted-foreground">
-          Master the language of private equity and exit transactions
+        <h2 className="text-3xl font-bold text-foreground mb-4">Interactive Glossary</h2>
+        <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+          Master the essential terminology of private equity transactions and business valuations. 
+          Each term includes real-world examples to help you understand concepts that matter most to buyers.
         </p>
       </div>
-
-      <div className="grid gap-4 md:grid-cols-2">
+      
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {sortedTerms.map((term) => (
-          <Card key={term.id} className="hover:shadow-md transition-shadow">
+          <Card key={term.id} className="hover:shadow-lg transition-shadow">
             <CardHeader className="pb-3">
               <CardTitle className="text-lg">{term.term}</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
               <CardDescription className="text-sm leading-relaxed">
                 {term.definition}
               </CardDescription>
-              
+            </CardHeader>
+            <CardContent className="space-y-3">
               {term.example && (
-                <div className="bg-muted/50 p-3 rounded-md">
+                <div className="bg-muted/50 p-3 rounded-lg">
                   <p className="text-sm text-muted-foreground">
                     <span className="font-medium">Example:</span> {term.example}
                   </p>
-                </div>
-              )}
-              
-              {term.relatedTerms && term.relatedTerms.length > 0 && (
-                <div>
-                  <p className="text-xs font-medium text-muted-foreground mb-2">Related Terms:</p>
-                  <div className="flex flex-wrap gap-1">
-                    {term.relatedTerms.map((relatedTerm) => (
-                      <Badge key={relatedTerm} variant="outline" className="text-xs">
-                        {relatedTerm}
-                      </Badge>
-                    ))}
-                  </div>
                 </div>
               )}
             </CardContent>
