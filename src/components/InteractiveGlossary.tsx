@@ -977,6 +977,17 @@ export function InteractiveGlossary() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [favorites, setFavorites] = useState<string[]>([]);
 
+  // Function to handle clicking on related terms
+  const handleRelatedTermClick = (term: string) => {
+    setSearchTerm(term);
+    setSelectedCategory('all');
+  };
+
+  // Function to clear search
+  const clearSearch = () => {
+    setSearchTerm('');
+  };
+
   const filteredTerms = useMemo(() => {
     return glossaryTerms.filter(term => {
       const matchesSearch = term.term.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -1023,13 +1034,24 @@ export function InteractiveGlossary() {
 
       {/* Search */}
       <div className="relative max-w-md mx-auto">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+        <Search 
+          className={`absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 ${searchTerm ? 'text-primary cursor-pointer hover:text-primary/80' : 'text-muted-foreground'}`}
+          onClick={searchTerm ? clearSearch : undefined}
+        />
         <Input
           placeholder="Search terms and definitions..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="pl-10"
+          className="pl-10 pr-8 text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-primary focus-visible:ring-primary"
         />
+        {searchTerm && (
+          <button
+            onClick={clearSearch}
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground text-sm font-medium"
+          >
+            ✕
+          </button>
+        )}
       </div>
 
       {/* Category Tabs */}
@@ -1095,18 +1117,23 @@ export function InteractiveGlossary() {
                         </div>
                       )}
                       
-                      {term.relatedTerms && term.relatedTerms.length > 0 && (
-                        <div>
-                          <p className="text-xs font-medium text-muted-foreground mb-2">Related Terms:</p>
-                          <div className="flex flex-wrap gap-1">
-                            {term.relatedTerms.map((relatedTerm) => (
-                              <Badge key={relatedTerm} variant="outline" className="text-xs">
-                                {relatedTerm}
-                              </Badge>
-                            ))}
-                          </div>
-                        </div>
-                      )}
+                       {term.relatedTerms && term.relatedTerms.length > 0 && (
+                         <div>
+                           <p className="text-xs font-medium text-muted-foreground mb-2">Related Terms:</p>
+                           <div className="flex flex-wrap gap-1">
+                             {term.relatedTerms.map((relatedTerm) => (
+                               <Badge 
+                                 key={relatedTerm} 
+                                 variant="outline" 
+                                 className="text-xs cursor-pointer hover:bg-primary/10 hover:border-primary transition-colors"
+                                 onClick={() => handleRelatedTermClick(relatedTerm)}
+                               >
+                                 {relatedTerm}
+                               </Badge>
+                             ))}
+                           </div>
+                         </div>
+                       )}
                     </CardContent>
                   </Card>
                 );
