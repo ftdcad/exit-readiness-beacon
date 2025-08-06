@@ -16,8 +16,18 @@ interface Asset {
   name: string;
   value: number;
   description: string;
-  currentCategory: 'Core' | 'Destroyer' | 'Negotiable';
+  currentCategory: 'Core' | 'Destroyer' | 'Negotiable' | 'Uncategorized';
   notes: string;
+  warningLevel?: 'green' | 'yellow' | 'red';
+  warningMessage?: string;
+  explanation?: string;
+}
+
+interface IndustryAssetRule {
+  assetPattern: RegExp;
+  coreIndustries: string[];
+  negotiableIndustries: string[];
+  destroyerIndustries: string[];
 }
 
 const AssetWorkshopPage = () => {
@@ -25,56 +35,84 @@ const AssetWorkshopPage = () => {
   const { user } = useAuth();
   const { toast } = useToast();
   
-  const [assets, setAssets] = useState<Asset[]>([
-    {
-      id: '1',
-      name: 'Office Building',
-      value: 850000,
-      description: 'Main headquarters facility',
-      currentCategory: 'Core',
-      notes: ''
-    },
-    {
-      id: '2', 
-      name: 'Company Vehicle Fleet',
-      value: 120000,
-      description: 'Delivery trucks and sales vehicles',
-      currentCategory: 'Core',
-      notes: ''
-    },
-    {
-      id: '3',
-      name: 'Vacation Condo',
-      value: 400000,
-      description: 'Executive retreat property',
-      currentCategory: 'Destroyer',
-      notes: ''
-    },
-    {
-      id: '4',
-      name: 'Manufacturing Equipment',
-      value: 2100000,
-      description: 'Core production machinery',
-      currentCategory: 'Core',
-      notes: ''
-    },
-    {
-      id: '5',
-      name: 'Art Collection',
-      value: 75000,
-      description: 'Office artwork and sculptures',
-      currentCategory: 'Destroyer',
-      notes: ''
-    },
-    {
-      id: '6',
-      name: 'Cash Reserves',
-      value: 500000,
-      description: 'Excess working capital',
-      currentCategory: 'Negotiable',
-      notes: ''
+  // Start with empty assets list - users must add their own
+  const [assets, setAssets] = useState<Asset[]>([]);
+  
+  // Get user's industry from localStorage or default
+  const getUserIndustry = () => {
+    try {
+      const assessment = localStorage.getItem('preAssessment');
+      if (assessment) {
+        const data = JSON.parse(assessment);
+        return data.industry || 'Unknown';
+      }
+    } catch (e) {
+      console.log('Could not parse industry data');
     }
-  ]);
+    return 'Unknown';
+  };
+  
+  const userIndustry = getUserIndustry();
+  
+  // Industry-specific asset intelligence rules
+  const assetRules: IndustryAssetRule[] = [
+    {
+      assetPattern: /vehicle|truck|fleet|van|car/i,
+      coreIndustries: ['HVAC', 'Plumbing', 'Electrical', 'Construction', 'Delivery', 'Service'],
+      negotiableIndustries: ['Retail', 'Manufacturing'],
+      destroyerIndustries: ['Legal', 'Accounting', 'Consulting', 'Software', 'Healthcare']
+    },
+    {
+      assetPattern: /building|office|warehouse|facility|real estate|property/i,
+      coreIndustries: ['Manufacturing', 'Warehousing'],
+      negotiableIndustries: ['Retail', 'Healthcare'],
+      destroyerIndustries: ['Legal', 'Accounting', 'Consulting', 'Software', 'HVAC', 'Plumbing']
+    },
+    {
+      assetPattern: /equipment|machinery|tools|production/i,
+      coreIndustries: ['Manufacturing', 'Construction', 'Healthcare'],
+      negotiableIndustries: ['Service', 'Retail'],
+      destroyerIndustries: ['Legal', 'Accounting', 'Software']
+    },
+    {
+      assetPattern: /vacation|personal|art|yacht|rv|recreational/i,
+      coreIndustries: [],
+      negotiableIndustries: [],
+      destroyerIndustries: ['All']
+    },
+    {
+      assetPattern: /computer|printer|copier|software|IT/i,
+      coreIndustries: ['Software', 'Legal', 'Accounting', 'Consulting'],
+      negotiableIndustries: ['All'],
+      destroyerIndustries: []
+    }
+  ];
+  
+  // Get warning level for asset categorization
+  const getAssetWarning = (assetName: string, category: Asset['currentCategory']): { level: 'green' | 'yellow' | 'red', message: string } => {
+    if (category === 'Uncategorized') return { level: 'green', message: '' };
+    
+    const rule = assetRules.find(rule => rule.assetPattern.test(assetName));
+    if (!rule) return { level: 'green', message: 'Standard categorization' };
+    
+    const isCore = rule.coreIndustries.includes(userIndustry) || rule.coreIndustries.includes('All');
+    const isNegotiable = rule.negotiableIndustries.includes(userIndustry) || rule.negotiableIndustries.includes('All');
+    const isDestroyer = rule.destroyerIndustries.includes(userIndustry) || rule.destroyerIndustries.includes('All');
+    
+    if (category === 'Core') {
+      if (isDestroyer) return { level: 'red', message: `Very unusual - ${assetName} is typically not core for ${userIndustry} companies. Detailed justification required.` };
+      if (!isCore && !isNegotiable) return { level: 'yellow', message: `Unusual for ${userIndustry} - please explain why this is essential to operations.` };
+      return { level: 'green', message: `Common for ${userIndustry} companies - looks good` };
+    }
+    
+    if (category === 'Destroyer') {
+      if (isDestroyer) return { level: 'green', message: `Correct - typically problematic for all industries` };
+      if (isCore) return { level: 'red', message: `Warning - this asset is usually core for ${userIndustry} companies. Are you sure?` };
+      return { level: 'yellow', message: `Please explain why this is a value destroyer for your business` };
+    }
+    
+    return { level: 'green', message: 'Standard categorization' };
+  };
 
   const [newAsset, setNewAsset] = useState({
     name: '',
@@ -117,11 +155,19 @@ const AssetWorkshopPage = () => {
     e.preventDefault();
     if (draggedAsset) {
       setAssets(prev => 
-        prev.map(asset => 
-          asset.id === draggedAsset 
-            ? { ...asset, currentCategory: category }
-            : asset
-        )
+        prev.map(asset => {
+          if (asset.id === draggedAsset) {
+            const warning = getAssetWarning(asset.name, category);
+            return { 
+              ...asset, 
+              currentCategory: category,
+              warningLevel: warning.level,
+              warningMessage: warning.message,
+              explanation: warning.level !== 'green' ? asset.explanation || '' : undefined
+            };
+          }
+          return asset;
+        })
       );
       setDraggedAsset(null);
     }
@@ -134,12 +180,20 @@ const AssetWorkshopPage = () => {
         name: newAsset.name,
         value: parseInt(newAsset.value),
         description: newAsset.description,
-        currentCategory: 'Negotiable',
+        currentCategory: 'Uncategorized',
         notes: ''
       };
       setAssets(prev => [...prev, asset]);
       setNewAsset({ name: '', value: '', description: '' });
     }
+  };
+  
+  const updateAssetExplanation = (id: string, explanation: string) => {
+    setAssets(prev => 
+      prev.map(asset => 
+        asset.id === id ? { ...asset, explanation } : asset
+      )
+    );
   };
 
   const removeAsset = (id: string) => {
@@ -157,6 +211,15 @@ const AssetWorkshopPage = () => {
   const impact = calculateValuationImpact();
 
   const categories = [
+    {
+      key: 'Uncategorized' as const,
+      title: 'Your Assets',
+      description: 'Drag assets below into the appropriate categories based on buyer perspective.',
+      bgColor: 'bg-slate-900/10',
+      borderColor: 'border-slate-400/20',
+      textColor: 'text-slate-400',
+      icon: Plus
+    },
     {
       key: 'Core' as const,
       title: 'Core Assets',
@@ -300,6 +363,25 @@ const AssetWorkshopPage = () => {
                                   <p className="text-sm font-semibold text-accent mt-1">
                                     ${asset.value.toLocaleString()}
                                   </p>
+                                  
+                                  {/* Smart Warning System */}
+                                  {asset.warningLevel && asset.warningLevel !== 'green' && (
+                                    <div className={`mt-2 p-2 rounded text-xs ${
+                                      asset.warningLevel === 'red' 
+                                        ? 'bg-red-900/20 text-red-400 border border-red-400/30' 
+                                        : 'bg-yellow-900/20 text-yellow-400 border border-yellow-400/30'
+                                    }`}>
+                                      <p className="font-medium">
+                                        {asset.warningLevel === 'red' ? '🔴' : '🟡'} {asset.warningMessage}
+                                      </p>
+                                    </div>
+                                  )}
+                                  
+                                  {asset.warningLevel === 'green' && asset.warningMessage && (
+                                    <div className="mt-2 p-2 rounded text-xs bg-green-900/20 text-green-400 border border-green-400/30">
+                                      <p className="font-medium">✅ {asset.warningMessage}</p>
+                                    </div>
+                                  )}
                                 </div>
                                 <Button
                                   variant="ghost"
@@ -310,6 +392,18 @@ const AssetWorkshopPage = () => {
                                   <Minus className="h-4 w-4" />
                                 </Button>
                               </div>
+                              
+                              {/* Explanation required for warnings */}
+                              {asset.warningLevel && asset.warningLevel !== 'green' && (
+                                <Textarea
+                                  placeholder={`Required: Explain why this is ${category.key.toLowerCase()} for your ${userIndustry} business...`}
+                                  value={asset.explanation || ''}
+                                  onChange={(e) => updateAssetExplanation(asset.id, e.target.value)}
+                                  className="mt-3 text-sm bg-background/30 backdrop-blur-sm border-yellow-400/30"
+                                  rows={2}
+                                />
+                              )}
+                              
                               <Textarea
                                 placeholder="Add notes..."
                                 value={asset.notes}
@@ -410,18 +504,12 @@ const AssetWorkshopPage = () => {
                   className="w-full bg-gradient-to-r from-accent to-primary hover:from-accent/90 hover:to-primary/90 text-white shadow-lg" 
                   variant="default"
                   onClick={() => {
-                    // Generate CSV content
-                    const csvContent = [
-                      'Asset Name,Value,Category,Description,Notes',
+                    // Generate CSV export with warnings and explanations
+                     const csvContent = [
+                      'Asset Name,Value,Description,Category,Warning Level,Warning Message,Explanation,Notes',
                       ...assets.map(asset => 
-                        `"${asset.name}","${asset.value}","${asset.currentCategory}","${asset.description}","${asset.notes}"`
-                      ),
-                      '',
-                      'Summary:',
-                      `Total Assets,${impact.totalAssets}`,
-                      `Value Destroyers,${impact.destroyerValue}`,
-                      `Buyer Discount,${impact.discountAmount}`,
-                      `Adjusted Valuation,${impact.adjustedValuation}`
+                        `"${asset.name}","${asset.value}","${asset.description}","${asset.currentCategory}","${asset.warningLevel || 'none'}","${asset.warningMessage || ''}","${asset.explanation || ''}","${asset.notes}"`
+                      )
                     ].join('\n');
 
                     // Create and download CSV file
@@ -429,15 +517,15 @@ const AssetWorkshopPage = () => {
                     const url = window.URL.createObjectURL(blob);
                     const link = document.createElement('a');
                     link.href = url;
-                    link.download = `asset-workshop-analysis-${new Date().toISOString().split('T')[0]}.csv`;
+                    link.download = `asset-analysis-${userIndustry.toLowerCase()}-${new Date().toISOString().split('T')[0]}.csv`;
                     document.body.appendChild(link);
                     link.click();
                     document.body.removeChild(link);
                     window.URL.revokeObjectURL(url);
 
                     toast({
-                      title: "Analysis Exported!",
-                      description: "Your asset analysis has been downloaded as a CSV file.",
+                      title: "Export Complete",
+                      description: `Asset analysis for ${userIndustry} business exported successfully`
                     });
                   }}
                 >
@@ -447,13 +535,12 @@ const AssetWorkshopPage = () => {
                 
                 <Button 
                   className="w-full"
-                  variant="outline"
                   onClick={async () => {
                     if (!user) {
                       toast({
-                        title: "Error",
-                        description: "You must be logged in to complete modules.",
-                        variant: "destructive",
+                        title: "Login Required",
+                        description: "Please log in to save your progress",
+                        variant: "destructive"
                       });
                       return;
                     }
@@ -462,7 +549,7 @@ const AssetWorkshopPage = () => {
                       await markModuleComplete('Asset Workshop', 1);
                       toast({
                         title: "Module Completed!",
-                        description: "You've completed the Asset Workshop module.",
+                        description: "Asset Categorization Workshop marked as complete"
                       });
                     } catch (error) {
                       console.error('Error completing module:', error);
@@ -476,7 +563,7 @@ const AssetWorkshopPage = () => {
                   disabled={isModuleCompleted('Asset Workshop', 1)}
                 >
                   <CheckCircle2 className="h-4 w-4 mr-2" />
-                  {isModuleCompleted('Asset Workshop', 1) ? 'Module Completed' : 'Complete Module'}
+                  {isModuleCompleted('Asset Workshop', 1) ? '✓ Module Complete' : 'Complete Module'}
                 </Button>
               </div>
             </div>
