@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Download, Plus, DollarSign, AlertTriangle, CheckCircle2, Minus } from 'lucide-react';
@@ -318,15 +319,16 @@ const AssetWorkshopPage = () => {
                     
                     {/* Right Column */}
                     <div className="space-y-4">
-                      <select 
-                        className="w-full h-10 px-3 py-2 bg-background/50 backdrop-blur-sm text-foreground border border-input rounded-md text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-                        defaultValue=""
-                      >
-                        <option value="" disabled>Select category</option>
-                        <option value="Core">Core Asset</option>
-                        <option value="Negotiable">Negotiable</option>
-                        <option value="Destroyer">Non-Core</option>
-                      </select>
+                      <Select defaultValue="">
+                        <SelectTrigger className="bg-background/50 backdrop-blur-sm text-foreground">
+                          <SelectValue placeholder="Select category" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-background/95 backdrop-blur-sm border-input">
+                          <SelectItem value="Core">Core Asset</SelectItem>
+                          <SelectItem value="Negotiable">Negotiable</SelectItem>
+                          <SelectItem value="Destroyer">Non-Core</SelectItem>
+                        </SelectContent>
+                      </Select>
                       <textarea
                         placeholder="Description"
                         value={newAsset.description}
