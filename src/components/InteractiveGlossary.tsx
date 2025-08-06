@@ -1,9 +1,7 @@
-import React, { useState, useMemo } from 'react';
-import { Heart, BookOpen, DollarSign, Scale, Settings, TrendingUp } from 'lucide-react';
+import React, { useMemo } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+
 
 interface GlossaryTerm {
   id: string;
@@ -955,57 +953,12 @@ const glossaryTerms: GlossaryTerm[] = [
   }
 ];
 
-const categoryIcons = {
-  'accounting-financial': DollarSign,
-  'legal-contract': Scale,
-  'deal-structure': Settings,
-  'pe-specific': BookOpen,
-  'valuation-metrics': TrendingUp
-};
-
-const categoryColors = {
-  'accounting-financial': 'bg-green-100 text-green-800',
-  'legal-contract': 'bg-blue-100 text-blue-800',
-  'deal-structure': 'bg-purple-100 text-purple-800',
-  'pe-specific': 'bg-orange-100 text-orange-800',
-  'valuation-metrics': 'bg-red-100 text-red-800'
-};
 
 export function InteractiveGlossary() {
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const [favorites, setFavorites] = useState<string[]>([]);
+  const sortedTerms = useMemo(() => {
+    return [...glossaryTerms].sort((a, b) => a.term.localeCompare(b.term));
+  }, []);
 
-  const filteredTerms = useMemo(() => {
-    return glossaryTerms.filter(term => {
-      if (selectedCategory === 'favorites') {
-        return favorites.includes(term.id);
-      }
-      
-      if (selectedCategory === 'all') {
-        return true;
-      }
-      
-      return term.category === selectedCategory;
-    });
-  }, [selectedCategory, favorites]);
-
-  const toggleFavorite = (termId: string) => {
-    setFavorites(prev => 
-      prev.includes(termId) 
-        ? prev.filter(id => id !== termId)
-        : [...prev, termId]
-    );
-  };
-
-  const categories = [
-    { value: 'all', label: 'All Terms', count: glossaryTerms.length },
-    { value: 'accounting-financial', label: 'Accounting & Financial', count: glossaryTerms.filter(t => t.category === 'accounting-financial').length },
-    { value: 'legal-contract', label: 'Legal & Contract', count: glossaryTerms.filter(t => t.category === 'legal-contract').length },
-    { value: 'deal-structure', label: 'Deal Structure', count: glossaryTerms.filter(t => t.category === 'deal-structure').length },
-    { value: 'pe-specific', label: 'PE-Specific', count: glossaryTerms.filter(t => t.category === 'pe-specific').length },
-    { value: 'valuation-metrics', label: 'Valuation & Metrics', count: glossaryTerms.filter(t => t.category === 'valuation-metrics').length },
-    { value: 'favorites', label: 'Favorites', count: favorites.length }
-  ];
 
   return (
     <div className="space-y-6">
@@ -1016,89 +969,41 @@ export function InteractiveGlossary() {
         </p>
       </div>
 
-      {/* Category Tabs */}
-      <Tabs value={selectedCategory} onValueChange={setSelectedCategory} className="w-full">
-        <TabsList className="grid w-full grid-cols-6">
-          {categories.map((category) => (
-            <TabsTrigger key={category.value} value={category.value} className="text-xs">
-              {category.label} ({category.count})
-            </TabsTrigger>
-          ))}
-        </TabsList>
-
-        <TabsContent value={selectedCategory} className="mt-6">
-          {filteredTerms.length === 0 ? (
-            <Card>
-              <CardContent className="text-center py-8">
-                <p className="text-muted-foreground">
-                  No terms in this category yet.
-                </p>
-              </CardContent>
-            </Card>
-          ) : (
-            <div className="grid gap-4 md:grid-cols-2">
-              {filteredTerms.map((term) => {
-                const CategoryIcon = categoryIcons[term.category];
-                const isFavorited = favorites.includes(term.id);
-                
-                return (
-                  <Card key={term.id} className="group hover:shadow-md transition-shadow">
-                    <CardHeader className="pb-3">
-                      <div className="flex items-start justify-between">
-                        <div className="flex items-center gap-2">
-                          <CategoryIcon className="h-5 w-5 text-muted-foreground" />
-                          <CardTitle className="text-lg">{term.term}</CardTitle>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <Badge variant="secondary" className={categoryColors[term.category]}>
-                            {term.category.replace('-', ' ')}
-                          </Badge>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => toggleFavorite(term.id)}
-                            className="opacity-0 group-hover:opacity-100 transition-opacity"
-                          >
-                            <Heart 
-                              className={`h-4 w-4 ${isFavorited ? 'fill-red-500 text-red-500' : 'text-muted-foreground'}`} 
-                            />
-                          </Button>
-                        </div>
-                      </div>
-                    </CardHeader>
-                    <CardContent className="space-y-3">
-                      <CardDescription className="text-sm leading-relaxed">
-                        {term.definition}
-                      </CardDescription>
-                      
-                      {term.example && (
-                        <div className="bg-muted/50 p-3 rounded-md">
-                          <p className="text-sm text-muted-foreground">
-                            <span className="font-medium">Example:</span> {term.example}
-                          </p>
-                        </div>
-                      )}
-                      
-                       {term.relatedTerms && term.relatedTerms.length > 0 && (
-                         <div>
-                           <p className="text-xs font-medium text-muted-foreground mb-2">Related Terms:</p>
-                           <div className="flex flex-wrap gap-1">
-                             {term.relatedTerms.map((relatedTerm) => (
-                               <Badge key={relatedTerm} variant="outline" className="text-xs">
-                                 {relatedTerm}
-                               </Badge>
-                             ))}
-                           </div>
-                         </div>
-                       )}
-                    </CardContent>
-                  </Card>
-                );
-              })}
-            </div>
-          )}
-        </TabsContent>
-      </Tabs>
+      <div className="grid gap-4 md:grid-cols-2">
+        {sortedTerms.map((term) => (
+          <Card key={term.id} className="hover:shadow-md transition-shadow">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-lg">{term.term}</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <CardDescription className="text-sm leading-relaxed">
+                {term.definition}
+              </CardDescription>
+              
+              {term.example && (
+                <div className="bg-muted/50 p-3 rounded-md">
+                  <p className="text-sm text-muted-foreground">
+                    <span className="font-medium">Example:</span> {term.example}
+                  </p>
+                </div>
+              )}
+              
+              {term.relatedTerms && term.relatedTerms.length > 0 && (
+                <div>
+                  <p className="text-xs font-medium text-muted-foreground mb-2">Related Terms:</p>
+                  <div className="flex flex-wrap gap-1">
+                    {term.relatedTerms.map((relatedTerm) => (
+                      <Badge key={relatedTerm} variant="outline" className="text-xs">
+                        {relatedTerm}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        ))}
+      </div>
     </div>
   );
 }
