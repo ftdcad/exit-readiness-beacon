@@ -353,6 +353,14 @@ const glossaryTerms: GlossaryTerm[] = [
     example: 'Buyer signs NDA before seeing detailed financials or customer list.',
     relatedTerms: ['Due Diligence', 'Information Sharing', 'Trade Secrets']
   },
+  {
+    id: '101',
+    term: 'IOI (Indication of Interest)',
+    definition: 'Preliminary, non-binding document expressing buyer\'s serious intent to acquire your company. Comes before LOI to screen serious buyers.',
+    category: 'legal-contract',
+    example: 'IOI proposing $8-10M purchase price range with 45-day due diligence timeline to gauge mutual interest.',
+    relatedTerms: ['LOI', 'Due Diligence', 'Purchase Agreement']
+  },
   
   // DEAL STRUCTURE TERMS
   {
