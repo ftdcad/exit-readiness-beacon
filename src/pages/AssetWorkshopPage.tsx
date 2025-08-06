@@ -306,7 +306,7 @@ const AssetWorkshopPage = () => {
                   />
                   
                   {/* Row 2: Value and Category (side by side, 50/50) */}
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 gap-6">
                     <Input
                       type="number"
                       placeholder="Value ($)"
@@ -325,12 +325,12 @@ const AssetWorkshopPage = () => {
                     </select>
                   </div>
                   
-                  {/* Row 3: Description (full width textarea, BIGGER) */}
+                  {/* Row 3: Description (reasonable textarea) */}
                   <textarea
                     placeholder="Description"
                     value={newAsset.description}
                     onChange={(e) => setNewAsset(prev => ({ ...prev, description: e.target.value }))}
-                    rows={4}
+                    rows={3}
                     className="w-full px-3 py-2 bg-background/50 backdrop-blur-sm text-foreground placeholder:text-muted-foreground border border-input rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 resize-none"
                   />
                   
