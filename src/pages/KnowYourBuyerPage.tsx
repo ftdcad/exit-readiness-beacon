@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { ChevronRight, Target, AlertCircle, CheckCircle } from "lucide-react";
-import { toast } from "sonner";
 
 // Custom debounce - no lodash needed
 function debounce(fn: (...args: any[]) => void, delay: number) {
@@ -192,9 +191,7 @@ export default function KnowYourBuyerPage() {
         onConflict: 'user_id'
       });
       if (error) throw error;
-      toast.success("Analysis saved successfully!");
     } catch (err) {
-      toast.error("Failed to save analysis");
       console.error("Save error:", err);
     } finally {
       setSaving(false);
