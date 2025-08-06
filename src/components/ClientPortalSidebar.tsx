@@ -104,7 +104,7 @@ export function ClientPortalSidebar() {
       <SidebarContent className="bg-background">
         {/* Welcome Section */}
         <SidebarGroup>
-          <SidebarGroupLabel className="text-sm font-semibold text-primary flex items-center gap-2">
+          <SidebarGroupLabel className="text-sm font-semibold text-white flex items-center gap-2">
             <Crown className="h-4 w-4" />
             {!collapsed && "Your Journey"}
           </SidebarGroupLabel>
