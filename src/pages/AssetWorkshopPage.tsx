@@ -255,10 +255,6 @@ const AssetWorkshopPage = () => {
         {/* Module Header */}
         <Card className="border-primary/20 bg-gradient-to-r from-primary/5 to-primary/10 backdrop-blur-lg">
           <CardHeader>
-            <div className="flex items-center gap-2 text-primary mb-2">
-              <CheckCircle2 className="h-6 w-6" />
-              <span className="text-sm font-medium">Week 1 • Module 1</span>
-            </div>
             <CardTitle className="text-2xl">Asset Categorization Workshop</CardTitle>
             <CardDescription className="text-lg text-muted-foreground">
               Identify Core vs Non-Core Assets - Strategic Asset Allocation for Maximum Exit Value

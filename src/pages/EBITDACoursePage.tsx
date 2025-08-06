@@ -37,10 +37,6 @@ export default function EBITDACoursePage() {
       {/* Module Header */}
       <Card className="border-primary/20 bg-gradient-to-r from-primary/5 to-primary/10">
         <CardHeader>
-          <div className="flex items-center gap-2 text-primary mb-2">
-            <Calculator className="h-6 w-6" />
-            <span className="text-sm font-medium">Week 1 • Module 2</span>
-          </div>
           <CardTitle className="text-2xl">EBITDA Mastery Course</CardTitle>
           <CardDescription className="text-lg">
             Understand how EBITDA drives your valuation and learn to optimize it like a PE professional

@@ -215,10 +215,6 @@ export default function QuickWinsPage() {
       {/* Module Header */}
       <Card className="border-primary/20 bg-gradient-to-r from-primary/5 to-primary/10 backdrop-blur-sm">
         <CardHeader>
-          <div className="flex items-center gap-2 text-sm text-primary/80 mb-2">
-            <Target className="h-4 w-4" />
-            <span>Week 1 • Module 2</span>
-          </div>
           <CardTitle className="text-2xl">{QuickWinsModule.title}</CardTitle>
           <CardDescription className="text-base">
             {QuickWinsModule.purpose}
