@@ -239,21 +239,21 @@ const AssetWorkshopPage = () => {
                       placeholder="Asset name"
                       value={newAsset.name}
                       onChange={(e) => setNewAsset(prev => ({ ...prev, name: e.target.value }))}
-                      className="bg-background/50 backdrop-blur-sm"
+                      className="bg-background/50 backdrop-blur-sm text-foreground placeholder:text-muted-foreground"
                     />
                     <Input
                       type="number"
                       placeholder="Value ($)"
                       value={newAsset.value}
                       onChange={(e) => setNewAsset(prev => ({ ...prev, value: e.target.value }))}
-                      className="bg-background/50 backdrop-blur-sm"
+                      className="bg-background/50 backdrop-blur-sm text-foreground placeholder:text-muted-foreground"
                     />
                   </div>
                   <Input
                     placeholder="Description"
                     value={newAsset.description}
                     onChange={(e) => setNewAsset(prev => ({ ...prev, description: e.target.value }))}
-                    className="bg-background/50 backdrop-blur-sm"
+                    className="bg-background/50 backdrop-blur-sm text-foreground placeholder:text-muted-foreground"
                   />
                   <Button onClick={addAsset} disabled={!newAsset.name || !newAsset.value} className="w-full">
                     Add Asset
