@@ -1236,8 +1236,19 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_my_role: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          role_id: string
+          role_name: string
+        }[]
+      }
       is_admin: {
         Args: { user_id: string }
+        Returns: boolean
+      }
+      is_client: {
+        Args: { _uid?: string }
         Returns: boolean
       }
     }
