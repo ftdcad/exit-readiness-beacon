@@ -1,3 +1,4 @@
+
 export interface ModuleConfig {
   name: string;
   path: string;
@@ -23,13 +24,14 @@ export const moduleConfigurations: ModuleConfig[] = [
   { name: 'Time Kills Deals', path: '/portal/week-1/time-kills-deals', weekNumber: 1, order: 6 },
   { name: 'EBITDA Explained', path: '/portal/week-1/ebitda-course', weekNumber: 1, order: 7 },
   
-  // Week 2 - Deal Readiness (Reordered: Data Room, Asset Workshop, Quick Wins)
+  // Week 2 - Deal Readiness (Reordered: Data Room, Asset Workshop, HoldCo Structure, Quick Wins)
   { name: 'Data Room', path: '/portal/week-2/data-room', weekNumber: 2, order: 1 },
   { name: 'Asset Workshop', path: '/portal/week-2/asset-workshop', weekNumber: 2, order: 2 },
-  { name: 'Quick Wins', path: '/portal/week-2/quick-wins', weekNumber: 2, order: 3 },
-  { name: 'Executive Discovery Interview', path: '/portal/week-2/executive-discovery', weekNumber: 2, order: 4 },
-  { name: 'Strategy Doc Builder', path: '/portal/week-2/value-builder', weekNumber: 2, order: 5 },
-  { name: 'KPIs and OKRs', path: '/portal/week-2/kpis-okrs', weekNumber: 2, order: 6 },
+  { name: 'HoldCo Structure', path: '/portal/week-2/holdco-structure', weekNumber: 2, order: 3 },
+  { name: 'Quick Wins', path: '/portal/week-2/quick-wins', weekNumber: 2, order: 4 },
+  { name: 'Executive Discovery Interview', path: '/portal/week-2/executive-discovery', weekNumber: 2, order: 5 },
+  { name: 'Strategy Doc Builder', path: '/portal/week-2/value-builder', weekNumber: 2, order: 6 },
+  { name: 'KPIs and OKRs', path: '/portal/week-2/kpis-okrs', weekNumber: 2, order: 7 },
   
   // Week 3 - Performance Readiness
   { name: 'EBITDA Calculator', path: '/portal/week-3/ebitda-calculator', weekNumber: 3, order: 1 },

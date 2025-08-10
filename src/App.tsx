@@ -37,6 +37,7 @@ import AssetFreeEducationPage from "./pages/AssetFreeEducationPage";
 import TimeKillsDealsPage from "./pages/TimeKillsDealsPage";
 import ProfessionalAdvisorsPage from "./pages/ProfessionalAdvisorsPage";
 import DealProgressionPage from "./pages/DealProgressionPage";
+import HoldCoStructurePage from "./pages/week-2/HoldCoStructurePage";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -208,6 +209,16 @@ const App = () => {
                   <ClientRoute>
                     <ClientPortalLayout>
                       <DataRoomWorkspacePage />
+                    </ClientPortalLayout>
+                  </ClientRoute>
+                } 
+              />
+              <Route 
+                path="/portal/week-2/holdco-structure" 
+                element={
+                  <ClientRoute>
+                    <ClientPortalLayout>
+                      <HoldCoStructurePage />
                     </ClientPortalLayout>
                   </ClientRoute>
                 } 
