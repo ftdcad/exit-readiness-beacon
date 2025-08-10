@@ -3,11 +3,12 @@ import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { AuthProvider } from "@/hooks/useAuth";
+import { useAuth } from "@/hooks/useAuth";
+import { createContext, useContext } from "react";
 import Index from "./pages/Index";
 import AuthPage from "./pages/AuthPage";
 import AssessmentPage from "./pages/AssessmentPage";
-import ScheduleConsultationPage from "./pages/ScheduleConsultationPage";
+import { ScheduleConsultationPage } from "./pages/ScheduleConsultationPage";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminInquiries from "./pages/AdminInquiries";
@@ -19,9 +20,9 @@ import KnowYourBuyerPage from "./pages/KnowYourBuyerPage";
 import AssetFreeEducationPage from "./pages/AssetFreeEducationPage";
 import TimeKillsDealsPage from "./pages/TimeKillsDealsPage";
 import EBITDACoursePage from "./pages/EBITDACoursePage";
-import DataRoomIntroPage from "./pages/DataRoomIntroPage";
+import { DataRoomIntroPage } from "./pages/DataRoomIntroPage";
 import DataRoomPage from "./pages/DataRoomPage";
-import DataRoomWorkspacePage from "./pages/DataRoomWorkspacePage";
+import { DataRoomWorkspacePage } from "./pages/DataRoomWorkspacePage";
 import AssetWorkshopPage from "./pages/AssetWorkshopPage";
 import HoldCoStructurePage from "./pages/week-2/HoldCoStructurePage";
 import QuickWinsPage from "./pages/QuickWinsPage";
@@ -30,15 +31,24 @@ import EarnoutsMultipliersPage from "./pages/week-2/EarnoutsMultipliersPage";
 import PostClosingRealityPage from "./pages/PostClosingRealityPage";
 import EBITDACalculatorPage from "./pages/EBITDACalculatorPage";
 import IndustryMultiplesPage from "./pages/IndustryMultiplesPage";
-import ScenarioPlanningPage from "./pages/ScenarioPlanningPage";
+import { ScenarioPlanningPage } from "./pages/ScenarioPlanningPage";
 import ExecutiveDiscoveryInterviewPage from "./pages/ExecutiveDiscoveryInterviewPage";
 import StrategyDocBuilderPage from "./pages/StrategyDocBuilderPage";
 import KPIandOKRPage from "./pages/KPIandOKRPage";
 import CompanyDetail from "./pages/CompanyDetail";
 import NotFound from "./pages/NotFound";
 import AdminRoute from "./components/AdminRoute";
-import ClientRoute from "./components/ClientRoute";
+import { ClientRoute } from "./components/ClientRoute";
 import { ErrorBoundary } from "./components/ErrorBoundary";
+
+// Create AuthContext
+const AuthContext = createContext<ReturnType<typeof useAuth> | null>(null);
+
+// AuthProvider component
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+  const auth = useAuth();
+  return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
+};
 
 const queryClient = new QueryClient();
 
