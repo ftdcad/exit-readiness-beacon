@@ -1,9 +1,11 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Upload, Folder, FolderOpen, CheckCircle, X, FileText } from 'lucide-react';
 import { AddFolderDialog } from '@/components/AddFolderDialog';
+import { ChecklistSheet } from '@/components/data-room/ChecklistSheet';
+import { defaultDueDiligenceChecklist, ChecklistCategory, getChecklistStats } from '@/lib/checklists/defaultDueDiligenceChecklist';
 
 interface UploadedFile {
   file: File;
@@ -29,6 +31,8 @@ export const DataRoomWorkspacePage: React.FC = () => {
   const [selectedFolders, setSelectedFolders] = useState<string[]>([]);
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
   const [expandedFolders, setExpandedFolders] = useState<string[]>([]);
+  const [isChecklistOpen, setIsChecklistOpen] = useState(false);
+  const [checklistData, setChecklistData] = useState<ChecklistCategory[]>(defaultDueDiligenceChecklist);
   
   // Folder structure with subfolders
   const [folderStructure, setFolderStructure] = useState<FolderStructure[]>([
@@ -93,6 +97,24 @@ export const DataRoomWorkspacePage: React.FC = () => {
       ]
     }
   ]);
+
+  // Load checklist from localStorage on mount
+  useEffect(() => {
+    const savedChecklist = localStorage.getItem('dueDiligenceChecklist');
+    if (savedChecklist) {
+      try {
+        setChecklistData(JSON.parse(savedChecklist));
+      } catch (error) {
+        console.error('Failed to load checklist from localStorage:', error);
+      }
+    }
+  }, []);
+
+  // Save checklist to localStorage when it changes
+  const handleUpdateChecklist = (updatedChecklist: ChecklistCategory[]) => {
+    setChecklistData(updatedChecklist);
+    localStorage.setItem('dueDiligenceChecklist', JSON.stringify(updatedChecklist));
+  };
   
   const handleDrag = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -172,6 +194,7 @@ export const DataRoomWorkspacePage: React.FC = () => {
   };
   
   const getTotalDocumentCount = () => uploadedFiles.length;
+  const checklistStats = getChecklistStats(checklistData);
   
   return (
     <div className="space-y-6">
@@ -185,6 +208,10 @@ export const DataRoomWorkspacePage: React.FC = () => {
           <div className="text-sm">
             <span className="text-muted-foreground">Documents: </span>
             <span className="font-semibold text-foreground">{getTotalDocumentCount()}</span>
+          </div>
+          <div className="text-sm">
+            <span className="text-muted-foreground">Checklist: </span>
+            <span className="font-semibold text-foreground">{checklistStats.completionPercentage}%</span>
           </div>
           <AddFolderDialog onAddFolder={handleAddFolder} folderStructure={folderStructure} />
         </div>
@@ -372,14 +399,22 @@ export const DataRoomWorkspacePage: React.FC = () => {
               Data Room Progress: {Math.round((getTotalDocumentCount() / 3500) * 100)}%
             </p>
             <p className="text-sm text-muted-foreground">
-              {getTotalDocumentCount()} of ~3,500 documents uploaded
+              {getTotalDocumentCount()} of ~3,500 documents uploaded • Checklist: {checklistStats.completionPercentage}% complete
             </p>
           </div>
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" onClick={() => setIsChecklistOpen(true)}>
             View Checklist
           </Button>
         </div>
       </Card>
+      
+      {/* Checklist Sheet */}
+      <ChecklistSheet 
+        open={isChecklistOpen}
+        onOpenChange={setIsChecklistOpen}
+        checklist={checklistData}
+        onUpdateChecklist={handleUpdateChecklist}
+      />
     </div>
   );
 };
