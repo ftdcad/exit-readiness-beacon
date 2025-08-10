@@ -130,22 +130,34 @@ export const DataRoomWorkspacePage: React.FC = () => {
     );
   };
 
-  const handleAddFolder = (parentId: string, folderName: string) => {
-    setFolderStructure(prev => 
-      prev.map(folder => {
-        if (folder.id === parentId) {
-          const newSubfolderId = `${parentId}-${Date.now()}`;
-          return {
-            ...folder,
-            subfolders: [
-              ...folder.subfolders,
-              { id: newSubfolderId, name: folderName, count: 0 }
-            ]
-          };
-        }
-        return folder;
-      })
-    );
+  const handleAddFolder = (parentId: string | null, folderName: string) => {
+    if (parentId === null) {
+      // Adding a new parent folder
+      const newParentId = `parent-${Date.now()}`;
+      setFolderStructure(prev => [...prev, {
+        id: newParentId,
+        name: folderName,
+        count: 0,
+        subfolders: []
+      }]);
+    } else {
+      // Adding a subfolder to existing parent
+      setFolderStructure(prev => 
+        prev.map(folder => {
+          if (folder.id === parentId) {
+            const newSubfolderId = `${parentId}-${Date.now()}`;
+            return {
+              ...folder,
+              subfolders: [
+                ...folder.subfolders,
+                { id: newSubfolderId, name: folderName, count: 0 }
+              ]
+            };
+          }
+          return folder;
+        })
+      );
+    }
   };
   
   const handleUpload = () => {
