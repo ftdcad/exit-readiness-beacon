@@ -32,6 +32,7 @@ import AssessmentPage from "./pages/AssessmentPage";
 import { ScenarioPlanningPage } from "./pages/ScenarioPlanningPage";
 import { ScheduleConsultationPage } from "./pages/ScheduleConsultationPage";
 import AssetFreeEducationPage from "./pages/AssetFreeEducationPage";
+import TimeKillsDealsPage from "./pages/TimeKillsDealsPage";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -162,6 +163,16 @@ const App = () => {
                   <ClientRoute>
                     <ClientPortalLayout>
                       <AssetFreeEducationPage />
+                    </ClientPortalLayout>
+                  </ClientRoute>
+                } 
+              />
+              <Route 
+                path="/portal/week-1/time-kills-deals" 
+                element={
+                  <ClientRoute>
+                    <ClientPortalLayout>
+                      <TimeKillsDealsPage />
                     </ClientPortalLayout>
                   </ClientRoute>
                 } 
