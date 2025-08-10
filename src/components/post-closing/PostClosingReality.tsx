@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -21,7 +20,7 @@ export const PostClosingReality: React.FC = () => {
       content: <NotYourBusinessPage />
     },
     {
-      title: "Your New Role & Reality",
+      title: "Your New Role & Reality", 
       icon: Briefcase,
       content: <NewRolePage />
     },
@@ -45,7 +44,7 @@ export const PostClosingReality: React.FC = () => {
   const isLastSection = currentSection === sections.length - 1;
 
   const handleComplete = async () => {
-    await markModuleComplete('Post Closing Reality', 4); // Assuming this is week 4
+    await markModuleComplete('Post Closing Reality', 4);
     const nextPath = getNextModulePath('Post Closing Reality');
     if (nextPath) {
       navigate(nextPath);
@@ -55,7 +54,7 @@ export const PostClosingReality: React.FC = () => {
   };
   
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-4xl mx-auto p-6">
       {/* Header */}
       <div className="mb-8 text-center">
         <h1 className="text-3xl font-bold text-foreground mb-2">
@@ -92,7 +91,7 @@ export const PostClosingReality: React.FC = () => {
         </Button>
         
         {isLastSection ? (
-          <Button onClick={handleComplete} className="bg-success text-success-foreground hover:bg-success/90">
+          <Button onClick={handleComplete} className="bg-green-600 text-white hover:bg-green-700">
             <CheckCircle className="w-4 h-4 mr-2" />
             Complete Module
           </Button>
