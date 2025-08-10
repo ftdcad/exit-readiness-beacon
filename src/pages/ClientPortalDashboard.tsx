@@ -86,7 +86,7 @@ export default function ClientPortalDashboard() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="grid md:grid-cols-2 gap-4">
+          <div className="grid md:grid-cols-3 gap-4">
             <Card className="bg-muted/50">
               <CardHeader className="pb-3">
                 <CardTitle className="text-lg">Interactive Glossary</CardTitle>
@@ -120,6 +120,23 @@ export default function ClientPortalDashboard() {
                 </Button>
               </CardContent>
             </Card>
+
+            <Card className="bg-muted/50">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg">Time Kills Deals</CardTitle>
+                <CardDescription className="text-sm">
+                  Understand why speed and preparation are critical
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Button asChild variant="outline" className="w-full">
+                  <Link to="/portal/week-1/time-kills-deals">
+                    <Play className="h-4 w-4 mr-2" />
+                    Learn Now
+                  </Link>
+                </Button>
+              </CardContent>
+            </Card>
           </div>
 
           <div className="pt-4 border-t">
@@ -130,6 +147,7 @@ export default function ClientPortalDashboard() {
               <li>• Understand asset-free, debt-free transactions</li>
               <li>• Categorize your assets (core vs non-core)</li>
               <li>• Identify your buyer personas and data room needs</li>
+              <li>• Learn why time kills deals and how to prepare</li>
             </ul>
           </div>
         </CardContent>
@@ -146,7 +164,7 @@ export default function ClientPortalDashboard() {
         
         <Card>
           <CardHeader className="text-center">
-            <CardTitle className="text-2xl font-bold text-primary">5</CardTitle>
+            <CardTitle className="text-2xl font-bold text-primary">6</CardTitle>
             <CardDescription>Educational Modules This Week</CardDescription>
           </CardHeader>
         </Card>
