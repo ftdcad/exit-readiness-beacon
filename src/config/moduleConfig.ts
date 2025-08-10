@@ -31,6 +31,7 @@ export const moduleConfigurations: ModuleConfig[] = [
   { name: 'Add Backs', path: '/portal/week-2/quick-wins', weekNumber: 2, order: 4 },
   { name: 'Debt & Interest Payments', path: '/portal/week-2/debt-interest', weekNumber: 2, order: 5 },
   { name: 'Seller Earnouts & Performance Multipliers', path: '/portal/week-2/earnouts-multipliers', weekNumber: 2, order: 6 },
+  { name: 'Post Closing Reality', path: '/portal/week-2/post-closing-reality', weekNumber: 2, order: 7 },
   
   // Week 3 - Performance Readiness
   { name: 'EBITDA Calculator', path: '/portal/week-3/ebitda-calculator', weekNumber: 3, order: 1 },
