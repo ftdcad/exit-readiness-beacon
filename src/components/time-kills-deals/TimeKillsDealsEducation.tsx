@@ -1,12 +1,15 @@
-
 import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { ChevronRight, ChevronLeft, Clock, TrendingDown, Phone, AlertTriangle, CheckCircle } from 'lucide-react';
+import { useProgress } from '@/hooks/useProgress';
+import { useNavigate } from 'react-router-dom';
 
 export const TimeKillsDealsEducation: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(0);
+  const { markModuleComplete } = useProgress();
+  const navigate = useNavigate();
   
   const pages = [
     {
@@ -14,7 +17,7 @@ export const TimeKillsDealsEducation: React.FC = () => {
       content: <IntroPage />
     },
     {
-      title: "The Pager Store Disaster",
+      title: "The Pager Store Disaster", 
       content: <PagerStoryPage />
     },
     {
@@ -30,6 +33,11 @@ export const TimeKillsDealsEducation: React.FC = () => {
       content: <PreparationPage />
     }
   ];
+
+  const handleComplete = async () => {
+    await markModuleComplete('Time Kills Deals', 1);
+    navigate('/portal/week-1');
+  };
   
   return (
     <div className="max-w-4xl mx-auto">
@@ -55,13 +63,19 @@ export const TimeKillsDealsEducation: React.FC = () => {
           Previous
         </Button>
         
-        <Button
-          onClick={() => setCurrentPage(Math.min(pages.length - 1, currentPage + 1))}
-          disabled={currentPage === pages.length - 1}
-        >
-          Next
-          <ChevronRight className="w-4 h-4 ml-2" />
-        </Button>
+        {currentPage === pages.length - 1 ? (
+          <Button onClick={handleComplete} className="bg-success text-success-foreground hover:bg-success/90">
+            <CheckCircle className="w-4 h-4 mr-2" />
+            Complete Module
+          </Button>
+        ) : (
+          <Button
+            onClick={() => setCurrentPage(Math.min(pages.length - 1, currentPage + 1))}
+          >
+            Next
+            <ChevronRight className="w-4 h-4 ml-2" />
+          </Button>
+        )}
       </div>
     </div>
   );
@@ -454,3 +468,5 @@ const PreparationPage: React.FC = () => {
     </div>
   );
 };
+
+export default TimeKillsDealsEducation;
