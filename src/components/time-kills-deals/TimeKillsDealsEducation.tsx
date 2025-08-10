@@ -36,14 +36,14 @@ export const TimeKillsDealsEducation: React.FC = () => {
       {/* Progress Bar */}
       <div className="mb-8">
         <Progress value={(currentPage + 1) / pages.length * 100} className="h-2" />
-        <div className="flex justify-between mt-2 text-sm text-gray-400">
+        <div className="flex justify-between mt-2 text-sm text-muted-foreground">
           <span>Step {currentPage + 1} of {pages.length}</span>
           <span>{pages[currentPage].title}</span>
         </div>
       </div>
       
       {/* Content */}
-      <Card className="p-8 min-h-[500px] bg-slate-800 border-gray-700">
+      <Card className="p-8 min-h-[500px]">
         {pages[currentPage].content}
       </Card>
       
@@ -53,7 +53,6 @@ export const TimeKillsDealsEducation: React.FC = () => {
           variant="outline"
           onClick={() => setCurrentPage(Math.max(0, currentPage - 1))}
           disabled={currentPage === 0}
-          className="border-gray-600 text-gray-300 hover:bg-slate-700"
         >
           <ChevronLeft className="w-4 h-4 mr-2" />
           Previous
@@ -62,7 +61,6 @@ export const TimeKillsDealsEducation: React.FC = () => {
         <Button
           onClick={() => setCurrentPage(Math.min(pages.length - 1, currentPage + 1))}
           disabled={currentPage === pages.length - 1}
-          className="bg-blue-600 hover:bg-blue-700 text-white"
         >
           Next
           <ChevronRight className="w-4 h-4 ml-2" />
@@ -75,20 +73,20 @@ export const TimeKillsDealsEducation: React.FC = () => {
 // Page 1: Introduction
 const IntroPage: React.FC = () => (
   <div className="space-y-6">
-    <h2 className="text-3xl font-bold text-white flex items-center">
-      <Clock className="w-10 h-10 mr-3 text-red-400" />
+    <h2 className="text-3xl font-bold flex items-center">
+      <Clock className="w-10 h-10 mr-3 text-destructive" />
       Time Kills Deals
     </h2>
     
-    <div className="text-lg space-y-4 text-gray-300">
+    <div className="text-lg space-y-4 text-muted-foreground">
       <p>
         In M&A, there's a saying that every experienced dealmaker knows by heart: 
-        <strong className="text-red-400"> "Time kills deals."</strong>
+        <strong className="text-destructive"> "Time kills deals."</strong>
       </p>
       
-      <div className="bg-red-900/50 p-6 rounded-lg border-l-4 border-red-500">
-        <p className="font-semibold mb-2 text-white">Two Ways Time Destroys Value:</p>
-        <ol className="list-decimal list-inside space-y-2 text-gray-300">
+      <div className="bg-destructive/20 p-6 rounded-lg border-l-4 border-destructive">
+        <p className="font-semibold mb-2 text-foreground">Two Ways Time Destroys Value:</p>
+        <ol className="list-decimal list-inside space-y-2 text-muted-foreground">
           <li><strong>Waiting too long to sell</strong> - Your industry changes, competition emerges, technology shifts</li>
           <li><strong>Taking too long to close</strong> - Deal fatigue, changing conditions, buyers get cold feet</li>
         </ol>
@@ -101,49 +99,49 @@ const IntroPage: React.FC = () => (
     </div>
     
     <div className="grid grid-cols-2 gap-4 mt-8">
-      <Card className="p-4 bg-yellow-900/30 border border-yellow-700">
-        <TrendingDown className="w-8 h-8 text-yellow-400 mb-2" />
-        <p className="font-semibold text-white">Market Windows Close</p>
-        <p className="text-sm text-gray-400">Industries can change overnight</p>
+      <Card className="p-4 bg-warning/10 border border-warning/20">
+        <TrendingDown className="w-8 h-8 text-warning mb-2" />
+        <p className="font-semibold">Market Windows Close</p>
+        <p className="text-sm text-muted-foreground">Industries can change overnight</p>
       </Card>
-      <Card className="p-4 bg-blue-900/30 border border-blue-700">
-        <Clock className="w-8 h-8 text-blue-400 mb-2" />
-        <p className="font-semibold text-white">Buyers Don't Wait</p>
-        <p className="text-sm text-gray-400">They have other options</p>
+      <Card className="p-4 bg-accent/10 border border-accent/20">
+        <Clock className="w-8 h-8 text-accent mb-2" />
+        <p className="font-semibold">Buyers Don't Wait</p>
+        <p className="text-sm text-muted-foreground">They have other options</p>
       </Card>
     </div>
     
     <div className="mt-8">
-      <Card className="bg-slate-800 border-slate-700 p-6">
+      <Card className="p-6">
         <div className="flex items-start space-x-4">
           <div className="text-4xl">🥚</div>
           <div className="flex-1">
-            <h3 className="text-xl font-semibold text-white mb-3">
+            <h3 className="text-xl font-semibold mb-3">
               The Egg Paradox of M&A
             </h3>
-            <p className="text-gray-300 mb-4">
+            <p className="text-muted-foreground mb-4">
               A deal is like an egg - incredibly strong yet devastatingly fragile.
             </p>
             
             <div className="grid grid-cols-2 gap-4 mt-4">
-              <div className="bg-green-900/20 border border-green-800 rounded-lg p-4">
-                <p className="text-green-400 font-semibold mb-2">When Nurtured:</p>
-                <p className="text-gray-400 text-sm">
+              <div className="bg-success/10 border border-success/20 rounded-lg p-4">
+                <p className="text-success font-semibold mb-2">When Nurtured:</p>
+                <p className="text-muted-foreground text-sm">
                   Can withstand months of pressure, negotiations, and due diligence. 
                   A well-cared-for deal grows stronger over time.
                 </p>
               </div>
               
-              <div className="bg-red-900/20 border border-red-800 rounded-lg p-4">
-                <p className="text-red-400 font-semibold mb-2">When Attacked:</p>
-                <p className="text-gray-400 text-sm">
+              <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-4">
+                <p className="text-destructive font-semibold mb-2">When Attacked:</p>
+                <p className="text-muted-foreground text-sm">
                   One aggressive move, one surprise, one broken promise - 
                   and it shatters instantly. No putting it back together.
                 </p>
               </div>
             </div>
             
-            <p className="text-gray-300 mt-4 text-sm italic">
+            <p className="text-muted-foreground mt-4 text-sm italic">
               The strongest deals require the gentlest hands.
             </p>
           </div>
@@ -159,24 +157,24 @@ const PagerStoryPage: React.FC = () => {
   
   return (
     <div className="space-y-6">
-      <h2 className="text-3xl font-bold text-white">The $50 Million Mistake</h2>
+      <h2 className="text-3xl font-bold">The $50 Million Mistake</h2>
       
-      <div className="bg-slate-700 border border-gray-600 p-6 rounded-lg">
-        <p className="text-lg mb-4 text-gray-300">
-          <strong className="text-white">1998:</strong> A chain of pager stores in Texas. 
+      <Card className="p-6">
+        <p className="text-lg mb-4 text-muted-foreground">
+          <strong className="text-foreground">1998:</strong> A chain of pager stores in Texas. 
           42 locations. $8M in EBITDA. Life is good.
         </p>
         
-        <div className="space-y-3 text-gray-300">
+        <div className="space-y-3 text-muted-foreground">
           <p>📟 Pagers are everywhere - doctors, executives, teenagers</p>
           <p>💰 PE firm offers $50M (6.25x multiple)</p>
           <p>🤔 Owner thinks: "Business is growing. Let's wait a year for a better price."</p>
         </div>
-      </div>
+      </Card>
       
       <Button 
         onClick={() => setShowReveal(true)} 
-        className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+        className="w-full"
         disabled={showReveal}
       >
         What Happened Next?
@@ -184,12 +182,12 @@ const PagerStoryPage: React.FC = () => {
       
       {showReveal && (
         <div className="space-y-4 animate-fade-in">
-          <div className="bg-red-900/50 p-6 rounded-lg border-l-4 border-red-500">
-            <p className="text-lg mb-4 text-white">
+          <div className="bg-destructive/20 p-6 rounded-lg border-l-4 border-destructive">
+            <p className="text-lg mb-4 text-foreground">
               <strong>1999:</strong> Cell phones explode in popularity.
             </p>
             
-            <div className="space-y-3 text-gray-300">
+            <div className="space-y-3 text-muted-foreground">
               <p>📱 Nokia sells 78 million phones</p>
               <p>📉 Pager sales drop 40% in 6 months</p>
               <p>💸 PE firms won't even return calls</p>
@@ -197,10 +195,10 @@ const PagerStoryPage: React.FC = () => {
             </div>
           </div>
           
-          <Card className="p-4 bg-yellow-900/30 border border-yellow-700">
-            <AlertTriangle className="w-6 h-6 text-yellow-400 mb-2" />
-            <p className="font-semibold text-white">The Lesson:</p>
-            <p className="text-sm text-gray-300">
+          <Card className="p-4 bg-warning/10 border border-warning/20">
+            <AlertTriangle className="w-6 h-6 text-warning mb-2" />
+            <p className="font-semibold">The Lesson:</p>
+            <p className="text-sm text-muted-foreground">
               Waiting for "just a little more" cost this owner $42 million. 
               Technology changed. The window closed. Game over.
             </p>
@@ -242,22 +240,22 @@ const MarketTimingPage: React.FC = () => {
   
   return (
     <div className="space-y-6">
-      <h2 className="text-3xl font-bold text-white">Industries Can Die Overnight</h2>
+      <h2 className="text-3xl font-bold">Industries Can Die Overnight</h2>
       
-      <p className="text-lg text-gray-300">
+      <p className="text-lg text-muted-foreground">
         These business owners all thought they had more time:
       </p>
       
       <div className="space-y-4">
         {examples.map((example, idx) => (
-          <Card key={idx} className="p-4 bg-slate-700 border border-gray-600 hover:bg-slate-600 transition-colors">
+          <Card key={idx} className="p-4 hover:bg-accent transition-colors">
             <div className="flex items-start space-x-4">
               <span className="text-3xl">{example.icon}</span>
               <div className="flex-1">
-                <p className="font-semibold text-lg text-white">{example.industry}</p>
+                <p className="font-semibold text-lg">{example.industry}</p>
                 <div className="grid grid-cols-2 gap-4 mt-2 text-sm">
-                  <p className="text-green-400">✅ {example.peak}</p>
-                  <p className="text-red-400">❌ {example.crash}</p>
+                  <p className="text-success">✅ {example.peak}</p>
+                  <p className="text-destructive">❌ {example.crash}</p>
                 </div>
               </div>
             </div>
@@ -265,13 +263,13 @@ const MarketTimingPage: React.FC = () => {
         ))}
       </div>
       
-      <div className="bg-blue-900/50 border border-blue-700 p-6 rounded-lg">
-        <p className="font-semibold mb-2 text-white">The Pattern:</p>
-        <p className="text-gray-300">
+      <Card className="bg-accent/20 border-accent/20 p-6">
+        <p className="font-semibold mb-2">The Pattern:</p>
+        <p className="text-muted-foreground">
           Disruption happens slowly, then suddenly. By the time you see it coming, 
           buyers have already disappeared. The best time to sell is when you don't have to.
         </p>
-      </div>
+      </Card>
     </div>
   );
 };
@@ -291,20 +289,20 @@ const DealFatiguePage: React.FC = () => {
   
   return (
     <div className="space-y-6">
-      <h2 className="text-3xl font-bold text-white">Why Long Deals Die</h2>
+      <h2 className="text-3xl font-bold">Why Long Deals Die</h2>
       
-      <p className="text-lg text-gray-300">
+      <p className="text-lg text-muted-foreground">
         Watch what happens to enthusiasm over time in a poorly prepared deal:
       </p>
       
-      <div className="bg-slate-700 border border-gray-600 p-6 rounded-lg">
+      <Card className="p-6">
         <div className="flex justify-between mb-4">
           {timeline.map((point, idx) => (
             <button
               key={idx}
               onClick={() => setSelectedMonth(idx)}
               className={`text-center px-2 py-1 rounded transition-colors ${
-                idx === selectedMonth ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-slate-600'
+                idx === selectedMonth ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:bg-accent'
               }`}
             >
               <p className="text-2xl">{point.mood}</p>
@@ -315,37 +313,37 @@ const DealFatiguePage: React.FC = () => {
         
         <div className="space-y-4">
           <div>
-            <p className="font-semibold mb-2 text-white">Event: {timeline[selectedMonth].event}</p>
+            <p className="font-semibold mb-2">Event: {timeline[selectedMonth].event}</p>
           </div>
           
           <div className="space-y-2">
             <div>
-              <p className="text-sm text-gray-400">Buyer Enthusiasm</p>
-              <div className="w-full bg-gray-600 rounded-full h-4">
+              <p className="text-sm text-muted-foreground">Buyer Enthusiasm</p>
+              <div className="w-full bg-muted rounded-full h-4">
                 <div 
-                  className="bg-green-500 h-4 rounded-full transition-all duration-500"
+                  className="bg-success h-4 rounded-full transition-all duration-500"
                   style={{ width: `${timeline[selectedMonth].buyer}%` }}
                 />
               </div>
             </div>
             
             <div>
-              <p className="text-sm text-gray-400">Seller Enthusiasm</p>
-              <div className="w-full bg-gray-600 rounded-full h-4">
+              <p className="text-sm text-muted-foreground">Seller Enthusiasm</p>
+              <div className="w-full bg-muted rounded-full h-4">
                 <div 
-                  className="bg-blue-500 h-4 rounded-full transition-all duration-500"
+                  className="bg-accent h-4 rounded-full transition-all duration-500"
                   style={{ width: `${timeline[selectedMonth].seller}%` }}
                 />
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </Card>
       
       <div className="grid grid-cols-2 gap-4">
-        <Card className="p-4 bg-red-900/30 border border-red-700">
-          <p className="font-semibold mb-2 text-white">What Kills Enthusiasm:</p>
-          <ul className="text-sm space-y-1 text-gray-300">
+        <Card className="p-4 bg-destructive/10 border border-destructive/20">
+          <p className="font-semibold mb-2">What Kills Enthusiasm:</p>
+          <ul className="text-sm space-y-1 text-muted-foreground">
             <li>• Endless document requests</li>
             <li>• Surprise findings</li>
             <li>• Re-negotiation attempts</li>
@@ -354,9 +352,9 @@ const DealFatiguePage: React.FC = () => {
           </ul>
         </Card>
         
-        <Card className="p-4 bg-green-900/30 border border-green-700">
-          <p className="font-semibold mb-2 text-white">What Preserves It:</p>
-          <ul className="text-sm space-y-1 text-gray-300">
+        <Card className="p-4 bg-success/10 border border-success/20">
+          <p className="font-semibold mb-2">What Preserves It:</p>
+          <ul className="text-sm space-y-1 text-muted-foreground">
             <li>• Clean data room ready</li>
             <li>• No surprises</li>
             <li>• Fast responses</li>
@@ -402,9 +400,9 @@ const PreparationPage: React.FC = () => {
   
   return (
     <div className="space-y-6">
-      <h2 className="text-3xl font-bold text-white">Preparation = Speed = Success</h2>
+      <h2 className="text-3xl font-bold">Preparation = Speed = Success</h2>
       
-      <p className="text-lg text-gray-300">
+      <p className="text-lg text-muted-foreground">
         This 4-week program turns a 9-month nightmare into a 3-month sprint:
       </p>
       
@@ -414,8 +412,8 @@ const PreparationPage: React.FC = () => {
             key={benefit.id}
             className={`p-4 cursor-pointer transition-all border ${
               checkedItems.includes(benefit.id) 
-                ? 'bg-green-900/30 border-green-500' 
-                : 'bg-slate-700 border-gray-600 hover:bg-slate-600'
+                ? 'bg-success/10 border-success' 
+                : 'hover:bg-accent'
             }`}
             onClick={() => {
               if (checkedItems.includes(benefit.id)) {
@@ -428,36 +426,36 @@ const PreparationPage: React.FC = () => {
             <div className="flex items-start space-x-3">
               <span className="text-3xl">{benefit.icon}</span>
               <div>
-                <p className="font-semibold text-white">{benefit.title}</p>
-                <p className="text-sm text-gray-300 mt-1">{benefit.description}</p>
+                <p className="font-semibold">{benefit.title}</p>
+                <p className="text-sm text-muted-foreground mt-1">{benefit.description}</p>
               </div>
             </div>
             {checkedItems.includes(benefit.id) && (
-              <CheckCircle className="w-6 h-6 text-green-400 mt-2" />
+              <CheckCircle className="w-6 h-6 text-success mt-2" />
             )}
           </Card>
         ))}
       </div>
       
-      <div className="bg-gradient-to-r from-blue-900/30 to-green-900/30 border border-gray-600 p-6 rounded-lg">
-        <h3 className="font-bold text-xl mb-4 text-white">The Bottom Line:</h3>
+      <Card className="bg-gradient-to-r from-accent/20 to-success/20 border border-accent/20 p-6">
+        <h3 className="font-bold text-xl mb-4">The Bottom Line:</h3>
         
-        <div className="space-y-3 text-gray-300">
+        <div className="space-y-3 text-muted-foreground">
           <p>
-            <strong className="text-white">Unprepared sellers:</strong> 6-9 months of hell, 50% close rate, 
+            <strong className="text-foreground">Unprepared sellers:</strong> 6-9 months of hell, 50% close rate, 
             price drops 10-20%, everyone exhausted
           </p>
           
           <p>
-            <strong className="text-white">Prepared sellers:</strong> 3-4 months smooth sailing, 90% close rate, 
+            <strong className="text-foreground">Prepared sellers:</strong> 3-4 months smooth sailing, 90% close rate, 
             maintain price, celebrate at closing
           </p>
         </div>
-      </div>
+      </Card>
       
-      <Card className="p-6 bg-yellow-900/30 border border-yellow-700">
-        <p className="text-center text-lg text-gray-300">
-          <strong className="text-white">Remember:</strong> Every week you spend preparing 
+      <Card className="p-6 bg-warning/10 border border-warning/20">
+        <p className="text-center text-lg text-muted-foreground">
+          <strong className="text-foreground">Remember:</strong> Every week you spend preparing 
           saves a month in the deal process.
         </p>
       </Card>

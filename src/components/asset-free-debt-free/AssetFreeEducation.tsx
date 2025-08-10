@@ -36,14 +36,14 @@ export const AssetFreeEducation: React.FC = () => {
       {/* Progress Bar */}
       <div className="mb-8">
         <Progress value={(currentPage + 1) / pages.length * 100} className="h-2" />
-        <div className="flex justify-between mt-2 text-sm text-gray-400">
+        <div className="flex justify-between mt-2 text-sm text-muted-foreground">
           <span>Step {currentPage + 1} of {pages.length}</span>
           <span>{pages[currentPage].title}</span>
         </div>
       </div>
       
       {/* Content */}
-      <Card className="p-8 min-h-[500px] bg-slate-800 border-gray-700">
+      <Card className="p-8 min-h-[500px]">
         {pages[currentPage].content}
       </Card>
       
@@ -53,7 +53,6 @@ export const AssetFreeEducation: React.FC = () => {
           variant="outline"
           onClick={() => setCurrentPage(Math.max(0, currentPage - 1))}
           disabled={currentPage === 0}
-          className="border-gray-600 text-gray-300 hover:bg-slate-700"
         >
           <ChevronLeft className="w-4 h-4 mr-2" />
           Previous
@@ -62,7 +61,6 @@ export const AssetFreeEducation: React.FC = () => {
         <Button
           onClick={() => setCurrentPage(Math.min(pages.length - 1, currentPage + 1))}
           disabled={currentPage === pages.length - 1}
-          className="bg-blue-600 hover:bg-blue-700 text-white"
         >
           Next
           <ChevronRight className="w-4 h-4 ml-2" />
@@ -75,17 +73,17 @@ export const AssetFreeEducation: React.FC = () => {
 // Page 1: Introduction
 const IntroPage: React.FC = () => (
   <div className="space-y-6">
-    <h2 className="text-3xl font-bold text-white">Private Equity Wants a Clean Business</h2>
+    <h2 className="text-3xl font-bold">Private Equity Wants a Clean Business</h2>
     
-    <div className="text-lg space-y-4 text-gray-300">
+    <div className="text-lg space-y-4 text-muted-foreground">
       <p>
-        When PE firms say they want an <strong className="text-white">"asset free, debt free, cash free"</strong> transaction, 
+        When PE firms say they want an <strong className="text-foreground">"asset free, debt free, cash free"</strong> transaction, 
         most business owners get confused. Let's break this down in plain English.
       </p>
       
-      <div className="bg-blue-900/50 p-6 rounded-lg border-l-4 border-blue-500">
-        <p className="font-semibold mb-2 text-white">Here's the simple truth:</p>
-        <p className="text-gray-300">
+      <div className="bg-accent/20 p-6 rounded-lg border-l-4 border-accent">
+        <p className="font-semibold mb-2 text-foreground">Here's the simple truth:</p>
+        <p className="text-muted-foreground">
           PE buyers want to purchase your <em>operating business</em> - the machine that makes money. 
           They don't want your personal stuff, your debt, or complications.
         </p>
@@ -99,20 +97,20 @@ const IntroPage: React.FC = () => (
     </div>
     
     <div className="mt-8 grid grid-cols-3 gap-4">
-      <div className="text-center p-4 bg-green-900/30 border border-green-700 rounded-lg">
-        <DollarSign className="w-12 h-12 text-green-400 mx-auto mb-2" />
-        <p className="font-semibold text-white">Cash Free</p>
-        <p className="text-sm text-gray-400">Explained on page 4</p>
+      <div className="text-center p-4 bg-success/10 border border-success/20 rounded-lg">
+        <DollarSign className="w-12 h-12 text-success mx-auto mb-2" />
+        <p className="font-semibold">Cash Free</p>
+        <p className="text-sm text-muted-foreground">Explained on page 4</p>
       </div>
-      <div className="text-center p-4 bg-red-900/30 border border-red-700 rounded-lg">
-        <Building className="w-12 h-12 text-red-400 mx-auto mb-2" />
-        <p className="font-semibold text-white">Asset Free</p>
-        <p className="text-sm text-gray-400">Core assets only</p>
+      <div className="text-center p-4 bg-destructive/10 border border-destructive/20 rounded-lg">
+        <Building className="w-12 h-12 text-destructive mx-auto mb-2" />
+        <p className="font-semibold">Asset Free</p>
+        <p className="text-sm text-muted-foreground">Core assets only</p>
       </div>
-      <div className="text-center p-4 bg-yellow-900/30 border border-yellow-700 rounded-lg">
-        <DollarSign className="w-12 h-12 text-yellow-400 mx-auto mb-2" />
-        <p className="font-semibold text-white">Debt Free</p>
-        <p className="text-sm text-gray-400">Clean balance sheet</p>
+      <div className="text-center p-4 bg-warning/10 border border-warning/20 rounded-lg">
+        <DollarSign className="w-12 h-12 text-warning mx-auto mb-2" />
+        <p className="font-semibold">Debt Free</p>
+        <p className="text-sm text-muted-foreground">Clean balance sheet</p>
       </div>
     </div>
   </div>
@@ -133,10 +131,10 @@ const CoreAssetsPage: React.FC = () => {
   
   return (
     <div className="space-y-6">
-      <h2 className="text-3xl font-bold text-white">Quiz: Core or Not Core?</h2>
+      <h2 className="text-3xl font-bold">Quiz: Core or Not Core?</h2>
       
-      <p className="text-lg text-gray-300">
-        Click on the assets that are <strong className="text-white">CORE</strong> to running the business:
+      <p className="text-lg text-muted-foreground">
+        Click on the assets that are <strong className="text-foreground">CORE</strong> to running the business:
       </p>
       
       <div className="grid grid-cols-2 gap-4">
@@ -152,32 +150,32 @@ const CoreAssetsPage: React.FC = () => {
               className={`p-4 rounded-lg border-2 transition-all ${
                 showResult
                   ? asset.isCore
-                    ? 'border-green-500 bg-green-900/30'
-                    : 'border-red-500 bg-red-900/30'
-                  : 'border-gray-600 hover:border-gray-500 bg-slate-700'
+                    ? 'border-success bg-success/10'
+                    : 'border-destructive bg-destructive/10'
+                  : 'border-border hover:border-muted-foreground bg-card'
               }`}
             >
               <Icon className={`w-12 h-12 mx-auto mb-2 ${
                 showResult
-                  ? asset.isCore ? 'text-green-400' : 'text-red-400'
-                  : 'text-gray-400'
+                  ? asset.isCore ? 'text-success' : 'text-destructive'
+                  : 'text-muted-foreground'
               }`} />
-              <p className="font-semibold text-white">{asset.label}</p>
+              <p className="font-semibold">{asset.label}</p>
               {showResult && (
-                <p className="text-sm mt-2 text-gray-300">{asset.reason}</p>
+                <p className="text-sm mt-2 text-muted-foreground">{asset.reason}</p>
               )}
             </button>
           );
         })}
       </div>
       
-      <div className="bg-slate-700 border border-gray-600 p-4 rounded-lg">
-        <p className="font-semibold mb-2 text-white">Remember:</p>
-        <p className="text-sm text-gray-300">
+      <Card className="p-4">
+        <p className="font-semibold mb-2">Remember:</p>
+        <p className="text-sm text-muted-foreground">
           Core assets are things the business NEEDS to operate and generate revenue. 
           If it's personal, recreational, or the business could easily rent/lease it instead, it's NOT core.
         </p>
-      </div>
+      </Card>
     </div>
   );
 };
@@ -185,50 +183,50 @@ const CoreAssetsPage: React.FC = () => {
 // Page 3: The Building Problem
 const BuildingExplanation: React.FC = () => (
   <div className="space-y-6">
-    <h2 className="text-3xl font-bold text-white">Why Your Building Isn't Core</h2>
+    <h2 className="text-3xl font-bold">Why Your Building Isn't Core</h2>
     
-    <div className="bg-yellow-900/50 p-6 rounded-lg border-l-4 border-yellow-500">
-      <p className="text-lg font-semibold mb-2 text-white">
+    <div className="bg-warning/20 p-6 rounded-lg border-l-4 border-warning">
+      <p className="text-lg font-semibold mb-2">
         "But I've owned this building for 20 years!"
       </p>
-      <p className="text-gray-300">
+      <p className="text-muted-foreground">
         We get it. But here's why PE buyers don't want to buy your real estate...
       </p>
     </div>
     
     <div className="space-y-4">
       <div className="flex items-start space-x-4">
-        <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0">1</div>
+        <div className="bg-primary text-primary-foreground rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0">1</div>
         <div>
-          <p className="font-semibold text-white">They're not in the real estate business</p>
-          <p className="text-gray-300">PE firms buy operating companies, not property management companies.</p>
+          <p className="font-semibold">They're not in the real estate business</p>
+          <p className="text-muted-foreground">PE firms buy operating companies, not property management companies.</p>
         </div>
       </div>
       
       <div className="flex items-start space-x-4">
-        <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0">2</div>
+        <div className="bg-primary text-primary-foreground rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0">2</div>
         <div>
-          <p className="font-semibold text-white">It ties up capital</p>
-          <p className="text-gray-300">They'd rather use that money to grow the business, not own a building.</p>
+          <p className="font-semibold">It ties up capital</p>
+          <p className="text-muted-foreground">They'd rather use that money to grow the business, not own a building.</p>
         </div>
       </div>
       
       <div className="flex items-start space-x-4">
-        <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0">3</div>
+        <div className="bg-primary text-primary-foreground rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0">3</div>
         <div>
-          <p className="font-semibold text-white">Flexibility matters</p>
-          <p className="text-gray-300">What if they want to move locations or expand? Leasing gives options.</p>
+          <p className="font-semibold">Flexibility matters</p>
+          <p className="text-muted-foreground">What if they want to move locations or expand? Leasing gives options.</p>
         </div>
       </div>
     </div>
     
-    <div className="bg-green-900/50 border border-green-700 p-6 rounded-lg mt-6">
-      <p className="font-semibold mb-2 text-white">The Solution: Sell-Leaseback</p>
-      <p className="text-gray-300">
+    <Card className="bg-success/10 border-success/20 p-6">
+      <p className="font-semibold mb-2">The Solution: Sell-Leaseback</p>
+      <p className="text-muted-foreground">
         You keep the building personally and lease it back to the company at market rates. 
         You get rental income, they get a clean transaction. Everyone wins.
       </p>
-    </div>
+    </Card>
   </div>
 );
 
@@ -238,28 +236,28 @@ const CashDebtExplanation: React.FC = () => {
   
   return (
     <div className="space-y-6">
-      <h2 className="text-3xl font-bold text-white">Cash & Debt at Closing</h2>
+      <h2 className="text-3xl font-bold">Cash & Debt at Closing</h2>
       
       <div className="grid grid-cols-2 gap-6">
-        <Card className="p-6 bg-green-900/30 border border-green-700">
-          <DollarSign className="w-12 h-12 text-green-400 mb-4" />
-          <h3 className="text-xl font-semibold mb-2 text-white">Cash Free</h3>
-          <p className="text-gray-300 mb-4">
+        <Card className="p-6 bg-success/10 border border-success/20">
+          <DollarSign className="w-12 h-12 text-success mb-4" />
+          <h3 className="text-xl font-semibold mb-2">Cash Free</h3>
+          <p className="text-muted-foreground mb-4">
             Any cash in the business bank accounts at closing goes to YOU, the seller.
           </p>
-          <p className="text-sm text-gray-400">
+          <p className="text-sm text-muted-foreground">
             If you have $300K in the bank, you get that $300K on top of the purchase price. 
             The buyer starts with their own working capital.
           </p>
         </Card>
         
-        <Card className="p-6 bg-red-900/30 border border-red-700">
-          <DollarSign className="w-12 h-12 text-red-400 mb-4" />
-          <h3 className="text-xl font-semibold mb-2 text-white">Debt Free</h3>
-          <p className="text-gray-300 mb-4">
+        <Card className="p-6 bg-destructive/10 border border-destructive/20">
+          <DollarSign className="w-12 h-12 text-destructive mb-4" />
+          <h3 className="text-xl font-semibold mb-2">Debt Free</h3>
+          <p className="text-muted-foreground mb-4">
             All company debt must be paid off at or before closing.
           </p>
-          <p className="text-sm text-gray-400">
+          <p className="text-sm text-muted-foreground">
             SBA loans, equipment financing, lines of credit - all gone. 
             This usually comes out of the purchase price at closing.
           </p>
@@ -269,32 +267,32 @@ const CashDebtExplanation: React.FC = () => {
       <Button 
         onClick={() => setShowExample(!showExample)}
         variant="outline"
-        className="w-full border-gray-600 text-gray-300 hover:bg-slate-700"
+        className="w-full"
       >
         {showExample ? 'Hide' : 'Show'} Real Example
       </Button>
       
       {showExample && (
-        <Card className="p-6 bg-slate-700 border border-gray-600">
-          <h4 className="font-semibold mb-4 text-white">Example: $10M Purchase Price</h4>
+        <Card className="p-6">
+          <h4 className="font-semibold mb-4">Example: $10M Purchase Price</h4>
           <div className="space-y-2 font-mono text-sm">
-            <div className="flex justify-between text-gray-300">
+            <div className="flex justify-between text-muted-foreground">
               <span>Purchase Price:</span>
               <span>$10,000,000</span>
             </div>
-            <div className="flex justify-between text-red-400">
+            <div className="flex justify-between text-destructive">
               <span>Less: SBA Loan Payoff:</span>
               <span>($500,000)</span>
             </div>
-            <div className="flex justify-between text-red-400">
+            <div className="flex justify-between text-destructive">
               <span>Less: Equipment Loans:</span>
               <span>($200,000)</span>
             </div>
-            <div className="flex justify-between text-green-400">
+            <div className="flex justify-between text-success">
               <span>Plus: Cash in Bank:</span>
               <span>$300,000</span>
             </div>
-            <div className="flex justify-between font-bold pt-2 border-t border-gray-600 text-white">
+            <div className="flex justify-between font-bold pt-2 border-t border-border">
               <span>You Receive:</span>
               <span>$9,600,000</span>
             </div>
@@ -321,9 +319,9 @@ const ChecklistPage: React.FC = () => {
   
   return (
     <div className="space-y-6">
-      <h2 className="text-3xl font-bold text-white">Your Clean-Up Checklist</h2>
+      <h2 className="text-3xl font-bold">Your Clean-Up Checklist</h2>
       
-      <p className="text-lg text-gray-300">
+      <p className="text-lg text-muted-foreground">
         Before you talk to PE buyers, clean up your business:
       </p>
       
@@ -331,7 +329,7 @@ const ChecklistPage: React.FC = () => {
         {checklistItems.map(item => (
           <label
             key={item.id}
-            className="flex items-center p-4 rounded-lg border border-gray-600 hover:bg-slate-700 cursor-pointer bg-slate-800"
+            className="flex items-center p-4 rounded-lg border border-border hover:bg-accent cursor-pointer"
           >
             <input
               type="checkbox"
@@ -345,26 +343,26 @@ const ChecklistPage: React.FC = () => {
               }}
               className="w-5 h-5 mr-4"
             />
-            <span className={checkedItems.includes(item.id) ? 'line-through text-gray-500' : 'text-gray-300'}>
+            <span className={checkedItems.includes(item.id) ? 'line-through text-muted-foreground' : ''}>
               {item.label}
             </span>
           </label>
         ))}
       </div>
       
-      <div className="bg-blue-900/50 border border-blue-700 p-6 rounded-lg">
-        <p className="font-semibold mb-2 text-white">Pro Tip:</p>
-        <p className="text-gray-300">
+      <Card className="bg-accent/20 border-accent/20 p-6">
+        <p className="font-semibold mb-2">Pro Tip:</p>
+        <p className="text-muted-foreground">
           Start this clean-up process at least 12 months before you plan to sell. 
           Some changes (like removing assets) can affect your taxes and financial statements.
         </p>
-      </div>
+      </Card>
       
       {checkedItems.length === checklistItems.length && (
-        <div className="bg-green-900/50 border border-green-700 p-6 rounded-lg text-center">
-          <p className="text-2xl font-bold text-green-400 mb-2">🎉 You're Ready!</p>
-          <p className="text-gray-300">Your business is starting to look attractive to PE buyers.</p>
-        </div>
+        <Card className="bg-success/10 border-success/20 p-6 text-center">
+          <p className="text-2xl font-bold text-success mb-2">🎉 You're Ready!</p>
+          <p className="text-muted-foreground">Your business is starting to look attractive to PE buyers.</p>
+        </Card>
       )}
     </div>
   );
