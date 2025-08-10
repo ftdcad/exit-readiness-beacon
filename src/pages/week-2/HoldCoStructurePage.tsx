@@ -307,15 +307,17 @@ export default function HoldCoStructurePage() {
             </AlertDescription>
           </Alert>
 
-          <Card className="bg-warning/10 border-warning/20">
-            <CardContent className="pt-6">
-              <p className="font-semibold mb-2 text-foreground">Key Takeaway</p>
-              <p className="text-sm text-foreground">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-foreground">Key Takeaway</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <p className="text-foreground">
                 This can save you millions. Get your attorney and CPA involved now. 
                 Form your HoldCo at least 2-4 weeks before closing. Make sure it's the 
                 payee for all post-close payments.
               </p>
-              <p className="text-xs text-muted-foreground mt-3">
+              <p className="text-xs text-muted-foreground">
                 Educational content only. Not legal or tax advice.
               </p>
             </CardContent>
