@@ -33,7 +33,6 @@ export const TimeKillsDealsEducation: React.FC = () => {
   
   return (
     <div className="max-w-4xl mx-auto">
-      {/* Progress Bar */}
       <div className="mb-8">
         <Progress value={(currentPage + 1) / pages.length * 100} className="h-2" />
         <div className="flex justify-between mt-2 text-sm text-muted-foreground">
@@ -42,12 +41,10 @@ export const TimeKillsDealsEducation: React.FC = () => {
         </div>
       </div>
       
-      {/* Content */}
       <Card className="p-8 min-h-[500px]">
         {pages[currentPage].content}
       </Card>
       
-      {/* Navigation */}
       <div className="flex justify-between mt-6">
         <Button
           variant="outline"
@@ -70,7 +67,6 @@ export const TimeKillsDealsEducation: React.FC = () => {
   );
 };
 
-// Page 1: Introduction
 const IntroPage: React.FC = () => (
   <div className="space-y-6">
     <h2 className="text-3xl font-bold flex items-center">
@@ -84,7 +80,7 @@ const IntroPage: React.FC = () => (
         <strong className="text-destructive"> "Time kills deals."</strong>
       </p>
       
-      <div className="bg-destructive/20 p-6 rounded-lg border-l-4 border-destructive">
+      <div className="bg-destructive/10 backdrop-blur-sm p-4 rounded-lg border-l-4 border-destructive/30">
         <p className="font-semibold mb-2 text-foreground">Two Ways Time Destroys Value:</p>
         <ol className="list-decimal list-inside space-y-2 text-muted-foreground">
           <li><strong>Waiting too long to sell</strong> - Your industry changes, competition emerges, technology shifts</li>
@@ -99,12 +95,12 @@ const IntroPage: React.FC = () => (
     </div>
     
     <div className="grid grid-cols-2 gap-4 mt-8">
-      <Card className="p-4 bg-warning/10 border border-warning/20">
+      <Card className="p-4 bg-warning/10 backdrop-blur-sm border border-warning/30">
         <TrendingDown className="w-8 h-8 text-warning mb-2" />
         <p className="font-semibold">Market Windows Close</p>
         <p className="text-sm text-muted-foreground">Industries can change overnight</p>
       </Card>
-      <Card className="p-4 bg-accent/10 border border-accent/20">
+      <Card className="p-4 bg-accent/10 backdrop-blur-sm border border-accent/30">
         <Clock className="w-8 h-8 text-accent mb-2" />
         <p className="font-semibold">Buyers Don't Wait</p>
         <p className="text-sm text-muted-foreground">They have other options</p>
@@ -124,7 +120,7 @@ const IntroPage: React.FC = () => (
             </p>
             
             <div className="grid grid-cols-2 gap-4 mt-4">
-              <div className="bg-success/10 border border-success/20 rounded-lg p-4">
+              <div className="bg-success/10 backdrop-blur-sm border border-success/30 rounded-lg p-4">
                 <p className="text-success font-semibold mb-2">When Nurtured:</p>
                 <p className="text-muted-foreground text-sm">
                   Can withstand months of pressure, negotiations, and due diligence. 
@@ -132,7 +128,7 @@ const IntroPage: React.FC = () => (
                 </p>
               </div>
               
-              <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-4">
+              <div className="bg-destructive/10 backdrop-blur-sm border border-destructive/30 rounded-lg p-4">
                 <p className="text-destructive font-semibold mb-2">When Attacked:</p>
                 <p className="text-muted-foreground text-sm">
                   One aggressive move, one surprise, one broken promise - 
@@ -151,7 +147,6 @@ const IntroPage: React.FC = () => (
   </div>
 );
 
-// Page 2: The Pager Store Story
 const PagerStoryPage: React.FC = () => {
   const [showReveal, setShowReveal] = useState(false);
   
@@ -182,7 +177,7 @@ const PagerStoryPage: React.FC = () => {
       
       {showReveal && (
         <div className="space-y-4 animate-fade-in">
-          <div className="bg-destructive/20 p-6 rounded-lg border-l-4 border-destructive">
+          <div className="bg-destructive/10 backdrop-blur-sm p-4 rounded-lg border-l-4 border-destructive/30">
             <p className="text-lg mb-4 text-foreground">
               <strong>1999:</strong> Cell phones explode in popularity.
             </p>
@@ -195,21 +190,20 @@ const PagerStoryPage: React.FC = () => {
             </div>
           </div>
           
-          <Card className="p-4 bg-warning/10 border border-warning/20">
+          <div className="bg-warning/10 backdrop-blur-sm p-4 rounded-lg border-l-4 border-warning/30">
             <AlertTriangle className="w-6 h-6 text-warning mb-2" />
             <p className="font-semibold">The Lesson:</p>
             <p className="text-sm text-muted-foreground">
               Waiting for "just a little more" cost this owner $42 million. 
               Technology changed. The window closed. Game over.
             </p>
-          </Card>
+          </div>
         </div>
       )}
     </div>
   );
 };
 
-// Page 3: Market Timing Risk
 const MarketTimingPage: React.FC = () => {
   const examples = [
     {
@@ -263,18 +257,17 @@ const MarketTimingPage: React.FC = () => {
         ))}
       </div>
       
-      <Card className="bg-accent/20 border-accent/20 p-6">
+      <div className="bg-accent/10 backdrop-blur-sm p-4 rounded-lg border-l-4 border-accent/30">
         <p className="font-semibold mb-2">The Pattern:</p>
         <p className="text-muted-foreground">
           Disruption happens slowly, then suddenly. By the time you see it coming, 
           buyers have already disappeared. The best time to sell is when you don't have to.
         </p>
-      </Card>
+      </div>
     </div>
   );
 };
 
-// Page 4: Deal Fatigue
 const DealFatiguePage: React.FC = () => {
   const [selectedMonth, setSelectedMonth] = useState(0);
   
@@ -341,7 +334,7 @@ const DealFatiguePage: React.FC = () => {
       </Card>
       
       <div className="grid grid-cols-2 gap-4">
-        <Card className="p-4 bg-destructive/10 border border-destructive/20">
+        <Card className="p-4 bg-destructive/10 backdrop-blur-sm border border-destructive/30">
           <p className="font-semibold mb-2">What Kills Enthusiasm:</p>
           <ul className="text-sm space-y-1 text-muted-foreground">
             <li>• Endless document requests</li>
@@ -352,7 +345,7 @@ const DealFatiguePage: React.FC = () => {
           </ul>
         </Card>
         
-        <Card className="p-4 bg-success/10 border border-success/20">
+        <Card className="p-4 bg-success/10 backdrop-blur-sm border border-success/30">
           <p className="font-semibold mb-2">What Preserves It:</p>
           <ul className="text-sm space-y-1 text-muted-foreground">
             <li>• Clean data room ready</li>
@@ -367,7 +360,6 @@ const DealFatiguePage: React.FC = () => {
   );
 };
 
-// Page 5: How Preparation Saves Deals
 const PreparationPage: React.FC = () => {
   const [checkedItems, setCheckedItems] = useState<string[]>([]);
   
@@ -412,7 +404,7 @@ const PreparationPage: React.FC = () => {
             key={benefit.id}
             className={`p-4 cursor-pointer transition-all border ${
               checkedItems.includes(benefit.id) 
-                ? 'bg-success/10 border-success' 
+                ? 'bg-success/10 backdrop-blur-sm border-success/30' 
                 : 'hover:bg-accent'
             }`}
             onClick={() => {
@@ -437,7 +429,7 @@ const PreparationPage: React.FC = () => {
         ))}
       </div>
       
-      <Card className="bg-gradient-to-r from-accent/20 to-success/20 border border-accent/20 p-6">
+      <div className="bg-gradient-to-r from-accent/10 to-success/10 backdrop-blur-sm border border-accent/30 p-6 rounded-lg">
         <h3 className="font-bold text-xl mb-4">The Bottom Line:</h3>
         
         <div className="space-y-3 text-muted-foreground">
@@ -451,14 +443,14 @@ const PreparationPage: React.FC = () => {
             maintain price, celebrate at closing
           </p>
         </div>
-      </Card>
+      </div>
       
-      <Card className="p-6 bg-warning/10 border border-warning/20">
+      <div className="bg-warning/10 backdrop-blur-sm p-4 rounded-lg border-l-4 border-warning/30">
         <p className="text-center text-lg text-muted-foreground">
           <strong className="text-foreground">Remember:</strong> Every week you spend preparing 
           saves a month in the deal process.
         </p>
-      </Card>
+      </div>
     </div>
   );
 };

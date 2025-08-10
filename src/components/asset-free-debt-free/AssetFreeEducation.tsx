@@ -33,7 +33,6 @@ export const AssetFreeEducation: React.FC = () => {
   
   return (
     <div className="max-w-4xl mx-auto">
-      {/* Progress Bar */}
       <div className="mb-8">
         <Progress value={(currentPage + 1) / pages.length * 100} className="h-2" />
         <div className="flex justify-between mt-2 text-sm text-muted-foreground">
@@ -42,12 +41,10 @@ export const AssetFreeEducation: React.FC = () => {
         </div>
       </div>
       
-      {/* Content */}
       <Card className="p-8 min-h-[500px]">
         {pages[currentPage].content}
       </Card>
       
-      {/* Navigation */}
       <div className="flex justify-between mt-6">
         <Button
           variant="outline"
@@ -70,7 +67,6 @@ export const AssetFreeEducation: React.FC = () => {
   );
 };
 
-// Page 1: Introduction
 const IntroPage: React.FC = () => (
   <div className="space-y-6">
     <h2 className="text-3xl font-bold">Private Equity Wants a Clean Business</h2>
@@ -81,7 +77,7 @@ const IntroPage: React.FC = () => (
         most business owners get confused. Let's break this down in plain English.
       </p>
       
-      <div className="bg-accent/20 p-6 rounded-lg border-l-4 border-accent">
+      <div className="bg-accent/10 backdrop-blur-sm p-4 rounded-lg border-l-4 border-accent/30">
         <p className="font-semibold mb-2 text-foreground">Here's the simple truth:</p>
         <p className="text-muted-foreground">
           PE buyers want to purchase your <em>operating business</em> - the machine that makes money. 
@@ -97,17 +93,17 @@ const IntroPage: React.FC = () => (
     </div>
     
     <div className="mt-8 grid grid-cols-3 gap-4">
-      <div className="text-center p-4 bg-success/10 border border-success/20 rounded-lg">
+      <div className="text-center p-4 bg-success/10 backdrop-blur-sm border border-success/30 rounded-lg">
         <DollarSign className="w-12 h-12 text-success mx-auto mb-2" />
         <p className="font-semibold">Cash Free</p>
         <p className="text-sm text-muted-foreground">Explained on page 4</p>
       </div>
-      <div className="text-center p-4 bg-destructive/10 border border-destructive/20 rounded-lg">
+      <div className="text-center p-4 bg-destructive/10 backdrop-blur-sm border border-destructive/30 rounded-lg">
         <Building className="w-12 h-12 text-destructive mx-auto mb-2" />
         <p className="font-semibold">Asset Free</p>
         <p className="text-sm text-muted-foreground">Core assets only</p>
       </div>
-      <div className="text-center p-4 bg-warning/10 border border-warning/20 rounded-lg">
+      <div className="text-center p-4 bg-warning/10 backdrop-blur-sm border border-warning/30 rounded-lg">
         <DollarSign className="w-12 h-12 text-warning mx-auto mb-2" />
         <p className="font-semibold">Debt Free</p>
         <p className="text-sm text-muted-foreground">Clean balance sheet</p>
@@ -116,7 +112,6 @@ const IntroPage: React.FC = () => (
   </div>
 );
 
-// Page 2: Core vs Non-Core Assets
 const CoreAssetsPage: React.FC = () => {
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   
@@ -150,8 +145,8 @@ const CoreAssetsPage: React.FC = () => {
               className={`p-4 rounded-lg border-2 transition-all ${
                 showResult
                   ? asset.isCore
-                    ? 'border-success bg-success/10'
-                    : 'border-destructive bg-destructive/10'
+                    ? 'border-success bg-success/10 backdrop-blur-sm'
+                    : 'border-destructive bg-destructive/10 backdrop-blur-sm'
                   : 'border-border hover:border-muted-foreground bg-card'
               }`}
             >
@@ -169,23 +164,22 @@ const CoreAssetsPage: React.FC = () => {
         })}
       </div>
       
-      <Card className="p-4">
+      <div className="bg-muted/50 backdrop-blur-sm p-4 rounded-lg border-l-4 border-muted/30">
         <p className="font-semibold mb-2">Remember:</p>
         <p className="text-sm text-muted-foreground">
           Core assets are things the business NEEDS to operate and generate revenue. 
           If it's personal, recreational, or the business could easily rent/lease it instead, it's NOT core.
         </p>
-      </Card>
+      </div>
     </div>
   );
 };
 
-// Page 3: The Building Problem
 const BuildingExplanation: React.FC = () => (
   <div className="space-y-6">
     <h2 className="text-3xl font-bold">Why Your Building Isn't Core</h2>
     
-    <div className="bg-warning/20 p-6 rounded-lg border-l-4 border-warning">
+    <div className="bg-warning/10 backdrop-blur-sm p-4 rounded-lg border-l-4 border-warning/30">
       <p className="text-lg font-semibold mb-2">
         "But I've owned this building for 20 years!"
       </p>
@@ -220,17 +214,16 @@ const BuildingExplanation: React.FC = () => (
       </div>
     </div>
     
-    <Card className="bg-success/10 border-success/20 p-6">
+    <div className="bg-success/10 backdrop-blur-sm p-4 rounded-lg border-l-4 border-success/30">
       <p className="font-semibold mb-2">The Solution: Sell-Leaseback</p>
       <p className="text-muted-foreground">
         You keep the building personally and lease it back to the company at market rates. 
         You get rental income, they get a clean transaction. Everyone wins.
       </p>
-    </Card>
+    </div>
   </div>
 );
 
-// Page 4: Cash and Debt Explanation
 const CashDebtExplanation: React.FC = () => {
   const [showExample, setShowExample] = useState(false);
   
@@ -239,7 +232,7 @@ const CashDebtExplanation: React.FC = () => {
       <h2 className="text-3xl font-bold">Cash & Debt at Closing</h2>
       
       <div className="grid grid-cols-2 gap-6">
-        <Card className="p-6 bg-success/10 border border-success/20">
+        <Card className="p-6 bg-success/10 backdrop-blur-sm border border-success/30">
           <DollarSign className="w-12 h-12 text-success mb-4" />
           <h3 className="text-xl font-semibold mb-2">Cash Free</h3>
           <p className="text-muted-foreground mb-4">
@@ -251,7 +244,7 @@ const CashDebtExplanation: React.FC = () => {
           </p>
         </Card>
         
-        <Card className="p-6 bg-destructive/10 border border-destructive/20">
+        <Card className="p-6 bg-destructive/10 backdrop-blur-sm border border-destructive/30">
           <DollarSign className="w-12 h-12 text-destructive mb-4" />
           <h3 className="text-xl font-semibold mb-2">Debt Free</h3>
           <p className="text-muted-foreground mb-4">
@@ -303,7 +296,6 @@ const CashDebtExplanation: React.FC = () => {
   );
 };
 
-// Page 5: Checklist
 const ChecklistPage: React.FC = () => {
   const [checkedItems, setCheckedItems] = useState<string[]>([]);
   
@@ -350,19 +342,19 @@ const ChecklistPage: React.FC = () => {
         ))}
       </div>
       
-      <Card className="bg-accent/20 border-accent/20 p-6">
+      <div className="bg-accent/10 backdrop-blur-sm p-4 rounded-lg border-l-4 border-accent/30">
         <p className="font-semibold mb-2">Pro Tip:</p>
         <p className="text-muted-foreground">
           Start this clean-up process at least 12 months before you plan to sell. 
           Some changes (like removing assets) can affect your taxes and financial statements.
         </p>
-      </Card>
+      </div>
       
       {checkedItems.length === checklistItems.length && (
-        <Card className="bg-success/10 border-success/20 p-6 text-center">
+        <div className="bg-success/10 backdrop-blur-sm p-4 rounded-lg border-l-4 border-success/30 text-center">
           <p className="text-2xl font-bold text-success mb-2">🎉 You're Ready!</p>
           <p className="text-muted-foreground">Your business is starting to look attractive to PE buyers.</p>
-        </Card>
+        </div>
       )}
     </div>
   );

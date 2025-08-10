@@ -71,7 +71,7 @@ const IntroPage: React.FC = () => (
   <div className="space-y-6">
     <h2 className="text-3xl font-bold">Your Cousin Larry Can't Do This Deal</h2>
     
-    <div className="bg-destructive/20 border-destructive/20 p-6 rounded-lg">
+    <div className="bg-destructive/10 backdrop-blur-sm p-4 rounded-lg border-l-4 border-destructive/30">
       <p className="text-destructive font-semibold mb-2">Reality Check:</p>
       <p className="text-muted-foreground">
         PE buyers have teams doing 20+ deals a year. You'll do one. 
@@ -106,14 +106,14 @@ const BankerPage: React.FC = () => (
   <div className="space-y-6">
     <h2 className="text-3xl font-bold">Investment Banker: Your Quarterback</h2>
     
-    <Card className="bg-success/10 border-success/20 p-6">
+    <div className="bg-success/10 backdrop-blur-sm p-4 rounded-lg border-l-4 border-success/30">
       <p className="text-success font-semibold mb-2">What They Do:</p>
       <ul className="space-y-2 text-muted-foreground">
         <li>• Create competitive auction (adds 15-30% to price)</li>
         <li>• Know 50+ PE funds personally</li>
         <li>• Manage entire process start to finish</li>
       </ul>
-    </Card>
+    </div>
     
     <Card className="p-6">
       <h3 className="font-semibold mb-3">How They Get Paid:</h3>
@@ -125,10 +125,10 @@ const BankerPage: React.FC = () => (
       </div>
     </Card>
     
-    <Card className="bg-destructive/10 border-destructive/20 p-4">
+    <div className="bg-destructive/10 backdrop-blur-sm p-4 rounded-lg border-l-4 border-destructive/30">
       <p className="text-destructive font-semibold">Red Flag:</p>
       <p className="text-muted-foreground">Can't name 10 PE deals in last 2 years = No real relationships</p>
-    </Card>
+    </div>
   </div>
 );
 
@@ -137,7 +137,7 @@ const AttorneyPage: React.FC = () => (
     <h2 className="text-3xl font-bold">M&A Attorney: Specialist Required</h2>
     
     <div className="grid grid-cols-2 gap-4">
-      <Card className="bg-destructive/10 border-destructive/20 p-4">
+      <Card className="bg-destructive/10 backdrop-blur-sm border border-destructive/30 p-4">
         <h3 className="text-destructive font-semibold mb-2">❌ Your Business Attorney</h3>
         <ul className="text-sm space-y-1 text-muted-foreground">
           <li>• Takes 300 hours for 100-hour job</li>
@@ -146,7 +146,7 @@ const AttorneyPage: React.FC = () => (
         </ul>
       </Card>
       
-      <Card className="bg-success/10 border-success/20 p-4">
+      <Card className="bg-success/10 backdrop-blur-sm border border-success/30 p-4">
         <h3 className="text-success font-semibold mb-2">✅ M&A Specialist</h3>
         <ul className="text-sm space-y-1 text-muted-foreground">
           <li>• Done 50+ PE deals</li>
@@ -156,7 +156,7 @@ const AttorneyPage: React.FC = () => (
       </Card>
     </div>
     
-    <Card className="bg-warning/10 border-warning/20 p-6">
+    <div className="bg-warning/10 backdrop-blur-sm p-4 rounded-lg border-l-4 border-warning/30">
       <h3 className="text-warning font-semibold mb-2">Control Legal Bills:</h3>
       <ul className="space-y-2 text-muted-foreground text-sm">
         <li>• 15-minute cap on unscheduled calls</li>
@@ -164,7 +164,7 @@ const AttorneyPage: React.FC = () => (
         <li>• Batch your questions</li>
         <li>• Decide internally before calling</li>
       </ul>
-    </Card>
+    </div>
   </div>
 );
 
@@ -172,7 +172,7 @@ const AccountantPage: React.FC = () => (
   <div className="space-y-6">
     <h2 className="text-3xl font-bold">QoE: Find Hidden EBITDA</h2>
     
-    <Card className="bg-accent/20 border-accent/20 p-6">
+    <div className="bg-accent/10 backdrop-blur-sm p-4 rounded-lg border-l-4 border-accent/30">
       <div className="text-center mb-4">
         <p className="text-muted-foreground">Your CPA says:</p>
         <p className="text-3xl font-mono">$3M EBITDA</p>
@@ -182,7 +182,7 @@ const AccountantPage: React.FC = () => (
         <p className="text-3xl font-mono">$4.2M EBITDA</p>
       </div>
       <p className="text-success text-center mt-4">= $6M more at 5x multiple</p>
-    </Card>
+    </div>
     
     <Card className="p-6">
       <h3 className="font-semibold mb-3">What QoE Finds:</h3>
@@ -201,7 +201,7 @@ const CostPage: React.FC = () => (
   <div className="space-y-6">
     <h2 className="text-3xl font-bold">Yes, It's Expensive. It's Worth It.</h2>
     
-    <Card className="bg-accent/20 border-accent/20 p-6">
+    <div className="bg-accent/10 backdrop-blur-sm p-4 rounded-lg border-l-4 border-accent/30">
       <h3 className="text-accent font-semibold mb-3">Typical All-In Costs:</h3>
       <div className="space-y-2 text-muted-foreground">
         <div className="flex justify-between">
@@ -213,9 +213,9 @@ const CostPage: React.FC = () => (
           <span className="font-mono">$1.5-2.5M</span>
         </div>
       </div>
-    </Card>
+    </div>
     
-    <Card className="bg-success/10 border-success/20 p-6">
+    <div className="bg-success/10 backdrop-blur-sm p-4 rounded-lg border-l-4 border-success/30">
       <p className="text-success font-semibold mb-2">The Math:</p>
       <p className="text-muted-foreground">
         Good advisors typically add 15-30% to your price.
@@ -223,15 +223,15 @@ const CostPage: React.FC = () => (
         Cost: $800K. Net gain: $2.2-5.2M.
       </p>
       <p className="font-semibold mt-3">ROI: 3-7x</p>
-    </Card>
+    </div>
     
-    <Card className="bg-warning/10 border-warning/20 p-4">
+    <div className="bg-warning/10 backdrop-blur-sm p-4 rounded-lg border-l-4 border-warning/30">
       <p className="text-warning font-semibold">Remember:</p>
       <p className="text-muted-foreground">
         Only the banker's success fee waits for closing. 
         Lawyers and QoE get paid regardless. Budget accordingly.
       </p>
-    </Card>
+    </div>
   </div>
 );
 

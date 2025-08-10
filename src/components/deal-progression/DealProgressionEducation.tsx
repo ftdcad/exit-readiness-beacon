@@ -123,10 +123,10 @@ const OverviewPage: React.FC = () => (
       </Card>
     </div>
     
-    <Card className="border-warning p-4">
+    <div className="bg-warning/10 backdrop-blur-sm p-4 rounded-lg border-l-4 border-warning/30">
       <p className="text-warning font-semibold">Critical Point:</p>
       <p className="text-muted-foreground">The IOI stage is where fortunes are made. Buyers often misunderstand your business - fixing their mistakes can add millions.</p>
-    </Card>
+    </div>
   </div>
 );
 
@@ -137,7 +137,7 @@ const NDAPage: React.FC = () => (
       NDA: Opening the Books
     </h2>
     
-    <Card className="border-primary p-6">
+    <div className="bg-primary/10 backdrop-blur-sm p-4 rounded-lg border-l-4 border-primary/30">
       <h3 className="text-primary font-semibold mb-3">What Happens:</h3>
       <ul className="space-y-2 text-muted-foreground">
         <li>• Buyer signs confidentiality agreement</li>
@@ -145,10 +145,10 @@ const NDAPage: React.FC = () => (
         <li>• They get 2-3 weeks to analyze</li>
         <li>• Multiple buyers can be looking simultaneously</li>
       </ul>
-    </Card>
+    </div>
     
     <div className="grid grid-cols-2 gap-4">
-      <Card className="border-success p-4">
+      <Card className="bg-success/10 backdrop-blur-sm border border-success/30 p-4">
         <h4 className="text-success font-semibold mb-2">✅ Do Share:</h4>
         <ul className="text-sm space-y-1 text-muted-foreground">
           <li>• 3 years P&L</li>
@@ -158,7 +158,7 @@ const NDAPage: React.FC = () => (
         </ul>
       </Card>
       
-      <Card className="border-destructive p-4">
+      <Card className="bg-destructive/10 backdrop-blur-sm border border-destructive/30 p-4">
         <h4 className="text-destructive font-semibold mb-2">❌ Don't Share Yet:</h4>
         <ul className="text-sm space-y-1 text-muted-foreground">
           <li>• Customer names</li>
@@ -207,12 +207,12 @@ const IOIPage: React.FC = () => {
         IOI: Your $2M Education Opportunity
       </h2>
       
-      <Card className="border-warning p-6">
+      <div className="bg-warning/10 backdrop-blur-sm p-4 rounded-lg border-l-4 border-warning/30">
         <p className="text-warning font-semibold mb-2">Critical Truth:</p>
         <p className="text-muted-foreground">
           PE buyers are smart about business models and math, but they DON'T know your industry's quirks. Their IOI will have errors. Finding and fixing these errors can add millions to your price.
         </p>
-      </Card>
+      </div>
       
       <div className="space-y-4">
         <h3 className="text-xl font-semibold">Real Examples (click to see):</h3>
@@ -246,7 +246,7 @@ const IOIPage: React.FC = () => {
         ))}
       </div>
       
-      <Card className="border-primary p-4">
+      <div className="bg-primary/10 backdrop-blur-sm p-4 rounded-lg border-l-4 border-primary/30">
         <p className="text-primary font-semibold">Your IOI Response Strategy:</p>
         <ol className="mt-2 space-y-1 text-muted-foreground text-sm list-decimal list-inside">
           <li>Thank them for the IOI</li>
@@ -255,7 +255,7 @@ const IOIPage: React.FC = () => {
           <li>Educate on industry-specific factors</li>
           <li>Watch your valuation increase</li>
         </ol>
-      </Card>
+      </div>
     </div>
   );
 };
@@ -267,7 +267,7 @@ const LOIPage: React.FC = () => (
       LOI: The Point of No Return
     </h2>
     
-    <Card className="border-destructive p-6">
+    <div className="bg-destructive/10 backdrop-blur-sm p-4 rounded-lg border-l-4 border-destructive/30">
       <h3 className="text-destructive font-semibold mb-3">⚠️ EXCLUSIVITY KICKS IN</h3>
       <p className="text-muted-foreground">
         Once you sign the LOI, you CANNOT:
@@ -279,7 +279,7 @@ const LOIPage: React.FC = () => (
         <li>• Back out without good reason</li>
       </ul>
       <p className="text-warning mt-3">Typical exclusivity: 60-90 days</p>
-    </Card>
+    </div>
     
     <div className="grid grid-cols-2 gap-4">
       <Card className="p-4">
@@ -301,7 +301,7 @@ const LOIPage: React.FC = () => (
       </Card>
     </div>
     
-    <Card className="border-warning p-6">
+    <div className="bg-warning/10 backdrop-blur-sm p-4 rounded-lg border-l-4 border-warning/30">
       <h3 className="text-warning font-semibold mb-2">Before You Sign:</h3>
       <ul className="space-y-2 text-muted-foreground">
         <li>✓ Price is where you want it (or close)</li>
@@ -310,14 +310,14 @@ const LOIPage: React.FC = () => (
         <li>✓ You're ready for 60-90 days of diligence</li>
         <li>✓ Key employees are informed and retained</li>
       </ul>
-    </Card>
+    </div>
     
-    <Card className="border-primary p-4">
+    <div className="bg-primary/10 backdrop-blur-sm p-4 rounded-lg border-l-4 border-primary/30">
       <p className="text-primary font-semibold">Good Faith Requirement:</p>
       <p className="text-muted-foreground">
         Both parties must act in "utmost good faith" - no games, no hidden agendas, full transparency. Violating this can lead to lawsuits.
       </p>
-    </Card>
+    </div>
   </div>
 );
 
@@ -329,7 +329,7 @@ const ClosePage: React.FC = () => (
     </h2>
     
     <div className="space-y-4">
-      <Card className="border-success p-6">
+      <div className="bg-success/10 backdrop-blur-sm p-4 rounded-lg border-l-4 border-success/30">
         <h3 className="text-success font-semibold mb-3">Closing Day:</h3>
         <ul className="space-y-2 text-muted-foreground">
           <li>• Sign 50+ documents (seriously)</li>
@@ -337,9 +337,9 @@ const ClosePage: React.FC = () => (
           <li>• You hand over the keys</li>
           <li>• Champagne (or tears)</li>
         </ul>
-      </Card>
+      </div>
       
-      <Card className="border-accent p-6">
+      <div className="bg-accent/10 backdrop-blur-sm p-4 rounded-lg border-l-4 border-accent/30">
         <h3 className="text-accent font-semibold mb-3">True Up (30-90 days later):</h3>
         <p className="text-muted-foreground mb-3">
           The final reconciliation based on actual closing date numbers:
@@ -358,18 +358,18 @@ const ClosePage: React.FC = () => (
         <p className="text-warning mt-3">
           Can swing 2-5% of purchase price either direction!
         </p>
-      </Card>
+      </div>
       
-      <Card className="border-warning p-4">
+      <div className="bg-warning/10 backdrop-blur-sm p-4 rounded-lg border-l-4 border-warning/30">
         <p className="text-warning font-semibold">Pro Tip:</p>
         <p className="text-muted-foreground">
           Clean books and consistent accounting methods prevent true-up surprises. 
           The cleaner your books, the less arguing later.
         </p>
-      </Card>
+      </div>
     </div>
     
-    <Card className="border-primary p-6">
+    <div className="bg-primary/10 backdrop-blur-sm p-4 rounded-lg border-l-4 border-primary/30">
       <h3 className="text-primary font-semibold mb-2">Timeline Reality Check:</h3>
       <div className="space-y-1 text-muted-foreground text-sm">
         <p>• NDA to IOI: 2-3 weeks</p>
@@ -378,7 +378,7 @@ const ClosePage: React.FC = () => (
         <p>• Close to True-Up Complete: 30-90 days</p>
         <p className="font-semibold mt-2">Total: 4-7 months (if everything goes perfectly)</p>
       </div>
-    </Card>
+    </div>
   </div>
 );
 
