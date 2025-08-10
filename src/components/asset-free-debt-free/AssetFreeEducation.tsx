@@ -417,7 +417,7 @@ const ChecklistPage: React.FC = () => {
       <h2 className="text-3xl font-bold">Your Clean-Up Checklist</h2>
       
       <p className="text-lg text-muted-foreground">
-        Before you talk to PE buyers, clean up your business:
+        Before you talk to PE buyers, you should consider cleaning up your business:
       </p>
       
       <div className="space-y-3">
