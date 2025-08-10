@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -72,7 +71,7 @@ const OverviewPage: React.FC = () => (
     <h2 className="text-3xl font-bold">Your Deal's 5 Critical Stages</h2>
     
     <div className="space-y-4">
-      <Card className="p-4 border-l-4 border-primary">
+      <Card className="p-4 border-l-4 border-blue-500">
         <div className="flex items-center justify-between">
           <div>
             <h3 className="font-semibold">1. NDA (Non-Disclosure Agreement)</h3>
@@ -82,7 +81,7 @@ const OverviewPage: React.FC = () => (
         </div>
       </Card>
       
-      <Card className="p-4 border-l-4 border-warning">
+      <Card className="p-4 border-l-4 border-amber-500">
         <div className="flex items-center justify-between">
           <div>
             <h3 className="font-semibold">2. IOI (Indication of Interest)</h3>
@@ -92,7 +91,7 @@ const OverviewPage: React.FC = () => (
         </div>
       </Card>
       
-      <Card className="p-4 border-l-4 border-accent">
+      <Card className="p-4 border-l-4 border-orange-500">
         <div className="flex items-center justify-between">
           <div>
             <h3 className="font-semibold">3. LOI (Letter of Intent)</h3>
@@ -102,7 +101,7 @@ const OverviewPage: React.FC = () => (
         </div>
       </Card>
       
-      <Card className="p-4 border-l-4 border-success">
+      <Card className="p-4 border-l-4 border-green-500">
         <div className="flex items-center justify-between">
           <div>
             <h3 className="font-semibold">4. Due Diligence & Close</h3>
@@ -112,7 +111,7 @@ const OverviewPage: React.FC = () => (
         </div>
       </Card>
       
-      <Card className="p-4 border-l-4 border-accent">
+      <Card className="p-4 border-l-4 border-purple-500">
         <div className="flex items-center justify-between">
           <div>
             <h3 className="font-semibold">5. True Up</h3>
