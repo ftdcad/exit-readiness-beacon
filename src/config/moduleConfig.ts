@@ -89,3 +89,27 @@ export const moveModuleToWeek = (moduleName: string, newWeekNumber: number, newO
     return module;
   });
 };
+
+// Helper function to get the next module path
+export const getNextModulePath = (currentModuleName: string): string | null => {
+  const currentModule = moduleConfigurations.find(module => module.name === currentModuleName);
+  if (!currentModule) return null;
+
+  // Find the next module in the same week
+  const nextInWeek = moduleConfigurations.find(module => 
+    module.weekNumber === currentModule.weekNumber && 
+    module.order === currentModule.order + 1
+  );
+
+  if (nextInWeek) {
+    return nextInWeek.path;
+  }
+
+  // If no next module in the same week, find the first module of the next week
+  const nextWeekModule = moduleConfigurations.find(module => 
+    module.weekNumber === currentModule.weekNumber + 1 && 
+    module.order === 1
+  );
+
+  return nextWeekModule ? nextWeekModule.path : null;
+};

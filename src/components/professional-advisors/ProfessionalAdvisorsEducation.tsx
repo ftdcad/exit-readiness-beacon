@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -5,6 +6,7 @@ import { Progress } from '@/components/ui/progress';
 import { ChevronRight, ChevronLeft, Users, DollarSign, AlertTriangle, CheckCircle } from 'lucide-react';
 import { useProgress } from '@/hooks/useProgress';
 import { useNavigate } from 'react-router-dom';
+import { getNextModulePath } from '@/config/moduleConfig';
 
 export const ProfessionalAdvisorsEducation: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(0);
@@ -36,7 +38,12 @@ export const ProfessionalAdvisorsEducation: React.FC = () => {
 
   const handleComplete = async () => {
     await markModuleComplete('Professional Advisors', 1);
-    navigate('/portal/week-1');
+    const nextPath = getNextModulePath('Professional Advisors');
+    if (nextPath) {
+      navigate(nextPath);
+    } else {
+      navigate('/portal');
+    }
   };
   
   return (

@@ -5,6 +5,7 @@ import { Progress } from '@/components/ui/progress';
 import { ChevronRight, ChevronLeft, FileText, Target, Handshake, CheckCircle, AlertCircle } from 'lucide-react';
 import { useProgress } from '@/hooks/useProgress';
 import { useNavigate } from 'react-router-dom';
+import { getNextModulePath } from '@/config/moduleConfig';
 
 export const DealProgressionEducation: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(0);
@@ -36,7 +37,12 @@ export const DealProgressionEducation: React.FC = () => {
 
   const handleComplete = async () => {
     await markModuleComplete('Deal Progression', 1);
-    navigate('/portal/week-1');
+    const nextPath = getNextModulePath('Deal Progression');
+    if (nextPath) {
+      navigate(nextPath);
+    } else {
+      navigate('/portal');
+    }
   };
   
   return (

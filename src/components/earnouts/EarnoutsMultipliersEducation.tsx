@@ -6,10 +6,13 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ChevronRight, ChevronLeft, TrendingUp, DollarSign, AlertTriangle, CheckCircle, Calculator, Target, Award } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useProgress } from '@/hooks/useProgress';
+import { getNextModulePath } from '@/config/moduleConfig';
 
 export const EarnoutsMultipliersEducation: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const navigate = useNavigate();
+  const { markModuleComplete } = useProgress();
   
   const pages = [
     {
@@ -39,6 +42,16 @@ export const EarnoutsMultipliersEducation: React.FC = () => {
   ];
 
   const isLastPage = currentPage === pages.length - 1;
+
+  const handleComplete = async () => {
+    await markModuleComplete('Seller Earnouts & Performance Multipliers', 2);
+    const nextPath = getNextModulePath('Seller Earnouts & Performance Multipliers');
+    if (nextPath) {
+      navigate(nextPath);
+    } else {
+      navigate('/portal');
+    }
+  };
   
   return (
     <div className="max-w-6xl mx-auto">
@@ -68,7 +81,8 @@ export const EarnoutsMultipliersEducation: React.FC = () => {
         </Button>
         
         {isLastPage ? (
-          <Button onClick={() => navigate('/portal')}>
+          <Button onClick={handleComplete} className="bg-success text-success-foreground hover:bg-success/90">
+            <CheckCircle className="w-4 h-4 mr-2" />
             Complete Module
           </Button>
         ) : (
