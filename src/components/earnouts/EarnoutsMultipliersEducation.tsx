@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -6,9 +5,11 @@ import { Progress } from '@/components/ui/progress';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ChevronRight, ChevronLeft, TrendingUp, DollarSign, AlertTriangle, CheckCircle, Calculator, Target, Award } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 export const EarnoutsMultipliersEducation: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(0);
+  const navigate = useNavigate();
   
   const pages = [
     {
@@ -16,7 +17,7 @@ export const EarnoutsMultipliersEducation: React.FC = () => {
       content: <IntroPage />
     },
     {
-      title: "Understanding the Multiplier Effect",
+      title: "Understanding the Multiplier Effect", 
       content: <MultiplierPage />
     },
     {
@@ -36,6 +37,8 @@ export const EarnoutsMultipliersEducation: React.FC = () => {
       content: <ProtectionPage />
     }
   ];
+
+  const isLastPage = currentPage === pages.length - 1;
   
   return (
     <div className="max-w-6xl mx-auto">
@@ -64,13 +67,16 @@ export const EarnoutsMultipliersEducation: React.FC = () => {
           Previous
         </Button>
         
-        <Button
-          onClick={() => setCurrentPage(Math.min(pages.length - 1, currentPage + 1))}
-          disabled={currentPage === pages.length - 1}
-        >
-          Next
-          <ChevronRight className="w-4 h-4 ml-2" />
-        </Button>
+        {isLastPage ? (
+          <Button onClick={() => navigate('/portal')}>
+            Complete Module
+          </Button>
+        ) : (
+          <Button onClick={() => setCurrentPage(Math.min(pages.length - 1, currentPage + 1))}>
+            Next
+            <ChevronRight className="w-4 h-4 ml-2" />
+          </Button>
+        )}
       </div>
     </div>
   );
