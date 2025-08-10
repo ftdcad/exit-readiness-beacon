@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -66,7 +65,7 @@ export const DealKillersDiagnostic: React.FC = () => {
     {
       id: 'just-money',
       category: 'mindset',
-      question: "Are you looking for just capital, not operational help?",
+      question: "Do you want PE money but NOT their operational involvement?",
       subtext: "Wrong answer: PE is buying control, not giving loans",
       yesIsFatal: true,
       severity: 'fatal'
