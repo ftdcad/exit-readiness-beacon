@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
-
 interface GlossaryTerm {
   id: string;
   term: string;
@@ -1003,6 +1002,18 @@ export function InteractiveGlossary() {
     return [...glossaryTerms].sort((a, b) => a.term.localeCompare(b.term));
   }, []);
 
+  // Color cycle for borders
+  const getBorderColor = (index: number) => {
+    const colors = [
+      'border-l-4 border-blue-500',
+      'border-l-4 border-yellow-500', 
+      'border-l-4 border-orange-500',
+      'border-l-4 border-green-500',
+      'border-l-4 border-purple-500'
+    ];
+    return colors[index % colors.length];
+  };
+
   return (
     <div className="space-y-6">
       <div className="text-center">
@@ -1014,8 +1025,8 @@ export function InteractiveGlossary() {
       </div>
       
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {sortedTerms.map((term) => (
-          <Card key={term.id} className="hover:shadow-lg transition-shadow">
+        {sortedTerms.map((term, index) => (
+          <Card key={term.id} className={`hover:shadow-lg transition-shadow ${getBorderColor(index)}`}>
             <CardHeader className="pb-3">
               <CardTitle className="text-lg">{term.term}</CardTitle>
               <CardDescription className="text-sm leading-relaxed">
