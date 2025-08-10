@@ -1,6 +1,8 @@
+
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
+import { getModuleCountByWeek } from '@/config/moduleConfig';
 
 interface ModuleProgress {
   module_name: string;
@@ -23,14 +25,6 @@ export const useProgress = () => {
   const [loading, setLoading] = useState(true);
   const { user, profile } = useAuth();
 
-  // Updated module counts per week to reflect new organization
-  const weekModuleCounts = {
-    1: 5, // Interactive Glossary, Know Your Buyer, Data Room, EBITDA Mastery, Asset Free Education
-    2: 5, // Executive Discovery Interview, Strategy Doc Builder, KPIs and OKRs, Asset Workshop, Quick Wins
-    3: 5, // EBITDA Calculator, Industry Multipliers, Scenario Planning, PE Benchmarks, Management Scorecard
-    4: 3  // Due Diligence Checklist, LOI Review, Final Report
-  };
-
   const fetchProgress = async () => {
     if (!user) {
       setProgress([]);
@@ -50,13 +44,13 @@ export const useProgress = () => {
 
       setProgress(data || []);
       
-      // Calculate week progress and unlock status
+      // Calculate week progress and unlock status using dynamic module counts
       const weekProgressData: WeekProgress[] = [];
       
       for (let week = 1; week <= 4; week++) {
         const weekModules = (data || []).filter(p => p.week_number === week);
         const completedCount = weekModules.filter(m => m.completed_at).length;
-        const totalCount = weekModuleCounts[week as keyof typeof weekModuleCounts];
+        const totalCount = getModuleCountByWeek(week);
         const progressPercent = Math.round((completedCount / totalCount) * 100);
         
         // TEMPORARY: Nuclear option - hardcode all weeks unlocked for testing

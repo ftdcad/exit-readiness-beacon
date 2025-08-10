@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
@@ -5,33 +6,23 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Crown, Clock, Trophy, ArrowRight, Play } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useProgress } from '@/hooks/useProgress';
+import { getModulesByWeek } from '@/config/moduleConfig';
+
 export default function ClientPortalDashboard() {
-  // This would come from user progress data in real implementation
-  const weekProgress = {
-    1: {
-      completed: 0,
-      total: 4,
-      unlocked: true
-    },
-    2: {
-      completed: 0,
-      total: 4,
-      unlocked: false
-    },
-    3: {
-      completed: 0,
-      total: 4,
-      unlocked: false
-    },
-    4: {
-      completed: 0,
-      total: 4,
-      unlocked: false
-    }
-  };
-  const overallProgress = 0; // 0% for new user
+  const { weekProgress } = useProgress();
+  
+  // Calculate overall progress
+  const totalModules = weekProgress.reduce((sum, week) => sum + week.totalModules, 0);
+  const completedModules = weekProgress.reduce((sum, week) => sum + week.completedModules, 0);
+  const overallProgress = totalModules > 0 ? Math.round((completedModules / totalModules) * 100) : 0;
+  
   const currentWeek = 1;
-  return <div className="space-y-8">
+  const week1Modules = getModulesByWeek(1);
+  const week1Progress = weekProgress.find(w => w.weekNumber === 1);
+
+  return (
+    <div className="space-y-8">
       {/* Welcome Header */}
       <div className="text-center space-y-4">
         <div className="flex items-center justify-center gap-2 text-primary">
@@ -67,14 +58,18 @@ export default function ClientPortalDashboard() {
           </div>
           
           <div className="grid grid-cols-4 gap-4 mt-6">
-            {Object.entries(weekProgress).map(([week, progress]) => <div key={week} className="text-center">
-                <div className={`w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-2 ${progress.unlocked ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'}`}>
-                  {week}
+            {weekProgress.map((week) => (
+              <div key={week.weekNumber} className="text-center">
+                <div className={`w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-2 ${
+                  week.isUnlocked ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'
+                }`}>
+                  {week.weekNumber}
                 </div>
                 <div className="text-xs text-muted-foreground">
-                  {progress.completed}/{progress.total} modules
+                  {week.completedModules}/{week.totalModules} modules
                 </div>
-              </div>)}
+              </div>
+            ))}
           </div>
         </CardContent>
       </Card>
@@ -111,15 +106,17 @@ export default function ClientPortalDashboard() {
 
             <Card className="bg-muted/50">
               <CardHeader className="pb-3">
-                <CardTitle className="text-lg">EBITDA Mastery Course</CardTitle>
+                <CardTitle className="text-lg">Asset Free Education</CardTitle>
                 <CardDescription className="text-sm">
-                  Understand how EBITDA drives your valuation
+                  Learn what PE buyers really want in your business
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Button variant="outline" className="w-full" disabled>
-                  <Clock className="h-4 w-4 mr-2" />
-                  Complete Glossary First
+                <Button asChild variant="outline" className="w-full">
+                  <Link to="/portal/week-1/asset-free-education">
+                    <Play className="h-4 w-4 mr-2" />
+                    Explore Now
+                  </Link>
                 </Button>
               </CardContent>
             </Card>
@@ -130,8 +127,9 @@ export default function ClientPortalDashboard() {
             <ul className="space-y-1 text-sm text-muted-foreground">
               <li>• Master 20+ essential PE terms and concepts</li>
               <li>• Learn how EBITDA calculation affects your valuation</li>
+              <li>• Understand asset-free, debt-free transactions</li>
               <li>• Categorize your assets (core vs non-core)</li>
-              <li>• Identify 5 quick wins worth $500K+ in value</li>
+              <li>• Identify your buyer personas and data room needs</li>
             </ul>
           </div>
         </CardContent>
@@ -148,8 +146,8 @@ export default function ClientPortalDashboard() {
         
         <Card>
           <CardHeader className="text-center">
-            <CardTitle className="text-2xl font-bold text-primary">$500K+</CardTitle>
-            <CardDescription>Potential Value from Quick Wins</CardDescription>
+            <CardTitle className="text-2xl font-bold text-primary">5</CardTitle>
+            <CardDescription>Educational Modules This Week</CardDescription>
           </CardHeader>
         </Card>
         
@@ -176,5 +174,6 @@ export default function ClientPortalDashboard() {
           </Button>
         </CardContent>
       </Card>
-    </div>;
+    </div>
+  );
 }
