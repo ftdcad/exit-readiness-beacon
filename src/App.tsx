@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -12,11 +11,11 @@ import AdminDashboard from "./pages/AdminDashboard";
 import AdminInquiries from "./pages/AdminInquiries";
 import ClientPortalDashboard from "./pages/ClientPortalDashboard";
 import AssessmentPage from "./pages/AssessmentPage";
-import ScheduleConsultationPage from "./pages/ScheduleConsultationPage";
+import { ScheduleConsultationPage } from "./pages/ScheduleConsultationPage";
 import CompanyDetail from "./pages/CompanyDetail";
 import DataRoomPage from "./pages/DataRoomPage";
-import DataRoomIntroPage from "./pages/DataRoomIntroPage";
-import DataRoomWorkspacePage from "./pages/DataRoomWorkspacePage";
+import { DataRoomIntroPage } from "./pages/DataRoomIntroPage";
+import { DataRoomWorkspacePage } from "./pages/DataRoomWorkspacePage";
 import GlossaryPage from "./pages/GlossaryPage";
 import DealProgressionPage from "./pages/DealProgressionPage";
 import ProfessionalAdvisorsPage from "./pages/ProfessionalAdvisorsPage";
@@ -28,7 +27,7 @@ import AssetWorkshopPage from "./pages/AssetWorkshopPage";
 import QuickWinsPage from "./pages/QuickWinsPage";
 import EBITDACalculatorPage from "./pages/EBITDACalculatorPage";
 import IndustryMultiplesPage from "./pages/IndustryMultiplesPage";
-import ScenarioPlanningPage from "./pages/ScenarioPlanningPage";
+import { ScenarioPlanningPage } from "./pages/ScenarioPlanningPage";
 import KPIandOKRPage from "./pages/KPIandOKRPage";
 import ExecutiveDiscoveryInterviewPage from "./pages/ExecutiveDiscoveryInterviewPage";
 import StrategyDocBuilderPage from "./pages/StrategyDocBuilderPage";
@@ -39,7 +38,7 @@ import DebtInterestPage from "./pages/week-2/DebtInterestPage";
 import EarnoutsMultipliersPage from "./pages/week-2/EarnoutsMultipliersPage";
 import PostClosingRealityPage from "./pages/week-2/PostClosingRealityPage";
 import AdminRoute from "./components/AdminRoute";
-import ClientRoute from "./components/ClientRoute";
+import { ClientRoute } from "./components/ClientRoute";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 
 const queryClient = new QueryClient();
