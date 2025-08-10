@@ -1,7 +1,8 @@
+
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
@@ -39,9 +40,21 @@ import EarnoutsMultipliersPage from "./pages/week-2/EarnoutsMultipliersPage";
 import PostClosingRealityPage from "./pages/week-2/PostClosingRealityPage";
 import AdminRoute from "./components/AdminRoute";
 import { ClientRoute } from "./components/ClientRoute";
+import { ClientPortalLayout } from "./components/ClientPortalLayout";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 
 const queryClient = new QueryClient();
+
+// Portal Layout Wrapper Component
+const PortalLayoutWrapper = () => {
+  return (
+    <ClientRoute>
+      <ClientPortalLayout>
+        <Outlet />
+      </ClientPortalLayout>
+    </ClientRoute>
+  );
+};
 
 function App() {
   return (
@@ -61,44 +74,46 @@ function App() {
                 <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
                 <Route path="/admin/inquiries" element={<AdminRoute><AdminInquiries /></AdminRoute>} />
                 
-                {/* Client Portal Routes */}
-                <Route path="/portal" element={<ClientRoute><ClientPortalDashboard /></ClientRoute>} />
-                <Route path="/portal/assessment" element={<ClientRoute><AssessmentPage /></ClientRoute>} />
-                <Route path="/portal/company/:id" element={<ClientRoute><CompanyDetail /></ClientRoute>} />
-                
-                {/* Data Room Routes */}
-                <Route path="/portal/week-2/data-room" element={<ClientRoute><DataRoomIntroPage /></ClientRoute>} />
-                <Route path="/portal/data-room" element={<ClientRoute><DataRoomPage /></ClientRoute>} />
-                <Route path="/portal/data-room/workspace" element={<ClientRoute><DataRoomWorkspacePage /></ClientRoute>} />
-                
-                {/* Week 1 - Foundation & Education */}
-                <Route path="/portal/week-1/glossary" element={<ClientRoute><GlossaryPage /></ClientRoute>} />
-                <Route path="/portal/week-1/deal-progression" element={<ClientRoute><DealProgressionPage /></ClientRoute>} />
-                <Route path="/portal/week-1/professional-advisors" element={<ClientRoute><ProfessionalAdvisorsPage /></ClientRoute>} />
-                <Route path="/portal/week-1/know-your-buyer" element={<ClientRoute><KnowYourBuyerPage /></ClientRoute>} />
-                <Route path="/portal/week-1/asset-free-education" element={<ClientRoute><AssetFreeEducationPage /></ClientRoute>} />
-                <Route path="/portal/week-1/time-kills-deals" element={<ClientRoute><TimeKillsDealsPage /></ClientRoute>} />
-                <Route path="/portal/week-1/ebitda-course" element={<ClientRoute><EBITDACoursePage /></ClientRoute>} />
-                
-                {/* Week 2 - Deal Readiness */}
-                <Route path="/portal/week-2/asset-workshop" element={<ClientRoute><AssetWorkshopPage /></ClientRoute>} />
-                <Route path="/portal/week-2/holdco-structure" element={<ClientRoute><HoldCoStructurePage /></ClientRoute>} />
-                <Route path="/portal/week-2/quick-wins" element={<ClientRoute><QuickWinsPage /></ClientRoute>} />
-                <Route path="/portal/week-2/debt-interest" element={<ClientRoute><DebtInterestPage /></ClientRoute>} />
-                <Route path="/portal/week-2/earnouts-multipliers" element={<ClientRoute><EarnoutsMultipliersPage /></ClientRoute>} />
-                <Route path="/portal/week-2/post-closing-reality" element={<ClientRoute><PostClosingRealityPage /></ClientRoute>} />
-                
-                {/* Week 3 - Performance Readiness */}
-                <Route path="/portal/week-3/ebitda-calculator" element={<ClientRoute><EBITDACalculatorPage /></ClientRoute>} />
-                <Route path="/portal/week-3/multiples" element={<ClientRoute><IndustryMultiplesPage /></ClientRoute>} />
-                <Route path="/portal/week-3/scenarios" element={<ClientRoute><ScenarioPlanningPage /></ClientRoute>} />
-                <Route path="/portal/week-3/scorecard" element={<ClientRoute><ManagementScorecardPage /></ClientRoute>} />
-                <Route path="/portal/week-3/business-scorecard" element={<ClientRoute><BusinessScorecardPage /></ClientRoute>} />
-                
-                {/* Week 4 - Final Readiness */}
-                <Route path="/portal/week-4/kpis-okrs" element={<ClientRoute><KPIandOKRPage /></ClientRoute>} />
-                <Route path="/portal/week-4/executive-discovery" element={<ClientRoute><ExecutiveDiscoveryInterviewPage /></ClientRoute>} />
-                <Route path="/portal/week-4/value-builder" element={<ClientRoute><StrategyDocBuilderPage /></ClientRoute>} />
+                {/* Client Portal Routes - All wrapped in ClientPortalLayout */}
+                <Route path="/portal" element={<PortalLayoutWrapper />}>
+                  <Route index element={<ClientPortalDashboard />} />
+                  <Route path="assessment" element={<AssessmentPage />} />
+                  <Route path="company/:id" element={<CompanyDetail />} />
+                  
+                  {/* Data Room Routes */}
+                  <Route path="week-2/data-room" element={<DataRoomIntroPage />} />
+                  <Route path="data-room" element={<DataRoomPage />} />
+                  <Route path="data-room/workspace" element={<DataRoomWorkspacePage />} />
+                  
+                  {/* Week 1 - Foundation & Education */}
+                  <Route path="week-1/glossary" element={<GlossaryPage />} />
+                  <Route path="week-1/deal-progression" element={<DealProgressionPage />} />
+                  <Route path="week-1/professional-advisors" element={<ProfessionalAdvisorsPage />} />
+                  <Route path="week-1/know-your-buyer" element={<KnowYourBuyerPage />} />
+                  <Route path="week-1/asset-free-education" element={<AssetFreeEducationPage />} />
+                  <Route path="week-1/time-kills-deals" element={<TimeKillsDealsPage />} />
+                  <Route path="week-1/ebitda-course" element={<EBITDACoursePage />} />
+                  
+                  {/* Week 2 - Deal Readiness */}
+                  <Route path="week-2/asset-workshop" element={<AssetWorkshopPage />} />
+                  <Route path="week-2/holdco-structure" element={<HoldCoStructurePage />} />
+                  <Route path="week-2/quick-wins" element={<QuickWinsPage />} />
+                  <Route path="week-2/debt-interest" element={<DebtInterestPage />} />
+                  <Route path="week-2/earnouts-multipliers" element={<EarnoutsMultipliersPage />} />
+                  <Route path="week-2/post-closing-reality" element={<PostClosingRealityPage />} />
+                  
+                  {/* Week 3 - Performance Readiness */}
+                  <Route path="week-3/ebitda-calculator" element={<EBITDACalculatorPage />} />
+                  <Route path="week-3/multiples" element={<IndustryMultiplesPage />} />
+                  <Route path="week-3/scenarios" element={<ScenarioPlanningPage />} />
+                  <Route path="week-3/scorecard" element={<ManagementScorecardPage />} />
+                  <Route path="week-3/business-scorecard" element={<BusinessScorecardPage />} />
+                  
+                  {/* Week 4 - Final Readiness */}
+                  <Route path="week-4/kpis-okrs" element={<KPIandOKRPage />} />
+                  <Route path="week-4/executive-discovery" element={<ExecutiveDiscoveryInterviewPage />} />
+                  <Route path="week-4/value-builder" element={<StrategyDocBuilderPage />} />
+                </Route>
                 
                 <Route path="*" element={<NotFound />} />
               </Routes>
