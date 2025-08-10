@@ -8,19 +8,21 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
-import { ChevronRight, ChevronLeft, AlertTriangle, Shield, Target, Clock, Users, CheckCircle } from 'lucide-react';
+import { ChevronRight, ChevronLeft, AlertTriangle, Shield, Target, Clock, Users, CheckCircle, DollarSign } from 'lucide-react';
 import { useProgress } from '@/hooks/useProgress';
 import { getNextModulePath } from '@/config/moduleConfig';
 
 interface ExecutiveScore {
   name: string;
   role: string;
+  compensation: number;
   numbersObsession: number;
   coachability: number;
   clockSpeed: number;
   executionFocus: number;
   complexityShield: number;
   replaceability: number;
+  compensationScore: number;
   overallScore?: number;
   verdict?: 'keeper' | 'coach' | 'replace';
 }
@@ -33,12 +35,14 @@ export const ManagementScorecard: React.FC = () => {
   const [currentExec, setCurrentExec] = useState<ExecutiveScore>({
     name: '',
     role: '',
+    compensation: 0,
     numbersObsession: 0,
     coachability: 0,
     clockSpeed: 0,
     executionFocus: 0,
     complexityShield: 0,
-    replaceability: 0
+    replaceability: 0,
+    compensationScore: 0
   });
 
   // Load from localStorage on mount
@@ -159,6 +163,7 @@ const IntroPage: React.FC = () => (
           <li>• Ego-free executors</li>
           <li>• 24/7 availability mindset</li>
           <li>• Zero-drama professionals</li>
+          <li>• Reasonably compensated (not overpaid)</li>
           <li>• Complex role holders (harder to replace)</li>
         </ul>
       </Card>
@@ -171,6 +176,7 @@ const IntroPage: React.FC = () => (
           <li>• Can't quote their numbers</li>
           <li>• Corporate politicians</li>
           <li>• 9-to-5 mentality</li>
+          <li>• Massively overpaid vs. market</li>
           <li>• Sacred cows (family, friends)</li>
         </ul>
       </Card>
@@ -219,17 +225,19 @@ const AddExecutivePage: React.FC<{
 }> = ({ currentExec, setCurrentExec, executives, setExecutives }) => {
   
   const addExecutive = () => {
-    if (currentExec.name && currentExec.role) {
-      setExecutives([...executives, currentExec]);
+    if (currentExec.name.trim() && currentExec.role.trim()) {
+      setExecutives([...executives, { ...currentExec }]);
       setCurrentExec({
         name: '',
         role: '',
+        compensation: 0,
         numbersObsession: 0,
         coachability: 0,
         clockSpeed: 0,
         executionFocus: 0,
         complexityShield: 0,
-        replaceability: 0
+        replaceability: 0,
+        compensationScore: 0
       });
     }
   };
@@ -237,6 +245,8 @@ const AddExecutivePage: React.FC<{
   const removeExecutive = (index: number) => {
     setExecutives(executives.filter((_, i) => i !== index));
   };
+  
+  const isAddDisabled = !currentExec.name.trim() || !currentExec.role.trim();
   
   return (
     <div className="space-y-6">
@@ -248,9 +258,9 @@ const AddExecutivePage: React.FC<{
         Include everyone who reports to you directly, plus any critical leaders PE will scrutinize.
       </p>
       
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-3 gap-4">
         <div>
-          <Label htmlFor="name">Executive Name</Label>
+          <Label htmlFor="name">Executive Name *</Label>
           <Input
             id="name"
             value={currentExec.name}
@@ -260,7 +270,7 @@ const AddExecutivePage: React.FC<{
           />
         </div>
         <div>
-          <Label htmlFor="role">Role/Title</Label>
+          <Label htmlFor="role">Role/Title *</Label>
           <Input
             id="role"
             value={currentExec.role}
@@ -269,9 +279,26 @@ const AddExecutivePage: React.FC<{
             className="mt-1"
           />
         </div>
+        <div>
+          <Label htmlFor="compensation">Total Compensation ($)</Label>
+          <Input
+            id="compensation"
+            type="number"
+            value={currentExec.compensation || ''}
+            onChange={(e) => setCurrentExec({...currentExec, compensation: parseInt(e.target.value) || 0})}
+            placeholder="150000"
+            className="mt-1"
+          />
+          <p className="text-xs text-muted-foreground mt-1">Include salary + bonus + benefits</p>
+        </div>
       </div>
       
-      <Button onClick={addExecutive} className="w-full">
+      <Button 
+        onClick={addExecutive} 
+        className="w-full"
+        disabled={isAddDisabled}
+      >
+        <Users className="w-4 h-4 mr-2" />
         Add Executive
       </Button>
       
@@ -283,6 +310,9 @@ const AddExecutivePage: React.FC<{
               <div>
                 <p className="font-semibold">{exec.name}</p>
                 <p className="text-sm text-muted-foreground">{exec.role}</p>
+                {exec.compensation > 0 && (
+                  <p className="text-xs text-muted-foreground">${exec.compensation.toLocaleString()}/year</p>
+                )}
               </div>
               <Button
                 variant="ghost"
@@ -336,7 +366,7 @@ const ScoringPage: React.FC<{
   
   const calculateVerdict = (exec: ExecutiveScore): 'keeper' | 'coach' | 'replace' => {
     const avgScore = (exec.numbersObsession + exec.coachability + exec.clockSpeed + 
-                     exec.executionFocus - exec.replaceability + exec.complexityShield) / 6;
+                     exec.executionFocus - exec.replaceability + exec.complexityShield + exec.compensationScore) / 7;
     if (avgScore >= 7) return 'keeper';
     if (avgScore >= 4) return 'coach';
     return 'replace';
@@ -354,10 +384,48 @@ const ScoringPage: React.FC<{
       </div>
       
       <p className="text-lg text-muted-foreground">{currentExec.role}</p>
+      {currentExec.compensation > 0 && (
+        <p className="text-sm text-muted-foreground">
+          Compensation: ${currentExec.compensation.toLocaleString()}/year
+        </p>
+      )}
       
       <div className="space-y-6">
         <Card className="p-6">
-          <h3 className="text-lg font-semibold mb-4">1. Numbers Obsession (Deal Breaker)</h3>
+          <h3 className="text-lg font-semibold mb-4 flex items-center">
+            <DollarSign className="w-5 h-5 mr-2" />
+            1. Compensation vs. Market Rate
+          </h3>
+          <p className="text-sm text-muted-foreground mb-4">
+            PE firms will benchmark every executive against market rates. Overpaid = immediate target.
+          </p>
+          <RadioGroup 
+            value={currentExec.compensationScore?.toString()} 
+            onValueChange={(value) => updateScore('compensationScore', parseInt(value))}
+          >
+            <div className="space-y-2">
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="10" id="comp-10" />
+                <Label htmlFor="comp-10">Below market rate - great value for PE</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="7" id="comp-7" />
+                <Label htmlFor="comp-7">At market rate - fair compensation</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="3" id="comp-3" />
+                <Label htmlFor="comp-3">10-20% above market - slight overpay</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="1" id="comp-1" />
+                <Label htmlFor="comp-1">20%+ above market - PE will cut immediately</Label>
+              </div>
+            </div>
+          </RadioGroup>
+        </Card>
+
+        <Card className="p-6">
+          <h3 className="text-lg font-semibold mb-4">2. Numbers Obsession (Deal Breaker)</h3>
           <p className="text-sm text-muted-foreground mb-4">
             Can they quote their KPIs without looking? Do they live in spreadsheets?
           </p>
@@ -383,7 +451,7 @@ const ScoringPage: React.FC<{
         </Card>
         
         <Card className="p-6">
-          <h3 className="text-lg font-semibold mb-4">2. Coachability vs Ego</h3>
+          <h3 className="text-lg font-semibold mb-4">3. Coachability vs Ego</h3>
           <p className="text-sm text-muted-foreground mb-4">
             Will they accept a 28-year-old MBA as their boss? Can they handle "That's not how PE does it"?
           </p>
@@ -409,7 +477,7 @@ const ScoringPage: React.FC<{
         </Card>
         
         <Card className="p-6">
-          <h3 className="text-lg font-semibold mb-4">3. Clock Speed</h3>
+          <h3 className="text-lg font-semibold mb-4">4. Clock Speed</h3>
           <p className="text-sm text-muted-foreground mb-4">
             PE moves at 3x normal speed. Daily reports, weekly reviews, always on.
           </p>
@@ -435,7 +503,7 @@ const ScoringPage: React.FC<{
         </Card>
         
         <Card className="p-6">
-          <h3 className="text-lg font-semibold mb-4">4. Execution vs Philosophy</h3>
+          <h3 className="text-lg font-semibold mb-4">5. Execution vs Philosophy</h3>
           <p className="text-sm text-muted-foreground mb-4">
             PE wants doers, not thinkers. Results, not strategy decks.
           </p>
@@ -461,7 +529,7 @@ const ScoringPage: React.FC<{
         </Card>
         
         <Card className="p-6">
-          <h3 className="text-lg font-semibold mb-4">5. Complexity Shield</h3>
+          <h3 className="text-lg font-semibold mb-4">6. Complexity Shield</h3>
           <p className="text-sm text-muted-foreground mb-4">
             How hard is their job for PE to understand? Complex = safer.
           </p>
@@ -487,7 +555,7 @@ const ScoringPage: React.FC<{
         </Card>
         
         <Card className="p-6">
-          <h3 className="text-lg font-semibold mb-4">6. Replaceability (Lower is Better)</h3>
+          <h3 className="text-lg font-semibold mb-4">7. Replaceability (Lower is Better)</h3>
           <p className="text-sm text-muted-foreground mb-4">
             How fast could PE replace them? What walks out the door?
           </p>
@@ -536,7 +604,7 @@ const ScoringPage: React.FC<{
                 ...exec,
                 verdict: calculateVerdict(exec),
                 overallScore: (exec.numbersObsession + exec.coachability + exec.clockSpeed + 
-                              exec.executionFocus - exec.replaceability + exec.complexityShield) / 6
+                              exec.executionFocus - exec.replaceability + exec.complexityShield + exec.compensationScore) / 7
               }));
               setExecutives(updatedExecs);
             }}
@@ -612,6 +680,9 @@ const ReportPage: React.FC<{
                   <div>
                     <p className="font-semibold">{exec.name}</p>
                     <p className="text-sm text-muted-foreground">{exec.role}</p>
+                    {exec.compensation > 0 && (
+                      <p className="text-xs text-muted-foreground">${exec.compensation.toLocaleString()}/year</p>
+                    )}
                   </div>
                   <div className="text-right">
                     <p className="text-sm font-semibold">Score: {exec.overallScore?.toFixed(1)}</p>
@@ -632,6 +703,9 @@ const ReportPage: React.FC<{
                   <div>
                     <p className="font-semibold">{exec.name}</p>
                     <p className="text-sm text-muted-foreground">{exec.role}</p>
+                    {exec.compensation > 0 && (
+                      <p className="text-xs text-muted-foreground">${exec.compensation.toLocaleString()}/year</p>
+                    )}
                   </div>
                   <div className="text-right">
                     <p className="text-sm font-semibold">Score: {exec.overallScore?.toFixed(1)}</p>
@@ -652,6 +726,9 @@ const ReportPage: React.FC<{
                   <div>
                     <p className="font-semibold">{exec.name}</p>
                     <p className="text-sm text-muted-foreground">{exec.role}</p>
+                    {exec.compensation > 0 && (
+                      <p className="text-xs text-muted-foreground">${exec.compensation.toLocaleString()}/year</p>
+                    )}
                   </div>
                   <div className="text-right">
                     <p className="text-sm font-semibold">Score: {exec.overallScore?.toFixed(1)}</p>
@@ -679,6 +756,9 @@ const ReportPage: React.FC<{
           )}
           <p className="text-sm">
             • Create retention packages for your {keepers.length} keeper{keepers.length !== 1 ? 's' : ''}
+          </p>
+          <p className="text-sm">
+            • Benchmark all executive compensation against market rates
           </p>
           <p className="text-sm">
             • Document all key processes before any transitions
