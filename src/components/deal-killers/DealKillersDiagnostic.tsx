@@ -17,7 +17,10 @@ import {
   HeartCrack,
   Bomb,
   FileWarning,
-  Shield
+  Shield,
+  ChevronLeft,
+  CheckCircle,
+  XCircle
 } from 'lucide-react';
 
 interface DiagnosticQuestion {
@@ -41,6 +44,8 @@ export const DealKillersDiagnostic: React.FC = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Answer[]>([]);
   const [showResults, setShowResults] = useState(false);
+  const [justAnswered, setJustAnswered] = useState<'yes' | 'no' | null>(null);
+  const [showFeedback, setShowFeedback] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
   const { markModuleComplete } = useProgress();
 
@@ -50,7 +55,7 @@ export const DealKillersDiagnostic: React.FC = () => {
       id: 'control-freak',
       category: 'mindset',
       question: "Will you refuse PE's changes if you disagree with them?",
-      subtext: "Be honest - when they want to rebrand, restructure, or pivot",
+      subtext: "Think about rebranding, restructuring, or strategic pivots",
       yesIsFatal: true,
       severity: 'fatal'
     },
@@ -58,15 +63,15 @@ export const DealKillersDiagnostic: React.FC = () => {
       id: 'my-way',
       category: 'mindset',
       question: "Do you believe you know better than PE how to grow your business?",
-      subtext: "They've done this 50 times, you've done it once",
+      subtext: "They've done this 50 times across their portfolio",
       yesIsFatal: true,
       severity: 'fatal'
     },
     {
       id: 'just-money',
       category: 'mindset',
-      question: "Do you want PE money but NOT their operational involvement?",
-      subtext: "Wrong answer: PE is buying control, not giving loans",
+      question: "Are you looking for just capital, not operational help?",
+      subtext: "PE is about partnership and transformation, not just funding",
       yesIsFatal: true,
       severity: 'fatal'
     },
@@ -74,15 +79,15 @@ export const DealKillersDiagnostic: React.FC = () => {
       id: 'company-name',
       category: 'mindset',
       question: "Would you fight to keep your company name if PE wants to change it?",
-      subtext: "Your ego vs. their portfolio strategy",
+      subtext: "Sometimes rebranding is part of the growth strategy",
       yesIsFatal: true,
       severity: 'critical'
     },
     {
       id: 'fire-friend',
       category: 'mindset',
-      question: "Would you block PE from firing your underperforming friend/golf buddy?",
-      subtext: "Loyalty vs. business performance",
+      question: "Would you block PE from firing your underperforming friend?",
+      subtext: "Personal relationships vs. business performance",
       yesIsFatal: true,
       severity: 'critical'
     },
@@ -92,7 +97,7 @@ export const DealKillersDiagnostic: React.FC = () => {
       id: 'spouse-payroll',
       category: 'nepotism',
       question: "Is your spouse on payroll but doing less than a full-time job?",
-      subtext: "$150K for 'marketing' = managing the Christmas party",
+      subtext: "Be honest about their actual contribution",
       yesIsFatal: true,
       severity: 'fatal'
     },
@@ -100,7 +105,7 @@ export const DealKillersDiagnostic: React.FC = () => {
       id: 'family-employees',
       category: 'nepotism',
       question: "Do you have family members in key roles who couldn't get hired elsewhere?",
-      subtext: "Your nephew the 'VP' who can't spell VP",
+      subtext: "Would they get the same role at another company?",
       yesIsFatal: true,
       severity: 'critical'
     },
@@ -108,15 +113,15 @@ export const DealKillersDiagnostic: React.FC = () => {
       id: 'hidden-incompetence',
       category: 'nepotism',
       question: "Are you hiding someone's incompetence because of personal relationships?",
-      subtext: "PE will test everyone - the truth always comes out",
+      subtext: "PE will test everyone individually",
       yesIsFatal: true,
       severity: 'fatal'
     },
     {
       id: 'ghost-employees',
       category: 'nepotism',
-      question: "Do you have anyone on payroll who rarely/never shows up?",
-      subtext: "Kids on payroll, consultants who don't consult",
+      question: "Do you have anyone on payroll who rarely shows up?",
+      subtext: "Kids, consultants, advisors who don't actually work",
       yesIsFatal: true,
       severity: 'fatal'
     },
@@ -124,15 +129,15 @@ export const DealKillersDiagnostic: React.FC = () => {
       id: 'protect-weak',
       category: 'nepotism',
       question: "Will you lie about someone's performance to protect them?",
-      subtext: "PE will interview everyone separately - lies get exposed",
+      subtext: "PE interviews everyone separately - truth comes out",
       yesIsFatal: true,
       severity: 'fatal'
     },
     {
       id: 'made-up-roles',
       category: 'nepotism',
-      question: "Did you create BS titles/roles just to justify family salaries?",
-      subtext: "'Chief Happiness Officer' = owner's daughter",
+      question: "Did you create titles just to justify family salaries?",
+      subtext: "Chief Happiness Officer, Brand Ambassador, etc.",
       yesIsFatal: true,
       severity: 'critical'
     },
@@ -141,16 +146,16 @@ export const DealKillersDiagnostic: React.FC = () => {
     {
       id: 'pending-lawsuit',
       category: 'hidden',
-      question: "Are there ANY pending or threatened lawsuits you haven't disclosed?",
-      subtext: "Even that employee who 'might' sue",
+      question: "Are there ANY pending or threatened lawsuits?",
+      subtext: "Even verbal threats or potential claims",
       yesIsFatal: true,
       severity: 'fatal'
     },
     {
       id: 'side-deals',
       category: 'hidden',
-      question: "Do you have any handshake deals or verbal agreements not in writing?",
-      subtext: "That customer discount, that employee promise",
+      question: "Do you have any handshake deals or verbal agreements?",
+      subtext: "Customer discounts, employee promises, supplier terms",
       yesIsFatal: true,
       severity: 'fatal'
     },
@@ -158,22 +163,22 @@ export const DealKillersDiagnostic: React.FC = () => {
       id: 'personal-expenses',
       category: 'hidden',
       question: "Are you running personal expenses through the business?",
-      subtext: "Country club, cars, vacation home 'retreats'",
+      subtext: "Country club, cars, vacation homes, family trips",
       yesIsFatal: true,
       severity: 'critical'
     },
     {
       id: 'revenue-games',
       category: 'hidden',
-      question: "Have you played ANY games with revenue timing or recognition?",
-      subtext: "Pulling forward Q1, channel stuffing, prebilling",
+      question: "Have you played ANY games with revenue timing?",
+      subtext: "Pulling forward sales, channel stuffing, prebilling",
       yesIsFatal: true,
       severity: 'fatal'
     },
     {
       id: 'regulatory-issues',
       category: 'hidden',
-      question: "Are you non-compliant with ANY regulations you're supposed to follow?",
+      question: "Are you non-compliant with ANY regulations?",
       subtext: "Licenses, permits, safety, employment law",
       yesIsFatal: true,
       severity: 'fatal'
@@ -181,7 +186,7 @@ export const DealKillersDiagnostic: React.FC = () => {
     {
       id: 'tax-problems',
       category: 'hidden',
-      question: "Do you have any tax issues, payment plans, or unfiled returns?",
+      question: "Do you have any tax issues or payment plans?",
       subtext: "IRS, state, payroll, sales tax",
       yesIsFatal: true,
       severity: 'fatal'
@@ -189,8 +194,8 @@ export const DealKillersDiagnostic: React.FC = () => {
     {
       id: 'customer-leaving',
       category: 'hidden',
-      question: "Is any major customer planning to leave that you haven't mentioned?",
-      subtext: "Or 'considering' other options",
+      question: "Is any major customer planning to leave?",
+      subtext: "Or even considering other options",
       yesIsFatal: true,
       severity: 'fatal'
     },
@@ -213,28 +218,28 @@ export const DealKillersDiagnostic: React.FC = () => {
     {
       id: 'no-contracts',
       category: 'business',
-      question: "Do key employees lack employment contracts and non-competes?",
+      question: "Do key employees lack employment contracts?",
       yesIsFatal: true,
       severity: 'critical'
     },
     {
       id: 'owner-dependent',
       category: 'business',
-      question: "Would the business struggle to operate without you for 30 days?",
+      question: "Would the business struggle without you for 30 days?",
       yesIsFatal: true,
       severity: 'critical'
     },
     {
       id: 'no-financials',
       category: 'business',
-      question: "Do you lack reviewed/audited financials for the last 3 years?",
+      question: "Do you lack reviewed/audited financials?",
       yesIsFatal: true,
       severity: 'critical'
     },
     {
       id: 'ancient-tech',
       category: 'business',
-      question: "Are you still using paper or Excel for critical business processes?",
+      question: "Are you still using paper or Excel for critical processes?",
       yesIsFatal: true,
       severity: 'major'
     },
@@ -251,36 +256,36 @@ export const DealKillersDiagnostic: React.FC = () => {
       id: 'ebitda-games',
       category: 'financial',
       question: "Are your EBITDA adjustments over 20% of reported EBITDA?",
-      subtext: "Adding back everything including the kitchen sink",
+      subtext: "All those add-backs you're claiming",
       yesIsFatal: true,
       severity: 'critical'
     },
     {
       id: 'working-capital',
       category: 'financial',
-      question: "Do you have deteriorating working capital or cash flow issues?",
+      question: "Do you have deteriorating working capital?",
       yesIsFatal: true,
       severity: 'critical'
     },
     {
       id: 'hidden-liabilities',
       category: 'financial',
-      question: "Are there ANY unrecorded liabilities or commitments?",
-      subtext: "Warranty claims, purchase commitments, lease obligations",
+      question: "Are there ANY unrecorded liabilities?",
+      subtext: "Warranties, commitments, lease obligations",
       yesIsFatal: true,
       severity: 'fatal'
     },
     {
       id: 'inventory-issues',
       category: 'financial',
-      question: "Is inventory overstated or includes obsolete items?",
+      question: "Is inventory overstated or obsolete?",
       yesIsFatal: true,
       severity: 'major'
     },
     {
       id: 'bad-receivables',
       category: 'financial',
-      question: "Do you have uncollectible receivables still on the books?",
+      question: "Do you have uncollectible receivables on the books?",
       yesIsFatal: true,
       severity: 'major'
     }
@@ -290,50 +295,10 @@ export const DealKillersDiagnostic: React.FC = () => {
   const totalQuestions = questions.length;
   const progress = ((currentQuestionIndex + 1) / totalQuestions) * 100;
 
-  // Load saved data from localStorage on mount
-  useEffect(() => {
-    const savedAnswers = localStorage.getItem('deal-killers-answers');
-    const savedIndex = localStorage.getItem('deal-killers-current-index');
-    const savedResults = localStorage.getItem('deal-killers-show-results');
-    const savedCompleted = localStorage.getItem('deal-killers-completed');
-
-    if (savedAnswers) {
-      try {
-        setAnswers(JSON.parse(savedAnswers));
-      } catch (e) {
-        console.error('Error loading saved answers:', e);
-      }
-    }
-
-    if (savedIndex) {
-      setCurrentQuestionIndex(parseInt(savedIndex));
-    }
-
-    if (savedResults === 'true') {
-      setShowResults(true);
-    }
-
-    if (savedCompleted === 'true') {
-      setIsCompleted(true);
-    }
-  }, []);
-
-  // Save to localStorage whenever state changes
-  useEffect(() => {
-    localStorage.setItem('deal-killers-answers', JSON.stringify(answers));
-  }, [answers]);
-
-  useEffect(() => {
-    localStorage.setItem('deal-killers-current-index', currentQuestionIndex.toString());
-  }, [currentQuestionIndex]);
-
-  useEffect(() => {
-    localStorage.setItem('deal-killers-show-results', showResults.toString());
-  }, [showResults]);
-
-  useEffect(() => {
-    localStorage.setItem('deal-killers-completed', isCompleted.toString());
-  }, [isCompleted]);
+  // Determine which answer is good/bad
+  const goodAnswer = currentQuestion.yesIsFatal ? 'no' : 
+                     currentQuestion.noIsFatal ? 'yes' : 'no';
+  const badAnswer = goodAnswer === 'yes' ? 'no' : 'yes';
 
   const handleAnswer = (answer: 'yes' | 'no') => {
     const question = questions[currentQuestionIndex];
@@ -348,18 +313,27 @@ export const DealKillersDiagnostic: React.FC = () => {
     };
 
     setAnswers([...answers, newAnswer]);
+    setJustAnswered(answer);
+    setShowFeedback(true);
 
-    if (currentQuestionIndex < questions.length - 1) {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
-    } else {
-      setShowResults(true);
-    }
+    // Auto-advance after showing feedback
+    setTimeout(() => {
+      if (currentQuestionIndex < questions.length - 1) {
+        setCurrentQuestionIndex(currentQuestionIndex + 1);
+        setJustAnswered(null);
+        setShowFeedback(false);
+      } else {
+        setShowResults(true);
+      }
+    }, 2000);
   };
 
   const goBack = () => {
     if (currentQuestionIndex > 0) {
       setAnswers(answers.slice(0, -1));
       setCurrentQuestionIndex(currentQuestionIndex - 1);
+      setJustAnswered(null);
+      setShowFeedback(false);
     }
   };
 
@@ -383,23 +357,12 @@ export const DealKillersDiagnostic: React.FC = () => {
 
   const getCategoryIcon = (category: string) => {
     switch(category) {
-      case 'mindset': return <Brain className="w-6 h-6" />;
-      case 'nepotism': return <Users className="w-6 h-6" />;
-      case 'hidden': return <EyeOff className="w-6 h-6" />;
-      case 'business': return <FileWarning className="w-6 h-6" />;
-      case 'financial': return <DollarSign className="w-6 h-6" />;
-      default: return <AlertTriangle className="w-6 h-6" />;
-    }
-  };
-
-  const getCategoryColor = (category: string) => {
-    switch(category) {
-      case 'mindset': return 'text-purple-500';
-      case 'nepotism': return 'text-pink-500';
-      case 'hidden': return 'text-red-500';
-      case 'business': return 'text-orange-500';
-      case 'financial': return 'text-yellow-500';
-      default: return 'text-muted-foreground';
+      case 'mindset': return <Brain className="w-5 h-5" />;
+      case 'nepotism': return <Users className="w-5 h-5" />;
+      case 'hidden': return <EyeOff className="w-5 h-5" />;
+      case 'business': return <FileWarning className="w-5 h-5" />;
+      case 'financial': return <DollarSign className="w-5 h-5" />;
+      default: return <AlertTriangle className="w-5 h-5" />;
     }
   };
 
@@ -407,11 +370,11 @@ export const DealKillersDiagnostic: React.FC = () => {
     <div className="max-w-4xl mx-auto p-6 space-y-6">
       {/* Header */}
       <div className="text-center space-y-2">
-        <h1 className="text-4xl font-bold bg-gradient-to-r from-red-500 to-orange-500 bg-clip-text text-transparent">
+        <h1 className="text-4xl font-bold bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
           Deal Killer Diagnostic
         </h1>
         <p className="text-xl text-muted-foreground">
-          30 Yes/No Questions That Determine Your PE Fundability
+          30 Questions That Determine Your PE Fundability
         </p>
       </div>
 
@@ -427,11 +390,17 @@ export const DealKillersDiagnostic: React.FC = () => {
       </Card>
 
       {/* Question Card */}
-      <Card className="p-8 bg-card border-border">
+      <Card className={`p-8 border-2 transition-all duration-500 ${
+        showFeedback && justAnswered === badAnswer ? 
+          'bg-destructive/10 border-destructive' : 
+        showFeedback && justAnswered === goodAnswer ?
+          'bg-green-500/10 border-green-500' :
+          'bg-card border-border'
+      }`}>
         <div className="space-y-6">
           {/* Category Badge */}
           <div className="flex items-center justify-center">
-            <div className={`flex items-center gap-2 px-4 py-2 rounded-full bg-muted ${getCategoryColor(currentQuestion.category)}`}>
+            <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-muted text-muted-foreground">
               {getCategoryIcon(currentQuestion.category)}
               <span className="text-sm font-semibold capitalize">
                 {currentQuestion.category === 'nepotism' ? 'Dead Weight' : currentQuestion.category}
@@ -445,55 +414,73 @@ export const DealKillersDiagnostic: React.FC = () => {
               {currentQuestion.question}
             </h2>
             {currentQuestion.subtext && (
-              <p className="text-muted-foreground italic">
+              <p className="text-muted-foreground text-sm">
                 {currentQuestion.subtext}
               </p>
             )}
           </div>
 
-          {/* Warning if applicable */}
-          {(currentQuestion.yesIsFatal || currentQuestion.noIsFatal) && (
-            <Alert className="bg-destructive/10 border-destructive/30">
-              <Skull className="h-4 w-4 text-destructive" />
+          {/* Warning/Feedback when bad answer is clicked */}
+          {showFeedback && justAnswered === badAnswer && (
+            <Alert className="bg-destructive/10 border-destructive animate-pulse">
+              <AlertTriangle className="h-5 w-5 text-destructive" />
               <AlertDescription className="text-destructive">
-                <strong>WARNING:</strong> This question can be a deal killer
+                <strong>⚠️ DEAL KILLER WARNING:</strong> This issue will significantly 
+                impact your PE deal. {currentQuestion.severity === 'fatal' ? 
+                  'This could kill the entire transaction.' : 
+                  'This will reduce your valuation substantially.'}
               </AlertDescription>
             </Alert>
           )}
 
-          {/* Answer Buttons */}
-          <div className="grid grid-cols-2 gap-4">
-            <Button
-              onClick={() => handleAnswer('yes')}
-              size="lg"
-              className="h-20 text-lg bg-red-600 hover:bg-red-700 text-white"
-            >
-              YES
-              {currentQuestion.yesIsFatal && (
-                <Skull className="ml-2 w-5 h-5" />
-              )}
-            </Button>
-            <Button
-              onClick={() => handleAnswer('no')}
-              size="lg"
-              className="h-20 text-lg bg-emerald-600 hover:bg-emerald-700 text-white"
-            >
-              NO
-              {currentQuestion.noIsFatal && (
-                <Skull className="ml-2 w-5 h-5" />
-              )}
-            </Button>
-          </div>
+          {/* Success feedback for good answer */}
+          {showFeedback && justAnswered === goodAnswer && (
+            <div className="text-center p-4 rounded-lg bg-green-500/10 animate-pulse">
+              <div className="flex items-center justify-center gap-2 text-green-500">
+                <CheckCircle className="w-5 h-5" />
+                <span className="font-semibold">Good - No Issue Here</span>
+              </div>
+            </div>
+          )}
+
+          {/* Answer Buttons - Show colors before clicking */}
+          {!showFeedback && (
+            <div className="grid grid-cols-2 gap-4">
+              <Button
+                onClick={() => handleAnswer('yes')}
+                size="lg"
+                className={`h-20 text-lg text-white border-0 transition-all ${
+                  goodAnswer === 'yes' ? 
+                    'bg-green-600 hover:bg-green-700' : 
+                    'bg-yellow-600 hover:bg-yellow-700'
+                }`}
+              >
+                YES
+              </Button>
+              <Button
+                onClick={() => handleAnswer('no')}
+                size="lg"
+                className={`h-20 text-lg text-white border-0 transition-all ${
+                  goodAnswer === 'no' ? 
+                    'bg-green-600 hover:bg-green-700' : 
+                    'bg-yellow-600 hover:bg-yellow-700'
+                }`}
+              >
+                NO
+              </Button>
+            </div>
+          )}
 
           {/* Back Button */}
-          {currentQuestionIndex > 0 && (
+          {currentQuestionIndex > 0 && !showFeedback && (
             <div className="flex justify-center">
               <Button
                 onClick={goBack}
                 variant="outline"
                 className="border-border hover:bg-muted"
               >
-                Go Back
+                <ChevronLeft className="w-4 h-4 mr-1" />
+                Previous Question
               </Button>
             </div>
           )}
@@ -501,12 +488,11 @@ export const DealKillersDiagnostic: React.FC = () => {
       </Card>
 
       {/* Context Card */}
-      <Card className="p-6 bg-gradient-to-r from-muted/50 to-muted border-border">
-        <h3 className="text-sm font-semibold text-muted-foreground mb-2">Why This Matters:</h3>
-        <p className="text-foreground text-sm">
-          PE firms have seen every trick, every hidden issue, every type of difficult seller. 
-          They have forensic accountants, operational experts, and interview specialists who will 
-          uncover everything. The only winning move is brutal honesty - with them and yourself.
+      <Card className="p-4 bg-card border-border">
+        <p className="text-muted-foreground text-sm">
+          <strong className="text-foreground">Why these questions matter:</strong> PE firms have seen it all. 
+          They use forensic accountants, operational experts, and behavioral interviews to uncover everything. 
+          Answer honestly - this diagnostic is for your benefit.
         </p>
       </Card>
     </div>
