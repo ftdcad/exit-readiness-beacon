@@ -33,6 +33,7 @@ import { ScenarioPlanningPage } from "./pages/ScenarioPlanningPage";
 import { ScheduleConsultationPage } from "./pages/ScheduleConsultationPage";
 import AssetFreeEducationPage from "./pages/AssetFreeEducationPage";
 import TimeKillsDealsPage from "./pages/TimeKillsDealsPage";
+import ProfessionalAdvisorsPage from "./pages/ProfessionalAdvisorsPage";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -72,7 +73,6 @@ const App = () => {
               <Route path="/" element={<Index />} />
               <Route path="/assessment" element={<AssessmentPage />} />
               <Route path="/auth" element={<AuthPage />} />
-              <Route path="/admin/login" element={<AdminLogin />} />
               <Route 
                 path="/admin/dashboard" 
                 element={
@@ -128,16 +128,6 @@ const App = () => {
                 } 
               />
               <Route 
-                path="/portal/week-1/data-room" 
-                element={
-                  <ClientRoute>
-                    <ClientPortalLayout>
-                      <DataRoomPage />
-                    </ClientPortalLayout>
-                  </ClientRoute>
-                } 
-              />
-              <Route 
                 path="/portal/week-1/glossary" 
                 element={
                   <ClientRoute>
@@ -177,8 +167,28 @@ const App = () => {
                   </ClientRoute>
                 } 
               />
+              <Route 
+                path="/portal/week-1/professional-advisors" 
+                element={
+                  <ClientRoute>
+                    <ClientPortalLayout>
+                      <ProfessionalAdvisorsPage />
+                    </ClientPortalLayout>
+                  </ClientRoute>
+                } 
+              />
               
               {/* Week 2 Routes - Deal Readiness */}
+              <Route 
+                path="/portal/week-2/data-room" 
+                element={
+                  <ClientRoute>
+                    <ClientPortalLayout>
+                      <DataRoomPage />
+                    </ClientPortalLayout>
+                  </ClientRoute>
+                } 
+              />
               <Route 
                 path="/portal/week-2/executive-discovery" 
                 element={

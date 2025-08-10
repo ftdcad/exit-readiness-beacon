@@ -21,6 +21,7 @@ export const moduleConfigurations: ModuleConfig[] = [
   { name: 'EBITDA Mastery', path: '/portal/week-1/ebitda-course', weekNumber: 1, order: 3 },
   { name: 'Asset Free Education', path: '/portal/week-1/asset-free-education', weekNumber: 1, order: 4 },
   { name: 'Time Kills Deals', path: '/portal/week-1/time-kills-deals', weekNumber: 1, order: 5 },
+  { name: 'Professional Advisors', path: '/portal/week-1/professional-advisors', weekNumber: 1, order: 6 },
   
   // Week 2 - Deal Readiness (Data Room moved here as first step, Asset Workshop as second)
   { name: 'Data Room', path: '/portal/week-2/data-room', weekNumber: 2, order: 1 },
