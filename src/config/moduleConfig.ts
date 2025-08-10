@@ -1,4 +1,3 @@
-
 export interface ModuleConfig {
   name: string;
   path: string;
@@ -22,7 +21,7 @@ export const moduleConfigurations: ModuleConfig[] = [
   { name: 'Know Your Buyer', path: '/portal/week-1/know-your-buyer', weekNumber: 1, order: 4 },
   { name: 'Asset Free Education', path: '/portal/week-1/asset-free-education', weekNumber: 1, order: 5 },
   { name: 'Time Kills Deals', path: '/portal/week-1/time-kills-deals', weekNumber: 1, order: 6 },
-  { name: 'EBITDA Mastery', path: '/portal/week-1/ebitda-course', weekNumber: 1, order: 7 },
+  { name: 'Understanding EBITDA', path: '/portal/week-1/ebitda-course', weekNumber: 1, order: 7 },
   
   // Week 2 - Deal Readiness (Data Room moved here as first step, Asset Workshop as second)
   { name: 'Data Room', path: '/portal/week-2/data-room', weekNumber: 2, order: 1 },
