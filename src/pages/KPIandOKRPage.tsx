@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
@@ -93,41 +94,11 @@ const SimpleGauge = ({ value, label, status }: any) => {
   );
 };
 
-// Trend Sparkline Component
-const TrendLine = ({ data, positive }: any) => {
-  const max = Math.max(...data);
-  const min = Math.min(...data);
-  const points = data.map((val: number, i: number) => {
-    const x = (i / (data.length - 1)) * 100;
-    const y = 100 - ((val - min) / (max - min)) * 100;
-    return `${x},${y}`;
-  }).join(' ');
-  
-  return (
-    <div className="flex items-center gap-2">
-      <svg className="w-20 h-10" viewBox="0 0 100 100" preserveAspectRatio="none">
-        <polyline
-          points={points}
-          fill="none"
-          stroke={positive ? '#10b981' : '#ef4444'}
-          strokeWidth="3"
-          vectorEffect="non-scaling-stroke"
-        />
-      </svg>
-      {positive ? (
-        <TrendingUp className="w-4 h-4 text-green-400" />
-      ) : (
-        <TrendingDown className="w-4 h-4 text-red-400" />
-      )}
-    </div>
-  );
-};
-
 const peValueDriverTemplates = [
   {
     metricName: "Customer Concentration",
     category: "Customer" as const,
-    currentValue: 42,
+    currentValue: 0,
     targetValue: 25,
     unitOfMeasure: "% of revenue",
     valuationImpact: "High" as const,
@@ -136,7 +107,7 @@ const peValueDriverTemplates = [
   {
     metricName: "Gross Margin Improvement",
     category: "Financial" as const,
-    currentValue: 35,
+    currentValue: 0,
     targetValue: 42,
     unitOfMeasure: "%",
     valuationImpact: "High" as const,
@@ -145,7 +116,7 @@ const peValueDriverTemplates = [
   {
     metricName: "Monthly Recurring Revenue",
     category: "Growth" as const,
-    currentValue: 250000,
+    currentValue: 0,
     targetValue: 400000,
     unitOfMeasure: "$",
     valuationImpact: "High" as const,
@@ -154,7 +125,7 @@ const peValueDriverTemplates = [
   {
     metricName: "Employee Turnover Rate",
     category: "Operational" as const,
-    currentValue: 25,
+    currentValue: 0,
     targetValue: 10,
     unitOfMeasure: "% annual",
     valuationImpact: "Medium" as const,
@@ -163,7 +134,7 @@ const peValueDriverTemplates = [
   {
     metricName: "Customer NPS Score",
     category: "Quality" as const,
-    currentValue: 32,
+    currentValue: 0,
     targetValue: 50,
     unitOfMeasure: "score",
     valuationImpact: "Medium" as const,
@@ -182,79 +153,6 @@ export default function KPIandOKRPage() {
   const [showTemplates, setShowTemplates] = useState(false);
   const [showSetup, setShowSetup] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-
-  // Dashboard state
-  const [dashboardMetrics, setDashboardMetrics] = useState([
-    {
-      id: '1',
-      name: 'EBITDA Margin',
-      current: 18,
-      target: 25,
-      unit: '%',
-      trend: [15, 16, 16, 17, 17, 18, 18, 18],
-      valueImpact: 1200000,
-      status: 'amber',
-      action: 'Reduce operating expenses by 10%',
-      progress: 52
-    },
-    {
-      id: '2',
-      name: 'Customer Concentration',
-      current: 35,
-      target: 20,
-      unit: '%',
-      trend: [45, 44, 42, 40, 38, 36, 35, 35],
-      valueImpact: 1500000,
-      status: 'red',
-      action: 'Add 5 new customers over $100K',
-      progress: 33,
-      inverse: true
-    },
-    {
-      id: '3',
-      name: 'Recurring Revenue',
-      current: 45,
-      target: 70,
-      unit: '%',
-      trend: [30, 32, 35, 38, 40, 42, 45, 45],
-      valueImpact: 900000,
-      status: 'amber',
-      action: 'Convert 10 project clients to retainers',
-      progress: 56
-    },
-    {
-      id: '4',
-      name: 'Revenue Growth YoY',
-      current: 22,
-      target: 30,
-      unit: '%',
-      trend: [10, 12, 15, 18, 20, 22, 22, 22],
-      valueImpact: 800000,
-      status: 'green',
-      action: 'Launch new service line Q2',
-      progress: 73
-    },
-    {
-      id: '5',
-      name: 'Customer Retention',
-      current: 85,
-      target: 95,
-      unit: '%',
-      trend: [80, 82, 83, 84, 84, 85, 85, 85],
-      valueImpact: 600000,
-      status: 'amber',
-      action: 'Implement quarterly business reviews',
-      progress: 50
-    }
-  ]);
-
-  const [summaryData, setSummaryData] = useState({
-    totalValueAtRisk: 5000000,
-    capturedValue: 1800000,
-    remainingOpportunity: 3200000,
-    overallHealth: 'amber',
-    daysToNextReview: 28
-  });
 
   useEffect(() => {
     loadMetrics();
@@ -301,23 +199,6 @@ export default function KPIandOKRPage() {
         }));
         
         setMetrics(formattedMetrics);
-        
-        // Convert database metrics to dashboard format
-        if (formattedMetrics.length > 0) {
-          const convertedDashboardMetrics = formattedMetrics.slice(0, 5).map((metric, index) => ({
-            id: metric.id,
-            name: metric.metricName,
-            current: metric.currentValue,
-            target: metric.targetValue,
-            unit: metric.unitOfMeasure,
-            trend: [metric.currentValue * 0.7, metric.currentValue * 0.8, metric.currentValue * 0.9, metric.currentValue],
-            valueImpact: metric.ebitdaImpact,
-            status: metric.status === 'Achieved' ? 'green' : metric.status === 'On Track' ? 'amber' : 'red',
-            action: `Improve ${metric.metricName.toLowerCase()}`,
-            progress: calculateProgress(metric)
-          }));
-          setDashboardMetrics(convertedDashboardMetrics);
-        }
         
         // Load OKR key results
         const okrIds = formattedMetrics.filter(m => m.metricType === 'OKR').map(m => m.id);
@@ -450,7 +331,7 @@ export default function KPIandOKRPage() {
       }
       
       toast.success("KPIs and OKRs saved!");
-      // Refresh dashboard data
+      // Refresh data
       loadMetrics();
     } catch (err) {
       toast.error("Failed to save metrics");
@@ -488,8 +369,8 @@ export default function KPIandOKRPage() {
     setMetrics([...metrics, newMetric]);
     setActiveTab(type);
     setShowTemplates(false);
-    setShowSetup(true); // CRITICAL: Keep setup panel open
-    setIsEditing(true); // Mark as actively editing
+    setShowSetup(true);
+    setIsEditing(true);
     
     if (type === 'OKR') {
       setKeyResults({
@@ -569,13 +450,6 @@ export default function KPIandOKRPage() {
     }
   };
 
-  const getTopOpportunities = () => {
-    return dashboardMetrics
-      .filter(m => m.status !== 'green')
-      .sort((a, b) => b.valueImpact - a.valueImpact)
-      .slice(0, 3);
-  };
-
   const exportMetrics = () => {
     const doc = `# KPIs and OKRs
 Generated: ${new Date().toLocaleDateString()}
@@ -624,8 +498,6 @@ ${i + 1}. ${kr.keyResult}
     return <div className="flex items-center justify-center min-h-screen"><div className="text-white/70">Loading your value drivers...</div></div>;
   }
 
-  const topOpportunities = getTopOpportunities();
-
   return (
     <div className="min-h-screen p-6">
       <div className="max-w-7xl mx-auto">
@@ -660,13 +532,15 @@ ${i + 1}. ${kr.keyResult}
           
           {showSetup && (
             <div className="px-6 pb-6 border-t border-white/10">
-              {/* Setup content - existing KPI/OKR creation functionality */}
-              <div className="mt-4 p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg">
-                <p className="text-sm text-blue-300">
-                  <BarChart3 className="w-4 h-4 inline mr-1" />
-                  Total EBITDA Impact: <span className="font-bold">${getTotalEBITDAImpact().toLocaleString()}</span>
-                </p>
-              </div>
+              {/* Total EBITDA Impact */}
+              {getTotalEBITDAImpact() > 0 && (
+                <div className="mt-4 p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg">
+                  <p className="text-sm text-blue-300">
+                    <BarChart3 className="w-4 h-4 inline mr-1" />
+                    Total EBITDA Impact: <span className="font-bold">${getTotalEBITDAImpact().toLocaleString()}</span>
+                  </p>
+                </div>
+              )}
 
               {/* Tab Navigation */}
               <div className="flex items-center gap-4 mt-6 mb-6">
@@ -718,7 +592,7 @@ ${i + 1}. ${kr.keyResult}
                         className="text-left p-3 bg-black/30 border border-white/10 rounded-lg hover:bg-white/10 transition"
                       >
                         <p className="text-white text-sm font-medium">{template.metricName}</p>
-                        <p className="text-white/60 text-xs">{template.currentValue} → {template.targetValue} {template.unitOfMeasure}</p>
+                        <p className="text-white/60 text-xs">Target: {template.targetValue} {template.unitOfMeasure}</p>
                         <p className="text-green-400 text-xs mt-1">+${template.ebitdaImpact.toLocaleString()} EBITDA</p>
                       </button>
                     ))}
@@ -744,7 +618,7 @@ ${i + 1}. ${kr.keyResult}
                 </Button>
               </div>
 
-              {/* Simplified metrics list for setup */}
+              {/* Metrics editing section */}
               {metrics.length > 0 && (
                 <div className="space-y-3 mb-6">
                   {metrics.filter(m => m.metricType === activeTab).map((metric) => (
@@ -795,8 +669,7 @@ ${i + 1}. ${kr.keyResult}
                         </div>
                       </div>
 
-                      {/* Owner and Department row */}
-                      <div className="grid grid-cols-2 gap-4">
+                      <div className="grid grid-cols-2 gap-4 mt-3">
                         <div>
                           <label className="text-xs text-white/60">Owner</label>
                           <input
@@ -840,152 +713,150 @@ ${i + 1}. ${kr.keyResult}
           )}
         </Card>
 
-        {/* Dashboard Section (Always Visible) */}
-        <div className="space-y-8">
-          {/* Executive Summary */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Card className="glass-card p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-muted-foreground">Total KPIs</p>
-                  <p className="text-3xl font-bold text-primary">
-                    {metrics.filter(m => m.metricType === 'KPI').length}
-                  </p>
+        {/* Dashboard Section - Only show if there are real metrics */}
+        {metrics.length > 0 ? (
+          <div className="space-y-8">
+            {/* Executive Summary */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <Card className="glass-card p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Total KPIs</p>
+                    <p className="text-3xl font-bold text-primary">
+                      {metrics.filter(m => m.metricType === 'KPI').length}
+                    </p>
+                  </div>
+                  <TrendingUp className="w-8 h-8 text-primary" />
                 </div>
-                <TrendingUp className="w-8 h-8 text-primary" />
-              </div>
-            </Card>
-            
-            <Card className="glass-card p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-muted-foreground">Active OKRs</p>
-                  <p className="text-3xl font-bold text-primary">
-                    {metrics.filter(m => m.metricType === 'OKR').length}
-                  </p>
+              </Card>
+              
+              <Card className="glass-card p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Active OKRs</p>
+                    <p className="text-3xl font-bold text-primary">
+                      {metrics.filter(m => m.metricType === 'OKR').length}
+                    </p>
+                  </div>
+                  <Target className="w-8 h-8 text-primary" />
                 </div>
-                <Target className="w-8 h-8 text-primary" />
-              </div>
-            </Card>
-            
-            <Card className="glass-card p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-muted-foreground">Avg. Progress</p>
-                  <p className="text-3xl font-bold text-primary">
-                    {metrics.length > 0 ? Math.round(metrics.reduce((acc, m) => acc + calculateProgress(m), 0) / metrics.length) : 0}%
-                  </p>
+              </Card>
+              
+              <Card className="glass-card p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Avg. Progress</p>
+                    <p className="text-3xl font-bold text-primary">
+                      {Math.round(metrics.reduce((acc, m) => acc + calculateProgress(m), 0) / metrics.length)}%
+                    </p>
+                  </div>
+                  <BarChart3 className="w-8 h-8 text-primary" />
                 </div>
-                <BarChart3 className="w-8 h-8 text-primary" />
+              </Card>
+            </div>
+
+            {/* Performance Overview */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <Card className="glass-card p-6">
+                <h3 className="text-xl font-semibold mb-6 flex items-center gap-2">
+                  <Target className="w-5 h-5" />
+                  Performance Gauges
+                </h3>
+                <div className="grid grid-cols-2 gap-4">
+                  {metrics.slice(0, 4).map((metric) => (
+                    <div key={metric.id} className="text-center">
+                      <SimpleGauge 
+                        value={calculateProgress(metric)} 
+                        label={metric.metricName || 'Untitled Metric'}
+                        status={metric.status === 'Achieved' ? 'green' : metric.status === 'On Track' ? 'amber' : 'red'}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </Card>
+
+              <Card className="glass-card p-6">
+                <h3 className="text-xl font-semibold mb-6 flex items-center gap-2">
+                  <TrendingUp className="w-5 h-5" />
+                  Metrics Overview
+                </h3>
+                <div className="space-y-4">
+                  {metrics.slice(0, 5).map((metric) => (
+                    <div key={metric.id} className="flex items-center justify-between">
+                      <div className="flex-1">
+                        <p className="font-medium">{metric.metricName || 'Untitled Metric'}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {metric.currentValue} / {metric.targetValue} {metric.unitOfMeasure}
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <p className={`text-sm font-medium ${getStatusColor(metric.status)}`}>
+                          {calculateProgress(metric)}%
+                        </p>
+                        <p className="text-xs text-muted-foreground">{metric.status}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+            </div>
+
+            {/* Action Focus Section */}
+            <Card className="glass-card p-6">
+              <h3 className="text-xl font-semibold mb-6 flex items-center gap-2">
+                <AlertCircle className="w-5 h-5" />
+                Action Focus
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {metrics
+                  .filter(m => calculateProgress(m) < 70)
+                  .slice(0, 3)
+                  .map((metric) => (
+                    <div key={metric.id} className="p-4 bg-orange-500/10 border border-orange-500/20 rounded-lg">
+                      <div className="flex items-center gap-2 mb-2">
+                        <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+                        <span className="text-sm font-medium">{metric.metricType}</span>
+                      </div>
+                      <p className="font-semibold">{metric.metricName || 'Untitled Metric'}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {calculateProgress(metric)}% complete - Needs attention
+                      </p>
+                      <div className="mt-2">
+                        <div className="w-full bg-orange-900/20 rounded-full h-2">
+                          <div 
+                            className="bg-orange-500 h-2 rounded-full transition-all duration-300"
+                            style={{ width: `${calculateProgress(metric)}%` }}
+                          ></div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                {metrics.filter(m => calculateProgress(m) < 70).length === 0 && (
+                  <div className="col-span-full text-center py-8 text-muted-foreground">
+                    <CheckCircle className="w-12 h-12 mx-auto mb-2 text-green-500" />
+                    <p>All metrics are performing well!</p>
+                  </div>
+                )}
               </div>
             </Card>
           </div>
-
-          {metrics.length > 0 ? (
-            <>
-              {/* Performance Overview */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <Card className="glass-card p-6">
-                  <h3 className="text-xl font-semibold mb-6 flex items-center gap-2">
-                    <Target className="w-5 h-5" />
-                    Performance Gauges
-                  </h3>
-                  <div className="grid grid-cols-2 gap-4">
-                    {metrics.slice(0, 4).map((metric) => (
-                      <div key={metric.id} className="text-center">
-                        <SimpleGauge 
-                          value={calculateProgress(metric)} 
-                          label={metric.metricName || 'Untitled Metric'}
-                          status={metric.status === 'Achieved' ? 'green' : metric.status === 'On Track' ? 'amber' : 'red'}
-                        />
-                      </div>
-                    ))}
-                  </div>
-                </Card>
-
-                <Card className="glass-card p-6">
-                  <h3 className="text-xl font-semibold mb-6 flex items-center gap-2">
-                    <TrendingUp className="w-5 h-5" />
-                    Metrics Overview
-                  </h3>
-                  <div className="space-y-4">
-                    {metrics.slice(0, 5).map((metric) => (
-                      <div key={metric.id} className="flex items-center justify-between">
-                        <div className="flex-1">
-                          <p className="font-medium">{metric.metricName || 'Untitled Metric'}</p>
-                          <p className="text-sm text-muted-foreground">
-                            {metric.currentValue} / {metric.targetValue} {metric.unitOfMeasure}
-                          </p>
-                        </div>
-                        <div className="text-right">
-                          <p className={`text-sm font-medium ${getStatusColor(metric.status)}`}>
-                            {calculateProgress(metric)}%
-                          </p>
-                          <p className="text-xs text-muted-foreground">{metric.status}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </Card>
-              </div>
-
-              {/* Action Focus Section */}
-              <Card className="glass-card p-6">
-                <h3 className="text-xl font-semibold mb-6 flex items-center gap-2">
-                  <AlertCircle className="w-5 h-5" />
-                  Action Focus
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {metrics
-                    .filter(m => calculateProgress(m) < 70)
-                    .slice(0, 3)
-                    .map((metric) => (
-                      <div key={metric.id} className="p-4 bg-orange-500/10 border border-orange-500/20 rounded-lg">
-                        <div className="flex items-center gap-2 mb-2">
-                          <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
-                          <span className="text-sm font-medium">{metric.metricType}</span>
-                        </div>
-                        <p className="font-semibold">{metric.metricName || 'Untitled Metric'}</p>
-                        <p className="text-sm text-muted-foreground">
-                          {calculateProgress(metric)}% complete - Needs attention
-                        </p>
-                        <div className="mt-2">
-                          <div className="w-full bg-orange-900/20 rounded-full h-2">
-                            <div 
-                              className="bg-orange-500 h-2 rounded-full transition-all duration-300"
-                              style={{ width: `${calculateProgress(metric)}%` }}
-                            ></div>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  {metrics.filter(m => calculateProgress(m) < 70).length === 0 && (
-                    <div className="col-span-full text-center py-8 text-muted-foreground">
-                      <CheckCircle className="w-12 h-12 mx-auto mb-2 text-green-500" />
-                      <p>All metrics are performing well!</p>
-                    </div>
-                  )}
-                </div>
-              </Card>
-            </>
-          ) : (
-            <Card className="glass-card p-12 text-center">
-              <Target className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
-              <h3 className="text-xl font-semibold mb-2">No KPIs or OKRs Yet</h3>
-              <p className="text-muted-foreground mb-6">
-                Start tracking your performance by adding your first KPI or OKR above.
-              </p>
-              <Button 
-                onClick={() => setShowSetup(true)}
-                className="bg-blue-500 hover:bg-blue-600 text-white"
-              >
-                <Plus className="w-4 h-4 mr-2" />
-                Get Started
-              </Button>
-            </Card>
-          )}
-        </div>
-
+        ) : (
+          // Empty state when no metrics exist
+          <Card className="glass-card p-12 text-center">
+            <Target className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
+            <h3 className="text-xl font-semibold mb-2">No KPIs or OKRs Yet</h3>
+            <p className="text-muted-foreground mb-6">
+              Start tracking your performance by adding your first KPI or OKR above.
+            </p>
+            <Button 
+              onClick={() => setShowSetup(true)}
+              className="bg-blue-500 hover:bg-blue-600 text-white"
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              Get Started
+            </Button>
+          </Card>
+        )}
       </div>
     </div>
   );
