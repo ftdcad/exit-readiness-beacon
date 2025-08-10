@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -41,6 +40,7 @@ import HoldCoStructurePage from "./pages/week-2/HoldCoStructurePage";
 import DebtInterestPage from "./pages/week-2/DebtInterestPage";
 import EarnoutsMultipliersPage from "./pages/week-2/EarnoutsMultipliersPage";
 import PostClosingRealityPage from "./pages/week-2/PostClosingRealityPage";
+import ManagementScorecardPage from "./pages/week-3/ManagementScorecardPage";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -344,6 +344,16 @@ const App = () => {
                   <ClientRoute>
                     <ClientPortalLayout>
                       <ScenarioPlanningPage />
+                    </ClientPortalLayout>
+                  </ClientRoute>
+                } 
+              />
+              <Route 
+                path="/portal/week-3/scorecard" 
+                element={
+                  <ClientRoute>
+                    <ClientPortalLayout>
+                      <ManagementScorecardPage />
                     </ClientPortalLayout>
                   </ClientRoute>
                 } 
