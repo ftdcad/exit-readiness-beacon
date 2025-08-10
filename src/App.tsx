@@ -34,6 +34,7 @@ import { ScheduleConsultationPage } from "./pages/ScheduleConsultationPage";
 import AssetFreeEducationPage from "./pages/AssetFreeEducationPage";
 import TimeKillsDealsPage from "./pages/TimeKillsDealsPage";
 import ProfessionalAdvisorsPage from "./pages/ProfessionalAdvisorsPage";
+import DealProgressionPage from "./pages/DealProgressionPage";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -173,6 +174,16 @@ const App = () => {
                   <ClientRoute>
                     <ClientPortalLayout>
                       <ProfessionalAdvisorsPage />
+                    </ClientPortalLayout>
+                  </ClientRoute>
+                } 
+              />
+              <Route 
+                path="/portal/week-1/deal-progression" 
+                element={
+                  <ClientRoute>
+                    <ClientPortalLayout>
+                      <DealProgressionPage />
                     </ClientPortalLayout>
                   </ClientRoute>
                 } 
