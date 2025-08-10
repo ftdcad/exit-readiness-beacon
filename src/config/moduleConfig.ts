@@ -30,6 +30,7 @@ export const moduleConfigurations: ModuleConfig[] = [
   { name: 'HoldCo Structure', path: '/portal/week-2/holdco-structure', weekNumber: 2, order: 3 },
   { name: 'Add Backs', path: '/portal/week-2/quick-wins', weekNumber: 2, order: 4 },
   { name: 'Debt & Interest Payments', path: '/portal/week-2/debt-interest', weekNumber: 2, order: 5 },
+  { name: 'Seller Earnouts & Performance Multipliers', path: '/portal/week-2/earnouts-multipliers', weekNumber: 2, order: 6 },
   
   // Week 3 - Performance Readiness
   { name: 'EBITDA Calculator', path: '/portal/week-3/ebitda-calculator', weekNumber: 3, order: 1 },

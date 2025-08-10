@@ -38,6 +38,7 @@ import ProfessionalAdvisorsPage from "./pages/ProfessionalAdvisorsPage";
 import DealProgressionPage from "./pages/DealProgressionPage";
 import HoldCoStructurePage from "./pages/week-2/HoldCoStructurePage";
 import DebtInterestPage from "./pages/week-2/DebtInterestPage";
+import EarnoutsMultipliersPage from "./pages/week-2/EarnoutsMultipliersPage";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -229,6 +230,16 @@ const App = () => {
                   <ClientRoute>
                     <ClientPortalLayout>
                       <DebtInterestPage />
+                    </ClientPortalLayout>
+                  </ClientRoute>
+                } 
+              />
+              <Route 
+                path="/portal/week-2/earnouts-multipliers" 
+                element={
+                  <ClientRoute>
+                    <ClientPortalLayout>
+                      <EarnoutsMultipliersPage />
                     </ClientPortalLayout>
                   </ClientRoute>
                 } 
