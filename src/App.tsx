@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -23,7 +24,8 @@ import EBITDACalculatorPage from "./pages/EBITDACalculatorPage";
 import AssetWorkshopPage from "./pages/AssetWorkshopPage";
 import QuickWinsPage from "./pages/QuickWinsPage";
 import KnowYourBuyerPage from "./pages/KnowYourBuyerPage";
-import DataRoomPage from "./pages/DataRoomPage";
+import { DataRoomIntroPage } from "./pages/DataRoomIntroPage";
+import { DataRoomWorkspacePage } from "./pages/DataRoomWorkspacePage";
 import ExecutiveDiscoveryInterviewPage from "./pages/ExecutiveDiscoveryInterviewPage";
 import StrategyDocBuilderPage from "./pages/StrategyDocBuilderPage";
 import KPIandOKRPage from "./pages/KPIandOKRPage";
@@ -195,7 +197,17 @@ const App = () => {
                 element={
                   <ClientRoute>
                     <ClientPortalLayout>
-                      <DataRoomPage />
+                      <DataRoomIntroPage />
+                    </ClientPortalLayout>
+                  </ClientRoute>
+                } 
+              />
+              <Route 
+                path="/portal/week-2/data-room/workspace" 
+                element={
+                  <ClientRoute>
+                    <ClientPortalLayout>
+                      <DataRoomWorkspacePage />
                     </ClientPortalLayout>
                   </ClientRoute>
                 } 
