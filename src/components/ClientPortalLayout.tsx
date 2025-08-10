@@ -1,9 +1,11 @@
+
 import React from 'react';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { ClientPortalSidebar } from '@/components/ClientPortalSidebar';
 import { Button } from '@/components/ui/button';
 import { ExternalLink } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { AIAssistantDialog } from '@/components/ai/AIAssistantDialog';
 
 interface ClientPortalLayoutProps {
   children: React.ReactNode;
@@ -23,12 +25,15 @@ export const ClientPortalLayout = ({ children }: ClientPortalLayoutProps) => {
                 <p className="text-sm text-muted-foreground">Exit Readiness Journey</p>
               </div>
             </div>
-            <Button variant="outline" size="sm" asChild className="mr-4">
-              <Link to="/" className="flex items-center gap-2">
-                <ExternalLink className="h-4 w-4" />
-                Exit Portal
-              </Link>
-            </Button>
+            <div className="flex items-center gap-2 mr-4">
+              <AIAssistantDialog />
+              <Button variant="outline" size="sm" asChild>
+                <Link to="/" className="flex items-center gap-2">
+                  <ExternalLink className="h-4 w-4" />
+                  Exit Portal
+                </Link>
+              </Button>
+            </div>
           </header>
           <main className="flex-1 overflow-auto p-6">
             {children}
