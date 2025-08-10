@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -42,6 +41,7 @@ import AdminRoute from "./components/AdminRoute";
 import { ClientRoute } from "./components/ClientRoute";
 import { ClientPortalLayout } from "./components/ClientPortalLayout";
 import { ErrorBoundary } from "./components/ErrorBoundary";
+import TopPerformersPage from "./pages/week-3/TopPerformersPage";
 
 const queryClient = new QueryClient();
 
@@ -108,6 +108,7 @@ function App() {
                   <Route path="week-3/scenarios" element={<ScenarioPlanningPage />} />
                   <Route path="week-3/scorecard" element={<ManagementScorecardPage />} />
                   <Route path="week-3/business-scorecard" element={<BusinessScorecardPage />} />
+                  <Route path="week-3/top-performers" element={<TopPerformersPage />} />
                   
                   {/* Week 4 - Final Readiness */}
                   <Route path="week-4/kpis-okrs" element={<KPIandOKRPage />} />
