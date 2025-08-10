@@ -1,13 +1,26 @@
-
 import React, { useState, useCallback } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Upload, Folder, FolderOpen, CheckCircle, X, Plus, FileText } from 'lucide-react';
+import { Upload, Folder, FolderOpen, CheckCircle, X, FileText } from 'lucide-react';
+import { AddFolderDialog } from '@/components/AddFolderDialog';
 
 interface UploadedFile {
   file: File;
   destinationFolders: string[];
+}
+
+interface Subfolder {
+  id: string;
+  name: string;
+  count: number;
+}
+
+interface FolderStructure {
+  id: string;
+  name: string;
+  count: number;
+  subfolders: Subfolder[];
 }
 
 export const DataRoomWorkspacePage: React.FC = () => {
@@ -18,7 +31,7 @@ export const DataRoomWorkspacePage: React.FC = () => {
   const [expandedFolders, setExpandedFolders] = useState<string[]>([]);
   
   // Folder structure with subfolders
-  const folderStructure = [
+  const [folderStructure, setFolderStructure] = useState<FolderStructure[]>([
     {
       id: 'corporate',
       name: 'Corporate Documents',
@@ -79,7 +92,7 @@ export const DataRoomWorkspacePage: React.FC = () => {
         { id: 'war-compliance', name: 'Compliance', count: 0 }
       ]
     }
-  ];
+  ]);
   
   const handleDrag = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -116,6 +129,24 @@ export const DataRoomWorkspacePage: React.FC = () => {
         : [...prev, folderId]
     );
   };
+
+  const handleAddFolder = (parentId: string, folderName: string) => {
+    setFolderStructure(prev => 
+      prev.map(folder => {
+        if (folder.id === parentId) {
+          const newSubfolderId = `${parentId}-${Date.now()}`;
+          return {
+            ...folder,
+            subfolders: [
+              ...folder.subfolders,
+              { id: newSubfolderId, name: folderName, count: 0 }
+            ]
+          };
+        }
+        return folder;
+      })
+    );
+  };
   
   const handleUpload = () => {
     if (currentFile && selectedFolders.length > 0) {
@@ -143,10 +174,7 @@ export const DataRoomWorkspacePage: React.FC = () => {
             <span className="text-muted-foreground">Documents: </span>
             <span className="font-semibold text-foreground">{getTotalDocumentCount()}</span>
           </div>
-          <Button variant="outline" size="sm">
-            <Plus className="w-4 h-4 mr-2" />
-            Add Folder
-          </Button>
+          <AddFolderDialog onAddFolder={handleAddFolder} folderStructure={folderStructure} />
         </div>
       </div>
       
