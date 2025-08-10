@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
@@ -22,22 +23,24 @@ export const useAuth = () => {
   useEffect(() => {
     let mounted = true;
     
+    console.log('useAuth: Starting initialization...');
+    
     // Fetch user profile function
     const fetchUserProfile = async (userId: string) => {
       try {
-        console.log('Fetching profile for user:', userId);
+        console.log('useAuth: Fetching profile for user:', userId);
         
         // Get the profile with role data in a single query using JOIN
-        const { data: profileData, error: profileError } = await (supabase as any)
+        const { data: profileData, error: profileError } = await supabase
           .from('profiles')
           .select('*, role:user_roles(*)')
           .eq('id', userId)
           .maybeSingle();
 
-        console.log('Profile with role:', profileData);
+        console.log('useAuth: Profile query result:', { profileData, profileError });
 
         if (profileError) {
-          console.error('Error fetching profile:', profileError);
+          console.error('useAuth: Error fetching profile:', profileError);
           // Set empty profile but don't block loading completion
           if (mounted) {
             setProfile(null);
@@ -47,23 +50,24 @@ export const useAuth = () => {
 
         if (profileData) {
           if (mounted) {
-            setProfile({
+            const profileWithRole = {
               id: profileData.id,
               email: profileData.email,
               full_name: profileData.full_name,
               role_id: profileData.role_id,
               role: profileData.role || null
-            });
-            console.log('Profile set:', { role: profileData.role?.name });
+            };
+            setProfile(profileWithRole);
+            console.log('useAuth: Profile set successfully:', { role: profileData.role?.name });
           }
         } else {
-          console.log('No profile found for user');
+          console.log('useAuth: No profile found for user');
           if (mounted) {
             setProfile(null);
           }
         }
       } catch (error) {
-        console.error('Error in fetchUserProfile:', error);
+        console.error('useAuth: Error in fetchUserProfile:', error);
         // Ensure profile is set to null on any error
         if (mounted) {
           setProfile(null);
@@ -72,11 +76,16 @@ export const useAuth = () => {
     };
 
     // Set up auth state listener
+    console.log('useAuth: Setting up auth state listener...');
+    
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
-        console.log('Auth state changed:', event, session?.user?.id);
+        console.log('useAuth: Auth state changed:', event, session?.user?.id || 'No user');
         
-        if (!mounted) return;
+        if (!mounted) {
+          console.log('useAuth: Component unmounted, ignoring auth change');
+          return;
+        }
         
         setSession(session);
         setUser(session?.user ?? null);
@@ -92,7 +101,7 @@ export const useAuth = () => {
               setProfile(null);
             }
           } catch (error) {
-            console.error('Error in profile fetch:', error);
+            console.error('useAuth: Error in profile fetch after auth change:', error);
             setProfile(null);
           } finally {
             if (mounted) {
@@ -104,31 +113,58 @@ export const useAuth = () => {
     );
 
     return () => {
+      console.log('useAuth: Cleaning up...');
       mounted = false;
       subscription.unsubscribe();
     };
   }, []);
 
   const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    return { error };
+    try {
+      console.log('useAuth: Attempting sign in for:', email);
+      
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+      
+      if (error) {
+        console.error('useAuth: Sign in error:', error);
+      } else {
+        console.log('useAuth: Sign in successful');
+      }
+      
+      return { error };
+    } catch (error) {
+      console.error('useAuth: Unexpected error in signIn:', error);
+      return { error };
+    }
   };
 
   const signOut = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (!error) {
-      setUser(null);
-      setSession(null);
-      setProfile(null);
+    try {
+      console.log('useAuth: Attempting sign out...');
+      
+      const { error } = await supabase.auth.signOut();
+      if (!error) {
+        setUser(null);
+        setSession(null);
+        setProfile(null);
+        console.log('useAuth: Sign out successful');
+      } else {
+        console.error('useAuth: Sign out error:', error);
+      }
+      return { error };
+    } catch (error) {
+      console.error('useAuth: Unexpected error in signOut:', error);
+      return { error };
     }
-    return { error };
   };
 
   const isAdmin = () => {
-    return profile?.role?.name === 'admin';
+    const result = profile?.role?.name === 'admin';
+    console.log('useAuth: isAdmin check:', result, 'role:', profile?.role?.name);
+    return result;
   };
 
   return {

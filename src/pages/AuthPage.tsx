@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -15,38 +16,71 @@ const AuthPage = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [loading, setLoading] = useState(false);
   const [currentUser, setCurrentUser] = useState<any>(null);
+  const [initLoading, setInitLoading] = useState(true);
   const navigate = useNavigate();
   const { toast } = useToast();
   const [searchParams] = useSearchParams();
 
   useEffect(() => {
+    console.log('AuthPage: Starting auth check...');
+    
     // Check if user is already authenticated
     const checkAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
-        // Check user role and redirect accordingly
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('*, role:user_roles(*)')
-          .eq('id', session.user.id)
-          .single();
+      try {
+        console.log('AuthPage: Getting session...');
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
         
-        // Store current user info for logout option
-        setCurrentUser({
-          email: session.user.email,
-          role: profile?.role?.name
-        });
+        if (sessionError) {
+          console.error('AuthPage: Session error:', sessionError);
+          setInitLoading(false);
+          return;
+        }
+
+        console.log('AuthPage: Session result:', session?.user?.id || 'No session');
         
-        // Only auto-redirect if not explicitly requesting logout
-        if (!searchParams.has('logout')) {
-          if (profile?.role?.name === 'client') {
-            navigate('/portal');
-          } else if (profile?.role?.name === 'admin') {
-            navigate('/admin/dashboard');
-          } else {
-            navigate('/');
+        if (session?.user) {
+          console.log('AuthPage: User found, fetching profile...');
+          
+          // Check user role and redirect accordingly
+          const { data: profile, error: profileError } = await supabase
+            .from('profiles')
+            .select('*, role:user_roles(*)')
+            .eq('id', session.user.id)
+            .maybeSingle();
+          
+          if (profileError) {
+            console.error('AuthPage: Profile fetch error:', profileError);
+            // Don't block - user might not have profile yet
+          }
+
+          console.log('AuthPage: Profile result:', profile?.role?.name || 'No profile');
+          
+          // Store current user info for logout option
+          setCurrentUser({
+            email: session.user.email,
+            role: profile?.role?.name || 'unknown'
+          });
+          
+          // Only auto-redirect if not explicitly requesting logout
+          if (!searchParams.has('logout')) {
+            console.log('AuthPage: Auto-redirecting based on role:', profile?.role?.name);
+            
+            if (profile?.role?.name === 'client') {
+              navigate('/portal', { replace: true });
+              return;
+            } else if (profile?.role?.name === 'admin') {
+              navigate('/admin/dashboard', { replace: true });
+              return;
+            } else {
+              navigate('/', { replace: true });
+              return;
+            }
           }
         }
+      } catch (error) {
+        console.error('AuthPage: Unexpected error in checkAuth:', error);
+      } finally {
+        setInitLoading(false);
       }
     };
     
@@ -58,28 +92,42 @@ const AuthPage = () => {
     setLoading(true);
 
     try {
+      console.log('AuthPage: Starting authentication...', { isLogin, email });
+      
       if (isLogin) {
         const { data, error } = await supabase.auth.signInWithPassword({
           email,
           password,
         });
 
-        if (error) throw error;
+        if (error) {
+          console.error('AuthPage: Login error:', error);
+          throw error;
+        }
+
+        console.log('AuthPage: Login successful, user ID:', data.user?.id);
 
         if (data.user) {
           // Fetch user profile to determine role
-          const { data: profile } = await supabase
+          const { data: profile, error: profileError } = await supabase
             .from('profiles')
             .select('*, role:user_roles(*)')
             .eq('id', data.user.id)
-            .single();
+            .maybeSingle();
+
+          if (profileError) {
+            console.error('AuthPage: Profile fetch error after login:', profileError);
+            // Continue anyway - might be new user
+          }
+
+          console.log('AuthPage: Redirecting based on role:', profile?.role?.name);
 
           if (profile?.role?.name === 'client') {
-            navigate('/portal');
+            navigate('/portal', { replace: true });
           } else if (profile?.role?.name === 'admin') {
-            navigate('/admin/dashboard');
+            navigate('/admin/dashboard', { replace: true });
           } else {
-            navigate('/');
+            navigate('/', { replace: true });
           }
           
           toast({
@@ -88,6 +136,8 @@ const AuthPage = () => {
           });
         }
       } else {
+        console.log('AuthPage: Starting signup...');
+        
         const { error } = await supabase.auth.signUp({
           email,
           password,
@@ -96,7 +146,12 @@ const AuthPage = () => {
           }
         });
 
-        if (error) throw error;
+        if (error) {
+          console.error('AuthPage: Signup error:', error);
+          throw error;
+        }
+
+        console.log('AuthPage: Signup successful');
 
         toast({
           title: "Account created!",
@@ -104,9 +159,10 @@ const AuthPage = () => {
         });
       }
     } catch (error: any) {
+      console.error('AuthPage: Auth error:', error);
       toast({
         title: "Authentication Error",
-        description: error.message,
+        description: error.message || "An unexpected error occurred",
         variant: "destructive",
       });
     } finally {
@@ -117,24 +173,41 @@ const AuthPage = () => {
   const handleLogout = async () => {
     setLoading(true);
     try {
+      console.log('AuthPage: Logging out...');
+      
       const { error } = await supabase.auth.signOut();
-      if (error) throw error;
+      if (error) {
+        console.error('AuthPage: Logout error:', error);
+        throw error;
+      }
       
       setCurrentUser(null);
+      console.log('AuthPage: Logout successful');
+      
       toast({
         title: "Signed out",
         description: "You have been successfully logged out.",
       });
     } catch (error: any) {
+      console.error('AuthPage: Logout error:', error);
       toast({
         title: "Error",
-        description: error.message,
+        description: error.message || "An error occurred during logout",
         variant: "destructive",
       });
     } finally {
       setLoading(false);
     }
   };
+
+  // Show loading state during initialization
+  if (initLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-background to-muted/20 flex items-center justify-center p-4">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted/20 flex items-center justify-center p-4">
@@ -190,6 +263,7 @@ const AuthPage = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
+                  disabled={!!currentUser}
                 />
               </div>
               <div className="space-y-2">
@@ -201,6 +275,7 @@ const AuthPage = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
+                  disabled={!!currentUser}
                 />
               </div>
               <Button type="submit" className="w-full" disabled={loading || !!currentUser}>
@@ -213,6 +288,7 @@ const AuthPage = () => {
                 type="button"
                 onClick={() => setIsLogin(!isLogin)}
                 className="text-sm text-primary hover:underline"
+                disabled={!!currentUser}
               >
                 {isLogin 
                   ? "Don't have an account? Sign up" 
