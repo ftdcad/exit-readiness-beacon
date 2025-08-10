@@ -3,8 +3,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useAuth } from "@/hooks/useAuth";
-import { createContext, useContext } from "react";
+import { AuthProvider } from "@/hooks/useAuth";
 import Index from "./pages/Index";
 import AuthPage from "./pages/AuthPage";
 import AssessmentPage from "./pages/AssessmentPage";
@@ -40,15 +39,6 @@ import NotFound from "./pages/NotFound";
 import AdminRoute from "./components/AdminRoute";
 import { ClientRoute } from "./components/ClientRoute";
 import { ErrorBoundary } from "./components/ErrorBoundary";
-
-// Create AuthContext
-const AuthContext = createContext<ReturnType<typeof useAuth> | null>(null);
-
-// AuthProvider component
-export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const auth = useAuth();
-  return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
-};
 
 const queryClient = new QueryClient();
 
