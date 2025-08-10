@@ -25,7 +25,7 @@ export const useProgress = () => {
 
   // Updated module counts per week to reflect new organization
   const weekModuleCounts = {
-    1: 4, // Interactive Glossary, Know Your Buyer, Data Room, EBITDA Mastery
+    1: 5, // Interactive Glossary, Know Your Buyer, Data Room, EBITDA Mastery, Asset Free Education
     2: 5, // Executive Discovery Interview, Strategy Doc Builder, KPIs and OKRs, Asset Workshop, Quick Wins
     3: 5, // EBITDA Calculator, Industry Multipliers, Scenario Planning, PE Benchmarks, Management Scorecard
     4: 3  // Due Diligence Checklist, LOI Review, Final Report

@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -32,6 +31,7 @@ import IndustryMultiplesPage from "./pages/IndustryMultiplesPage";
 import AssessmentPage from "./pages/AssessmentPage";
 import { ScenarioPlanningPage } from "./pages/ScenarioPlanningPage";
 import { ScheduleConsultationPage } from "./pages/ScheduleConsultationPage";
+import AssetFreeEducationPage from "./pages/AssetFreeEducationPage";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -152,6 +152,16 @@ const App = () => {
                   <ClientRoute>
                     <ClientPortalLayout>
                       <EBITDACoursePage />
+                    </ClientPortalLayout>
+                  </ClientRoute>
+                } 
+              />
+              <Route 
+                path="/portal/week-1/asset-free-education" 
+                element={
+                  <ClientRoute>
+                    <ClientPortalLayout>
+                      <AssetFreeEducationPage />
                     </ClientPortalLayout>
                   </ClientRoute>
                 } 

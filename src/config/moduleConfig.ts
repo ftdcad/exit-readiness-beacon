@@ -20,6 +20,7 @@ export const moduleConfigurations: ModuleConfig[] = [
   { name: 'Know Your Buyer', path: '/portal/week-1/know-your-buyer', weekNumber: 1, order: 2 },
   { name: 'Data Room', path: '/portal/week-1/data-room', weekNumber: 1, order: 3 },
   { name: 'EBITDA Mastery', path: '/portal/week-1/ebitda-course', weekNumber: 1, order: 4 },
+  { name: 'Asset Free Education', path: '/portal/week-1/asset-free-education', weekNumber: 1, order: 5 },
   
   // Week 2 - Deal Readiness
   { name: 'Executive Discovery Interview', path: '/portal/week-2/executive-discovery', weekNumber: 2, order: 1 },
