@@ -33,6 +33,10 @@ export const AssetFreeEducation: React.FC = () => {
       content: <DebtPayoffPage />
     },
     {
+      title: "Understanding Leases",
+      content: <LeasesPage />
+    },
+    {
       title: "Your Clean-Up Checklist",
       content: <ChecklistPage />
     }
@@ -406,6 +410,111 @@ const DebtPayoffPage: React.FC = () => {
             <p className="text-muted-foreground text-sm">
               This MUST be discussed during LOI negotiations, not at the closing table. 
               Good attorneys on both sides can paper this properly, but they need time.
+            </p>
+          </Card>
+        </div>
+      )}
+    </div>
+  );
+};
+
+const LeasesPage: React.FC = () => {
+  const [showExamples, setShowExamples] = useState(false);
+  
+  return (
+    <div className="space-y-6">
+      <h2 className="text-3xl font-bold text-foreground">
+        Leases: What Stays, What Goes
+      </h2>
+      
+      <Card className="bg-primary/10 backdrop-blur-sm p-6 rounded-lg border-l-4 border-primary/30">
+        <h3 className="text-primary font-semibold mb-3">The Lease Reality:</h3>
+        <p className="text-muted-foreground">
+          Leases are essentially loans - you're paying for something over time that you don't own. 
+          PE buyers are fine with CORE business leases, but personal or non-essential leases must go.
+        </p>
+      </Card>
+      
+      <Button 
+        onClick={() => setShowExamples(true)} 
+        className="w-full"
+        disabled={showExamples}
+      >
+        See Real Examples
+      </Button>
+      
+      {showExamples && (
+        <div className="space-y-4 animate-fade-in">
+          <div className="grid grid-cols-2 gap-4">
+            <Card className="bg-success/10 backdrop-blur-sm p-6 rounded-lg border-l-4 border-success/30">
+              <h3 className="text-success font-semibold mb-3">✅ Acceptable Leases (Keep):</h3>
+              <ul className="space-y-2 text-muted-foreground">
+                <li>• Office copier/printer</li>
+                <li>• Warehouse forklift</li>
+                <li>• Company vehicles (delivery trucks)</li>
+                <li>• Office space</li>
+                <li>• Essential equipment</li>
+                <li>• Software licenses</li>
+              </ul>
+              <p className="text-foreground font-semibold mt-4">
+                These are core to operations
+              </p>
+            </Card>
+            
+            <Card className="bg-destructive/10 backdrop-blur-sm p-6 rounded-lg border-l-4 border-destructive/30">
+              <h3 className="text-destructive font-semibold mb-3">❌ Unacceptable Leases (Remove):</h3>
+              <ul className="space-y-2 text-muted-foreground">
+                <li>• Jet ski for "client entertainment"</li>
+                <li>• Luxury car for personal use</li>
+                <li>• Boat at the marina</li>
+                <li>• Country club membership</li>
+                <li>• Vacation property</li>
+                <li>• Personal aircraft</li>
+              </ul>
+              <p className="text-foreground font-semibold mt-4">
+                Not core = must be removed
+              </p>
+            </Card>
+          </div>
+          
+          <Card className="bg-warning/10 backdrop-blur-sm p-6 rounded-lg border-l-4 border-warning/30">
+            <h3 className="text-warning font-semibold mb-3">⚠️ How to Handle Non-Core Leases:</h3>
+            <div className="space-y-3 text-muted-foreground">
+              <p>
+                <strong className="text-foreground">Option 1:</strong> Transfer lease to your personal name before closing
+              </p>
+              <p>
+                <strong className="text-foreground">Option 2:</strong> Pay off the lease entirely (buyout)
+              </p>
+              <p>
+                <strong className="text-foreground">Option 3:</strong> Return the leased item to lessor
+              </p>
+              <p className="text-yellow-400 mt-3">
+                Do this EARLY - lease transfers can take 30-60 days!
+              </p>
+            </div>
+          </Card>
+          
+          <Card className="p-6">
+            <h3 className="font-semibold text-foreground mb-3">The Gray Area Test:</h3>
+            <p className="text-muted-foreground mb-4">
+              Ask yourself: "If this lease disappeared tomorrow, would the business still operate normally?"
+            </p>
+            <div className="space-y-2 text-sm">
+              <p className="text-muted-foreground">
+                <span className="text-success">YES →</span> It's not core, remove it
+              </p>
+              <p className="text-muted-foreground">
+                <span className="text-destructive">NO →</span> It's core, keep it
+              </p>
+            </div>
+          </Card>
+          
+          <Card className="bg-primary/10 backdrop-blur-sm p-4 rounded-lg border-l-4 border-primary/30">
+            <p className="text-primary font-semibold">Remember:</p>
+            <p className="text-muted-foreground text-sm">
+              PE buyers aren't being difficult - they just want to buy a clean operating business, 
+              not inherit your toys or tax write-offs. Clean up leases early to avoid last-minute scrambles.
             </p>
           </Card>
         </div>
