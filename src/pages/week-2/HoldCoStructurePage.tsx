@@ -2,7 +2,8 @@ import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
-import { AlertTriangle, Building2, Car, DollarSign, ArrowRight } from "lucide-react";
+import { AlertTriangle, Building2, Car, DollarSign, ArrowRight, CreditCard, TrendingDown } from "lucide-react";
+import { InterestDistributionCalculator } from "@/components/finance/InterestDistributionCalculator";
 
 export default function HoldCoStructurePage() {
   return (
@@ -25,11 +26,12 @@ export default function HoldCoStructurePage() {
       </Alert>
 
       <Tabs defaultValue="problem" className="w-full">
-        <TabsList className="grid grid-cols-3 lg:grid-cols-6 w-full">
+        <TabsList className="grid grid-cols-3 lg:grid-cols-7 w-full">
           <TabsTrigger value="problem">The Problem</TabsTrigger>
           <TabsTrigger value="what">What is HoldCo</TabsTrigger>
           <TabsTrigger value="assets">What Goes In</TabsTrigger>
           <TabsTrigger value="money">Money Flow</TabsTrigger>
+          <TabsTrigger value="debt">Debt & Interest</TabsTrigger>
           <TabsTrigger value="timeline">Timeline</TabsTrigger>
           <TabsTrigger value="mistakes">Mistakes</TabsTrigger>
         </TabsList>
@@ -227,6 +229,100 @@ export default function HoldCoStructurePage() {
               </Alert>
             </CardContent>
           </Card>
+        </TabsContent>
+
+        <TabsContent value="debt" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <CreditCard className="h-5 w-5" />
+                Understanding PE Debt & Interest Payments
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-3">
+                <p className="text-foreground">
+                  Most private equity firms treat the purchase price like a loan when they acquire your company. 
+                  This creates a debt structure that generates regular interest payments from the operating company 
+                  to the holding company where your ownership stake resides.
+                </p>
+                
+                <Alert>
+                  <TrendingDown className="h-4 w-4" />
+                  <AlertTitle>Key Misconception</AlertTitle>
+                  <AlertDescription>
+                    Many sellers think PE firms will dump money into growth immediately. In reality, 
+                    they're more focused on debt service and returns. Growth funding must make financial sense for them.
+                  </AlertDescription>
+                </Alert>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-4 mt-6">
+                <div className="space-y-3">
+                  <h4 className="font-semibold text-foreground">How It Works:</h4>
+                  <ul className="list-disc pl-5 space-y-1 text-sm text-foreground">
+                    <li>Purchase price becomes debt on the operating company</li>
+                    <li>Interest payments flow from OpCo to HoldCo</li>
+                    <li>Payments typically made monthly, quarterly, or annually</li>
+                    <li>Interest rates usually range from 6-12% annually</li>
+                    <li>Distributions are pro rata based on ownership percentage</li>
+                  </ul>
+                </div>
+
+                <div className="space-y-3">
+                  <h4 className="font-semibold text-foreground">Tax Benefits:</h4>
+                  <ul className="list-disc pl-5 space-y-1 text-sm text-foreground">
+                    <li>Interest payments are tax-deductible for OpCo</li>
+                    <li>Reduces corporate tax burden significantly</li>
+                    <li>Shelters distributions from dividend taxation</li>
+                    <li>Creates favorable cash flow for all owners</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div className="bg-muted/50 border border-border p-4 rounded-lg mt-6">
+                <h4 className="font-semibold text-sm text-foreground mb-3">Example Payment Flow:</h4>
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2 text-sm">
+                    <span className="px-2 py-1 bg-card border border-border rounded text-foreground">OpCo</span>
+                    <ArrowRight className="h-4 w-4 text-muted-foreground" />
+                    <span className="font-mono text-foreground">$100k quarterly interest</span>
+                    <ArrowRight className="h-4 w-4 text-muted-foreground" />
+                    <span className="px-2 py-1 bg-card border border-border rounded text-foreground">HoldCo</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm ml-4">
+                    <span className="px-2 py-1 bg-accent/20 border border-accent/40 rounded text-foreground">You (25%)</span>
+                    <ArrowRight className="h-4 w-4 text-muted-foreground" />
+                    <span className="font-mono text-foreground">$25k distribution</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm ml-4">
+                    <span className="px-2 py-1 bg-accent/20 border border-accent/40 rounded text-foreground">PE (75%)</span>
+                    <ArrowRight className="h-4 w-4 text-muted-foreground" />
+                    <span className="font-mono text-foreground">$75k distribution</span>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Interest Payment Calculator</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <InterestDistributionCalculator />
+            </CardContent>
+          </Card>
+
+          <Alert>
+            <AlertTitle>Important Notes</AlertTitle>
+            <AlertDescription className="space-y-2">
+              <p>• Interest payments are separate from any earnout or performance bonuses</p>
+              <p>• These payments continue regardless of company performance</p>
+              <p>• Your HoldCo must be structured to receive these distributions</p>
+              <p>• Work with your tax advisor to optimize the structure for your situation</p>
+            </AlertDescription>
+          </Alert>
         </TabsContent>
 
         <TabsContent value="timeline" className="space-y-4">
