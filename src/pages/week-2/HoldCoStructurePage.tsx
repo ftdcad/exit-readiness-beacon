@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -17,7 +16,7 @@ export default function HoldCoStructurePage() {
         </p>
       </div>
 
-      <Alert className="bg-accent/10 border-accent/20">
+      <Alert className="bg-muted border-border">
         <AlertTitle className="text-foreground">Core Message</AlertTitle>
         <AlertDescription className="text-foreground">
           That beach condo in the company name? The building you own? Without a HoldCo, you just sold them. 
@@ -208,7 +207,7 @@ export default function HoldCoStructurePage() {
                   </div>
                 </div>
 
-                <div className="p-3 bg-primary/10 border border-primary/20 rounded-lg">
+                <div className="p-3 bg-muted border border-border rounded-lg">
                   <p className="text-sm font-medium mb-2 text-foreground">Brand License:</p>
                   <div className="flex items-center gap-2 text-sm">
                     <span className="px-2 py-1 bg-card border border-border rounded text-foreground">OpCo</span>
