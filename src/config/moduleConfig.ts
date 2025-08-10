@@ -37,9 +37,9 @@ export const moduleConfigurations: ModuleConfig[] = [
   { name: 'EBITDA Calculator', path: '/portal/week-3/ebitda-calculator', weekNumber: 3, order: 1 },
   { name: 'Industry Multipliers', path: '/portal/week-3/multiples', weekNumber: 3, order: 2 },
   { name: 'Scenario Planning', path: '/portal/week-3/scenarios', weekNumber: 3, order: 3 },
-  { name: 'Business Scorecard', path: '/portal/week-3/business-scorecard', weekNumber: 3, order: 4 },
-  { name: 'Management Scorecard', path: '/portal/week-3/scorecard', weekNumber: 3, order: 5 },
-  { name: 'Top Performers', path: '/portal/week-3/top-performers', weekNumber: 3, order: 6 },
+  { name: 'Management Scorecard', path: '/portal/week-3/scorecard', weekNumber: 3, order: 4 },
+  { name: 'Top Performers', path: '/portal/week-3/top-performers', weekNumber: 3, order: 5 },
+  { name: 'Business Scorecard', path: '/portal/week-3/business-scorecard', weekNumber: 3, order: 6 },
   { name: 'Deal Killers Diagnostic', path: '/portal/week-3/deal-killers', weekNumber: 3, order: 7 },
   
   // Week 4 - Final Readiness (Added the three moved modules at the bottom)
