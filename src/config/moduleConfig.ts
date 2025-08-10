@@ -24,11 +24,12 @@ export const moduleConfigurations: ModuleConfig[] = [
   { name: 'Time Kills Deals', path: '/portal/week-1/time-kills-deals', weekNumber: 1, order: 6 },
   { name: 'EBITDA Explained', path: '/portal/week-1/ebitda-course', weekNumber: 1, order: 7 },
   
-  // Week 2 - Deal Readiness (Removed Executive Discovery, Strategy Doc Builder, KPIs and OKRs)
+  // Week 2 - Deal Readiness
   { name: 'Data Room', path: '/portal/week-2/data-room', weekNumber: 2, order: 1 },
   { name: 'Asset Workshop', path: '/portal/week-2/asset-workshop', weekNumber: 2, order: 2 },
   { name: 'HoldCo Structure', path: '/portal/week-2/holdco-structure', weekNumber: 2, order: 3 },
   { name: 'Add Backs', path: '/portal/week-2/quick-wins', weekNumber: 2, order: 4 },
+  { name: 'Debt & Interest Payments', path: '/portal/week-2/debt-interest', weekNumber: 2, order: 5 },
   
   // Week 3 - Performance Readiness
   { name: 'EBITDA Calculator', path: '/portal/week-3/ebitda-calculator', weekNumber: 3, order: 1 },
