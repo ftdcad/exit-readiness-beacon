@@ -112,6 +112,44 @@ const IntroPage: React.FC = () => (
         <p className="text-sm text-gray-400">They have other options</p>
       </Card>
     </div>
+    
+    <div className="mt-8">
+      <Card className="bg-slate-800 border-slate-700 p-6">
+        <div className="flex items-start space-x-4">
+          <div className="text-4xl">🥚</div>
+          <div className="flex-1">
+            <h3 className="text-xl font-semibold text-white mb-3">
+              The Egg Paradox of M&A
+            </h3>
+            <p className="text-gray-300 mb-4">
+              A deal is like an egg - incredibly strong yet devastatingly fragile.
+            </p>
+            
+            <div className="grid grid-cols-2 gap-4 mt-4">
+              <div className="bg-green-900/20 border border-green-800 rounded-lg p-4">
+                <p className="text-green-400 font-semibold mb-2">When Nurtured:</p>
+                <p className="text-gray-400 text-sm">
+                  Can withstand months of pressure, negotiations, and due diligence. 
+                  A well-cared-for deal grows stronger over time.
+                </p>
+              </div>
+              
+              <div className="bg-red-900/20 border border-red-800 rounded-lg p-4">
+                <p className="text-red-400 font-semibold mb-2">When Attacked:</p>
+                <p className="text-gray-400 text-sm">
+                  One aggressive move, one surprise, one broken promise - 
+                  and it shatters instantly. No putting it back together.
+                </p>
+              </div>
+            </div>
+            
+            <p className="text-gray-300 mt-4 text-sm italic">
+              The strongest deals require the gentlest hands.
+            </p>
+          </div>
+        </div>
+      </Card>
+    </div>
   </div>
 );
 
