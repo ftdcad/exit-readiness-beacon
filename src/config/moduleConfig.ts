@@ -39,6 +39,8 @@ export const moduleConfigurations: ModuleConfig[] = [
   { name: 'Scenario Planning', path: '/portal/week-3/scenarios', weekNumber: 3, order: 3 },
   { name: 'Business Scorecard', path: '/portal/week-3/business-scorecard', weekNumber: 3, order: 4 },
   { name: 'Management Scorecard', path: '/portal/week-3/scorecard', weekNumber: 3, order: 5 },
+  { name: 'Top Performers', path: '/portal/week-3/top-performers', weekNumber: 3, order: 6 },
+  { name: 'Deal Killers Diagnostic', path: '/portal/week-3/deal-killers', weekNumber: 3, order: 7 },
   
   // Week 4 - Final Readiness (Added the three moved modules at the bottom)
   { name: 'Due Diligence Checklist', path: '/portal/week-4/dd-checklist', weekNumber: 4, order: 1 },
