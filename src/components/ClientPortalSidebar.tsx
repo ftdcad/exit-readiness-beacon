@@ -5,6 +5,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useProgress } from '@/hooks/useProgress';
 import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '@/components/ui/sidebar';
 import { Badge } from '@/components/ui/badge';
+
 const weeks = [{
   number: 1,
   title: 'Foundation & Education',
@@ -21,12 +22,6 @@ const weeks = [{
   }, {
     name: 'EBITDA Mastery',
     path: '/portal/week-1/ebitda-course'
-  }, {
-    name: 'Asset Workshop',
-    path: '/portal/week-1/asset-workshop'
-  }, {
-    name: 'Quick Wins',
-    path: '/portal/week-1/quick-wins'
   }]
 }, {
   number: 2,
@@ -42,20 +37,26 @@ const weeks = [{
     name: 'KPIs and OKRs',
     path: '/portal/week-2/kpis-okrs'
   }, {
-    name: 'EBITDA Calculator',
-    path: '/portal/week-2/ebitda-calculator'
+    name: 'Asset Workshop',
+    path: '/portal/week-2/asset-workshop'
   }, {
-    name: 'Industry Multipliers',
-    path: '/portal/week-2/multiples'
-  }, {
-    name: 'Scenario Planning',
-    path: '/portal/week-2/scenarios'
+    name: 'Quick Wins',
+    path: '/portal/week-2/quick-wins'
   }]
 }, {
   number: 3,
   title: 'Performance Readiness',
   icon: TrendingUp,
   modules: [{
+    name: 'EBITDA Calculator',
+    path: '/portal/week-3/ebitda-calculator'
+  }, {
+    name: 'Industry Multipliers',
+    path: '/portal/week-3/multiples'
+  }, {
+    name: 'Scenario Planning',
+    path: '/portal/week-3/scenarios'
+  }, {
     name: 'PE Benchmarks',
     path: '/portal/week-3/benchmarks'
   }, {

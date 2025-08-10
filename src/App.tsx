@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -113,6 +114,8 @@ const App = () => {
                   </ClientRoute>
                 } 
               />
+              
+              {/* Week 1 Routes - Foundation & Education */}
               <Route 
                 path="/portal/week-1/know-your-buyer" 
                 element={
@@ -153,28 +156,8 @@ const App = () => {
                   </ClientRoute>
                 } 
               />
-              <Route 
-                path="/portal/week-1/asset-workshop" 
-                element={
-                  <ClientRoute>
-                    <ClientPortalLayout>
-                      <AssetWorkshopPage />
-                    </ClientPortalLayout>
-                  </ClientRoute>
-                } 
-              />
-              <Route 
-                path="/portal/week-1/quick-wins" 
-                element={
-                  <ClientRoute>
-                    <ClientPortalLayout>
-                      <QuickWinsPage />
-                    </ClientPortalLayout>
-                  </ClientRoute>
-                } 
-              />
               
-              {/* Week 2 Routes */}
+              {/* Week 2 Routes - Deal Readiness */}
               <Route 
                 path="/portal/week-2/executive-discovery" 
                 element={
@@ -216,7 +199,29 @@ const App = () => {
                 } 
               />
               <Route 
-                path="/portal/week-2/ebitda-calculator" 
+                path="/portal/week-2/asset-workshop" 
+                element={
+                  <ClientRoute>
+                    <ClientPortalLayout>
+                      <AssetWorkshopPage />
+                    </ClientPortalLayout>
+                  </ClientRoute>
+                } 
+              />
+              <Route 
+                path="/portal/week-2/quick-wins" 
+                element={
+                  <ClientRoute>
+                    <ClientPortalLayout>
+                      <QuickWinsPage />
+                    </ClientPortalLayout>
+                  </ClientRoute>
+                } 
+              />
+              
+              {/* Week 3 Routes - Performance Readiness */}
+              <Route 
+                path="/portal/week-3/ebitda-calculator" 
                 element={
                   <ClientRoute>
                     <ClientPortalLayout>
@@ -226,7 +231,7 @@ const App = () => {
                 } 
               />
               <Route 
-                path="/portal/week-2/multiples" 
+                path="/portal/week-3/multiples" 
                 element={
                   <ClientRoute>
                     <ClientPortalLayout>
@@ -236,7 +241,7 @@ const App = () => {
                 } 
               />
               <Route 
-                path="/portal/week-2/scenarios" 
+                path="/portal/week-3/scenarios" 
                 element={
                   <ClientRoute>
                     <ClientPortalLayout>
@@ -245,6 +250,7 @@ const App = () => {
                   </ClientRoute>
                 } 
               />
+              
               <Route 
                 path="/portal/schedule-consultation" 
                 element={

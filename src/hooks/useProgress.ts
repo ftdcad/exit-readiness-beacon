@@ -23,11 +23,11 @@ export const useProgress = () => {
   const [loading, setLoading] = useState(true);
   const { user, profile } = useAuth();
 
-  // Module counts per week (matches sidebar data)
+  // Updated module counts per week to reflect new organization
   const weekModuleCounts = {
-    1: 6, // Interactive Glossary, Know Your Buyer, Data Room, EBITDA Mastery, Asset Workshop, Quick Wins
-    2: 6, // Executive Discovery Interview, Strategy Doc Builder, KPIs and OKRs, EBITDA Calculator, Industry Multipliers, Scenario Planning
-    3: 2, // PE Benchmarks, Management Scorecard
+    1: 4, // Interactive Glossary, Know Your Buyer, Data Room, EBITDA Mastery
+    2: 5, // Executive Discovery Interview, Strategy Doc Builder, KPIs and OKRs, Asset Workshop, Quick Wins
+    3: 5, // EBITDA Calculator, Industry Multipliers, Scenario Planning, PE Benchmarks, Management Scorecard
     4: 3  // Due Diligence Checklist, LOI Review, Final Report
   };
 
