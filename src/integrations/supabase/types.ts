@@ -97,6 +97,79 @@ export type Database = {
           },
         ]
       }
+      ai_queries: {
+        Row: {
+          answer: string
+          created_at: string | null
+          id: string
+          module: string | null
+          org_id: string
+          question: string
+          used_snippet_ids: string[] | null
+          user_id: string
+        }
+        Insert: {
+          answer: string
+          created_at?: string | null
+          id?: string
+          module?: string | null
+          org_id: string
+          question: string
+          used_snippet_ids?: string[] | null
+          user_id: string
+        }
+        Update: {
+          answer?: string
+          created_at?: string | null
+          id?: string
+          module?: string | null
+          org_id?: string
+          question?: string
+          used_snippet_ids?: string[] | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_queries_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ai_settings: {
+        Row: {
+          created_at: string | null
+          daily_user_limit: number
+          enabled: boolean
+          monthly_org_cap: number
+          org_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          daily_user_limit?: number
+          enabled?: boolean
+          monthly_org_cap?: number
+          org_id: string
+        }
+        Update: {
+          created_at?: string | null
+          daily_user_limit?: number
+          enabled?: boolean
+          monthly_org_cap?: number
+          org_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_settings_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       assessment_access: {
         Row: {
           access_granted_at: string
@@ -825,6 +898,39 @@ export type Database = {
           size_band?: string
           typical_margin_percent?: number | null
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      kb_snippets: {
+        Row: {
+          answer: string
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          link: string | null
+          module: string
+          question: string
+          tags: string[] | null
+        }
+        Insert: {
+          answer: string
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          link?: string | null
+          module: string
+          question: string
+          tags?: string[] | null
+        }
+        Update: {
+          answer?: string
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          link?: string | null
+          module?: string
+          question?: string
+          tags?: string[] | null
         }
         Relationships: []
       }
