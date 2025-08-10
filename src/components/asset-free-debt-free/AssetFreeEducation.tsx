@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -14,7 +13,7 @@ export const AssetFreeEducation: React.FC = () => {
       content: <IntroPage />
     },
     {
-      title: "Core vs Non-Core Assets",
+      title: "Core vs Non-Core Assets", 
       content: <CoreAssetsPage />
     },
     {
@@ -24,6 +23,10 @@ export const AssetFreeEducation: React.FC = () => {
     {
       title: "Cash & Debt at Closing",
       content: <CashDebtExplanation />
+    },
+    {
+      title: "Handling Debt at Closing",
+      content: <DebtPayoffPage />
     },
     {
       title: "Your Clean-Up Checklist",
@@ -291,6 +294,106 @@ const CashDebtExplanation: React.FC = () => {
             </div>
           </div>
         </Card>
+      )}
+    </div>
+  );
+};
+
+const DebtPayoffPage: React.FC = () => {
+  const [showSolution, setShowSolution] = useState(false);
+  
+  return (
+    <div className="space-y-6">
+      <h2 className="text-3xl font-bold text-foreground">
+        When You Can't Pay Debt Before Closing
+      </h2>
+      
+      <Card className="bg-destructive/10 backdrop-blur-sm p-6 rounded-lg border-l-4 border-destructive/30">
+        <h3 className="text-destructive font-semibold mb-3">The $1M Problem:</h3>
+        <p className="text-muted-foreground">
+          You have a $1,000,000 business loan. The buyer wants an "asset free, debt free" deal. 
+          You're getting $3,000,000 at closing but can't afford to pay the debt off early.
+        </p>
+        <p className="text-foreground font-semibold mt-3">
+          What do you do?
+        </p>
+      </Card>
+      
+      <Button 
+        onClick={() => setShowSolution(true)} 
+        className="w-full"
+        disabled={showSolution}
+      >
+        See the Solution
+      </Button>
+      
+      {showSolution && (
+        <div className="space-y-4 animate-fade-in">
+          <Card className="bg-success/10 backdrop-blur-sm p-6 rounded-lg border-l-4 border-success/30">
+            <h3 className="text-success font-semibold mb-3">✅ The Escrow Solution:</h3>
+            
+            <div className="space-y-4 text-muted-foreground">
+              <p>
+                <strong className="text-foreground">Step 1:</strong> Tell your attorney EARLY (during LOI stage) about the debt situation.
+              </p>
+              
+              <p>
+                <strong className="text-foreground">Step 2:</strong> Attorneys structure a "payoff at closing" arrangement:
+              </p>
+              
+              <div className="ml-6 space-y-2">
+                <p>• $1M of the $3M purchase price goes to escrow</p>
+                <p>• Escrow agent pays your lender directly at closing</p>
+                <p>• You receive the remaining $2M</p>
+                <p>• Debt is cleared, buyer gets clean assets</p>
+              </div>
+              
+              <p>
+                <strong className="text-foreground">Step 3:</strong> This gets properly documented in the purchase agreement.
+              </p>
+            </div>
+          </Card>
+          
+          <Card className="bg-primary/10 backdrop-blur-sm p-6 rounded-lg border-l-4 border-primary/30">
+            <h3 className="text-primary font-semibold mb-2">The Smart Seller's Position:</h3>
+            <p className="text-muted-foreground italic">
+              "I'm happy to deliver a debt-free business, but I'm not paying off debt early 
+              on a deal that might not close. We'll handle all debt from closing proceeds 
+              through proper escrow arrangements."
+            </p>
+          </Card>
+          
+          <div className="grid grid-cols-2 gap-4">
+            <Card className="p-4">
+              <h4 className="font-semibold text-foreground mb-2">Why This Works:</h4>
+              <ul className="text-sm space-y-1 text-muted-foreground">
+                <li>• Protects you if deal falls apart</li>
+                <li>• Buyer still gets debt-free business</li>
+                <li>• Lender gets paid in full</li>
+                <li>• Everyone's protected legally</li>
+              </ul>
+            </Card>
+            
+            <Card className="p-4">
+              <h4 className="font-semibold text-foreground mb-2">Common Debts Handled This Way:</h4>
+              <ul className="text-sm space-y-1 text-muted-foreground">
+                <li>• Equipment loans</li>
+                <li>• Lines of credit</li>
+                <li>• SBA loans</li>
+                <li>• Vehicle financing</li>
+                <li>• Even some leases</li>
+              </ul>
+            </Card>
+          </div>
+          
+          <Card className="bg-warning/10 backdrop-blur-sm p-4 rounded-lg border-l-4 border-warning/30">
+            <p className="text-warning font-semibold">⚠️ Critical Timing:</p>
+            <p className="text-muted-foreground text-sm">
+              This MUST be discussed during LOI negotiations, not at the closing table. 
+              Good attorneys on both sides can paper this properly, but they need time.
+            </p>
+          </Card>
+        </div>
       )}
     </div>
   );
