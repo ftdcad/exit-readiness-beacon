@@ -1,7 +1,14 @@
 
 import React from 'react';
 import { PostClosingReality } from '@/components/post-closing/PostClosingReality';
+import { ClientPortalLayout } from '@/components/ClientPortalLayout';
 
-export default function PostClosingRealityPage() {
-  return <PostClosingReality />;
-}
+const PostClosingRealityPage = () => {
+  return (
+    <ClientPortalLayout>
+      <PostClosingReality />
+    </ClientPortalLayout>
+  );
+};
+
+export default PostClosingRealityPage;
