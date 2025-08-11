@@ -1,4 +1,3 @@
-
 // EBITDA CALCULATOR PAGE - TRUE SIDE-BY-SIDE COMPARISON
 // src/pages/EBITDACalculatorPage.tsx
 
@@ -31,6 +30,18 @@ interface CalculatorData {
   otherNonRecurring: number;
 }
 
+// Sample data that loads by default
+const sampleCalculatorData: CalculatorData = {
+  revenue: 2500000,
+  cogs: 1100000,
+  opex: 950000,
+  ownerSalary: 175000,
+  personalVehicle: 18000,
+  travelMeals: 25000,
+  legalFees: 12000,
+  otherNonRecurring: 0
+};
+
 const emptyCalculatorData: CalculatorData = {
   revenue: 0,
   cogs: 0,
@@ -45,48 +56,27 @@ const emptyCalculatorData: CalculatorData = {
 export default function EBITDACalculatorPage() {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);
-  const [hasUploadedPnL, setHasUploadedPnL] = useState(false);
-  const [bypassGate, setBypassGate] = useState(false); // NEW: Allow bypassing the gate
+  const [loading, setLoading] = useState(false); // Start with no loading
   const [savingA, setSavingA] = useState(false);
   const [savingB, setSavingB] = useState(false);
   
-  // Two separate calculator states
-  const [calculatorA, setCalculatorA] = useState<CalculatorData>(emptyCalculatorData);
-  const [calculatorB, setCalculatorB] = useState<CalculatorData>(emptyCalculatorData);
-  const [baselineData, setBaselineData] = useState<CalculatorData>(emptyCalculatorData);
+  // Two separate calculator states - start with sample data
+  const [calculatorA, setCalculatorA] = useState<CalculatorData>(sampleCalculatorData);
+  const [calculatorB, setCalculatorB] = useState<CalculatorData>(sampleCalculatorData);
+  const [baselineData, setBaselineData] = useState<CalculatorData>(sampleCalculatorData);
   
   // Multiplier states
   const [multiplierA] = useState(4.5); // Fixed for baseline
   const [multiplierB, setMultiplierB] = useState(4.5); // Adjustable for scenario
   
   // Labels for each calculator
-  const [labelA, setLabelA] = useState('Actual Financials');
+  const [labelA, setLabelA] = useState('Actual Financials (Sample Data)');
   const [labelB, setLabelB] = useState('Scenario Analysis');
 
   useEffect(() => {
-    checkDataRoomDocuments();
+    // Try to load user data if available, but don't block the page
     loadFinancialData();
   }, [user]);
-
-  const checkDataRoomDocuments = async () => {
-    if (!user) return;
-
-    try {
-      const { data } = await supabase
-        .from('data_room_documents')
-        .select('*')
-        .eq('user_id', user.id)
-        .eq('category', 'Financials')
-        .eq('subcategory', 'Income Statements')
-        .eq('is_active', true)
-        .eq('document_type', 'Income Statement');
-
-      setHasUploadedPnL(data && data.length > 0);
-    } catch (error) {
-      console.error('Error checking documents:', error);
-    }
-  };
 
   const loadFinancialData = async () => {
     if (!user) return;
@@ -99,8 +89,8 @@ export default function EBITDACalculatorPage() {
         .maybeSingle();
 
       if (data) {
-        // Load actual data into both calculators with same baseline
-        const baselineData = {
+        // Load actual data into both calculators
+        const userData = {
           revenue: data.revenue || 0,
           cogs: data.cogs || 0,
           opex: data.opex || 0,
@@ -111,19 +101,23 @@ export default function EBITDACalculatorPage() {
           otherNonRecurring: data.other_non_recurring || 0
         };
         
-        setBaselineData(baselineData);
-        setCalculatorA(baselineData);
-        setCalculatorB(baselineData); // Start scenario with same baseline
+        setBaselineData(userData);
+        setCalculatorA(userData);
+        setCalculatorB(userData);
+        setLabelA('Actual Financials (Your Data)');
+        toast.success('Loaded your financial data');
       }
     } catch (error) {
       console.error('Error loading financial data:', error);
-    } finally {
-      setLoading(false);
+      // Keep sample data on error
     }
   };
 
   const saveCalculatorData = async (calculator: 'A' | 'B', data: CalculatorData) => {
-    if (!user) return;
+    if (!user) {
+      toast.error('Please sign in to save your data');
+      return;
+    }
 
     const setSaving = calculator === 'A' ? setSavingA : setSavingB;
     setSaving(true);
@@ -154,28 +148,12 @@ export default function EBITDACalculatorPage() {
     }
   };
 
-  const loadMockData = () => {
-    const mockData: CalculatorData = {
-      revenue: 2500000,
-      cogs: 1100000,
-      opex: 950000,
-      ownerSalary: 175000,
-      personalVehicle: 18000,
-      travelMeals: 25000,
-      legalFees: 12000,
-      otherNonRecurring: 0
-    };
-    
-    setBaselineData(mockData);
-    setCalculatorA(mockData);
-    setCalculatorB(mockData); // Start scenario with same baseline
-    setBypassGate(true); // NEW: Bypass the gate when using sample data
-    toast.success('Mock data loaded - Acme Manufacturing LLC');
-  };
-
-  const skipForNow = () => {
-    setBypassGate(true);
-    toast.success('Skipped upload requirement - you can enter data manually');
+  const loadNewSampleData = () => {
+    setBaselineData(sampleCalculatorData);
+    setCalculatorA(sampleCalculatorData);
+    setCalculatorB(sampleCalculatorData);
+    setLabelA('Actual Financials (Sample Data)');
+    toast.success('Refreshed with sample data - Acme Manufacturing LLC');
   };
 
   const copyToCalculator = (from: 'A' | 'B') => {
@@ -237,43 +215,6 @@ export default function EBITDACalculatorPage() {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <Loader2 className="w-8 h-8 animate-spin text-white/70" />
-      </div>
-    );
-  }
-
-  // No P&L uploaded state - UPDATED: Check both hasUploadedPnL AND bypassGate
-  if (!hasUploadedPnL && !bypassGate) {
-    return (
-      <div className="min-h-screen p-6 flex items-center justify-center">
-        <div className="max-w-2xl w-full bg-white/5 border border-white/10 rounded-xl p-8 backdrop-blur-sm text-center">
-          <FileText className="w-16 h-16 text-white/40 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-white mb-4">Upload Your P&L Statement First</h2>
-          <p className="text-white/70 mb-6">
-            To use the EBITDA Calculator, please upload your Profit & Loss statement to the Data Room first.
-            This ensures accurate calculations based on your actual financial data.
-          </p>
-          <div className="flex gap-4 justify-center">
-            <button
-              onClick={() => navigate('/portal/week-2/data-room')}
-              className="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition inline-flex items-center gap-2"
-            >
-              Go to Data Room
-              <ArrowRight className="w-5 h-5" />
-            </button>
-            <button
-              onClick={loadMockData}
-              className="bg-white/10 text-white px-6 py-3 rounded-lg hover:bg-white/20 transition"
-            >
-              Use Sample Data
-            </button>
-            <button
-              onClick={skipForNow}
-              className="bg-gray-500 text-white px-6 py-3 rounded-lg hover:bg-gray-600 transition"
-            >
-              Skip for Now
-            </button>
-          </div>
-        </div>
       </div>
     );
   }
@@ -516,7 +457,15 @@ export default function EBITDACalculatorPage() {
   return (
     <div className="min-h-screen p-6">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-3xl font-bold text-white mb-8">EBITDA Calculator - Side by Side Comparison</h1>
+        <div className="flex items-center justify-between mb-8">
+          <h1 className="text-3xl font-bold text-white">EBITDA Calculator - Side by Side Comparison</h1>
+          <button
+            onClick={loadNewSampleData}
+            className="bg-white/10 text-white px-4 py-2 rounded-lg hover:bg-white/20 transition"
+          >
+            Refresh Sample Data
+          </button>
+        </div>
         
         {/* Delta Summary Bar */}
         {(calculatorA.revenue > 0 && calculatorB.revenue > 0) && (
