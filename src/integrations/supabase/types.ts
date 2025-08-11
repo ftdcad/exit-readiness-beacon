@@ -1157,24 +1157,30 @@ export type Database = {
           email: string
           full_name: string | null
           id: string
+          phone: string | null
           role_id: string | null
           updated_at: string | null
+          website: string | null
         }
         Insert: {
           created_at?: string | null
           email: string
           full_name?: string | null
           id: string
+          phone?: string | null
           role_id?: string | null
           updated_at?: string | null
+          website?: string | null
         }
         Update: {
           created_at?: string | null
           email?: string
           full_name?: string | null
           id?: string
+          phone?: string | null
           role_id?: string | null
           updated_at?: string | null
+          website?: string | null
         }
         Relationships: [
           {
@@ -1413,6 +1419,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      ensure_profile: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
       get_my_role: {
         Args: Record<PropertyKey, never>
         Returns: {
