@@ -1,8 +1,10 @@
+
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Index from './pages/Index';
 import AuthPage from './pages/AuthPage';
+import AssessmentPage from './pages/AssessmentPage';
 import ClientPortalDashboard from './pages/ClientPortalDashboard';
 import DueDiligenceChecklistPage from './pages/week-4/DueDiligenceChecklistPage';
 import LOIReviewPage from './pages/LOIReviewPage';
@@ -44,6 +46,7 @@ import { ProgressProvider } from './components/ProgressProvider';
 import { ClientPortalLayout } from './components/ClientPortalLayout';
 import { ScheduleConsultationPage } from './pages/ScheduleConsultationPage';
 import DiscoveryInterviewPage from './pages/DiscoveryInterviewPage';
+import ExecutiveDiscoveryInterviewPage from './pages/ExecutiveDiscoveryInterviewPage';
 
 // Create a client
 const queryClient = new QueryClient({
@@ -64,6 +67,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/auth" element={<AuthPage />} />
+              <Route path="/assessment" element={<AssessmentPage />} />
               
               {/* Admin Routes */}
               <Route path="/admin/login" element={<AdminLogin />} />
@@ -128,6 +132,7 @@ function App() {
               <Route path="/portal/week-4/loi-review" element={<ClientPortalLayout><LOIReviewPage /></ClientPortalLayout>} />
               <Route path="/portal/week-4/final-report" element={<ClientPortalLayout><FinalReportPage /></ClientPortalLayout>} />
               <Route path="/portal/week-4/discovery-interview" element={<ClientPortalLayout><DiscoveryInterviewPage /></ClientPortalLayout>} />
+              <Route path="/portal/week-4/executive-discovery" element={<ClientPortalLayout><ExecutiveDiscoveryInterviewPage /></ClientPortalLayout>} />
               <Route path="/portal/week-4/value-builder" element={<ClientPortalLayout><StrategyDocBuilderPage /></ClientPortalLayout>} />
               <Route path="/portal/week-4/kpis-okrs" element={<ClientPortalLayout><KPIandOKRPage /></ClientPortalLayout>} />
               
