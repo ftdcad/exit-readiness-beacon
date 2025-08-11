@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -15,7 +14,7 @@ export const ProfessionalAdvisorsEducation: React.FC = () => {
   
   const pages = [
     {
-      title: "Don't Use Your Cousin Larry",
+      title: "Larry the Lawyer Can't Do This Deal",
       content: <IntroPage />
     },
     {
@@ -90,13 +89,13 @@ export const ProfessionalAdvisorsEducation: React.FC = () => {
 
 const IntroPage: React.FC = () => (
   <div className="space-y-6">
-    <h2 className="text-3xl font-bold">Your Cousin Larry Can't Do This Deal</h2>
+    <h2 className="text-3xl font-bold">Your Cousin Larry the Lawyer Can't Do This Deal</h2>
     
     <div className="bg-destructive/10 backdrop-blur-sm p-4 rounded-lg border-l-4 border-destructive/30">
       <p className="text-destructive font-semibold mb-2">Reality Check:</p>
       <p className="text-muted-foreground">
         PE buyers have teams doing 20+ deals a year. You'll do one. 
-        Using your regular advisors is like bringing a knife to a gunfight.
+        Using your cousin Larry or other regular advisors is like bringing a knife to a gunfight.
       </p>
     </div>
     
