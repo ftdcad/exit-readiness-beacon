@@ -2,6 +2,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Index from './pages/Index';
+import AuthPage from './pages/AuthPage';
 import ClientPortalDashboard from './pages/ClientPortalDashboard';
 import DueDiligenceChecklistPage from './pages/week-4/DueDiligenceChecklistPage';
 import LOIReviewPage from './pages/LOIReviewPage';
@@ -41,6 +42,7 @@ function App() {
         <Router>
           <Routes>
             <Route path="/" element={<Index />} />
+            <Route path="/auth" element={<AuthPage />} />
             <Route path="/portal" element={<ClientPortalLayout><ClientPortalDashboard /></ClientPortalLayout>} />
             <Route path="/portal/schedule-consultation" element={<ClientPortalLayout><ScheduleConsultationPage /></ClientPortalLayout>} />
 
