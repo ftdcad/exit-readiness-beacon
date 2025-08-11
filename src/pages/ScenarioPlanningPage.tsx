@@ -1,7 +1,7 @@
+
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Slider } from '@/components/ui/slider';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { ArrowRight, TrendingUp, Clock, DollarSign, Target, Zap, Building2 } from 'lucide-react';
@@ -57,9 +57,9 @@ const scenarios: Scenario[] = [
 
 export function ScenarioPlanningPage() {
   const [preferences, setPreferences] = useState({
-    timeline: [18], // months
-    riskTolerance: [50], // 0-100
-    capitalAvailable: [500000] // dollars
+    timeline: 18, // months
+    riskTolerance: 50, // 0-100
+    capitalAvailable: 500000 // dollars
   });
 
   // Mock current valuation - in real app, this would come from user's data
@@ -71,14 +71,14 @@ export function ScenarioPlanningPage() {
     const baseValue = currentEBITDA * scenario.projectedMultiple;
     
     // Adjust for timeline preference
-    const timelineBonus = preferences.timeline[0] >= 24 ? 1.1 : 1.0;
+    const timelineBonus = preferences.timeline >= 24 ? 1.1 : 1.0;
     
     // Adjust for risk tolerance
     const riskMultiplier = scenario.riskLevel === 'High' ? 
-      (preferences.riskTolerance[0] / 100) * 1.2 + 0.8 : 1.0;
+      (preferences.riskTolerance / 100) * 1.2 + 0.8 : 1.0;
     
     // Adjust for capital availability
-    const capitalFit = preferences.capitalAvailable[0] >= scenario.capitalRequired ? 1.0 : 0.85;
+    const capitalFit = preferences.capitalAvailable >= scenario.capitalRequired ? 1.0 : 0.85;
     
     return Math.round(baseValue * timelineBonus * riskMultiplier * capitalFit);
   };
@@ -110,6 +110,24 @@ export function ScenarioPlanningPage() {
   };
 
   const bestScenario = getBestScenario();
+
+  const getTimelineLabel = (months: number) => {
+    if (months <= 12) return 'Quick Exit (Green)';
+    if (months <= 24) return 'Moderate Timeline (Yellow)';
+    return 'Long-term Strategy (Red)';
+  };
+
+  const getRiskToleranceLabel = (risk: number) => {
+    if (risk <= 33) return 'Conservative (Green)';
+    if (risk <= 66) return 'Moderate (Yellow)';
+    return 'Aggressive (Red)';
+  };
+
+  const getCapitalLabel = (capital: number) => {
+    if (capital <= 250000) return 'Limited Capital (Green)';
+    if (capital <= 750000) return 'Moderate Capital (Yellow)';
+    return 'High Capital (Red)';
+  };
 
   return (
     <div className="space-y-8">
@@ -158,45 +176,147 @@ export function ScenarioPlanningPage() {
             Adjust these sliders to see how different scenarios fit your goals
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-6">
+        <CardContent className="space-y-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Timeline Preference */}
             <div className="space-y-3">
-              <label className="text-sm font-medium">Timeline Preference</label>
-              <Slider
-                value={preferences.timeline}
-                onValueChange={(value) => setPreferences(prev => ({ ...prev, timeline: value }))}
-                max={60}
-                min={6}
-                step={6}
-                className="w-full"
-              />
-              <p className="text-sm text-muted-foreground">{preferences.timeline[0]} months</p>
+              <label className="text-sm font-medium text-zinc-300">Timeline Preference</label>
+              <div className="relative">
+                <input
+                  type="range"
+                  min="6"
+                  max="60"
+                  step="6"
+                  value={preferences.timeline}
+                  onChange={(e) => setPreferences(prev => ({ ...prev, timeline: Number(e.target.value) }))}
+                  className="w-full h-2 rounded-lg appearance-none cursor-pointer bg-zinc-700 
+                           [&::-webkit-slider-thumb]:appearance-none
+                           [&::-webkit-slider-thumb]:w-5
+                           [&::-webkit-slider-thumb]:h-5
+                           [&::-webkit-slider-thumb]:rounded-full
+                           [&::-webkit-slider-thumb]:bg-blue-500
+                           [&::-webkit-slider-thumb]:ring-2
+                           [&::-webkit-slider-thumb]:ring-white
+                           [&::-webkit-slider-thumb]:cursor-pointer
+                           [&::-moz-range-thumb]:w-5
+                           [&::-moz-range-thumb]:h-5
+                           [&::-moz-range-thumb]:rounded-full
+                           [&::-moz-range-thumb]:bg-blue-500
+                           [&::-moz-range-thumb]:border-2
+                           [&::-moz-range-thumb]:border-white
+                           [&::-moz-range-thumb]:cursor-pointer"
+                  style={{
+                    background: `linear-gradient(to right, 
+                      #10b981 0%, 
+                      #eab308 33%, 
+                      #f97316 66%, 
+                      #ef4444 100%)`
+                  }}
+                />
+                <div className="flex justify-between text-xs text-zinc-500 mt-1">
+                  <span>Quick (6m)</span>
+                  <span>Moderate (24m)</span>
+                  <span>Long (60m)</span>
+                </div>
+              </div>
+              <div className="text-center space-y-1">
+                <div className="text-sm text-white font-medium">{preferences.timeline} months</div>
+                <div className="text-xs text-zinc-400">{getTimelineLabel(preferences.timeline)}</div>
+              </div>
             </div>
             
+            {/* Risk Tolerance */}
             <div className="space-y-3">
-              <label className="text-sm font-medium">Risk Tolerance</label>
-              <Slider
-                value={preferences.riskTolerance}
-                onValueChange={(value) => setPreferences(prev => ({ ...prev, riskTolerance: value }))}
-                max={100}
-                min={0}
-                step={10}
-                className="w-full"
-              />
-              <p className="text-sm text-muted-foreground">{preferences.riskTolerance[0]}% risk tolerance</p>
+              <label className="text-sm font-medium text-zinc-300">Risk Tolerance</label>
+              <div className="relative">
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  step="10"
+                  value={preferences.riskTolerance}
+                  onChange={(e) => setPreferences(prev => ({ ...prev, riskTolerance: Number(e.target.value) }))}
+                  className="w-full h-2 rounded-lg appearance-none cursor-pointer bg-zinc-700 
+                           [&::-webkit-slider-thumb]:appearance-none
+                           [&::-webkit-slider-thumb]:w-5
+                           [&::-webkit-slider-thumb]:h-5
+                           [&::-webkit-slider-thumb]:rounded-full
+                           [&::-webkit-slider-thumb]:bg-blue-500
+                           [&::-webkit-slider-thumb]:ring-2
+                           [&::-webkit-slider-thumb]:ring-white
+                           [&::-webkit-slider-thumb]:cursor-pointer
+                           [&::-moz-range-thumb]:w-5
+                           [&::-moz-range-thumb]:h-5
+                           [&::-moz-range-thumb]:rounded-full
+                           [&::-moz-range-thumb]:bg-blue-500
+                           [&::-moz-range-thumb]:border-2
+                           [&::-moz-range-thumb]:border-white
+                           [&::-moz-range-thumb]:cursor-pointer"
+                  style={{
+                    background: `linear-gradient(to right, 
+                      #10b981 0%, 
+                      #eab308 50%, 
+                      #f97316 75%, 
+                      #ef4444 100%)`
+                  }}
+                />
+                <div className="flex justify-between text-xs text-zinc-500 mt-1">
+                  <span>Safe (0%)</span>
+                  <span>Moderate (50%)</span>
+                  <span>Risky (100%)</span>
+                </div>
+              </div>
+              <div className="text-center space-y-1">
+                <div className="text-sm text-white font-medium">{preferences.riskTolerance}% risk tolerance</div>
+                <div className="text-xs text-zinc-400">{getRiskToleranceLabel(preferences.riskTolerance)}</div>
+              </div>
             </div>
             
+            {/* Capital Available */}
             <div className="space-y-3">
-              <label className="text-sm font-medium">Capital Available</label>
-              <Slider
-                value={preferences.capitalAvailable}
-                onValueChange={(value) => setPreferences(prev => ({ ...prev, capitalAvailable: value }))}
-                max={2000000}
-                min={0}
-                step={50000}
-                className="w-full"
-              />
-              <p className="text-sm text-muted-foreground">{formatCurrency(preferences.capitalAvailable[0])}</p>
+              <label className="text-sm font-medium text-zinc-300">Capital Available</label>
+              <div className="relative">
+                <input
+                  type="range"
+                  min="0"
+                  max="2000000"
+                  step="50000"
+                  value={preferences.capitalAvailable}
+                  onChange={(e) => setPreferences(prev => ({ ...prev, capitalAvailable: Number(e.target.value) }))}
+                  className="w-full h-2 rounded-lg appearance-none cursor-pointer bg-zinc-700 
+                           [&::-webkit-slider-thumb]:appearance-none
+                           [&::-webkit-slider-thumb]:w-5
+                           [&::-webkit-slider-thumb]:h-5
+                           [&::-webkit-slider-thumb]:rounded-full
+                           [&::-webkit-slider-thumb]:bg-blue-500
+                           [&::-webkit-slider-thumb]:ring-2
+                           [&::-webkit-slider-thumb]:ring-white
+                           [&::-webkit-slider-thumb]:cursor-pointer
+                           [&::-moz-range-thumb]:w-5
+                           [&::-moz-range-thumb]:h-5
+                           [&::-moz-range-thumb]:rounded-full
+                           [&::-moz-range-thumb]:bg-blue-500
+                           [&::-moz-range-thumb]:border-2
+                           [&::-moz-range-thumb]:border-white
+                           [&::-moz-range-thumb]:cursor-pointer"
+                  style={{
+                    background: `linear-gradient(to right, 
+                      #10b981 0%, 
+                      #eab308 25%, 
+                      #f97316 50%, 
+                      #ef4444 100%)`
+                  }}
+                />
+                <div className="flex justify-between text-xs text-zinc-500 mt-1">
+                  <span>$0</span>
+                  <span>$1M</span>
+                  <span>$2M</span>
+                </div>
+              </div>
+              <div className="text-center space-y-1">
+                <div className="text-sm text-white font-medium">{formatCurrency(preferences.capitalAvailable)}</div>
+                <div className="text-xs text-zinc-400">{getCapitalLabel(preferences.capitalAvailable)}</div>
+              </div>
             </div>
           </div>
         </CardContent>
