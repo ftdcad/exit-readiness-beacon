@@ -1,3 +1,4 @@
+
 // EBITDA CALCULATOR PAGE - TRUE SIDE-BY-SIDE COMPARISON
 // src/pages/EBITDACalculatorPage.tsx
 
@@ -46,6 +47,7 @@ export default function EBITDACalculatorPage() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [hasUploadedPnL, setHasUploadedPnL] = useState(false);
+  const [bypassGate, setBypassGate] = useState(false); // NEW: Allow bypassing the gate
   const [savingA, setSavingA] = useState(false);
   const [savingB, setSavingB] = useState(false);
   
@@ -167,7 +169,13 @@ export default function EBITDACalculatorPage() {
     setBaselineData(mockData);
     setCalculatorA(mockData);
     setCalculatorB(mockData); // Start scenario with same baseline
+    setBypassGate(true); // NEW: Bypass the gate when using sample data
     toast.success('Mock data loaded - Acme Manufacturing LLC');
+  };
+
+  const skipForNow = () => {
+    setBypassGate(true);
+    toast.success('Skipped upload requirement - you can enter data manually');
   };
 
   const copyToCalculator = (from: 'A' | 'B') => {
@@ -233,8 +241,8 @@ export default function EBITDACalculatorPage() {
     );
   }
 
-  // No P&L uploaded state
-  if (!hasUploadedPnL) {
+  // No P&L uploaded state - UPDATED: Check both hasUploadedPnL AND bypassGate
+  if (!hasUploadedPnL && !bypassGate) {
     return (
       <div className="min-h-screen p-6 flex items-center justify-center">
         <div className="max-w-2xl w-full bg-white/5 border border-white/10 rounded-xl p-8 backdrop-blur-sm text-center">
@@ -246,7 +254,7 @@ export default function EBITDACalculatorPage() {
           </p>
           <div className="flex gap-4 justify-center">
             <button
-              onClick={() => navigate('/portal/week-1/data-room')}
+              onClick={() => navigate('/portal/week-2/data-room')}
               className="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition inline-flex items-center gap-2"
             >
               Go to Data Room
@@ -257,6 +265,12 @@ export default function EBITDACalculatorPage() {
               className="bg-white/10 text-white px-6 py-3 rounded-lg hover:bg-white/20 transition"
             >
               Use Sample Data
+            </button>
+            <button
+              onClick={skipForNow}
+              className="bg-gray-500 text-white px-6 py-3 rounded-lg hover:bg-gray-600 transition"
+            >
+              Skip for Now
             </button>
           </div>
         </div>
@@ -580,7 +594,7 @@ export default function EBITDACalculatorPage() {
         {/* Navigation */}
         <div className="mt-8 flex justify-center">
           <button
-            onClick={() => navigate('/portal/week-1/industry-multiples')}
+            onClick={() => navigate('/portal/week-3/multiples')}
             className="bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600 transition inline-flex items-center gap-2"
           >
             Continue to Industry Multipliers
