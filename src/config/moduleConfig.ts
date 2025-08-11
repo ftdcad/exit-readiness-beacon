@@ -35,7 +35,7 @@ export const moduleConfigurations: ModuleConfig[] = [
   
   // Week 3 - Performance Readiness
   { name: 'EBITDA Calculator', path: '/portal/week-3/ebitda-calculator', weekNumber: 3, order: 1 },
-  { name: 'Industry Multipliers', path: '/portal/week-3/multiples', weekNumber: 3, order: 2 },
+  { name: 'Industry Multipliers', path: '/portal/week-3/industry-multipliers', weekNumber: 3, order: 2 },
   { name: 'Scenario Planning', path: '/portal/week-3/scenarios', weekNumber: 3, order: 3 },
   { name: 'Management Scorecard', path: '/portal/week-3/scorecard', weekNumber: 3, order: 4 },
   { name: 'Top Performers', path: '/portal/week-3/top-performers', weekNumber: 3, order: 5 },

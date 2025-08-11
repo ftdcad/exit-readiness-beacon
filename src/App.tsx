@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Index from './pages/Index';
@@ -26,6 +27,7 @@ import EarnoutsMultipliersPage from './pages/week-2/EarnoutsMultipliersPage';
 import PostClosingRealityPage from './pages/week-2/PostClosingRealityPage';
 import EbitdaCalculatorPage from './pages/EBITDACalculatorPage';
 import MultiplesPage from './pages/IndustryMultiplesPage';
+import { ScenarioPlanningPage } from './pages/ScenarioPlanningPage';
 import ScorecardPage from './pages/week-3/ManagementScorecardPage';
 import TopPerformersPage from './pages/week-3/TopPerformersPage';
 import BusinessScorecardPage from './pages/week-3/BusinessScorecardPage';
@@ -71,7 +73,7 @@ function App() {
             <Route path="/portal/week-3/ebitda-calculator" element={<ClientPortalLayout><EbitdaCalculatorPage /></ClientPortalLayout>} />
             <Route path="/portal/week-3/multiples" element={<ClientPortalLayout><MultiplesPage /></ClientPortalLayout>} />
             <Route path="/portal/week-3/industry-multipliers" element={<ClientPortalLayout><MultiplesPage /></ClientPortalLayout>} />
-            <Route path="/portal/week-3/scenario-planning" element={<ClientPortalLayout><ScorecardPage /></ClientPortalLayout>} />
+            <Route path="/portal/week-3/scenarios" element={<ClientPortalLayout><ScenarioPlanningPage /></ClientPortalLayout>} />
             <Route path="/portal/week-3/scorecard" element={<ClientPortalLayout><ScorecardPage /></ClientPortalLayout>} />
             <Route path="/portal/week-3/top-performers" element={<ClientPortalLayout><TopPerformersPage /></ClientPortalLayout>} />
             <Route path="/portal/week-3/business-scorecard" element={<ClientPortalLayout><BusinessScorecardPage /></ClientPortalLayout>} />
