@@ -4,7 +4,7 @@ import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { ClientPortalSidebar } from '@/components/ClientPortalSidebar';
 import { Button } from '@/components/ui/button';
 import { ExternalLink } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { AIAssistantDialog } from '@/components/ai/AIAssistantDialog';
 
 interface ClientPortalLayoutProps {
@@ -12,6 +12,12 @@ interface ClientPortalLayoutProps {
 }
 
 export const ClientPortalLayout = ({ children }: ClientPortalLayoutProps) => {
+  const navigate = useNavigate();
+
+  const handleExitPortal = () => {
+    navigate('/');
+  };
+
   return (
     <SidebarProvider>
       <div className="flex min-h-screen w-full bg-gradient-to-br from-background to-muted/20">
@@ -27,11 +33,9 @@ export const ClientPortalLayout = ({ children }: ClientPortalLayoutProps) => {
             </div>
             <div className="flex items-center gap-2 mr-4">
               <AIAssistantDialog />
-              <Button variant="outline" size="sm" asChild>
-                <Link to="/" className="flex items-center gap-2">
-                  <ExternalLink className="h-4 w-4" />
-                  Exit Portal
-                </Link>
+              <Button variant="outline" size="sm" onClick={handleExitPortal}>
+                <ExternalLink className="h-4 w-4" />
+                Exit Portal
               </Button>
             </div>
           </header>
