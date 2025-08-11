@@ -1,360 +1,86 @@
-
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import Index from "./pages/Index";
-import AuthPage from "./pages/AuthPage";
-import AssessmentPage from "./pages/AssessmentPage";
-import AssessmentSuccessPage from "./pages/AssessmentSuccessPage";
-import ClientPortalDashboard from "./pages/ClientPortalDashboard";
-import AdminLogin from "./pages/AdminLogin";
-import AdminDashboard from "./pages/AdminDashboard";
-import AdminInquiries from "./pages/AdminInquiries";
-import CompanyDetail from "./pages/CompanyDetail";
-import NotFound from "./pages/NotFound";
-import { ClientRoute } from "./components/ClientRoute";
-import AdminRoute from "./components/AdminRoute";
-import { ClientPortalLayout } from "./components/ClientPortalLayout";
-import AdminLayout from "./components/AdminLayout";
-
-// Week 1 pages
-import EBITDACalculatorPage from "./pages/EBITDACalculatorPage";
-import IndustryMultiplesPage from "./pages/IndustryMultiplesPage";
-import { ScenarioPlanningPage } from "./pages/ScenarioPlanningPage";
-import GlossaryPage from "./pages/GlossaryPage";
-import QuickWinsPage from "./pages/QuickWinsPage";
-import KnowYourBuyerPage from "./pages/KnowYourBuyerPage";
-import StrategyDocBuilderPage from "./pages/StrategyDocBuilderPage";
-import ExecutiveDiscoveryInterviewPage from "./pages/ExecutiveDiscoveryInterviewPage";
-import AssetWorkshopPage from "./pages/AssetWorkshopPage";
-import DataRoomPage from "./pages/DataRoomPage";
-import { DataRoomIntroPage } from "./pages/DataRoomIntroPage";
-import { DataRoomWorkspacePage } from "./pages/DataRoomWorkspacePage";
-import { ScheduleConsultationPage } from "./pages/ScheduleConsultationPage";
-import ProfessionalAdvisorsPage from "./pages/ProfessionalAdvisorsPage";
-import AssetFreeEducationPage from "./pages/AssetFreeEducationPage";
-import TimeKillsDealsPage from "./pages/TimeKillsDealsPage";
-import DealProgressionPage from "./pages/DealProgressionPage";
-import EBITDACoursePage from "./pages/EBITDACoursePage";
-
-// Week 2 pages
-import DebtInterestPage from "./pages/week-2/DebtInterestPage";
-import EarnoutsMultipliersPage from "./pages/week-2/EarnoutsMultipliersPage";
-import HoldCoStructurePage from "./pages/week-2/HoldCoStructurePage";
-import PostClosingRealityPage from "./pages/week-2/PostClosingRealityPage";
-
-// Week 3 pages
-import TopPerformersPage from "./pages/week-3/TopPerformersPage";
-import BusinessScorecardPage from "./pages/week-3/BusinessScorecardPage";
-import ManagementScorecardPage from "./pages/week-3/ManagementScorecardPage";
-import DealKillersDiagnosticPage from "./pages/week-3/DealKillersDiagnosticPage";
-
-// Week 4 pages
-import DueDiligenceChecklistPage from "./pages/week-4/DueDiligenceChecklistPage";
-import FinalReportPage from "./pages/week-4/FinalReportPage";
-import LOIReviewPage from "./pages/LOIReviewPage";
-import KPIandOKRPage from "./pages/KPIandOKRPage";
-
-const queryClient = new QueryClient();
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import ClientPortalDashboard from './pages/ClientPortalDashboard';
+import DueDiligenceChecklistPage from './pages/DueDiligenceChecklistPage';
+import LOIReviewPage from './pages/LOIReviewPage';
+import FinalReportPage from './pages/FinalReportPage';
+import StrategyDocBuilderPage from './pages/StrategyDocBuilderPage';
+import KPIandOKRPage from './pages/KPIandOKRPage';
+import InteractiveGlossaryPage from './pages/InteractiveGlossaryPage';
+import DealProgressionPage from './pages/DealProgressionPage';
+import ProfessionalAdvisorsPage from './pages/ProfessionalAdvisorsPage';
+import KnowYourBuyerPage from './pages/KnowYourBuyerPage';
+import AssetFreeEducationPage from './pages/AssetFreeEducationPage';
+import TimeKillsDealsPage from './pages/TimeKillsDealsPage';
+import EBITDAExplainedPage from './pages/EBITDAExplainedPage';
+import DataRoomPage from './pages/DataRoomPage';
+import AssetWorkshopPage from './pages/AssetWorkshopPage';
+import HoldCoStructurePage from './pages/HoldCoStructurePage';
+import QuickWinsPage from './pages/QuickWinsPage';
+import DebtInterestPage from './pages/DebtInterestPage';
+import EarnoutsMultipliersPage from './pages/EarnoutsMultipliersPage';
+import PostClosingRealityPage from './pages/PostClosingRealityPage';
+import EbitdaCalculatorPage from './pages/EbitdaCalculatorPage';
+import MultiplesPage from './pages/MultiplesPage';
+import ScenariosPage from './pages/ScenariosPage';
+import ScorecardPage from './pages/ScorecardPage';
+import TopPerformersPage from './pages/TopPerformersPage';
+import BusinessScorecardPage from './pages/BusinessScorecardPage';
+import DealKillersPage from './pages/DealKillersPage';
+import { AuthProvider } from './hooks/useAuth';
+import { ProgressProvider } from './hooks/useProgress';
+import { ClientPortalLayout } from './components/ClientPortalLayout';
+import ScheduleConsultation from './pages/ScheduleConsultation';
+import DiscoveryInterviewPage from './pages/DiscoveryInterviewPage';
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
+    <AuthProvider>
+      <ProgressProvider>
+        <Router>
           <Routes>
-            {/* Public routes */}
-            <Route path="/" element={<Index />} />
-            <Route path="/auth" element={<AuthPage />} />
-            <Route path="/assessment" element={<AssessmentPage />} />
-            <Route path="/assessment-success" element={<AssessmentSuccessPage />} />
-            
-            {/* Admin routes */}
-            <Route path="/admin" element={<AdminLogin />} />
-            <Route path="/admin/dashboard" element={
-              <AdminRoute>
-                <AdminLayout>
-                  <AdminDashboard />
-                </AdminLayout>
-              </AdminRoute>
-            } />
-            <Route path="/admin/inquiries" element={
-              <AdminRoute>
-                <AdminLayout>
-                  <AdminInquiries />
-                </AdminLayout>
-              </AdminRoute>
-            } />
-            <Route path="/admin/companies/:id" element={
-              <AdminRoute>
-                <AdminLayout>
-                  <CompanyDetail />
-                </AdminLayout>
-              </AdminRoute>
-            } />
+            <Route path="/" element={<ClientPortalLayout><ClientPortalDashboard /></ClientPortalLayout>} />
+            <Route path="/portal" element={<ClientPortalLayout><ClientPortalDashboard /></ClientPortalLayout>} />
+            <Route path="/portal/schedule-consultation" element={<ClientPortalLayout><ScheduleConsultation /></ClientPortalLayout>} />
 
-            {/* Client portal routes */}
-            <Route path="/portal" element={
-              <ClientRoute>
-                <ClientPortalLayout>
-                  <ClientPortalDashboard />
-                </ClientPortalLayout>
-              </ClientRoute>
-            } />
+            {/* Week 1 Routes */}
+            <Route path="/portal/week-1/glossary" element={<ClientPortalLayout><InteractiveGlossaryPage /></ClientPortalLayout>} />
+            <Route path="/portal/week-1/deal-progression" element={<ClientPortalLayout><DealProgressionPage /></ClientPortalLayout>} />
+            <Route path="/portal/week-1/professional-advisors" element={<ClientPortalLayout><ProfessionalAdvisorsPage /></ClientPortalLayout>} />
+            <Route path="/portal/week-1/know-your-buyer" element={<ClientPortalLayout><KnowYourBuyerPage /></ClientPortalLayout>} />
+            <Route path="/portal/week-1/asset-free-education" element={<ClientPortalLayout><AssetFreeEducationPage /></ClientPortalLayout>} />
+            <Route path="/portal/week-1/time-kills-deals" element={<ClientPortalLayout><TimeKillsDealsPage /></ClientPortalLayout>} />
+            <Route path="/portal/week-1/ebitda-course" element={<ClientPortalLayout><EBITDAExplainedPage /></ClientPortalLayout>} />
 
-            {/* Week 1 routes - aligned with moduleConfig */}
-            <Route path="/portal/week-1" element={<Navigate to="/portal/week-1/glossary" replace />} />
-            <Route path="/portal/week-1/glossary" element={
-              <ClientRoute>
-                <ClientPortalLayout>
-                  <GlossaryPage />
-                </ClientPortalLayout>
-              </ClientRoute>
-            } />
-            <Route path="/portal/week-1/deal-progression" element={
-              <ClientRoute>
-                <ClientPortalLayout>
-                  <DealProgressionPage />
-                </ClientPortalLayout>
-              </ClientRoute>
-            } />
-            <Route path="/portal/week-1/professional-advisors" element={
-              <ClientRoute>
-                <ClientPortalLayout>
-                  <ProfessionalAdvisorsPage />
-                </ClientPortalLayout>
-              </ClientRoute>
-            } />
-            <Route path="/portal/week-1/know-your-buyer" element={
-              <ClientRoute>
-                <ClientPortalLayout>
-                  <KnowYourBuyerPage />
-                </ClientPortalLayout>
-              </ClientRoute>
-            } />
-            <Route path="/portal/week-1/asset-free-education" element={
-              <ClientRoute>
-                <ClientPortalLayout>
-                  <AssetFreeEducationPage />
-                </ClientPortalLayout>
-              </ClientRoute>
-            } />
-            <Route path="/portal/week-1/time-kills-deals" element={
-              <ClientRoute>
-                <ClientPortalLayout>
-                  <TimeKillsDealsPage />
-                </ClientPortalLayout>
-              </ClientRoute>
-            } />
-            <Route path="/portal/week-1/ebitda-course" element={
-              <ClientRoute>
-                <ClientPortalLayout>
-                  <EBITDACoursePage />
-                </ClientPortalLayout>
-              </ClientRoute>
-            } />
+            {/* Week 2 Routes */}
+            <Route path="/portal/week-2/data-room" element={<ClientPortalLayout><DataRoomPage /></ClientPortalLayout>} />
+            <Route path="/portal/week-2/asset-workshop" element={<ClientPortalLayout><AssetWorkshopPage /></ClientPortalLayout>} />
+            <Route path="/portal/week-2/holdco-structure" element={<ClientPortalLayout><HoldCoStructurePage /></ClientPortalLayout>} />
+            <Route path="/portal/week-2/quick-wins" element={<ClientPortalLayout><QuickWinsPage /></ClientPortalLayout>} />
+            <Route path="/portal/week-2/debt-interest" element={<ClientPortalLayout><DebtInterestPage /></ClientPortalLayout>} />
+            <Route path="/portal/week-2/earnouts-multipliers" element={<ClientPortalLayout><EarnoutsMultipliersPage /></ClientPortalLayout>} />
+            <Route path="/portal/week-2/post-closing-reality" element={<ClientPortalLayout><PostClosingRealityPage /></ClientPortalLayout>} />
 
-            {/* Week 2 routes - aligned with moduleConfig */}
-            <Route path="/portal/week-2" element={<Navigate to="/portal/week-2/data-room" replace />} />
-            <Route path="/portal/week-2/data-room" element={
-              <ClientRoute>
-                <ClientPortalLayout>
-                  <DataRoomPage />
-                </ClientPortalLayout>
-              </ClientRoute>
-            } />
-            <Route path="/portal/week-2/asset-workshop" element={
-              <ClientRoute>
-                <ClientPortalLayout>
-                  <AssetWorkshopPage />
-                </ClientPortalLayout>
-              </ClientRoute>
-            } />
-            <Route path="/portal/week-2/holdco-structure" element={
-              <ClientRoute>
-                <ClientPortalLayout>
-                  <HoldCoStructurePage />
-                </ClientPortalLayout>
-              </ClientRoute>
-            } />
-            <Route path="/portal/week-2/quick-wins" element={
-              <ClientRoute>
-                <ClientPortalLayout>
-                  <QuickWinsPage />
-                </ClientPortalLayout>
-              </ClientRoute>
-            } />
-            <Route path="/portal/week-2/debt-interest" element={
-              <ClientRoute>
-                <ClientPortalLayout>
-                  <DebtInterestPage />
-                </ClientPortalLayout>
-              </ClientRoute>
-            } />
-            <Route path="/portal/week-2/earnouts-multipliers" element={
-              <ClientRoute>
-                <ClientPortalLayout>
-                  <EarnoutsMultipliersPage />
-                </ClientPortalLayout>
-              </ClientRoute>
-            } />
-            <Route path="/portal/week-2/post-closing-reality" element={
-              <ClientRoute>
-                <ClientPortalLayout>
-                  <PostClosingRealityPage />
-                </ClientPortalLayout>
-              </ClientRoute>
-            } />
+            {/* Week 3 Routes */}
+            <Route path="/portal/week-3/ebitda-calculator" element={<ClientPortalLayout><EbitdaCalculatorPage /></ClientPortalLayout>} />
+            <Route path="/portal/week-3/multiples" element={<ClientPortalLayout><MultiplesPage /></ClientPortalLayout>} />
+            <Route path="/portal/week-3/scenarios" element={<ClientPortalLayout><ScenariosPage /></ClientPortalLayout>} />
+            <Route path="/portal/week-3/scorecard" element={<ClientPortalLayout><ScorecardPage /></ClientPortalLayout>} />
+            <Route path="/portal/week-3/top-performers" element={<ClientPortalLayout><TopPerformersPage /></ClientPortalLayout>} />
+            <Route path="/portal/week-3/business-scorecard" element={<ClientPortalLayout><BusinessScorecardPage /></ClientPortalLayout>} />
+            <Route path="/portal/week-3/deal-killers" element={<ClientPortalLayout><DealKillersPage /></ClientPortalLayout>} />
 
-            {/* Week 3 routes - aligned with moduleConfig */}
-            <Route path="/portal/week-3" element={<Navigate to="/portal/week-3/ebitda-calculator" replace />} />
-            <Route path="/portal/week-3/ebitda-calculator" element={
-              <ClientRoute>
-                <ClientPortalLayout>
-                  <EBITDACalculatorPage />
-                </ClientPortalLayout>
-              </ClientRoute>
-            } />
-            <Route path="/portal/week-3/multiples" element={
-              <ClientRoute>
-                <ClientPortalLayout>
-                  <IndustryMultiplesPage />
-                </ClientPortalLayout>
-              </ClientRoute>
-            } />
-            <Route path="/portal/week-3/scenarios" element={
-              <ClientRoute>
-                <ClientPortalLayout>
-                  <ScenarioPlanningPage />
-                </ClientPortalLayout>
-              </ClientRoute>
-            } />
-            <Route path="/portal/week-3/scorecard" element={
-              <ClientRoute>
-                <ClientPortalLayout>
-                  <ManagementScorecardPage />
-                </ClientPortalLayout>
-              </ClientRoute>
-            } />
-            <Route path="/portal/week-3/top-performers" element={
-              <ClientRoute>
-                <ClientPortalLayout>
-                  <TopPerformersPage />
-                </ClientPortalLayout>
-              </ClientRoute>
-            } />
-            <Route path="/portal/week-3/business-scorecard" element={
-              <ClientRoute>
-                <ClientPortalLayout>
-                  <BusinessScorecardPage />
-                </ClientPortalLayout>
-              </ClientRoute>
-            } />
-            <Route path="/portal/week-3/deal-killers" element={
-              <ClientRoute>
-                <ClientPortalLayout>
-                  <DealKillersDiagnosticPage />
-                </ClientPortalLayout>
-              </ClientRoute>
-            } />
-
-            {/* Week 4 routes - aligned with moduleConfig */}
-            <Route path="/portal/week-4" element={<Navigate to="/portal/week-4/dd-checklist" replace />} />
-            <Route path="/portal/week-4/dd-checklist" element={
-              <ClientRoute>
-                <ClientPortalLayout>
-                  <DueDiligenceChecklistPage />
-                </ClientPortalLayout>
-              </ClientRoute>
-            } />
-            <Route path="/portal/week-4/loi-review" element={
-              <ClientRoute>
-                <ClientPortalLayout>
-                  <LOIReviewPage />
-                </ClientPortalLayout>
-              </ClientRoute>
-            } />
-            <Route path="/portal/week-4/final-report" element={
-              <ClientRoute>
-                <ClientPortalLayout>
-                  <FinalReportPage />
-                </ClientPortalLayout>
-              </ClientRoute>
-            } />
-            <Route path="/portal/week-4/executive-discovery" element={
-              <ClientRoute>
-                <ClientPortalLayout>
-                  <ExecutiveDiscoveryInterviewPage />
-                </ClientPortalLayout>
-              </ClientRoute>
-            } />
-            <Route path="/portal/week-4/value-builder" element={
-              <ClientRoute>
-                <ClientPortalLayout>
-                  <StrategyDocBuilderPage />
-                </ClientPortalLayout>
-              </ClientRoute>
-            } />
-            <Route path="/portal/week-4/kpis-okrs" element={
-              <ClientRoute>
-                <ClientPortalLayout>
-                  <KPIandOKRPage />
-                </ClientPortalLayout>
-              </ClientRoute>
-            } />
-
-            {/* Legacy redirects for backward compatibility */}
-            <Route path="/portal/week-1/ebitda-calculator" element={<Navigate to="/portal/week-3/ebitda-calculator" replace />} />
-            <Route path="/portal/week-1/industry-multiples" element={<Navigate to="/portal/week-3/multiples" replace />} />
-            <Route path="/portal/week-1/scenario-planning" element={<Navigate to="/portal/week-3/scenarios" replace />} />
-            <Route path="/portal/week-1/quick-wins" element={<Navigate to="/portal/week-2/quick-wins" replace />} />
-            <Route path="/portal/week-2/earnouts-multipliers" element={<Navigate to="/portal/week-2/earnouts-multipliers" replace />} />
-            <Route path="/portal/week-3/ebitda-course" element={<Navigate to="/portal/week-1/ebitda-course" replace />} />
-            <Route path="/portal/week-3/strategy-doc-builder" element={<Navigate to="/portal/week-4/value-builder" replace />} />
-            <Route path="/portal/week-3/executive-discovery-interview" element={<Navigate to="/portal/week-4/executive-discovery" replace />} />
-            <Route path="/portal/week-3/management-scorecard" element={<Navigate to="/portal/week-3/scorecard" replace />} />
-            <Route path="/portal/week-3/deal-killers-diagnostic" element={<Navigate to="/portal/week-3/deal-killers" replace />} />
-            <Route path="/portal/week-4/asset-workshop" element={<Navigate to="/portal/week-2/asset-workshop" replace />} />
-            <Route path="/portal/week-4/data-room" element={<Navigate to="/portal/week-2/data-room" replace />} />
-            <Route path="/portal/week-4/due-diligence-checklist" element={<Navigate to="/portal/week-4/dd-checklist" replace />} />
-
-            {/* Additional standalone routes */}
-            <Route path="/portal/week-4/data-room-intro" element={
-              <ClientRoute>
-                <ClientPortalLayout>
-                  <DataRoomIntroPage />
-                </ClientPortalLayout>
-              </ClientRoute>
-            } />
-            <Route path="/portal/week-4/data-room-workspace" element={
-              <ClientRoute>
-                <ClientPortalLayout>
-                  <DataRoomWorkspacePage />
-                </ClientPortalLayout>
-              </ClientRoute>
-            } />
-            <Route path="/portal/schedule-consultation" element={
-              <ClientRoute>
-                <ClientPortalLayout>
-                  <ScheduleConsultationPage />
-                </ClientPortalLayout>
-              </ClientRoute>
-            } />
-
-            {/* Legacy standalone redirects */}
-            <Route path="/portal/loi-review" element={<Navigate to="/portal/week-4/loi-review" replace />} />
-            <Route path="/portal/kpi-okr" element={<Navigate to="/portal/week-4/kpis-okrs" replace />} />
-
-            {/* Fallback route */}
-            <Route path="*" element={<NotFound />} />
+            {/* Week 4 Routes */}
+            <Route path="/portal/week-4/dd-checklist" element={<ClientPortalLayout><DueDiligenceChecklistPage /></ClientPortalLayout>} />
+            <Route path="/portal/week-4/loi-review" element={<ClientPortalLayout><LOIReviewPage /></ClientPortalLayout>} />
+            <Route path="/portal/week-4/final-report" element={<ClientPortalLayout><FinalReportPage /></ClientPortalLayout>} />
+            <Route path="/portal/week-4/discovery-interview" element={<ClientPortalLayout><DiscoveryInterviewPage /></ClientPortalLayout>} />
+            <Route path="/portal/week-4/value-builder" element={<ClientPortalLayout><StrategyDocBuilderPage /></ClientPortalLayout>} />
+            <Route path="/portal/week-4/kpis-okrs" element={<ClientPortalLayout><KPIandOKRPage /></ClientPortalLayout>} />
           </Routes>
-        </BrowserRouter>
-      </TooltipProvider>
-    </QueryClientProvider>
+        </Router>
+      </ProgressProvider>
+    </AuthProvider>
   );
 }
 

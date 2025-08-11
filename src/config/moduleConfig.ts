@@ -42,11 +42,11 @@ export const moduleConfigurations: ModuleConfig[] = [
   { name: 'Business Scorecard', path: '/portal/week-3/business-scorecard', weekNumber: 3, order: 6 },
   { name: 'Deal Killers Diagnostic', path: '/portal/week-3/deal-killers', weekNumber: 3, order: 7 },
   
-  // Week 4 - Final Readiness (Added the three moved modules at the bottom)
+  // Week 4 - Final Readiness (Updated Discovery Interview module)
   { name: 'Due Diligence Checklist', path: '/portal/week-4/dd-checklist', weekNumber: 4, order: 1 },
   { name: 'LOI Review', path: '/portal/week-4/loi-review', weekNumber: 4, order: 2 },
   { name: 'Final Report', path: '/portal/week-4/final-report', weekNumber: 4, order: 3 },
-  { name: 'Executive Discovery Interview', path: '/portal/week-4/executive-discovery', weekNumber: 4, order: 4 },
+  { name: 'Discovery Interview', path: '/portal/week-4/discovery-interview', weekNumber: 4, order: 4 },
   { name: 'Strategy Doc Builder', path: '/portal/week-4/value-builder', weekNumber: 4, order: 5 },
   { name: 'KPIs and OKRs', path: '/portal/week-4/kpis-okrs', weekNumber: 4, order: 6 }
 ];
