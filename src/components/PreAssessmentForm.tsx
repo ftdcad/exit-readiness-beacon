@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Progress } from '@/components/ui/progress';
 import Step08ContactInfo from './assessment/steps/Step08ContactInfo';
-import Step09ExitGoals from './assessment/steps/Step09ExitGoals';
-import Step10BusinessReality from './assessment/steps/Step10BusinessReality';
+import { Step09ExitGoals } from './assessment/steps/Step09ExitGoals';
+import { Step10BusinessReality } from './assessment/steps/Step10BusinessReality';
 import { useContactSubmission } from '@/hooks/useContactSubmission';
 
 const PreAssessmentForm = () => {
@@ -43,15 +43,19 @@ const PreAssessmentForm = () => {
       case 9:
         return (
           <Step09ExitGoals
+            value={{}}
+            onChange={() => {}}
             onNext={handleNext}
-            onPrevious={handlePrevious}
+            onBack={handlePrevious}
           />
         );
       case 10:
         return (
           <Step10BusinessReality
-            onNext={handleNext}
-            onPrevious={handlePrevious}
+            value={{}}
+            onChange={() => {}}
+            onBack={handlePrevious}
+            onComplete={handleNext}
           />
         );
       default:
