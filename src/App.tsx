@@ -39,6 +39,7 @@ import DebtInterestPage from "./pages/week-2/DebtInterestPage";
 import EarnoutsMultipliersPage from "./pages/week-2/EarnoutsMultipliersPage";
 import PostClosingRealityPage from "./pages/week-2/PostClosingRealityPage";
 import DueDiligenceChecklistPage from "./pages/week-4/DueDiligenceChecklistPage";
+import LOIReviewPage from "./pages/LOIReviewPage";
 import AdminRoute from "./components/AdminRoute";
 import { ClientRoute } from "./components/ClientRoute";
 import { ClientPortalLayout } from "./components/ClientPortalLayout";
@@ -116,6 +117,7 @@ function App() {
                   
                   {/* Week 4 - Final Readiness */}
                   <Route path="week-4/dd-checklist" element={<DueDiligenceChecklistPage />} />
+                  <Route path="week-4/loi-review" element={<LOIReviewPage />} />
                   <Route path="week-4/kpis-okrs" element={<KPIandOKRPage />} />
                   <Route path="week-4/executive-discovery" element={<ExecutiveDiscoveryInterviewPage />} />
                   <Route path="week-4/value-builder" element={<StrategyDocBuilderPage />} />
