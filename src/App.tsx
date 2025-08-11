@@ -17,6 +17,8 @@ import AssetFreeEducationPage from './pages/AssetFreeEducationPage';
 import TimeKillsDealsPage from './pages/TimeKillsDealsPage';
 import EBITDAExplainedPage from './pages/EBITDACoursePage';
 import DataRoomPage from './pages/DataRoomPage';
+import { DataRoomIntroPage } from './pages/DataRoomIntroPage';
+import { DataRoomWorkspacePage } from './pages/DataRoomWorkspacePage';
 import AssetWorkshopPage from './pages/AssetWorkshopPage';
 import HoldCoStructurePage from './pages/week-2/HoldCoStructurePage';
 import QuickWinsPage from './pages/QuickWinsPage';
@@ -56,7 +58,9 @@ function App() {
             <Route path="/portal/week-1/ebitda-course" element={<ClientPortalLayout><EBITDAExplainedPage /></ClientPortalLayout>} />
 
             {/* Week 2 Routes */}
-            <Route path="/portal/week-2/data-room" element={<ClientPortalLayout><DataRoomPage /></ClientPortalLayout>} />
+            <Route path="/portal/week-2/data-room" element={<ClientPortalLayout><DataRoomIntroPage /></ClientPortalLayout>} />
+            <Route path="/portal/week-2/data-room/workspace" element={<ClientPortalLayout><DataRoomWorkspacePage /></ClientPortalLayout>} />
+            <Route path="/portal/week-2/data-room/advanced" element={<ClientPortalLayout><DataRoomPage /></ClientPortalLayout>} />
             <Route path="/portal/week-2/asset-workshop" element={<ClientPortalLayout><AssetWorkshopPage /></ClientPortalLayout>} />
             <Route path="/portal/week-2/holdco-structure" element={<ClientPortalLayout><HoldCoStructurePage /></ClientPortalLayout>} />
             <Route path="/portal/week-2/quick-wins" element={<ClientPortalLayout><QuickWinsPage /></ClientPortalLayout>} />
