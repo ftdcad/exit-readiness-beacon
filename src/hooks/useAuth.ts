@@ -97,9 +97,10 @@ export const useAuth = () => {
           try {
             if (session?.user) {
               // Safety net: ensure a profile row exists before we query it (prevents flicker)
-              await supabase.rpc('ensure_profile').catch(() => {
-                console.warn('useAuth: ensure_profile RPC failed or not necessary');
-              });
+              const { error: ensureProfileError } = await supabase.rpc('ensure_profile');
+              if (ensureProfileError) {
+                console.warn('useAuth: ensure_profile RPC returned error:', ensureProfileError);
+              }
 
               await fetchUserProfile(session.user.id);
             } else {
