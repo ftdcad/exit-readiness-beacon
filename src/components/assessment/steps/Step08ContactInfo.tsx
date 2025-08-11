@@ -6,12 +6,11 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import { normalizePhone, validatePhone, normalizeUrl, validateUrlLoose } from "@/lib/validation/contact";
 
 type Props = {
   value: {
-    phone?: string;            // whatever you were storing before
-    companyWebsite?: string;   // optional
+    phone?: string;
+    companyWebsite?: string;
     preferredContact?: "email"|"phone"|"either";
     howDidYouHear?: string;
   };
@@ -20,65 +19,93 @@ type Props = {
   onBack: () => void;
 };
 
+// Validation helpers
+const digits = (s: string) => (s || '').replace(/\D+/g, '');
+const isValidUS = (s: string) => {
+  const d = digits(s);
+  return d.length === 10 || (d.length === 11 && d.startsWith('1'));
+};
+const toE164 = (s: string) => {
+  const d = digits(s);
+  if (d.length === 10) return `+1${d}`;
+  if (d.length === 11 && d.startsWith('1')) return `+${d}`;
+  return `+${d}`;
+};
+
 export default function Step08ContactInfo({ value, onChange, onNext, onBack }: Props) {
   const [phone, setPhone] = useState(value.phone ?? "");
   const [website, setWebsite] = useState(value.companyWebsite ?? "");
   const [preferred, setPreferred] = useState<Props["value"]["preferredContact"]>(value.preferredContact ?? "email");
   const [referral, setReferral] = useState(value.howDidYouHear ?? "");
 
-  const [errors, setErrors] = useState<Partial<Record<"phone"|"website", string>>>({});
+  const [phoneError, setPhoneError] = useState("");
+  const [websiteError, setWebsiteError] = useState("");
   const phoneRef = useRef<HTMLInputElement>(null);
   const websiteRef = useRef<HTMLInputElement>(null);
 
-  function focusFirstError(map: typeof errors) {
-    if (map.phone) {
-      phoneRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    
+    // Clear previous errors
+    setPhoneError("");
+    setWebsiteError("");
+
+    // Validate phone
+    if (!phone.trim()) {
+      setPhoneError("Phone is required.");
       phoneRef.current?.focus();
       return;
     }
-    if (map.website) {
-      websiteRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-      websiteRef.current?.focus();
-    }
-  }
-
-  function validate() {
-    const nextErrors: typeof errors = {};
-
-    // Phone is required but flexible. Accept (386) 689-6896, 386-689-6896, 3866896896, 1-386...
-    if (!phone.trim()) {
-      nextErrors.phone = "Phone is required.";
-    } else if (!validatePhone(phone)) {
-      nextErrors.phone = "Enter a valid US phone number.";
+    if (!isValidUS(phone)) {
+      setPhoneError("Enter a valid US phone number.");
+      phoneRef.current?.focus();
+      return;
     }
 
-    // Website is OPTIONAL. If provided, accept domain, www.domain, or full URL.
-    if (website.trim()) {
-      if (!validateUrlLoose(website)) {
-        nextErrors.website = "Enter a valid domain or URL (example: coastalclaims.net or https://coastalclaims.net).";
+    // Website optional. If provided, make sure it parses with scheme added
+    let websiteNormalized = website.trim();
+    if (websiteNormalized) {
+      const test = /^[a-zA-Z][\w+.-]*:\/\//.test(websiteNormalized)
+        ? websiteNormalized
+        : `https://${websiteNormalized}`;
+      try {
+        const u = new URL(test);
+        websiteNormalized = `${u.protocol}//${u.hostname}${u.pathname === '/' ? '' : u.pathname}${u.search}${u.hash}`;
+      } catch {
+        setWebsiteError("Enter a valid domain or URL.");
+        websiteRef.current?.focus();
+        return;
       }
     }
 
-    setErrors(nextErrors);
-    if (Object.keys(nextErrors).length) {
-      focusFirstError(nextErrors);
-      return false;
-    }
-    return true;
-  }
-
-  function handleNext() {
-    if (!validate()) return;
-
+    // Build normalized payload
     const normalized = {
-      phone: normalizePhone(phone),                     // stores +13866896896
-      companyWebsite: website.trim() ? normalizeUrl(website) : "", // stores https://coastalclaims.net
+      phone: toE164(phone),
+      companyWebsite: websiteNormalized || "",
       preferredContact: preferred,
       howDidYouHear: referral
     };
 
     onChange(normalized);
     onNext();
+  }
+
+  function handleWebsiteBlur() {
+    const v = website.trim();
+    if (!v) return; // optional
+    
+    // Normalize to https:// if valid
+    try {
+      const test = /^[a-zA-Z][a-zA-Z0-9+.-]*:\/\//.test(v) ? v : `https://${v}`;
+      const u = new URL(test);
+      const normalized = `${u.protocol}//${u.hostname}${u.pathname === '/' ? '' : u.pathname}${u.search}${u.hash}`;
+      if (normalized !== v) {
+        setWebsite(normalized);
+      }
+    } catch {
+      // Leave as-is; validation will catch it on submit
+      setWebsite(v);
+    }
   }
 
   return (
@@ -89,96 +116,92 @@ export default function Step08ContactInfo({ value, onChange, onNext, onBack }: P
       </p>
 
       <Card className="p-4 space-y-6">
-        <div className="grid gap-4 md:grid-cols-2">
-          <div>
-            <Label htmlFor="phone">Phone Number *</Label>
-            <Input
-              id="phone"
-              ref={phoneRef}
-              type="text"                 // not "tel" with strict pattern
-              inputMode="tel"
-              placeholder="(386) 689-6896"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              aria-invalid={!!errors.phone}
-              className={cn(errors.phone && "border-red-600 focus-visible:ring-red-600")}
-            />
-            {errors.phone && <p className="mt-1 text-sm text-red-600">{errors.phone}</p>}
+        <form noValidate onSubmit={handleSubmit} className="space-y-6">
+          <div className="grid gap-4 md:grid-cols-2">
+            <div>
+              <Label htmlFor="phone">Phone Number *</Label>
+              <Input
+                id="phone"
+                ref={phoneRef}
+                type="text"
+                inputMode="tel"
+                placeholder="(386) 689-6896"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                aria-invalid={!!phoneError}
+                className={cn(phoneError && "border-red-600 focus-visible:ring-red-600")}
+              />
+              {phoneError && <p className="mt-1 text-sm text-red-600">{phoneError}</p>}
+            </div>
+
+            <div>
+              <Label htmlFor="companyWebsite">Company Website (Optional)</Label>
+              <Input
+                id="companyWebsite"
+                ref={websiteRef}
+                type="text"
+                inputMode="url"
+                autoComplete="url"
+                placeholder="coastalclaims.net or https://coastalclaims.net"
+                value={website}
+                onChange={(e) => setWebsite(e.target.value)}
+                onBlur={handleWebsiteBlur}
+                aria-invalid={!!websiteError}
+                className={cn(websiteError && "border-red-600 focus-visible:ring-red-600")}
+              />
+              {websiteError && <p className="mt-1 text-sm text-red-600">{websiteError}</p>}
+            </div>
           </div>
 
-          <div>
-            <Label htmlFor="website">Company Website (Optional)</Label>
-            <Input
-              id="website"
-              ref={websiteRef}
-              type="text"                 // not "url" so "www..." and domains are allowed
-              inputMode="url"
-              autoComplete="url"
-              placeholder="coastalclaims.net or https://coastalclaims.net"
-              value={website}
-              onChange={(e) => setWebsite(e.target.value)}
-              onBlur={() => {
-                // Soft normalization on blur if valid
-                if (website.trim() && validateUrlLoose(website)) {
-                  const v = normalizeUrl(website);
-                  if (v !== website) setWebsite(v);
-                }
-              }}
-              aria-invalid={!!errors.website}
-              className={cn(errors.website && "border-red-600 focus-visible:ring-red-600")}
-            />
-            {errors.website && <p className="mt-1 text-sm text-red-600">{errors.website}</p>}
+          <div className="space-y-2">
+            <Label>Preferred Contact Method *</Label>
+            <div className="grid gap-2 md:grid-cols-3">
+              <Button
+                type="button"
+                variant={preferred === "email" ? "default" : "outline"}
+                onClick={() => setPreferred("email")}
+              >
+                Email
+              </Button>
+              <Button
+                type="button"
+                variant={preferred === "phone" ? "default" : "outline"}
+                onClick={() => setPreferred("phone")}
+              >
+                Phone Call
+              </Button>
+              <Button
+                type="button"
+                variant={preferred === "either" ? "default" : "outline"}
+                onClick={() => setPreferred("either")}
+              >
+                Either Email or Phone
+              </Button>
+            </div>
           </div>
-        </div>
 
-        <div className="space-y-2">
-          <Label>Preferred Contact Method *</Label>
-          <div className="grid gap-2 md:grid-cols-3">
-            <Button
-              type="button"
-              variant={preferred === "email" ? "default" : "outline"}
-              onClick={() => setPreferred("email")}
-            >
-              Email
-            </Button>
-            <Button
-              type="button"
-              variant={preferred === "phone" ? "default" : "outline"}
-              onClick={() => setPreferred("phone")}
-            >
-              Phone Call
-            </Button>
-            <Button
-              type="button"
-              variant={preferred === "either" ? "default" : "outline"}
-              onClick={() => setPreferred("either")}
-            >
-              Either Email or Phone
-            </Button>
+          <div className="space-y-2">
+            <Label htmlFor="referral">How did you hear about us? (Optional)</Label>
+            <Select value={referral} onValueChange={setReferral}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select an option" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="">Select an option</SelectItem>
+                <SelectItem value="search">Search</SelectItem>
+                <SelectItem value="referral">Referral</SelectItem>
+                <SelectItem value="social">Social</SelectItem>
+                <SelectItem value="event">Event</SelectItem>
+                <SelectItem value="other">Other</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="referral">How did you hear about us? (Optional)</Label>
-          <Select value={referral} onValueChange={setReferral}>
-            <SelectTrigger>
-              <SelectValue placeholder="Select an option" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="">Select an option</SelectItem>
-              <SelectItem value="search">Search</SelectItem>
-              <SelectItem value="referral">Referral</SelectItem>
-              <SelectItem value="social">Social</SelectItem>
-              <SelectItem value="event">Event</SelectItem>
-              <SelectItem value="other">Other</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+        </form>
       </Card>
 
       <div className="flex justify-between">
         <Button variant="outline" onClick={onBack}>Back</Button>
-        <Button onClick={handleNext}>Next</Button>
+        <Button onClick={handleSubmit}>Next</Button>
       </div>
     </div>
   );
