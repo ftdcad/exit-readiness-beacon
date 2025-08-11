@@ -30,7 +30,7 @@ import DealKillersPage from './pages/week-3/DealKillersDiagnosticPage';
 import { AuthProvider } from './components/AuthProvider';
 import { ProgressProvider } from './components/ProgressProvider';
 import { ClientPortalLayout } from './components/ClientPortalLayout';
-import ScheduleConsultation from './pages/ScheduleConsultationPage';
+import { ScheduleConsultationPage } from './pages/ScheduleConsultationPage';
 import DiscoveryInterviewPage from './pages/DiscoveryInterviewPage';
 
 function App() {
@@ -41,7 +41,7 @@ function App() {
           <Routes>
             <Route path="/" element={<ClientPortalLayout><ClientPortalDashboard /></ClientPortalLayout>} />
             <Route path="/portal" element={<ClientPortalLayout><ClientPortalDashboard /></ClientPortalLayout>} />
-            <Route path="/portal/schedule-consultation" element={<ClientPortalLayout><ScheduleConsultation /></ClientPortalLayout>} />
+            <Route path="/portal/schedule-consultation" element={<ClientPortalLayout><ScheduleConsultationPage /></ClientPortalLayout>} />
 
             {/* Week 1 Routes */}
             <Route path="/portal/week-1/glossary" element={<ClientPortalLayout><InteractiveGlossaryPage /></ClientPortalLayout>} />
