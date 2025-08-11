@@ -5,41 +5,22 @@ import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { 
   AlertTriangle, 
   Skull,
   Shield,
   DollarSign,
-  Users,
-  Clock,
-  FileText,
   Gavel,
   Target,
   Bomb,
   Eye,
   CheckCircle,
   XCircle,
-  ChevronRight,
-  AlertCircle,
-  BookOpen,
-  Zap
+  AlertCircle
 } from 'lucide-react';
-
-interface LOISection {
-  id: string;
-  title: string;
-  description: string;
-  criticalTerms: string[];
-  commonTraps: string[];
-  whatToLookFor: string[];
-  redFlags: string[];
-  negotiationLeverage: string;
-}
 
 interface UserTerm {
   id: string;
@@ -52,7 +33,6 @@ interface UserTerm {
 export const LOIReview: React.FC = () => {
   const [currentSection, setCurrentSection] = useState(0);
   const [userTerms, setUserTerms] = useState<UserTerm[]>([]);
-  const [showTraps, setShowTraps] = useState(false);
   const [attorneyNotes, setAttorneyNotes] = useState('');
 
   const sections = [
@@ -465,7 +445,7 @@ function CommonTraps() {
       <Card className="p-6 bg-green-950/30 border-green-900/50">
         <h3 className="text-lg font-bold text-green-400 mb-3">How to Protect Yourself</h3>
         <div className="space-y-2 text-zinc-300">
-          <p>1. <strong>Specific > Vague:</strong> Numbers, titles, and dates in writing</p>
+          <p>1. <strong>Specific &gt; Vague:</strong> Numbers, titles, and dates in writing</p>
           <p>2. <strong>Define Everything:</strong> "Market", "normal", "reasonable" = PE decides</p>
           <p>3. <strong>Get it in LOI:</strong> If it's not there, it won't be in final docs</p>
           <p>4. <strong>Use YOUR lawyer:</strong> Not the "efficient" lawyer PE recommends</p>
@@ -759,7 +739,7 @@ function AttorneyPrep({ attorneyNotes, setAttorneyNotes }: any) {
           you're in exclusivity and they know you're committed. Get EVERYTHING important in the LOI 
           or kiss it goodbye forever.
         </AlertDescription>
-      </Alert>
+        </Alert>
     </Card>
   );
 }
