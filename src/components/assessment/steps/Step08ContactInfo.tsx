@@ -1,185 +1,266 @@
+import React, { useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Card } from '@/components/ui/card';
+import { useContactSubmission } from '@/hooks/useContactSubmission';
 
-import React, { useRef, useState } from "react";
-import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { cn } from "@/lib/utils";
-import { normalizePhone, validatePhone, normalizeUrl, validateUrlLoose } from "@/lib/validation/contact";
-
-type Props = {
-  value: {
-    phone?: string;
-    companyWebsite?: string;
-    preferredContact?: "email"|"phone"|"either";
-    howDidYouHear?: string;
-  };
-  onChange: (p: Props["value"]) => void;
+interface Step08ContactInfoProps {
   onNext: () => void;
-  onBack: () => void;
-};
+  onPrevious: () => void;
+}
 
-export default function Step08ContactInfo({ value, onChange, onNext, onBack }: Props) {
-  const [phone, setPhone] = useState(value.phone ?? "");
-  const [website, setWebsite] = useState(value.companyWebsite ?? "");
-  const [preferred, setPreferred] = useState<Props["value"]["preferredContact"]>(value.preferredContact ?? "email");
-  const [referral, setReferral] = useState(value.howDidYouHear ?? "");
-
-  const [phoneError, setPhoneError] = useState("");
-  const [websiteError, setWebsiteError] = useState("");
-  const phoneRef = useRef<HTMLInputElement>(null);
+const Step08ContactInfo: React.FC<Step08ContactInfoProps> = ({ onNext, onPrevious }) => {
+  const navigate = useNavigate();
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [companyName, setCompanyName] = useState('');
+  const [website, setWebsite] = useState('');
+  const [role, setRole] = useState('');
+  const [phoneError, setPhoneError] = useState('');
+  const [websiteError, setWebsiteError] = useState('');
+  const [globalError, setGlobalError] = useState('');
+  
   const websiteRef = useRef<HTMLInputElement>(null);
+  const { submitContactInfo, isSubmitting } = useContactSubmission();
 
-  function handleSubmit(e: React.FormEvent) {
+  const isValidUS = (str: string) => {
+    return /^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$/.test(str);
+  };
+
+  const toE164 = (str: string) => {
+    const cleaned = (str || "").replace(/\D+/g, "");
+    if (cleaned.length > 10) {
+      return `+1${cleaned.substring(0, 11)}`;
+    }
+    return `+1${cleaned}`;
+  };
+
+  const normalizePhone = (value: string) => {
+    const cleanedValue = value.replace(/\D/g, '');
+    let formattedValue = '';
+  
+    if (cleanedValue.length > 0) {
+      formattedValue += '(' + cleanedValue.substring(0, 3);
+    }
+    if (cleanedValue.length > 3) {
+      formattedValue += ') ' + cleanedValue.substring(3, 6);
+    }
+    if (cleanedValue.length > 6) {
+      formattedValue += '-' + cleanedValue.substring(6, 10);
+    }
+  
+    return formattedValue;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Clear previous errors
-    setPhoneError("");
-    setWebsiteError("");
+    setPhoneError('');
+    setWebsiteError('');
+    setGlobalError('');
 
     // Validate phone
-    if (!phone.trim()) {
-      setPhoneError("Phone is required.");
-      phoneRef.current?.focus();
-      return;
-    }
-    if (!validatePhone(phone)) {
+    if (!isValidUS(phone)) {
       setPhoneError("Enter a valid US phone number.");
-      phoneRef.current?.focus();
+      document.getElementById('phone')?.focus();
       return;
     }
 
-    // Website optional. If provided, make sure it parses with scheme added
+    // Website validation (optional)
     let websiteNormalized = website.trim();
     if (websiteNormalized) {
-      if (!validateUrlLoose(websiteNormalized)) {
+      const test = /^[a-zA-Z][\w+.-]*:\/\//.test(websiteNormalized)
+        ? websiteNormalized
+        : `https://${websiteNormalized}`;
+      try {
+        const u = new URL(test);
+        websiteNormalized = `${u.protocol}//${u.hostname}${u.pathname === '/' ? '' : u.pathname}${u.search}${u.hash}`;
+      } catch {
         setWebsiteError("Enter a valid domain or URL.");
-        websiteRef.current?.focus();
+        document.getElementById('companyWebsite')?.focus();
         return;
       }
-      websiteNormalized = normalizeUrl(websiteNormalized);
     }
 
-    // Build normalized payload
-    const normalized = {
-      phone: normalizePhone(phone),
-      companyWebsite: websiteNormalized || "",
-      preferredContact: preferred,
-      howDidYouHear: referral
+    const contactData = {
+      firstName,
+      lastName,
+      email,
+      phone: toE164(phone),
+      companyName,
+      website: websiteNormalized || null,
+      role
     };
 
-    onChange(normalized);
-    onNext();
-  }
-
-  function handleWebsiteBlur() {
-    const v = website.trim();
-    if (!v) return; // optional
-    
-    // Normalize to https:// if valid
-    if (validateUrlLoose(v)) {
-      const normalized = normalizeUrl(v);
-      if (normalized !== v) {
-        setWebsite(normalized);
+    try {
+      await submitContactInfo(contactData);
+      onNext();
+    } catch (err: any) {
+      if (err?.field === 'website') {
+        setWebsiteError(err.message || "Invalid website.");
+        document.getElementById('companyWebsite')?.focus();
+        return;
       }
+      if (err?.field === 'phone') {
+        setPhoneError(err.message || "Invalid phone.");
+        document.getElementById('phone')?.focus();
+        return;
+      }
+      setGlobalError(err?.message || "Could not submit. Please try again.");
     }
-  }
+  };
 
   return (
-    <div className="space-y-6">
-      <h2 className="text-xl font-semibold">Contact Information</h2>
-      <p className="text-sm text-muted-foreground">
-        Final step. We will use this to follow up with your assessment results.
-      </p>
-
-      <Card className="p-4 space-y-6">
-        <form noValidate onSubmit={handleSubmit} className="space-y-6">
-          <div className="grid gap-4 md:grid-cols-2">
-            <div>
-              <Label htmlFor="phone">Phone Number *</Label>
-              <Input
-                id="phone"
-                ref={phoneRef}
-                type="text"
-                inputMode="tel"
-                placeholder="(386) 689-6896"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                aria-invalid={!!phoneError}
-                className={cn(phoneError && "border-red-600 focus-visible:ring-red-600")}
-              />
-              {phoneError && <p className="mt-1 text-sm text-red-600">{phoneError}</p>}
-            </div>
-
-            <div>
-              <Label htmlFor="companyWebsite">Company Website (Optional)</Label>
-              <Input
-                id="companyWebsite"
-                ref={websiteRef}
-                type="text"
-                inputMode="url"
-                placeholder="coastalclaims.net or https://coastalclaims.net"
-                value={website}
-                onChange={(e) => setWebsite(e.target.value)}
-                onBlur={handleWebsiteBlur}
-                aria-invalid={!!websiteError}
-                className={cn(websiteError && "border-red-600 focus-visible:ring-red-600")}
-              />
-              {websiteError && <p className="mt-1 text-sm text-red-600">{websiteError}</p>}
-            </div>
-          </div>
-
-          <div className="space-y-2">
-            <Label>Preferred Contact Method *</Label>
-            <div className="grid gap-2 md:grid-cols-3">
-              <Button
-                type="button"
-                variant={preferred === "email" ? "default" : "outline"}
-                onClick={() => setPreferred("email")}
-              >
-                Email
-              </Button>
-              <Button
-                type="button"
-                variant={preferred === "phone" ? "default" : "outline"}
-                onClick={() => setPreferred("phone")}
-              >
-                Phone Call
-              </Button>
-              <Button
-                type="button"
-                variant={preferred === "either" ? "default" : "outline"}
-                onClick={() => setPreferred("either")}
-              >
-                Either Email or Phone
-              </Button>
-            </div>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="referral">How did you hear about us? (Optional)</Label>
-            <Select value={referral} onValueChange={setReferral}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select an option" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="">Select an option</SelectItem>
-                <SelectItem value="search">Search</SelectItem>
-                <SelectItem value="referral">Referral</SelectItem>
-                <SelectItem value="social">Social</SelectItem>
-                <SelectItem value="event">Event</SelectItem>
-                <SelectItem value="other">Other</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </form>
-      </Card>
-
-      <div className="flex justify-between">
-        <Button variant="outline" onClick={onBack}>Back</Button>
-        <Button onClick={handleSubmit}>Next</Button>
+    <Card className="p-8">
+      <div className="mb-6">
+        <h2 className="text-2xl font-bold text-foreground mb-2">Contact Information</h2>
+        <p className="text-muted-foreground">
+          Let's get your contact details to personalize your assessment results.
+        </p>
       </div>
-    </div>
+
+      {/* Temporary Skip Button */}
+      <div className="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+        <p className="text-sm text-yellow-800 mb-3">
+          <strong>Temporary:</strong> Skip form validation and go directly to Executive Discovery Interview
+        </p>
+        <Button 
+          variant="outline" 
+          onClick={() => navigate('/portal/week-4/executive-discovery')}
+          className="bg-yellow-100 hover:bg-yellow-200 text-yellow-800 border-yellow-300"
+        >
+          Skip to Executive Discovery Interview →
+        </Button>
+      </div>
+
+      <form noValidate onSubmit={handleSubmit} className="space-y-6">
+        {globalError && (
+          <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+            <p className="text-red-800">{globalError}</p>
+          </div>
+        )}
+
+        <div className="grid md:grid-cols-2 gap-6">
+          <div className="space-y-2">
+            <Label htmlFor="firstName">First Name *</Label>
+            <Input
+              id="firstName"
+              type="text"
+              required
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+              placeholder="John"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="lastName">Last Name *</Label>
+            <Input
+              id="lastName"
+              type="text"
+              required
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+              placeholder="Smith"
+            />
+          </div>
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="email">Email Address *</Label>
+          <Input
+            id="email"
+            type="email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="john@company.com"
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="phone">Phone Number *</Label>
+          <Input
+            id="phone"
+            type="text"
+            inputMode="tel"
+            placeholder="(386) 689-6896"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+          />
+          {phoneError && <p className="mt-1 text-sm text-red-600">{phoneError}</p>}
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="companyName">Company Name *</Label>
+          <Input
+            id="companyName"
+            type="text"
+            required
+            value={companyName}
+            onChange={(e) => setCompanyName(e.target.value)}
+            placeholder="Acme Corporation"
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="companyWebsite">Company Website (Optional)</Label>
+          <Input
+            id="companyWebsite"
+            ref={websiteRef}
+            type="text"
+            inputMode="url"
+            placeholder="coastalclaims.net or https://coastalclaims.net"
+            value={website}
+            onChange={(e) => setWebsite(e.target.value)}
+            onBlur={() => {
+              const v = website.trim();
+              if (!v) return;
+              try {
+                const test = /^[a-zA-Z][a-zA-Z0-9+.-]*:\/\//.test(v) ? v : `https://${v}`;
+                const u = new URL(test);
+                setWebsite(`${u.protocol}//${u.hostname}${u.pathname === '/' ? '' : u.pathname}${u.search}${u.hash}`);
+                setWebsiteError('');
+              } catch {
+                setWebsite(v);
+              }
+            }}
+          />
+          {websiteError && <p className="mt-1 text-sm text-red-600">{websiteError}</p>}
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="role">Your Role *</Label>
+          <Select value={role} onValueChange={setRole} required>
+            <SelectTrigger>
+              <SelectValue placeholder="Select your role" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="owner">Business Owner</SelectItem>
+              <SelectItem value="ceo">CEO</SelectItem>
+              <SelectItem value="president">President</SelectItem>
+              <SelectItem value="cfo">CFO</SelectItem>
+              <SelectItem value="partner">Partner</SelectItem>
+              <SelectItem value="other">Other Executive</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="flex justify-between pt-6">
+          <Button type="button" variant="outline" onClick={onPrevious}>
+            Previous
+          </Button>
+          <Button type="submit" disabled={isSubmitting}>
+            {isSubmitting ? 'Submitting...' : 'Complete Assessment'}
+          </Button>
+        </div>
+      </form>
+    </Card>
   );
-}
+};
+
+export default Step08ContactInfo;
