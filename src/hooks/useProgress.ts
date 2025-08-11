@@ -25,6 +25,30 @@ export const useProgress = () => {
   const [loading, setLoading] = useState(true);
   const { user, profile } = useAuth();
 
+  const isWeekCompleted = (weekNumber: number, weekModules: ModuleProgress[]): boolean => {
+    const totalCount = getModuleCountByWeek(weekNumber);
+    const completedCount = weekModules.filter(m => m.completed_at).length;
+    return completedCount >= totalCount;
+  };
+
+  const calculateWeekUnlockStatus = (weekNumber: number, allProgress: ModuleProgress[]): boolean => {
+    // Week 1 is always unlocked
+    if (weekNumber === 1) {
+      return true;
+    }
+
+    // Admins have access to all weeks
+    if (profile?.role?.name === 'admin') {
+      return true;
+    }
+
+    // For other weeks, check if the previous week is completed
+    const previousWeekNumber = weekNumber - 1;
+    const previousWeekModules = allProgress.filter(p => p.week_number === previousWeekNumber);
+    
+    return isWeekCompleted(previousWeekNumber, previousWeekModules);
+  };
+
   const fetchProgress = async () => {
     if (!user) {
       setProgress([]);
@@ -44,7 +68,7 @@ export const useProgress = () => {
 
       setProgress(data || []);
       
-      // Calculate week progress and unlock status using dynamic module counts
+      // Calculate week progress and unlock status using proper logic
       const weekProgressData: WeekProgress[] = [];
       
       for (let week = 1; week <= 4; week++) {
@@ -53,9 +77,8 @@ export const useProgress = () => {
         const totalCount = getModuleCountByWeek(week);
         const progressPercent = Math.round((completedCount / totalCount) * 100);
         
-        // TEMPORARY: Nuclear option - hardcode all weeks unlocked for testing
-        // TODO: Fix proper role-based unlocking logic with better async handling
-        let isUnlocked = true;
+        // Calculate unlock status based on previous week completion and user role
+        const isUnlocked = calculateWeekUnlockStatus(week, data || []);
         
         weekProgressData.push({
           weekNumber: week,
@@ -136,7 +159,7 @@ export const useProgress = () => {
 
   useEffect(() => {
     fetchProgress();
-  }, [user]);
+  }, [user, profile]); // Add profile dependency to re-fetch when role is loaded
 
   return {
     progress,
