@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -15,14 +16,14 @@ import AdminInquiries from "./pages/AdminInquiries";
 import CompanyDetail from "./pages/CompanyDetail";
 import NotFound from "./pages/NotFound";
 import { ClientRoute } from "./components/ClientRoute";
-import { AdminRoute } from "./components/AdminRoute";
+import AdminRoute from "./components/AdminRoute";
 import { ClientPortalLayout } from "./components/ClientPortalLayout";
-import { AdminLayout } from "./components/AdminLayout";
+import AdminLayout from "./components/AdminLayout";
 
 // Week 1 pages
 import EBITDACalculatorPage from "./pages/EBITDACalculatorPage";
 import IndustryMultiplesPage from "./pages/IndustryMultiplesPage";
-import ScenarioPlanningPage from "./pages/ScenarioPlanningPage";
+import { ScenarioPlanningPage } from "./pages/ScenarioPlanningPage";
 import GlossaryPage from "./pages/GlossaryPage";
 import QuickWinsPage from "./pages/QuickWinsPage";
 import KnowYourBuyerPage from "./pages/KnowYourBuyerPage";
@@ -30,9 +31,9 @@ import StrategyDocBuilderPage from "./pages/StrategyDocBuilderPage";
 import ExecutiveDiscoveryInterviewPage from "./pages/ExecutiveDiscoveryInterviewPage";
 import AssetWorkshopPage from "./pages/AssetWorkshopPage";
 import DataRoomPage from "./pages/DataRoomPage";
-import DataRoomIntroPage from "./pages/DataRoomIntroPage";
-import DataRoomWorkspacePage from "./pages/DataRoomWorkspacePage";
-import ScheduleConsultationPage from "./pages/ScheduleConsultationPage";
+import { DataRoomIntroPage } from "./pages/DataRoomIntroPage";
+import { DataRoomWorkspacePage } from "./pages/DataRoomWorkspacePage";
+import { ScheduleConsultationPage } from "./pages/ScheduleConsultationPage";
 import ProfessionalAdvisorsPage from "./pages/ProfessionalAdvisorsPage";
 import AssetFreeEducationPage from "./pages/AssetFreeEducationPage";
 import TimeKillsDealsPage from "./pages/TimeKillsDealsPage";
