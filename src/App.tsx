@@ -53,13 +53,18 @@ function App() {
                         <Route path="inquiries" element={<AdminInquiries />} />
                         <Route path="companies/:id" element={<AdminCompanyDetail />} />
                         <Route path="companies/:id/initial-ebitda" element={<AdminInitialEBITDA />} />
+                        <Route path="activity" element={<div>Admin activity page under construction</div>} />
+                        <Route path="*" element={<div>Admin page not found</div>} />
                       </Routes>
                     </AdminLayout>
                   </AdminRoute>
                 } />
 
-                {/* Default Route */}
-                <Route path="*" element={<div>Welcome to the application</div>} />
+                {/* Root redirect */}
+                <Route path="/" element={<div>Welcome to the application</div>} />
+                
+                {/* Catch-all for unmatched routes */}
+                <Route path="*" element={<div>Page not found</div>} />
               </Routes>
               <Toaster />
               <Sonner />
