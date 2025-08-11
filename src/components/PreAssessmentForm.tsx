@@ -11,6 +11,7 @@ import { Progress } from "@/components/ui/progress";
 import { CheckCircle, Clock, Users, DollarSign, Scale, Plus, X, FileText, Upload, File, Calculator } from "lucide-react";
 import { useContactSubmission } from "@/hooks/useContactSubmission";
 import { useToast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
 
 const PreAssessmentForm = () => {
   console.log("PreAssessmentForm loaded - NDA system removed");
@@ -77,11 +78,54 @@ const PreAssessmentForm = () => {
   
   const { submitContact, isSubmitting } = useContactSubmission();
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const totalSteps = 8;
   const progress = (step / totalSteps) * 100;
 
+  // Validation function for each step
+  const validateStep = (stepNumber: number): boolean => {
+    switch(stepNumber) {
+      case 1:
+        return !!(formData.companyName && formData.industry && formData.founded && formData.employees && formData.email);
+      case 2:
+        return !!(formData.revenue2025 && formData.revenue2024 && formData.revenue2023 && formData.revenue2022);
+      case 3:
+        return !!formData.investmentType;
+      case 4:
+        return !!(formData.entityType && formData.ownershipType);
+      case 5:
+        return !!(formData.pnlAvailability && formData.taxReturnsAvailability && formData.balanceSheetsAvailability);
+      case 6:
+        return true; // File uploads are optional
+      case 7:
+        return !!(formData.exitTimeline && formData.exitType && formData.currentChallenges);
+      case 8:
+        return !!(formData.phone && formData.preferredContact);
+      default:
+        return false;
+    }
+  };
+
+  const validateAllSteps = (): boolean => {
+    for (let i = 1; i <= totalSteps; i++) {
+      if (!validateStep(i)) {
+        return false;
+      }
+    }
+    return true;
+  };
+
   const handleNext = () => {
+    if (!validateStep(step)) {
+      toast({
+        title: "Please complete all required fields",
+        description: "Fill in all required information before proceeding to the next step.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     if (step < totalSteps) setStep(step + 1);
   };
 
@@ -92,10 +136,19 @@ const PreAssessmentForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // CRITICAL FIX: Only allow submission if we're on the final step
-    // This prevents auto-submission when reaching step 8
+    // Prevent submission if not on final step
     if (step !== totalSteps) {
       console.log('Form submission prevented - not on final step. Current step:', step, 'Total steps:', totalSteps);
+      return;
+    }
+
+    // Validate all steps before submission
+    if (!validateAllSteps()) {
+      toast({
+        title: "Please complete all required fields",
+        description: "Some required information is missing. Please review and complete all steps.",
+        variant: "destructive",
+      });
       return;
     }
     
@@ -107,8 +160,22 @@ const PreAssessmentForm = () => {
       const result = await submitContact(formData, null);
       
       if (result.success) {
-        // Could redirect to thank you page or show success state
-        // For now, form will show success message via toast
+        // Save completion status to localStorage
+        localStorage.setItem('meridian_assessment_submitted', JSON.stringify({
+          id: result.data?.id,
+          submittedAt: new Date().toISOString(),
+          companyName: formData.companyName
+        }));
+
+        toast({
+          title: "Assessment Submitted Successfully!",
+          description: "Thank you! We'll review your information and contact you within 24 hours.",
+        });
+
+        // Redirect to portal after successful submission
+        setTimeout(() => {
+          navigate('/portal');
+        }, 2000);
       }
     } catch (error: any) {
       console.error('=== SUBMISSION ERROR ===');
@@ -116,6 +183,12 @@ const PreAssessmentForm = () => {
       console.error('Error message:', error.message);
       console.error('Error code:', error.code);
       console.error('=== END ERROR ===');
+      
+      toast({
+        title: "Submission Failed",
+        description: "There was an error submitting your assessment. Please try again.",
+        variant: "destructive",
+      });
     }
   };
 
@@ -277,21 +350,23 @@ const PreAssessmentForm = () => {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="space-y-2">
-                        <Label htmlFor="companyName">Company Name</Label>
+                        <Label htmlFor="companyName">Company Name *</Label>
                         <Input
                           id="companyName"
                           value={formData.companyName}
                           onChange={(e) => setFormData(prev => ({ ...prev, companyName: e.target.value }))}
                           className="bg-background-hover border-border/50"
                           placeholder="Enter your company name"
+                          required
                         />
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="industry">Industry</Label>
+                        <Label htmlFor="industry">Industry *</Label>
                         <Select 
                           value={formData.industry} 
                           onValueChange={(value) => setFormData(prev => ({ ...prev, industry: value }))}
+                          required
                         >
                           <SelectTrigger className="bg-background-hover border-border/50">
                             <SelectValue placeholder="Select your industry" />
@@ -307,7 +382,7 @@ const PreAssessmentForm = () => {
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="founded">Year Founded</Label>
+                        <Label htmlFor="founded">Year Founded *</Label>
                         <Input
                           id="founded"
                           type="number"
@@ -317,14 +392,16 @@ const PreAssessmentForm = () => {
                           onChange={(e) => setFormData(prev => ({ ...prev, founded: e.target.value }))}
                           className="bg-background-hover border-border/50"
                           placeholder="e.g., 2010"
+                          required
                         />
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="employees">Number of Employees</Label>
+                        <Label htmlFor="employees">Number of Employees *</Label>
                         <Select 
                           value={formData.employees} 
                           onValueChange={(value) => setFormData(prev => ({ ...prev, employees: value }))}
+                          required
                         >
                           <SelectTrigger className="bg-background-hover border-border/50">
                             <SelectValue placeholder="Select employee count" />
@@ -341,7 +418,7 @@ const PreAssessmentForm = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="email">Business Email</Label>
+                      <Label htmlFor="email">Business Email *</Label>
                       <Input
                         id="email"
                         type="email"
@@ -349,6 +426,7 @@ const PreAssessmentForm = () => {
                         onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
                         className="bg-background-hover border-border/50"
                         placeholder="your@company.com"
+                        required
                       />
                     </div>
                   </div>
@@ -369,10 +447,11 @@ const PreAssessmentForm = () => {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="space-y-2">
-                        <Label htmlFor="revenue2025">2025 Revenue (Projected)</Label>
+                        <Label htmlFor="revenue2025">2025 Revenue (Projected) *</Label>
                         <Select 
                           value={formData.revenue2025} 
                           onValueChange={(value) => setFormData(prev => ({ ...prev, revenue2025: value }))}
+                          required
                         >
                           <SelectTrigger className="bg-background-hover border-border/50">
                             <SelectValue placeholder="Select revenue range" />
@@ -388,10 +467,11 @@ const PreAssessmentForm = () => {
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="revenue2024">2024 Revenue</Label>
+                        <Label htmlFor="revenue2024">2024 Revenue *</Label>
                         <Select 
                           value={formData.revenue2024} 
                           onValueChange={(value) => setFormData(prev => ({ ...prev, revenue2024: value }))}
+                          required
                         >
                           <SelectTrigger className="bg-background-hover border-border/50">
                             <SelectValue placeholder="Select revenue range" />
@@ -407,10 +487,11 @@ const PreAssessmentForm = () => {
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="revenue2023">2023 Revenue</Label>
+                        <Label htmlFor="revenue2023">2023 Revenue *</Label>
                         <Select 
                           value={formData.revenue2023} 
                           onValueChange={(value) => setFormData(prev => ({ ...prev, revenue2023: value }))}
+                          required
                         >
                           <SelectTrigger className="bg-background-hover border-border/50">
                             <SelectValue placeholder="Select revenue range" />
@@ -426,10 +507,11 @@ const PreAssessmentForm = () => {
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="revenue2022">2022 Revenue</Label>
+                        <Label htmlFor="revenue2022">2022 Revenue *</Label>
                         <Select 
                           value={formData.revenue2022} 
                           onValueChange={(value) => setFormData(prev => ({ ...prev, revenue2022: value }))}
+                          required
                         >
                           <SelectTrigger className="bg-background-hover border-border/50">
                             <SelectValue placeholder="Select revenue range" />
@@ -512,10 +594,11 @@ const PreAssessmentForm = () => {
 
                     <div className="space-y-6">
                       <div className="space-y-2">
-                        <Label htmlFor="entityType">Entity Type</Label>
+                        <Label htmlFor="entityType">Entity Type *</Label>
                         <Select 
                           value={formData.entityType} 
                           onValueChange={(value) => setFormData(prev => ({ ...prev, entityType: value }))}
+                          required
                         >
                           <SelectTrigger className="bg-background-hover border-border/50">
                             <SelectValue placeholder="Select entity type" />
@@ -532,7 +615,7 @@ const PreAssessmentForm = () => {
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="ownershipType">Ownership Structure</Label>
+                        <Label>Ownership Structure *</Label>
                         <RadioGroup 
                           value={formData.ownershipType} 
                           onValueChange={(value) => setFormData(prev => ({ ...prev, ownershipType: value }))}
@@ -631,7 +714,7 @@ const PreAssessmentForm = () => {
 
                     <div className="space-y-6">
                       <div className="space-y-2">
-                        <Label>Profit & Loss Statements</Label>
+                        <Label>Profit & Loss Statements *</Label>
                         <RadioGroup 
                           value={formData.pnlAvailability} 
                           onValueChange={(value) => setFormData(prev => ({ ...prev, pnlAvailability: value }))}
@@ -657,7 +740,7 @@ const PreAssessmentForm = () => {
                       </div>
 
                       <div className="space-y-2">
-                        <Label>Tax Returns</Label>
+                        <Label>Tax Returns *</Label>
                         <RadioGroup 
                           value={formData.taxReturnsAvailability} 
                           onValueChange={(value) => setFormData(prev => ({ ...prev, taxReturnsAvailability: value }))}
@@ -683,7 +766,7 @@ const PreAssessmentForm = () => {
                       </div>
 
                       <div className="space-y-2">
-                        <Label>Balance Sheets</Label>
+                        <Label>Balance Sheets *</Label>
                         <RadioGroup 
                           value={formData.balanceSheetsAvailability} 
                           onValueChange={(value) => setFormData(prev => ({ ...prev, balanceSheetsAvailability: value }))}
@@ -875,7 +958,7 @@ const PreAssessmentForm = () => {
 
                     <div className="space-y-6">
                       <div className="space-y-2">
-                        <Label>Target Exit Timeline</Label>
+                        <Label>Target Exit Timeline *</Label>
                         <RadioGroup 
                           value={formData.exitTimeline} 
                           onValueChange={(value) => setFormData(prev => ({ ...prev, exitTimeline: value }))}
@@ -909,7 +992,7 @@ const PreAssessmentForm = () => {
                       </div>
 
                       <div className="space-y-2">
-                        <Label>Preferred Exit Type</Label>
+                        <Label>Preferred Exit Type *</Label>
                         <RadioGroup 
                           value={formData.exitType} 
                           onValueChange={(value) => setFormData(prev => ({ ...prev, exitType: value }))}
@@ -939,13 +1022,14 @@ const PreAssessmentForm = () => {
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="currentChallenges">Current Business Challenges</Label>
+                        <Label htmlFor="currentChallenges">Current Business Challenges *</Label>
                         <Textarea
                           id="currentChallenges"
                           value={formData.currentChallenges}
                           onChange={(e) => setFormData(prev => ({ ...prev, currentChallenges: e.target.value }))}
                           className="bg-background-hover border-border/50 min-h-[100px]"
                           placeholder="Describe any current challenges, areas for improvement, or concerns about your business..."
+                          required
                         />
                       </div>
                     </div>
@@ -968,7 +1052,7 @@ const PreAssessmentForm = () => {
                     <div className="space-y-6">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
-                          <Label htmlFor="phone">Phone Number</Label>
+                          <Label htmlFor="phone">Phone Number *</Label>
                           <Input
                             id="phone"
                             type="tel"
@@ -976,6 +1060,7 @@ const PreAssessmentForm = () => {
                             onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
                             className="bg-background-hover border-border/50"
                             placeholder="(555) 123-4567"
+                            required
                           />
                         </div>
 
@@ -993,7 +1078,7 @@ const PreAssessmentForm = () => {
                       </div>
 
                       <div className="space-y-2">
-                        <Label>Preferred Contact Method</Label>
+                        <Label>Preferred Contact Method *</Label>
                         <RadioGroup 
                           value={formData.preferredContact} 
                           onValueChange={(value) => setFormData(prev => ({ ...prev, preferredContact: value }))}
@@ -1127,7 +1212,7 @@ const PreAssessmentForm = () => {
                   {step === totalSteps ? (
                     <Button 
                       type="submit" 
-                      disabled={isSubmitting}
+                      disabled={isSubmitting || !validateStep(step)}
                       className="bg-accent hover:bg-accent/90 font-semibold flex items-center gap-2"
                     >
                       {isSubmitting ? (
@@ -1146,6 +1231,7 @@ const PreAssessmentForm = () => {
                     <Button 
                       type="button" 
                       onClick={handleNext}
+                      disabled={!validateStep(step)}
                       className="bg-accent hover:bg-accent/90 font-semibold"
                     >
                       Next Step
@@ -1155,28 +1241,6 @@ const PreAssessmentForm = () => {
               </form>
             </CardContent>
           </Card>
-
-          {/* Thank You Message - appears after successful submission */}
-          {step > totalSteps && (
-            <Card className="glass-card border-border/50 mt-8">
-              <CardContent className="p-8 text-center space-y-4">
-                <div className="flex justify-center">
-                  <div className="p-4 bg-success/20 rounded-full">
-                    <CheckCircle className="h-8 w-8 text-success" />
-                  </div>
-                </div>
-                <h3 className="text-2xl font-bold">Assessment Submitted Successfully!</h3>
-                <p className="text-foreground-secondary">
-                  Thank you for completing our PE Readiness Pre-Assessment. We'll review your information and send you a personalized assessment report within 24-48 hours.
-                </p>
-                <div className="bg-background-hover/50 p-4 rounded-lg border border-border/30">
-                  <p className="text-sm text-foreground-secondary">
-                    <strong>Next Steps:</strong> Our team will analyze your responses and prepare a comprehensive readiness report tailored to your business. You'll receive this via your preferred contact method.
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
-          )}
         </div>
       </div>
     </section>
