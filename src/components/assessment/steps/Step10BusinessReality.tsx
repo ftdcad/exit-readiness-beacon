@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Card } from '@/components/ui/card';
@@ -25,6 +25,10 @@ type Props = {
 };
 
 export const Step10BusinessReality: React.FC<Props> = ({ value, onChange, onBack, onSavePartial, onComplete }) => {
+  useEffect(() => {
+    window.dispatchEvent(new CustomEvent('analytics', { detail: { event: 'assessment_step_view', step: 10 } }));
+  }, []);
+
   const setChecked = (key: string, checked: boolean) => {
     const prev = Array.isArray(value.processes) ? value.processes : [];
     const set = new Set(prev);
@@ -47,7 +51,7 @@ export const Step10BusinessReality: React.FC<Props> = ({ value, onChange, onBack
             <SelectContent>
               <SelectItem value="under10">Under 10%</SelectItem>
               <SelectItem value="10to25">10–25%</SelectItem>
-              <SelectItem value="25to40">25–40%</</SelectItem>
+              <SelectItem value="25to40">25–40%</SelectItem>
               <SelectItem value="over40">Over 40%</SelectItem>
             </SelectContent>
           </Select>
