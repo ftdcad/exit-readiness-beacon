@@ -23,13 +23,12 @@ import EarnoutsMultipliersPage from './pages/week-2/EarnoutsMultipliersPage';
 import PostClosingRealityPage from './pages/week-2/PostClosingRealityPage';
 import EbitdaCalculatorPage from './pages/EBITDACalculatorPage';
 import MultiplesPage from './pages/IndustryMultiplesPage';
-import ScenariosPage from './pages/ScenarioPlanningPage';
 import ScorecardPage from './pages/week-3/ManagementScorecardPage';
 import TopPerformersPage from './pages/week-3/TopPerformersPage';
 import BusinessScorecardPage from './pages/week-3/BusinessScorecardPage';
 import DealKillersPage from './pages/week-3/DealKillersDiagnosticPage';
-import { AuthProvider } from './hooks/useAuth';
-import { ProgressProvider } from './hooks/useProgress';
+import { AuthProvider } from './components/AuthProvider';
+import { ProgressProvider } from './components/ProgressProvider';
 import { ClientPortalLayout } from './components/ClientPortalLayout';
 import ScheduleConsultation from './pages/ScheduleConsultationPage';
 import DiscoveryInterviewPage from './pages/DiscoveryInterviewPage';
@@ -65,7 +64,6 @@ function App() {
             {/* Week 3 Routes */}
             <Route path="/portal/week-3/ebitda-calculator" element={<ClientPortalLayout><EbitdaCalculatorPage /></ClientPortalLayout>} />
             <Route path="/portal/week-3/multiples" element={<ClientPortalLayout><MultiplesPage /></ClientPortalLayout>} />
-            <Route path="/portal/week-3/scenarios" element={<ClientPortalLayout><ScenariosPage /></ClientPortalLayout>} />
             <Route path="/portal/week-3/scorecard" element={<ClientPortalLayout><ScorecardPage /></ClientPortalLayout>} />
             <Route path="/portal/week-3/top-performers" element={<ClientPortalLayout><TopPerformersPage /></ClientPortalLayout>} />
             <Route path="/portal/week-3/business-scorecard" element={<ClientPortalLayout><BusinessScorecardPage /></ClientPortalLayout>} />
