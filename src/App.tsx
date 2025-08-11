@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Index from './pages/Index';
 import ClientPortalDashboard from './pages/ClientPortalDashboard';
 import DueDiligenceChecklistPage from './pages/week-4/DueDiligenceChecklistPage';
 import LOIReviewPage from './pages/LOIReviewPage';
@@ -39,7 +40,7 @@ function App() {
       <ProgressProvider>
         <Router>
           <Routes>
-            <Route path="/" element={<ClientPortalLayout><ClientPortalDashboard /></ClientPortalLayout>} />
+            <Route path="/" element={<Index />} />
             <Route path="/portal" element={<ClientPortalLayout><ClientPortalDashboard /></ClientPortalLayout>} />
             <Route path="/portal/schedule-consultation" element={<ClientPortalLayout><ScheduleConsultationPage /></ClientPortalLayout>} />
 
