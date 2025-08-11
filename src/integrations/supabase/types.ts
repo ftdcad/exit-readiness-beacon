@@ -247,6 +247,36 @@ export type Database = {
           },
         ]
       }
+      assessment_submissions: {
+        Row: {
+          created_at: string
+          email: string | null
+          id: string
+          step_1_8: Json
+          step_10: Json
+          step_9: Json
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          step_1_8?: Json
+          step_10?: Json
+          step_9?: Json
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          step_1_8?: Json
+          step_10?: Json
+          step_9?: Json
+          updated_at?: string
+        }
+        Relationships: []
+      }
       buyer_analysis: {
         Row: {
           buyer_scores: Json | null
@@ -432,6 +462,47 @@ export type Database = {
           years_in_business?: number | null
         }
         Relationships: []
+      }
+      consultation_requests: {
+        Row: {
+          created_at: string
+          email: string | null
+          id: string
+          name: string | null
+          notes: string | null
+          phone: string | null
+          status: string | null
+          submission_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          name?: string | null
+          notes?: string | null
+          phone?: string | null
+          status?: string | null
+          submission_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          name?: string | null
+          notes?: string | null
+          phone?: string | null
+          status?: string | null
+          submission_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "consultation_requests_submission_id_fkey"
+            columns: ["submission_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_submissions"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       contact_inquiries: {
         Row: {
