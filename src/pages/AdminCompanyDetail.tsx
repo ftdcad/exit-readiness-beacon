@@ -1,4 +1,3 @@
-
 import { useParams, useNavigate } from 'react-router-dom';
 import { useInquiry, useUpdateInquiry } from '@/hooks/useInquiries';
 import { Button } from '@/components/ui/button';
@@ -7,7 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { ArrowLeft, Building2, User, Mail, Phone, DollarSign, Calendar, Clock } from 'lucide-react';
+import { ArrowLeft, Building2, User, Mail, Phone, DollarSign, Calendar, Clock, Calculator } from 'lucide-react';
 import { useState } from 'react';
 
 const AdminCompanyDetail = () => {
@@ -128,13 +127,22 @@ const AdminCompanyDetail = () => {
 
   return (
     <div className="p-6 space-y-6">
-      <div className="flex items-center gap-4">
-        <Button variant="outline" onClick={() => navigate('/admin/inquiries')}>
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Back to Companies
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <Button variant="outline" onClick={() => navigate('/admin/inquiries')}>
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Back to Companies
+          </Button>
+          <h1 className="text-3xl font-bold">{inquiry.company_name}</h1>
+          {getStatusBadge(inquiry.status)}
+        </div>
+        <Button 
+          onClick={() => navigate(`/admin/companies/${id}/initial-ebitda`)}
+          className="flex items-center gap-2"
+        >
+          <Calculator className="w-4 h-4" />
+          Initial EBITDA Calculator
         </Button>
-        <h1 className="text-3xl font-bold">{inquiry.company_name}</h1>
-        {getStatusBadge(inquiry.status)}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
