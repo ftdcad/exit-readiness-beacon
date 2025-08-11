@@ -32,6 +32,12 @@ import ScorecardPage from './pages/week-3/ManagementScorecardPage';
 import TopPerformersPage from './pages/week-3/TopPerformersPage';
 import BusinessScorecardPage from './pages/week-3/BusinessScorecardPage';
 import DealKillersPage from './pages/week-3/DealKillersDiagnosticPage';
+import NotFound from './pages/NotFound';
+import AdminLogin from './pages/AdminLogin';
+import AdminDashboard from './pages/AdminDashboard';
+import AdminInquiries from './pages/AdminInquiries';
+import AdminRoute from './components/AdminRoute';
+import AdminLayout from './components/AdminLayout';
 import { AuthProvider } from './components/AuthProvider';
 import { ProgressProvider } from './components/ProgressProvider';
 import { ClientPortalLayout } from './components/ClientPortalLayout';
@@ -46,6 +52,25 @@ function App() {
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<AuthPage />} />
+            
+            {/* Admin Routes */}
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/admin/dashboard" element={
+              <AdminRoute>
+                <AdminLayout>
+                  <AdminDashboard />
+                </AdminLayout>
+              </AdminRoute>
+            } />
+            <Route path="/admin/inquiries" element={
+              <AdminRoute>
+                <AdminLayout>
+                  <AdminInquiries />
+                </AdminLayout>
+              </AdminRoute>
+            } />
+            
+            {/* Client Portal Routes */}
             <Route path="/portal" element={<ClientPortalLayout><ClientPortalDashboard /></ClientPortalLayout>} />
             <Route path="/portal/schedule-consultation" element={<ClientPortalLayout><ScheduleConsultationPage /></ClientPortalLayout>} />
 
@@ -86,6 +111,9 @@ function App() {
             <Route path="/portal/week-4/discovery-interview" element={<ClientPortalLayout><DiscoveryInterviewPage /></ClientPortalLayout>} />
             <Route path="/portal/week-4/value-builder" element={<ClientPortalLayout><StrategyDocBuilderPage /></ClientPortalLayout>} />
             <Route path="/portal/week-4/kpis-okrs" element={<ClientPortalLayout><KPIandOKRPage /></ClientPortalLayout>} />
+            
+            {/* Catch-all 404 route */}
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </Router>
       </ProgressProvider>
