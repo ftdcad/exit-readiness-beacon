@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -37,6 +36,7 @@ import NotFound from './pages/NotFound';
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminInquiries from './pages/AdminInquiries';
+import AdminCompanyDetail from './pages/AdminCompanyDetail';
 import AdminRoute from './components/AdminRoute';
 import AdminLayout from './components/AdminLayout';
 import { AuthProvider } from './components/AuthProvider';
@@ -78,6 +78,13 @@ function App() {
                 <AdminRoute>
                   <AdminLayout>
                     <AdminInquiries />
+                  </AdminLayout>
+                </AdminRoute>
+              } />
+              <Route path="/admin/companies/:id" element={
+                <AdminRoute>
+                  <AdminLayout>
+                    <AdminCompanyDetail />
                   </AdminLayout>
                 </AdminRoute>
               } />
