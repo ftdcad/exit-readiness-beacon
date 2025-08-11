@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
+import { normalizePhone, validatePhone, normalizeUrl, validateUrlLoose } from "@/lib/validation/contact";
 
 type Props = {
   value: {
@@ -17,19 +18,6 @@ type Props = {
   onChange: (p: Props["value"]) => void;
   onNext: () => void;
   onBack: () => void;
-};
-
-// Validation helpers
-const digits = (s: string) => (s || '').replace(/\D+/g, '');
-const isValidUS = (s: string) => {
-  const d = digits(s);
-  return d.length === 10 || (d.length === 11 && d.startsWith('1'));
-};
-const toE164 = (s: string) => {
-  const d = digits(s);
-  if (d.length === 10) return `+1${d}`;
-  if (d.length === 11 && d.startsWith('1')) return `+${d}`;
-  return `+${d}`;
 };
 
 export default function Step08ContactInfo({ value, onChange, onNext, onBack }: Props) {
@@ -56,7 +44,7 @@ export default function Step08ContactInfo({ value, onChange, onNext, onBack }: P
       phoneRef.current?.focus();
       return;
     }
-    if (!isValidUS(phone)) {
+    if (!validatePhone(phone)) {
       setPhoneError("Enter a valid US phone number.");
       phoneRef.current?.focus();
       return;
@@ -65,22 +53,17 @@ export default function Step08ContactInfo({ value, onChange, onNext, onBack }: P
     // Website optional. If provided, make sure it parses with scheme added
     let websiteNormalized = website.trim();
     if (websiteNormalized) {
-      const test = /^[a-zA-Z][\w+.-]*:\/\//.test(websiteNormalized)
-        ? websiteNormalized
-        : `https://${websiteNormalized}`;
-      try {
-        const u = new URL(test);
-        websiteNormalized = `${u.protocol}//${u.hostname}${u.pathname === '/' ? '' : u.pathname}${u.search}${u.hash}`;
-      } catch {
+      if (!validateUrlLoose(websiteNormalized)) {
         setWebsiteError("Enter a valid domain or URL.");
         websiteRef.current?.focus();
         return;
       }
+      websiteNormalized = normalizeUrl(websiteNormalized);
     }
 
     // Build normalized payload
     const normalized = {
-      phone: toE164(phone),
+      phone: normalizePhone(phone),
       companyWebsite: websiteNormalized || "",
       preferredContact: preferred,
       howDidYouHear: referral
@@ -95,16 +78,11 @@ export default function Step08ContactInfo({ value, onChange, onNext, onBack }: P
     if (!v) return; // optional
     
     // Normalize to https:// if valid
-    try {
-      const test = /^[a-zA-Z][a-zA-Z0-9+.-]*:\/\//.test(v) ? v : `https://${v}`;
-      const u = new URL(test);
-      const normalized = `${u.protocol}//${u.hostname}${u.pathname === '/' ? '' : u.pathname}${u.search}${u.hash}`;
+    if (validateUrlLoose(v)) {
+      const normalized = normalizeUrl(v);
       if (normalized !== v) {
         setWebsite(normalized);
       }
-    } catch {
-      // Leave as-is; validation will catch it on submit
-      setWebsite(v);
     }
   }
 
