@@ -119,7 +119,6 @@ export default function Step08ContactInfo({ value, onChange, onNext, onBack }: P
                 ref={websiteRef}
                 type="text"
                 inputMode="url"
-                autoComplete="url"
                 placeholder="coastalclaims.net or https://coastalclaims.net"
                 value={website}
                 onChange={(e) => setWebsite(e.target.value)}
