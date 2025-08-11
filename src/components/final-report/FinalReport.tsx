@@ -1,4 +1,6 @@
 
+'use client';
+
 import React, { useState, useEffect, useMemo } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -95,6 +97,11 @@ export const FinalReport: React.FC = () => {
       const businessScore = JSON.parse(localStorage.getItem('business-scorecard') || '{}');
       const ddChecklist = JSON.parse(localStorage.getItem('dd-checklist') || '[]');
       
+      // Calculate DD readiness first
+      const ddItems = ddChecklist.length || 30;
+      const ddReady = ddChecklist.filter((i: any) => i.status === 'ready').length || 0;
+      const ddReadiness = (ddReady / ddItems) * 100;
+      
       // Calculate readiness scores
       const calculateReadiness = () => {
         let score = 100;
@@ -106,9 +113,6 @@ export const FinalReport: React.FC = () => {
         score -= (criticalCount * 10);
         
         // Deduct for DD not ready
-        const ddItems = ddChecklist.length || 30;
-        const ddReady = ddChecklist.filter((i: any) => i.status === 'ready').length || 0;
-        const ddReadiness = (ddReady / ddItems) * 100;
         if (ddReadiness < 50) score -= 20;
         
         return Math.max(0, score);
