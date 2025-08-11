@@ -26,7 +26,7 @@ const Step08ContactInfo: React.FC<Step08ContactInfoProps> = ({ onNext, onPreviou
   const [globalError, setGlobalError] = useState('');
   
   const websiteRef = useRef<HTMLInputElement>(null);
-  const { submitContactInfo, isSubmitting } = useContactSubmission();
+  const { submitContact, isSubmitting } = useContactSubmission();
 
   const isValidUS = (str: string) => {
     return /^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$/.test(str);
@@ -86,30 +86,41 @@ const Step08ContactInfo: React.FC<Step08ContactInfoProps> = ({ onNext, onPreviou
       }
     }
 
+    // Create contact data in the format expected by submitContact
     const contactData = {
-      firstName,
-      lastName,
+      companyName,
+      industry: 'Unknown', // Default value
+      founded: '2020', // Default value
+      employees: '1-10', // Default value
+      revenue2025: '0',
+      revenue2024: '0',
+      revenue2023: '0',
+      revenue2022: '0',
+      investmentType: 'Unknown',
+      entityType: 'Unknown',
+      ownershipType: 'Unknown',
+      owners: [],
+      pnlAvailability: 'Unknown',
+      taxReturnsAvailability: 'Unknown',
+      balanceSheetsAvailability: 'Unknown',
+      exitTimeline: 'Unknown',
+      exitType: 'Unknown',
+      currentChallenges: 'Unknown',
       email,
       phone: toE164(phone),
-      companyName,
-      website: websiteNormalized || null,
-      role
+      companyWebsite: websiteNormalized || undefined,
+      preferredContact: 'email',
+      jobTitle: role
     };
 
     try {
-      await submitContactInfo(contactData);
-      onNext();
+      const result = await submitContact(contactData);
+      if (result.success) {
+        onNext();
+      } else {
+        setGlobalError("Could not submit. Please try again.");
+      }
     } catch (err: any) {
-      if (err?.field === 'website') {
-        setWebsiteError(err.message || "Invalid website.");
-        document.getElementById('companyWebsite')?.focus();
-        return;
-      }
-      if (err?.field === 'phone') {
-        setPhoneError(err.message || "Invalid phone.");
-        document.getElementById('phone')?.focus();
-        return;
-      }
       setGlobalError(err?.message || "Could not submit. Please try again.");
     }
   };
