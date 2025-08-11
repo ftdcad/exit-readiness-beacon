@@ -31,25 +31,25 @@ import TimeKillsDealsPage from '@/pages/TimeKillsDealsPage';
 import ProfessionalAdvisorsPage from '@/pages/ProfessionalAdvisorsPage';
 
 // Week 2 imports
-import { DebtInterestPage } from '@/pages/week-2/DebtInterestPage';
-import { EarnoutsMultipliersPage } from '@/pages/week-2/EarnoutsMultipliersPage';
-import { HoldCoStructurePage } from '@/pages/week-2/HoldCoStructurePage';
-import { PostClosingRealityPage } from '@/pages/week-2/PostClosingRealityPage';
+import DebtInterestPage from '@/pages/week-2/DebtInterestPage';
+import EarnoutsMultipliersPage from '@/pages/week-2/EarnoutsMultipliersPage';
+import HoldCoStructurePage from '@/pages/week-2/HoldCoStructurePage';
+import PostClosingRealityPage from '@/pages/week-2/PostClosingRealityPage';
 
 // Week 3 imports
-import { BusinessScorecardPage } from '@/pages/week-3/BusinessScorecardPage';
-import { DealKillersDiagnosticPage } from '@/pages/week-3/DealKillersDiagnosticPage';
-import { ManagementScorecardPage } from '@/pages/week-3/ManagementScorecardPage';
-import { TopPerformersPage } from '@/pages/week-3/TopPerformersPage';
+import BusinessScorecardPage from '@/pages/week-3/BusinessScorecardPage';
+import DealKillersDiagnosticPage from '@/pages/week-3/DealKillersDiagnosticPage';
+import ManagementScorecardPage from '@/pages/week-3/ManagementScorecardPage';
+import TopPerformersPage from '@/pages/week-3/TopPerformersPage';
 
 // Week 4 imports
-import { DueDiligenceChecklistPage } from '@/pages/week-4/DueDiligenceChecklistPage';
-import { FinalReportPage } from '@/pages/week-4/FinalReportPage';
+import DueDiligenceChecklistPage from '@/pages/week-4/DueDiligenceChecklistPage';
+import FinalReportPage from '@/pages/week-4/FinalReportPage';
 
 // Portal imports
 import ClientPortalDashboard from '@/pages/ClientPortalDashboard';
-import { LOIReviewPage } from '@/pages/LOIReviewPage';
-import { DealProgressionPage } from '@/pages/DealProgressionPage';
+import LOIReviewPage from '@/pages/LOIReviewPage';
+import DealProgressionPage from '@/pages/DealProgressionPage';
 
 // Component imports
 import AdminLayout from '@/components/AdminLayout';
